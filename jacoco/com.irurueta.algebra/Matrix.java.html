@@ -1,0 +1,2016 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Matrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-algebra</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.algebra</a> &gt; <span class="el_source">Matrix.java</span></div><h1>Matrix.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.algebra;
+
+import com.irurueta.statistics.GaussianRandomizer;
+import com.irurueta.statistics.UniformRandomizer;
+
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Random;
+
+/**
+ * Defines a matrix of numerical data.
+ * Values of a matrix are stored inside an internal array of data.
+ */
+@SuppressWarnings(&quot;WeakerAccess&quot;)
+public class Matrix implements Serializable{
+    /**
+     * Constant defining the default order in which values are stored in a
+     * matrix. This can be useful when copying data to and from an array.
+     */
+    public static final boolean DEFAULT_USE_COLUMN_ORDER = true;
+    
+    /**
+     * Number of matrix rows.
+     */
+    private int rows;
+    
+    /**
+     * Number of matrix columns.
+     */
+    private int columns;
+    
+    /**
+     * Array containing data of matrix. Data is stored linearly in memory
+     * using column order.
+     */
+    private double[] buffer;
+    
+    /**
+     * Array used for indexing column start positions within buffer. This
+     * is used for faster access to matrix elements.
+     */
+    private int[] columnIndex;
+        
+    /**
+     * Constructor of this class.
+     * By default when instantiating a matrix its values are undefined.
+     * @param rows Defines number of rows in matrix.
+     * @param columns Defines number of columns in matrix.
+     * @throws WrongSizeException Exception thrown if matrix must be
+     * empty with provided size. In other words, matrices must have at least
+     * one row and one column. Leaving number of rows or columns to zero will
+     * raise this exception.
+     */
+<span class="fc" id="L70">    public Matrix(int rows, int columns) throws WrongSizeException {</span>
+<span class="fc" id="L71">        internalResize(rows, columns);</span>
+<span class="fc" id="L72">    }</span>
+    
+    /**
+     * Returns number of rows in matrix.
+     * @return Number of rows in matrix.
+     */
+    public int getRows() {
+<span class="fc" id="L79">        return rows;</span>
+    }
+    
+    /**
+     * Returns number of columns in matrix.
+     * @return Number of columns in matrix.
+     */
+    public int getColumns() {
+<span class="fc" id="L87">        return columns;</span>
+    }
+    
+    /**
+     * Obtains element in matrix located at position (row and column).
+     * Notice that row and column position are zero-indexed.
+     * @param row Row to be used for element location.
+     * @param column Column to be used for element location.
+     * @return Value of element in matrix located at provided position.
+     * @throws ArrayIndexOutOfBoundsException Exception raised if attempting
+     * to access a location that lies ouside the boundaries of the internal
+     * array containing matrix data. Notice that internal data is stored in
+     * column order, hence, if row position exceeds the number of rows in the
+     * matrix, this exception might not be raised depending on column position,
+     * however, if the column value exceeds the number of columns, it will
+     * always raise the exception.
+     */
+    public double getElementAt(int row, int column) 
+            throws ArrayIndexOutOfBoundsException {
+<span class="fc" id="L106">        return buffer[columnIndex[column] + row];</span>
+    }
+    
+    /**
+     * Returns index within internal buffer corresponding to provided row
+     * and column positions.
+     * @param row row to be used for element location.
+     * @param column column to be used for element location.
+     * @return index within internal buffer.
+     */
+    public int getIndex(int row, int column) {
+<span class="fc" id="L117">        return columnIndex[column] + row;</span>
+    }
+    
+    /**
+     * Obtains element in matrix located at provided index value using the
+     * order specified by DEFAULT_USE_COLUMN_ORDER.
+     * Note: an index indicates linear position within matrix, in layman terms,
+     * if using column order, then position (i, j), where i stands for row 
+     * index and j for column index, becomes index = j * rows + 1. On the other
+     * hand, if using row order then index becomes index = i * columns + j.
+     * @param index Linear position.
+     * @return Value of element contained at provided position.
+     * @throws ArrayIndexOutOfBoundsException Exception raised if index lays
+     * outside of valid values, which range from zero (inclusive) to 
+     * rows * columns (exclusive)
+     */
+    public double getElementAtIndex(int index) 
+            throws ArrayIndexOutOfBoundsException {
+<span class="fc" id="L135">        return getElementAtIndex(index, DEFAULT_USE_COLUMN_ORDER);</span>
+    }
+    
+    /**
+     * Obtain element in matrix located at provided index value using provided
+     * order (either column or row order).
+     * @param index Linear position.
+     * @param isColumnOrder if true indicates that values are retrieved
+     * assuming that are stored in column order.
+     * @return Value of element contained at provided position.
+     * @throws ArrayIndexOutOfBoundsException Exception raised if index lays
+     * outside of valid values, which range from zero (inclusive) to
+     * rows * columns (exclusive)
+     */
+    public double getElementAtIndex(int index, boolean isColumnOrder)
+            throws ArrayIndexOutOfBoundsException {
+        
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (isColumnOrder) {</span>
+<span class="fc" id="L153">            return buffer[index];</span>
+        } else {
+<span class="fc" id="L155">            int row = index / columns;</span>
+<span class="fc" id="L156">            int column = index % columns;</span>
+<span class="fc" id="L157">            return buffer[columnIndex[column] + row];</span>
+        }
+    }
+    
+    /**
+     * Sets element in matrix located at provided position (row and column).
+     * @param row Row to be used for element location to be set.
+     * @param column Column to be used for element location to be set.
+     * @param value Value to be set at provided position.
+     * @throws ArrayIndexOutOfBoundsException Exception raised if attempting
+     * to access a location that lies ouside the boundaries of the internal
+     * array containing matrix data. Notice that internal data is stored in
+     * column order, hence, if row position exceeds the number of rows in the
+     * matrix, this exception might not be raised depending on column position,
+     * however, if the column value exceeds the number of columns, it will
+     * always raise the exception.
+     */
+    public void setElementAt(int row, int column, double value)
+            throws ArrayIndexOutOfBoundsException {
+        
+<span class="fc" id="L177">        buffer[columnIndex[column] + row] = value;</span>
+<span class="fc" id="L178">    }</span>
+    
+    /**
+     * Sets element in matrix located at provided index using the order 
+     * specified by DEFAULT_USE_COLUMN_ORDER.
+     * Note: an index indicates linear position within matrix, in layman terms,
+     * if using column order, then position (i, j), where i stands for row 
+     * index and j for column index, becomes index = j * rows + 1. On the other
+     * hand, if using row order then index becomes index = i * columns + j.
+     * @param index Linear position.
+     * @param value Value of element contained at provided position.
+     * @throws ArrayIndexOutOfBoundsException Exception raised if index lays
+     * outside of valid values, which range from zero (inclusive) to 
+     * rows * columns (exclusive)
+     */
+    public void setElementAtIndex(int index, double value)
+            throws ArrayIndexOutOfBoundsException {
+        
+<span class="fc" id="L196">        setElementAtIndex(index, value, DEFAULT_USE_COLUMN_ORDER);</span>
+<span class="fc" id="L197">    }</span>
+    
+    /**
+     * Sets element in matrix located at provided index using provided order
+     * (either column or row order).
+     * @param index Linear position.
+     * @param value Value of element to be set at provided position.
+     * @param isColumnOrder if true indicates that values are retrieved
+     * assuming that are stored in column order.
+     * @throws ArrayIndexOutOfBoundsException Exception raised if index lays
+     * outside of valid values, which range from zero (inclusive) to
+     * rows * columns (exclusive).
+     */
+    public void setElementAtIndex(int index, double value, 
+            boolean isColumnOrder) throws ArrayIndexOutOfBoundsException {
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        if (isColumnOrder) {</span>
+<span class="fc" id="L213">            buffer[index] = value;</span>
+        } else {
+<span class="fc" id="L215">            int row = index / columns;</span>
+<span class="fc" id="L216">            int column = index % columns;</span>
+<span class="fc" id="L217">            buffer[columnIndex[column] + row] = value;</span>
+        }
+<span class="fc" id="L219">    }</span>
+    
+    /**
+     * Returns a new matrix instance containing the same data as this instance.
+     * @return A copy of this matrix instance.
+     */
+    @Override
+    public Matrix clone() {
+<span class="fc" id="L227">        Matrix out = null;</span>
+        try {
+<span class="fc" id="L229">            out = new Matrix(rows, columns);</span>
+<span class="fc" id="L230">            out.copyFrom(this);</span>
+<span class="pc" id="L231">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L232">        return out;</span>
+    }
+    
+    /**
+     * Copies this matrix data into provided matrix. Provided output matrix will
+     * be resized if needed.
+     * @param output Destination matrix where data will be copied to.
+     * @throws NullPointerException Exception raised if provided output matrix
+     * is null.
+     */
+    public void copyTo(Matrix output) throws NullPointerException {
+        //reset output size if not equal, otherwise reuse buffer and column 
+        //index
+<span class="pc bpc" id="L245" title="1 of 4 branches missed.">        if (output.getRows() != rows || output.getColumns() != columns) {</span>
+            //resets size and column index
+            try {
+<span class="fc" id="L248">                output.resize(rows, columns);</span>
+<span class="pc" id="L249">            } catch (WrongSizeException ignore) { }</span>
+        }
+        //copies content
+<span class="fc" id="L252">        System.arraycopy(buffer, 0, output.buffer, 0, buffer.length);</span>
+<span class="fc" id="L253">    }</span>
+    
+    /**
+     * Copies the contents of provided matrix into this instance. This instance
+     * will be resized if needed.
+     * @param input Input matrix where data will be copied from.
+     * @throws NullPointerException Exception raised if provided input matrix is
+     * null.
+     */
+    public void copyFrom(Matrix input) throws NullPointerException {
+        //reset size if not equal, otherwise reuse buffer and column index
+<span class="pc bpc" id="L264" title="1 of 4 branches missed.">        if (input.getRows() != rows || input.getColumns() != columns) {</span>
+            //resets size and column index
+            try {
+<span class="fc" id="L267">                resize(input.getRows(), input.getColumns());</span>
+<span class="pc" id="L268">            } catch (WrongSizeException ignore) { }</span>
+        }
+        //copies content
+<span class="fc" id="L271">        System.arraycopy(input.buffer, 0, buffer, 0, buffer.length);</span>
+<span class="fc" id="L272">    }</span>
+    
+    /**
+     * Method to internally add two matrices.
+     * @param other Matrix to be added to current matrix
+     * @param result Matrix where result will be stored.
+     */
+    private void internalAdd(Matrix other, Matrix result) {
+<span class="fc" id="L280">        int length = rows * columns;</span>
+<span class="fc bfc" id="L281" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L282">            result.buffer[i] = buffer[i] + other.buffer[i];</span>
+        }        
+<span class="fc" id="L284">    }</span>
+    
+    /**
+     * Adds another matrix to this matrix instance and stores the result in
+     * provided result matrix. If provided result matrix doesn't have proper 
+     * size, it will be resized.
+     * @param other Matrix to be added to current instance.
+     * @param result Matrix where result of summation is stored.
+     * @throws WrongSizeException Exception thrown if provided matrix to be 
+     * added (i.e. other) does not have the same size as this matrix.
+     * @throws NullPointerException Exception raised if provided matrices are
+     * null.
+     */
+    public void add(Matrix other, Matrix result) throws WrongSizeException,
+            NullPointerException {
+<span class="nc bnc" id="L299" title="All 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="nc" id="L300">            throw new WrongSizeException();</span>
+        }
+        
+        //resize result if needed
+<span class="nc bnc" id="L304" title="All 4 branches missed.">        if (result.getRows() != rows || result.getColumns() != columns) {</span>
+<span class="nc" id="L305">            result.resize(rows, columns);</span>
+        }
+        
+<span class="nc" id="L308">        internalAdd(other, result);</span>
+<span class="nc" id="L309">    }</span>
+    
+    /**
+     * Adds provided matrix to this instance and returns the result as a new
+     * matrix instance.
+     * @param other Matrix to be added.
+     * @return Returns a new matrix containing the sum of this matrix with
+     * provided matrix.
+     * @throws WrongSizeException Exception raised if provided matrix does
+     * not have the same size as this matrix.
+     * @throws NullPointerException Exception raised if provided matrix is null.
+     */
+    public Matrix addAndReturnNew(Matrix other) throws WrongSizeException,
+            NullPointerException {
+<span class="pc bpc" id="L323" title="1 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="fc" id="L324">            throw new WrongSizeException();</span>
+        }
+        
+<span class="fc" id="L327">        Matrix out = new Matrix(rows, columns);</span>
+<span class="fc" id="L328">        internalAdd(other, out);</span>
+<span class="fc" id="L329">        return out;</span>
+    }
+    
+    /**
+     * Adds provided matrix to this instance.
+     * @param other Matrix to be added.
+     * @throws WrongSizeException Exception raised if provided matrix does
+     * not have the same size as this matrix.
+     * @throws NullPointerException Exception raised if provided matrix is null.
+     */
+    public void add(Matrix other) throws WrongSizeException, 
+            NullPointerException {
+<span class="pc bpc" id="L341" title="1 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="fc" id="L342">            throw new WrongSizeException();</span>
+        }
+        
+<span class="fc" id="L345">        internalAdd(other, this);</span>
+<span class="fc" id="L346">    }</span>
+    
+    /**
+     * Method to internally subtract two matrices.
+     * @param other Matrix to be subtracted from current matrix.
+     * @param result Matrix where result will be stored.
+     */    
+    private void internalSubtract(Matrix other, Matrix result) {
+<span class="fc" id="L354">        int length = rows * columns;</span>
+<span class="fc bfc" id="L355" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L356">            result.buffer[i] = buffer[i] - other.buffer[i];</span>
+        }        
+<span class="fc" id="L358">    }</span>
+    
+    /**
+     * Subtracts another matrix from this matrix instance and stores the result 
+     * in provided result matrix. If provided result matrix doesn't have proper 
+     * size, it will be resized.
+     * @param other Matrix to be added to current instance.
+     * @param result Matrix where result of subtraction is stored.
+     * @throws WrongSizeException Exception thrown if provided matrix to be 
+     * subtracted (i.e. other) does not have the same size as this matrix.
+     * @throws NullPointerException Exception raised if provided matrices are
+     * null.
+     */    
+    public void subtract(Matrix other, Matrix result) throws WrongSizeException,
+            NullPointerException {
+<span class="nc bnc" id="L373" title="All 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="nc" id="L374">            throw new WrongSizeException();</span>
+        }
+        
+        //resize result if needed
+<span class="nc bnc" id="L378" title="All 4 branches missed.">        if (result.getRows() != rows || result.getColumns() != columns) {</span>
+<span class="nc" id="L379">            result.resize(rows, columns);</span>
+        }
+        
+<span class="nc" id="L382">        internalSubtract(other, result);        </span>
+<span class="nc" id="L383">    }</span>
+    
+    /**
+     * Subtracts provided matrix from this instance and returns the result as a 
+     * new matrix instance.
+     * @param other Matrix to be subtracted from.
+     * @return Returns a new matrix containing the subtraction of provided 
+     * matrix from this matrix.
+     * @throws WrongSizeException Exception raised if provided matrix does
+     * not have the same size as this matrix.
+     * @throws NullPointerException Exception raised if provided matrix is null.
+     */    
+    public Matrix subtractAndReturnNew(Matrix other) 
+            throws WrongSizeException, NullPointerException {
+<span class="pc bpc" id="L397" title="1 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="fc" id="L398">            throw new WrongSizeException();</span>
+        }
+        
+<span class="fc" id="L401">        Matrix out = new Matrix(rows, columns);</span>
+<span class="fc" id="L402">        internalSubtract(other, out);</span>
+<span class="fc" id="L403">        return out;</span>
+    }
+    
+    /**
+     * Subtracts provided matrix from this instance.
+     * @param other Matrix to be subtracted from.
+     * @throws WrongSizeException Exception raised if provided matrix does
+     * not have the same size as this matrix.
+     * @throws NullPointerException Exception raised if provided matrix is null.
+     */    
+    public void subtract(Matrix other) throws WrongSizeException {
+<span class="pc bpc" id="L414" title="2 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="nc" id="L415">            throw new WrongSizeException();</span>
+        }
+        
+<span class="fc" id="L418">        internalSubtract(other, this);</span>
+<span class="fc" id="L419">    }</span>
+
+    /**
+     * Method to internally multiply two matrices.
+     * @param other Matrix to be multiplied to current matrix
+     * @param resultBuffer Matrix buffer of data where result will be stored.
+     * @param resultColumnIndex Array of matrix column indices where result will
+     * be stored.
+     */        
+    private void internalMultiply(Matrix other, double[] resultBuffer, 
+            int[] resultColumnIndex) {
+<span class="fc" id="L430">        int columns2 = other.columns;</span>
+        double value;
+<span class="fc bfc" id="L432" title="All 2 branches covered.">        for (int k = 0; k &lt; columns2; k++) {</span>
+<span class="fc bfc" id="L433" title="All 2 branches covered.">            for (int j = 0; j &lt; rows; j++) {</span>
+<span class="fc" id="L434">                value = 0.0;</span>
+<span class="fc bfc" id="L435" title="All 2 branches covered.">                for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc" id="L436">                    value += buffer[columnIndex[i] + j] *</span>
+                            other.buffer[other.columnIndex[k] + i];
+                }
+<span class="fc" id="L439">                resultBuffer[resultColumnIndex[k] + j] = value;</span>
+            }
+        }      
+<span class="fc" id="L442">    }</span>
+    
+    /**
+     * Method to internally multiply two matrices.
+     * @param other Matrix to be multiplied to current matrix.
+     * @param result Matrix where result will be stored.
+     */            
+    private void internalMultiply(Matrix other, Matrix result) {
+<span class="fc" id="L450">        internalMultiply(other, result.buffer, result.columnIndex);</span>
+<span class="fc" id="L451">    }</span>
+    
+    /**
+     * Multiplies another matrix to this matrix instance and stores the result 
+     * in provided result matrix. If provided result matrix doesn't have proper 
+     * size, it will be resized.
+     * @param other Matrix to be multiplied to current instance.
+     * @param result Matrix where result of product is stored.
+     * @throws WrongSizeException Exception thrown when current and provided
+     * matrix (i.e. other) has incompatible size for product computation.
+     * @throws NullPointerException Exception raised if provided matrices are
+     * null.
+     */        
+    public void multiply(Matrix other, Matrix result) throws WrongSizeException,
+            NullPointerException {
+<span class="pc bpc" id="L466" title="1 of 2 branches missed.">        if (columns != other.rows) {</span>
+<span class="nc" id="L467">            throw new WrongSizeException();</span>
+        }
+        
+        //resize result if needed
+<span class="pc bpc" id="L471" title="2 of 4 branches missed.">        if (result.rows != rows || result.columns != other.columns) {</span>
+<span class="nc" id="L472">            result.resize(rows, other.columns);</span>
+        }
+        
+<span class="fc" id="L475">        internalMultiply(other, result);</span>
+<span class="fc" id="L476">    }</span>
+    
+    /**
+     * Multiplies this matrix with provided matrix and returns the result as
+     * a new instance.
+     * If this matrix m1 has size m x n and provided matrix m2 has size p x q, 
+     * then n must be equal to p so that product m1 * m2 can be correctly
+     * computed obtaining a matrix of size m x q, otherwise an 
+     * IllegalArgumentException will be raised.
+     * @param other Right operand of matrix product
+     * @return Matrix containing result of multiplication
+     * @throws WrongSizeException Exception thrown when current and 
+     * provided matrices have incompatible sizes for product computation.
+     * @throws NullPointerException Exception thrown if provided matrix is null
+     */
+    public Matrix multiplyAndReturnNew(Matrix other) 
+            throws WrongSizeException, NullPointerException {
+        
+<span class="fc bfc" id="L494" title="All 2 branches covered.">        if (columns != other.rows) {</span>
+<span class="fc" id="L495">            throw new WrongSizeException();</span>
+        }
+        
+<span class="fc" id="L498">        Matrix out = new Matrix(rows, other.columns);</span>
+<span class="fc" id="L499">        internalMultiply(other, out);</span>
+<span class="fc" id="L500">        return out;</span>
+    }
+    
+    /**
+     * Multiplies this matrix with provided matrix.
+     * If this matrix m1 has size m x n and provided matrix m2 has size p x q,
+     * then n must be equal to p so that product m1 * m2 can be correctly
+     * computed resizing this matrix to a new one having size m x q, otherwise
+     * an IllegalArgumentException will be raised.
+     * @param other Right operand of matrix product
+     * @throws WrongSizeException Exception thrown when current and
+     * provided matrices have incompatible sizes for product computation.
+     * @throws NullPointerException Exception thrown if provided matrix is null
+     */
+    public void multiply(Matrix other) throws WrongSizeException,
+            NullPointerException {
+        
+<span class="fc bfc" id="L517" title="All 2 branches covered.">        if (columns != other.rows) {</span>
+<span class="fc" id="L518">            throw new WrongSizeException();</span>
+        }
+        
+        //instantiate new buffer and column index
+<span class="fc" id="L522">        double[] resultBuffer = new double[rows * other.columns];</span>
+<span class="fc" id="L523">        int[] resultColumnIndex = new int[other.columns];</span>
+<span class="fc" id="L524">        int counter = 0;</span>
+<span class="fc bfc" id="L525" title="All 2 branches covered.">        for (int i = 0; i &lt; other.columns; i++) {</span>
+<span class="fc" id="L526">            resultColumnIndex[i] = counter;</span>
+<span class="fc" id="L527">            counter += rows;</span>
+        }
+        
+<span class="fc" id="L530">        internalMultiply(other, resultBuffer, resultColumnIndex);</span>
+        //update matrix data        
+<span class="fc" id="L532">        columns = other.columns;        </span>
+<span class="fc" id="L533">        columnIndex = resultColumnIndex;</span>
+<span class="fc" id="L534">        buffer = resultBuffer;</span>
+<span class="fc" id="L535">    }</span>
+    
+    /**
+     * Method to internally compute the Kronecker product between two matrices.
+     * @param other other matrix to be Kronecker multiplied to current matrix.
+     * @param resultBuffer matrix buffer of data where result will be stored.
+     * @param resultColumnIndex array of matrix column indices where result will 
+     * be stored.
+     */
+    private void internalMultiplyKronecker(Matrix other, double[] resultBuffer,
+            int[] resultColumnIndex) {
+<span class="fc" id="L546">        int rows2 = other.rows;</span>
+<span class="fc" id="L547">        int columns2 = other.columns;</span>
+        
+<span class="fc bfc" id="L549" title="All 2 branches covered.">        for (int j1 = 0; j1 &lt; rows; j1++) {</span>
+<span class="fc" id="L550">            int startJ3 = j1*other.rows;</span>
+<span class="fc bfc" id="L551" title="All 2 branches covered.">            for (int i1 = 0; i1 &lt; columns; i1++) {</span>
+<span class="fc" id="L552">                int startI3 = i1*other.columns;</span>
+<span class="fc" id="L553">                double value1 = buffer[columnIndex[i1] + j1];</span>
+                
+<span class="fc bfc" id="L555" title="All 2 branches covered.">                for (int j2 = 0; j2 &lt; rows2; j2++) {</span>
+<span class="fc" id="L556">                    int j3 = startJ3 + j2;</span>
+<span class="fc bfc" id="L557" title="All 2 branches covered.">                    for (int i2 = 0; i2 &lt; columns2; i2++) {</span>
+<span class="fc" id="L558">                        int i3 = startI3 + i2;</span>
+<span class="fc" id="L559">                        double value2 = </span>
+                                other.buffer[other.columnIndex[i2] + j2];
+                        
+<span class="fc" id="L562">                        double value3 = value1*value2;</span>
+<span class="fc" id="L563">                        resultBuffer[resultColumnIndex[i3] + j3] = value3;</span>
+                    }
+                }
+            }
+        }
+<span class="fc" id="L568">    }</span>
+    
+    /**
+     * Method to internally compute the Kronecker product between two matrices.
+     * @param other other matrix to be Kronecker multiplied to current matrix.
+     * @param result matrix where result will be stored.
+     */
+    private void internalMultiplyKronecker(Matrix other, Matrix result) {
+<span class="fc" id="L576">        internalMultiplyKronecker(other, result.buffer, result.columnIndex);</span>
+<span class="fc" id="L577">    }</span>
+    
+    /**
+     * Computes the Kronecker product with provided matrix and stores the
+     * result in provided result matrix. If provided result matrix doesn't
+     * have proper size, it will be resized.
+     * @param other other matrix to be Kronecker multiplied to current matrix.
+     * @param result matrix where result will be stored.
+     */
+    public void multiplyKronecker(Matrix other, Matrix result) {
+        //resize result if needed
+<span class="fc" id="L588">        int resultRows = rows*other.rows;</span>
+<span class="fc" id="L589">        int resultCols = columns*other.columns;</span>
+<span class="pc bpc" id="L590" title="3 of 4 branches missed.">        if (result.rows != resultRows || result.columns != resultCols) {</span>
+            try {
+<span class="fc" id="L592">                result.resize(resultRows, resultCols);</span>
+<span class="pc" id="L593">            } catch (WrongSizeException ignore) { /* never thrown */ }</span>
+        }
+        
+<span class="fc" id="L596">        internalMultiplyKronecker(other, result);</span>
+<span class="fc" id="L597">    }</span>
+    
+    /**
+     * Computes the Kronecker product with provided matrix and returns the 
+     * result as a new instance.
+     * If this matrix m1 has size mxn and provided matrix m2 has size pxq,
+     * the resulting matrix will be m*pxn*q.
+     * @param other other matrix to be Kronecker multiplied to current matrix.
+     * @return matrix containing result of Kronecker multiplication.
+     */
+    public Matrix multiplyKroneckerAndReturnNew(Matrix other) {
+<span class="fc" id="L608">        Matrix out = null;</span>
+        try {
+<span class="fc" id="L610">            out = new Matrix(rows*other.rows, columns*other.columns);</span>
+<span class="fc" id="L611">            internalMultiplyKronecker(other, out);</span>
+<span class="pc" id="L612">        } catch (WrongSizeException ignore) { /* never thrown */ }</span>
+<span class="fc" id="L613">        return out;</span>
+    }
+    
+    /**
+     * Computes the Kronecer product of this matrix with provided matrix and
+     * updates this matrix with the result of the multiplication.
+     * If this matrix m1 has size mxn and provided matrix m2 has size pxq,
+     * the resulting matrix will be resized to m*pxn*q.
+     * @param other other matrix to be Kronecker multiplied to current matrix.
+     */
+    public void multiplyKronecker(Matrix other) {
+        
+        //instantiate new buffer and column index
+<span class="fc" id="L626">        int resultRows = rows*other.rows;</span>
+<span class="fc" id="L627">        int resultCols = columns*other.columns;        </span>
+<span class="fc" id="L628">        double[] resultBuffer = new double[resultRows*resultCols];</span>
+<span class="fc" id="L629">        int[] resultColumnIndex = new int[resultCols];</span>
+<span class="fc" id="L630">        int counter = 0;</span>
+<span class="fc bfc" id="L631" title="All 2 branches covered.">        for (int i = 0; i &lt; resultCols; i++) {</span>
+<span class="fc" id="L632">            resultColumnIndex[i] = counter;</span>
+<span class="fc" id="L633">            counter += resultRows;</span>
+        }
+        
+<span class="fc" id="L636">        internalMultiplyKronecker(other, resultBuffer, resultColumnIndex);</span>
+        //update matrix data
+<span class="fc" id="L638">        rows = resultRows;</span>
+<span class="fc" id="L639">        columns = resultCols;</span>
+<span class="fc" id="L640">        columnIndex = resultColumnIndex;</span>
+<span class="fc" id="L641">        buffer = resultBuffer;</span>
+<span class="fc" id="L642">    }</span>
+    
+    /**
+     * Computes product by scalar of this instance multiplying all its elements
+     * by provided scalar value and storing the results in provided result 
+     * matrix. If provided result matrix doesn't have proper size, it will be
+     * automatically resized.
+     * @param scalar Scalar amount that current matrix will be multiplied by.
+     * @param result Matrix where result of operation is stored.
+     */
+    private void multiplyByScalar(double scalar, Matrix result) {
+<span class="fc" id="L653">        int length = rows * columns;</span>
+<span class="fc bfc" id="L654" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L655">            result.buffer[i] = scalar * buffer[i];</span>
+        }        
+<span class="fc" id="L657">    }</span>
+    
+    /**
+     * Computes product by scalar of this instance multiplying all its elements
+     * by provided scalar value and returning the result as a new instance.
+     * @param scalar Scalar amount that current matrix will be multiplied by.
+     * @return Returns a new matrix instance that contains result of product by
+     * scalar.
+     */
+    public Matrix multiplyByScalarAndReturnNew(double scalar){
+<span class="fc" id="L667">        Matrix out = null;</span>
+        try {
+<span class="fc" id="L669">            out = new Matrix(rows, columns);</span>
+<span class="fc" id="L670">            multiplyByScalar(scalar, out);</span>
+<span class="pc" id="L671">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L672">        return out;</span>
+    }
+    
+    /**
+     * Computes product by scalar of this instance multiplying all its elements
+     * by provided scalar value and returning the result as a new instance.
+     * @param scalar Scalar amount that current matrix will be multiplied by.
+     */
+    public void multiplyByScalar(double scalar) {
+<span class="fc" id="L681">        multiplyByScalar(scalar, this);</span>
+<span class="fc" id="L682">    }</span>
+    
+    /**
+     * Checks if provided object is a Matrix instance having exactly the same
+     * contents as this matrix instance.
+     * @param obj Object to be compared
+     * @return Returns true if both objects are considered to be equal.
+     */
+    @Override
+    public boolean equals(Object obj) {
+<span class="pc bpc" id="L692" title="1 of 2 branches missed.">        if (obj == null) {</span>
+<span class="nc" id="L693">            return false;</span>
+        }
+<span class="fc bfc" id="L695" title="All 2 branches covered.">        if (obj == this) {</span>
+<span class="fc" id="L696">            return true;</span>
+        }
+<span class="fc bfc" id="L698" title="All 2 branches covered.">        if (!(obj instanceof Matrix)) {</span>
+<span class="fc" id="L699">            return false;</span>
+        }
+        
+<span class="fc" id="L702">        Matrix other = (Matrix)obj;</span>
+<span class="fc" id="L703">        return equals(other);</span>
+    }
+
+    /**
+     * Computes and returns hash code for this instance. Hash codes are almost
+     * unique values that are useful for fast classification and storage of
+     * objects in collections.
+     * @return Hash code
+     */
+    @Override
+    public int hashCode() {
+<span class="fc" id="L714">        return Objects.hash(this.rows, this.columns,</span>
+<span class="fc" id="L715">                Arrays.hashCode(this.buffer), Arrays.hashCode(this.columnIndex));</span>
+    }
+    
+    /**
+     * Checks if provided matrix has exactly the same contents as this matrix
+     * instance.
+     * @param other Matrix to be compared.
+     * @return Returns true if both objects are considered to be equal (same
+     * content and size)
+     */
+    public boolean equals(Matrix other) {
+<span class="fc" id="L726">        return equals(other, 0.0);</span>
+    }
+    
+    /**
+     * Checks if provided matrix has contents similar to this matrix by checking
+     * that all values have a maximum difference equal to provided threshold and
+     * same size.
+     * @param other Matrix to be compared
+     * @param threshold Maximum difference allowed between values on same 
+     * position to determine that matrices are equal
+     * @return True if matrices are considered to be equal (almost equal content
+     * and same size)
+     */
+    public boolean equals(Matrix other, double threshold) {
+<span class="fc bfc" id="L740" title="All 2 branches covered.">        if (other == null) {</span>
+<span class="fc" id="L741">            return false;</span>
+        }
+<span class="fc bfc" id="L743" title="All 2 branches covered.">        if (other.getRows() != rows) {</span>
+<span class="fc" id="L744">            return false;</span>
+        }
+<span class="pc bpc" id="L746" title="1 of 2 branches missed.">        if (other.getColumns() != columns) {</span>
+<span class="nc" id="L747">            return false;</span>
+        }
+        
+        //check contents
+<span class="fc" id="L751">        int length = rows * columns;</span>
+<span class="fc bfc" id="L752" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc bfc" id="L753" title="All 2 branches covered.">            if (Math.abs(buffer[i] - other.buffer[i]) &gt; threshold) {</span>
+<span class="fc" id="L754">                return false;</span>
+            }
+        }
+<span class="fc" id="L757">        return true;</span>
+    }
+    
+    /**
+     * Method to internally compute element by element product of two matrices.
+     * @param other Matrix to be element by element multiplied to current matrix
+     * @param result Matrix where result will be stored.
+     */                
+    private void internalElementByElementProduct(Matrix other, Matrix result) {
+<span class="fc" id="L766">        int length = rows * columns;</span>
+<span class="fc bfc" id="L767" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L768">            result.buffer[i] = buffer[i] * other.buffer[i];</span>
+        }        
+<span class="fc" id="L770">    }</span>
+    
+    /**
+     * Computes element by element product (i.e. Hadamard product) between 
+     * current and provided (i.e. other) matrix, and stores the result in 
+     * provided result matrix.
+     * @param other Instance that will be used for element by element product
+     * with current instance.
+     * @param result Matrix where result of operation is stored.
+     * @throws WrongSizeException Exception raised if attempting to perform
+     * element by element product on matrices of different size.
+     * @throws NullPointerException Exception raised if provided matrix is null
+     */
+    public void elementByElementProduct(Matrix other, Matrix result) 
+            throws WrongSizeException, NullPointerException {
+<span class="nc bnc" id="L785" title="All 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="nc" id="L786">            throw new WrongSizeException();</span>
+        }
+
+        //resize result if needed
+<span class="nc bnc" id="L790" title="All 4 branches missed.">        if (result.getRows() != rows || result.getColumns() != columns) {</span>
+<span class="nc" id="L791">            result.resize(rows, columns);</span>
+        }
+        
+<span class="nc" id="L794">        internalElementByElementProduct(other, result);</span>
+<span class="nc" id="L795">    }</span>
+    
+    /**
+     * Computes element by element product (i.e. Hadamard product) between
+     * current and provided instances and returns the result as a new instace.
+     *	Example:
+     *	Having matrices
+     *		[1, 2, 3]		 [10, 11, 12]
+     *	m1 =	[4, 5, 6]	m2 = [13, 14, 15]
+     *		[7, 8, 9]		 [16, 17, 18]
+     * Then their element by element product will be
+     *          [10,  22,  36 ]
+     *	m3 =    [52,  70,  90 ]
+     *		[112, 136, 162] 
+     *
+     * Note: Attempting to perform element product on matrices of different size
+     * will raise an IllegalArgumentException
+     * @param other Instance that will be used for element by element product
+     * with current instance.
+     * @return A new Matrix containing element by element product result
+     * @throws WrongSizeException Exception raised if attempting to 
+     * perform element by element product on matrices of different size.
+     * @throws NullPointerException Exception raised if provided matrix is null
+     */
+    public Matrix elementByElementProductAndReturnNew(Matrix other) 
+            throws WrongSizeException, NullPointerException {
+<span class="pc bpc" id="L821" title="1 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="fc" id="L822">            throw new WrongSizeException();</span>
+        }
+        
+<span class="fc" id="L825">        Matrix out = new Matrix(rows, columns);</span>
+<span class="fc" id="L826">        internalElementByElementProduct(other, out);</span>
+<span class="fc" id="L827">        return out;</span>
+    }
+    
+    /**
+     * Computes element by element product (i.e. Hadamard product) between
+     * current and provided instances.
+     *	Example:
+     *	Having matrices
+     *		[1, 2, 3]		 [10, 11, 12]
+     *	m1 =	[4, 5, 6]	m2 = [13, 14, 15]
+     *		[7, 8, 9]		 [16, 17, 18]
+     * Then their element by element product will be
+     *          [10,  22,  36 ]
+     *	m3 =    [52,  70,  90 ]
+     *		[112, 136, 162] 
+     *
+     * Note: Attempting to perform element product on matrices of different size
+     * will raise an IllegalArgumentException
+     * @param other Instance that will be used for element by element product
+     * with current instance.
+     * @throws WrongSizeException Exception raised if attempting to 
+     * perform element by element product on matrices of different size.
+     * @throws NullPointerException Exception raised if provided matrix is null
+     */    
+    public void elementByElementProduct(Matrix other) 
+            throws WrongSizeException {
+<span class="pc bpc" id="L853" title="1 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="fc" id="L854">            throw new WrongSizeException();</span>
+        }
+        
+<span class="fc" id="L857">        internalElementByElementProduct(other, this);</span>
+<span class="fc" id="L858">    }</span>
+    
+    /**
+     * Method to internally compute matrix transposition.
+     * @param resultBuffer Buffer where transposed matrix data is stored.
+     * @param resultColumnIndex Buffer where indices of transposed matrix data 
+     * is stored.
+     */                    
+    private void internalTranspose(double[] resultBuffer, 
+            int[] resultColumnIndex) {
+<span class="fc bfc" id="L868" title="All 2 branches covered.">        for (int j = 0; j &lt; rows; j++) {</span>
+<span class="fc bfc" id="L869" title="All 2 branches covered.">            for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc" id="L870">                resultBuffer[resultColumnIndex[j] + i] =</span>
+                        buffer[columnIndex[i] + j];
+            }
+        }                
+<span class="fc" id="L874">    }</span>
+    
+    /**
+     * Method to internally compute matrix transposition.
+     * @param result Matrix where transposed data is stored.
+     */
+    private void internalTranspose(Matrix result) {
+<span class="fc" id="L881">        internalTranspose(result.buffer, result.columnIndex);</span>
+<span class="fc" id="L882">    }</span>
+    
+    /**
+     * Transposes current matrix and stores result in provided matrix. If 
+     * provided matrix doesn't have proper size, it will be resized.
+     * @param result Instance where transposed matrix is stored.
+     */
+    public void transpose(Matrix result) {
+        //resize result if needed
+<span class="nc bnc" id="L891" title="All 4 branches missed.">        if (result.getRows() != columns || result.getColumns() != rows) {</span>
+            try {
+<span class="nc" id="L893">                result.resize(columns, rows);</span>
+<span class="nc" id="L894">            } catch (WrongSizeException ignore) { }</span>
+        }
+<span class="nc" id="L896">        internalTranspose(result);</span>
+<span class="nc" id="L897">    }</span>
+    
+    /**
+     * Transposes current matrix and returns result as a new instance. 
+     * Transposition of a matrix is done by exchanging rows and columns, in
+     * Layman terms, given a matrix m1 with elements located at m1(i,j), where i
+     * is the row index and j is the column index, then it follows that its
+     * transposed matrix m2 has the following property m2(i,j) = m1(j, i).
+     * @return A new Matrix instance containing transposed matrix.
+     */
+    public Matrix transposeAndReturnNew() {
+<span class="fc" id="L908">        Matrix out = null;</span>
+        try {
+<span class="fc" id="L910">            out = new Matrix(columns, rows);</span>
+<span class="fc" id="L911">            internalTranspose(out);</span>
+<span class="pc" id="L912">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L913">        return out;</span>
+    }
+    
+    /**
+     * Transposes current matrix.
+     * Transposition of a matrix is done by exchanging rows and columns, in
+     * Layman terms, given a matrix m1 with elements located at m1(i,j), where i
+     * is the row index and j is the column index, then it follows that its
+     * transposed matrix m2 has the following property m2(i,j) = m1(j, i).
+     */
+    public void transpose() {
+        
+<span class="fc" id="L925">        double[] newBuffer = new double[rows * columns];</span>
+<span class="fc" id="L926">        int[] newColumnIndex = new int[rows];</span>
+<span class="fc" id="L927">        int counter = 0;</span>
+<span class="fc bfc" id="L928" title="All 2 branches covered.">        for (int i = 0; i &lt; rows; i++) {</span>
+<span class="fc" id="L929">            newColumnIndex[i] = counter;</span>
+<span class="fc" id="L930">            counter += columns;</span>
+        }
+<span class="fc" id="L932">        internalTranspose(newBuffer, newColumnIndex);</span>
+        
+        //update matrix data
+        
+        //swap rows and columns
+<span class="fc" id="L937">        int tmp = rows;</span>
+<span class="fc" id="L938">        rows = columns;</span>
+<span class="fc" id="L939">        columns = tmp;</span>
+        
+<span class="fc" id="L941">        columnIndex = newColumnIndex;</span>
+<span class="fc" id="L942">        buffer = newBuffer;</span>
+<span class="fc" id="L943">    }</span>
+    
+    /**
+     * Sets the contents of this matrix to provided value in all of its elements
+     * @param initValue Value to be set on all the elements of this matrix.
+     */
+    public void initialize(double initValue) {
+        //initialize buffer array to provided value
+<span class="fc" id="L951">        Arrays.fill(buffer, initValue);</span>
+<span class="fc" id="L952">    }</span>
+    
+    /**
+     * Resizes current instance by removing its contents and resizing it to
+     * provided size.
+     * @param rows Number of rows to be set
+     * @param columns Number of columns to be set
+     * @throws WrongSizeException Exception raised if either rows or
+     * columns is zero.
+     */
+    public void resize(int rows, int columns) throws WrongSizeException {
+<span class="fc" id="L963">        internalResize(rows, columns);</span>
+<span class="fc" id="L964">    }</span>
+    
+    /**
+     * Method used internally to remove matrix contents and resizing it.
+     * @param rows Number of rows to be set
+     * @param columns Number of columns to be set.
+     * @throws WrongSizeException Exception raised if either rows or
+     * columns is zero.
+     */
+    private void internalResize(int rows, int columns) 
+            throws WrongSizeException {
+<span class="fc bfc" id="L975" title="All 4 branches covered.">        if (rows == 0 || columns == 0) {</span>
+<span class="fc" id="L976">            throw new WrongSizeException();</span>
+        }
+        
+<span class="fc" id="L979">        this.rows = rows;</span>
+<span class="fc" id="L980">        this.columns = columns;</span>
+                
+        //instantiate buffers of data
+<span class="fc" id="L983">        buffer = new double[rows * columns];</span>
+<span class="fc" id="L984">        columnIndex = new int[columns];</span>
+        
+        //initialize column index;
+<span class="fc" id="L987">        int counter = 0;</span>
+<span class="fc bfc" id="L988" title="All 2 branches covered.">        for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc" id="L989">            columnIndex[i] = counter;</span>
+<span class="fc" id="L990">            counter += rows;</span>
+        }
+<span class="fc" id="L992">    }</span>
+    
+    /**
+     * Resets current instance by removing its contents, resizing it to provided
+     * size and setting all its elements to provided value.
+     * @param rows Number of rows to be set
+     * @param columns Number of columns to be set
+     * @param initValue Value to be set in all of its elements
+     * @throws WrongSizeException Exception raised if either rows or
+     * columns is zero.
+     */
+    public void reset(int rows, int columns, double initValue) 
+            throws WrongSizeException {
+<span class="fc" id="L1005">        internalResize(rows, columns);</span>
+<span class="fc" id="L1006">        initialize(initValue);</span>
+<span class="fc" id="L1007">    }</span>
+    
+    /**
+     * Returns the contents of the matrix as an array of values using
+     * DEFAULT_USE_COLUMN_ORDER to pick elements.
+     * @return Contents of matrix as an array
+     */
+    public double[] toArray() {
+<span class="fc" id="L1015">        return toArray(DEFAULT_USE_COLUMN_ORDER);</span>
+    }
+    
+    /**
+     * Returns the contents of the matrix as an array of values using provided
+     * order to pick elements.
+     * @param isColumnOrder If true, picks elements from matrix using column
+     * order, otherwise row order is used.
+     * @return Contents of matrix as an array,
+     */
+    public double[] toArray(boolean isColumnOrder) {
+<span class="fc" id="L1026">        int length = rows * columns;               </span>
+        
+<span class="fc bfc" id="L1028" title="All 2 branches covered.">        if (isColumnOrder) {</span>
+<span class="fc" id="L1029">            return Arrays.copyOf(buffer, length);</span>
+        } else {
+<span class="fc" id="L1031">            double[] out = new double[length];</span>
+            double value;
+<span class="fc" id="L1033">            int counter = 0;</span>
+            
+<span class="fc bfc" id="L1035" title="All 2 branches covered.">            for (int j = 0; j &lt; rows; j++) {</span>
+<span class="fc bfc" id="L1036" title="All 2 branches covered.">                for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc" id="L1037">                    value = buffer[columnIndex[i] + j];</span>
+<span class="fc" id="L1038">                    out[counter] = value;</span>
+<span class="fc" id="L1039">                    counter++;</span>
+                }
+            }
+            
+<span class="fc" id="L1043">            return out;</span>
+        }
+    }
+    
+    /**
+     * Copies the contents of the matrx to an array of values using column 
+     * order.
+     * @param result array where values will be copied to.
+     * @throws WrongSizeException if provided result array does not have the
+     * same number of elements as the matrix (i.e. rows x columns).
+     */
+    public void toArray(double[] result) throws WrongSizeException {
+<span class="fc" id="L1055">        toArray(result, DEFAULT_USE_COLUMN_ORDER);</span>
+<span class="fc" id="L1056">    }</span>
+    
+    /**
+     * Copies the contents of the matrix to an array of values using provided
+     * order to pick elements.
+     * @param result array where values will be copied to.
+     * @param isColumnOrder if true, picks elements from matrix using column 
+     * order, otherwise row order is used.
+     * @throws WrongSizeException if provided result array does not have the
+     * same number of elements as the matrix (i.e. rows x columns).
+     */
+    public void toArray(double[] result, boolean isColumnOrder) 
+            throws WrongSizeException {
+<span class="pc bpc" id="L1069" title="1 of 2 branches missed.">        if (result.length != buffer.length) {</span>
+<span class="nc" id="L1070">            throw new WrongSizeException(</span>
+                    &quot;result array must be equal to rows x columns&quot;);
+        }
+        
+<span class="fc bfc" id="L1074" title="All 2 branches covered.">        if (isColumnOrder) {</span>
+<span class="fc" id="L1075">            System.arraycopy(buffer, 0, result, 0, buffer.length);</span>
+        } else {
+            double value;
+<span class="fc" id="L1078">            int counter = 0;</span>
+            
+<span class="fc bfc" id="L1080" title="All 2 branches covered.">            for (int j = 0; j &lt; rows; j++) {</span>
+<span class="fc bfc" id="L1081" title="All 2 branches covered.">                for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc" id="L1082">                    value = buffer[columnIndex[i] + j];</span>
+<span class="fc" id="L1083">                    result[counter] = value;</span>
+<span class="fc" id="L1084">                    counter++;</span>
+                }
+            }            
+        }
+<span class="fc" id="L1088">    }</span>
+    
+    /**
+     * Returns current matrix internal buffer of data.
+     * @return Internal buffer of data.
+     */
+    public double[] getBuffer() {
+<span class="fc" id="L1095">        return buffer;</span>
+    }
+    
+    /**
+     * Internal method to retrieve a submatrix of current matrix instance. 
+     * Submatrix is obtained by copying all elements contained within provided 
+     * coordinates (both top-left and bottom-right points are included within 
+     * submatrix).
+     * @param topLeftRow Top-left row index where submatrix starts.
+     * @param topLeftColumn Top-left column index where submatrix starts.
+     * @param bottomRightRow Bottom-right row index where submatrix ends.
+     * @param bottomRightColumn Bottom-right column index where submatrix ends.
+     * @param result Instance where submatrix data is stored.
+     */
+    private void internalGetSubmatrix(int topLeftRow, int topLeftColumn,
+            int bottomRightRow, int bottomRightColumn, Matrix result) {
+<span class="fc" id="L1111">        int i2 = 0, j2 = 0;</span>
+<span class="fc bfc" id="L1112" title="All 2 branches covered.">        for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
+<span class="fc bfc" id="L1113" title="All 2 branches covered.">            for (int i = topLeftRow; i &lt;= bottomRightRow; i++) {</span>
+<span class="fc" id="L1114">                result.buffer[result.columnIndex[j2] + i2] =</span>
+                        buffer[columnIndex[j] + i];
+<span class="fc" id="L1116">                i2++;</span>
+            }
+<span class="fc" id="L1118">            i2 = 0;</span>
+<span class="fc" id="L1119">            j2++;</span>
+        }
+<span class="fc" id="L1121">    }</span>
+    
+    /**
+     * Obtains a submatrix of current matrix instance. Submatrix is obtained by
+     * copying all elements contained within provided coordinates (both top-left
+     * and bottom-right points are included within submatrix).
+     * @param topLeftRow Top-left row index where submatrix starts.
+     * @param topLeftColumn Top-left column index where submatrix starts.
+     * @param bottomRightRow Bottom-right row index where submatrix ends.
+     * @param bottomRightColumn Bottom-right column index where submatrix ends.
+     * @param result Instance where submatrix data is stored.
+     * @throws IllegalArgumentException Exception raised whenever top-left or
+     * bottom-right corners lie outside current matrix instance, or if top-left
+     * corner is indeed located below or at right side of bottom-right corner.
+     * @throws NullPointerException If provided result matrix is null.
+     */
+    public void getSubmatrix(int topLeftRow, int topLeftColumn, 
+            int bottomRightRow, int bottomRightColumn, Matrix result)
+            throws IllegalArgumentException, NullPointerException {
+<span class="pc bpc" id="L1140" title="10 of 20 branches missed.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+                topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
+                bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
+                bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
+                topLeftRow &gt; bottomRightRow || 
+                topLeftColumn &gt; bottomRightColumn) {
+<span class="nc" id="L1146">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L1149">        int subRows = bottomRightRow - topLeftRow + 1;</span>
+<span class="fc" id="L1150">        int subCols = bottomRightColumn - topLeftColumn + 1;</span>
+<span class="pc bpc" id="L1151" title="2 of 4 branches missed.">        if (result.getRows() != subRows || result.getColumns() != subCols) {</span>
+            //resize result
+            try {
+<span class="nc" id="L1154">                result.resize(subRows, subCols);</span>
+<span class="nc" id="L1155">            } catch (WrongSizeException ignore) { }</span>
+        }
+<span class="fc" id="L1157">        internalGetSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,</span>
+                bottomRightColumn, result);
+<span class="fc" id="L1159">    }</span>
+    
+    /**
+     * Obtains a submatrix of current matrix instance. Submatrix is obtained by
+     * copying all elements contained within provided coordinates (both top-left
+     * and bottom-right points are included within submatrix).
+     * @param topLeftRow Top-left row index where submatrix starts.
+     * @param topLeftColumn Top-left column index where submatrix starts.
+     * @param bottomRightRow Bottom-right row index where submatrix ends.
+     * @param bottomRightColumn Bottom-right column index where submatrix ends.
+     * @return A new instance containing selected submatrix.
+     * @throws IllegalArgumentException Exception raised whenever top-left or
+     * bottom-right corners lie outside current matrix instance, or if top-left
+     * corner is indeed located belo or at right side of bottom-right corner.
+     */
+    public Matrix getSubmatrix(int topLeftRow, int topLeftColumn, 
+            int bottomRightRow, int bottomRightColumn) 
+            throws IllegalArgumentException {
+<span class="pc bpc" id="L1177" title="4 of 20 branches missed.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+                topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
+                bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
+                bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
+                topLeftRow &gt; bottomRightRow || 
+                topLeftColumn &gt; bottomRightColumn) {
+<span class="fc" id="L1183">            throw new IllegalArgumentException();</span>
+        }
+        
+        Matrix out;
+        try {
+<span class="fc" id="L1188">            out = new Matrix(bottomRightRow - topLeftRow + 1,</span>
+                bottomRightColumn - topLeftColumn + 1);
+<span class="nc" id="L1190">        } catch (WrongSizeException e) {</span>
+<span class="nc" id="L1191">            throw new IllegalArgumentException(e);</span>
+<span class="fc" id="L1192">        }</span>
+<span class="fc" id="L1193">        internalGetSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,</span>
+                bottomRightColumn, out);
+<span class="fc" id="L1195">        return out;</span>
+    }
+    
+    /**
+     * Internal method to retrieve a submatrix of current matrix instance as an 
+     * array of values using provided column order and storing the result in
+     * provided array. 
+     * Submatrix is obtained by copying all elements contained within provided 
+     * coordinates (both top-left and bottom-right points are included within 
+     * submatrix).
+     * @param topLeftRow Top-left row index where submatrix starts
+     * @param topLeftColumn Top-left column index where submatrix starts
+     * @param bottomRightRow Bottom-right row index where submatrix ends
+     * @param bottomRightColumn Bottom-right column index where submatrix ends.
+     * @param isColumnOrder If true, picks elements from matrix using column
+     * order, otherwise row order is used.
+     * @param result Array where submatrix data is stored.
+     */    
+    private void internalGetSubmatrixAsArray(int topLeftRow, int topLeftColumn,
+            int bottomRightRow, int bottomRightColumn, boolean isColumnOrder, 
+            double[] result) {
+<span class="fc" id="L1216">        int counter = 0;        </span>
+<span class="fc bfc" id="L1217" title="All 2 branches covered.">        if (isColumnOrder) {</span>
+<span class="fc bfc" id="L1218" title="All 2 branches covered.">            for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
+<span class="fc bfc" id="L1219" title="All 2 branches covered.">                for (int i = topLeftRow; i &lt;= bottomRightRow; i++) {</span>
+<span class="fc" id="L1220">                    result[counter] = buffer[columnIndex[j] + i];</span>
+<span class="fc" id="L1221">                    counter++;</span>
+                }
+            }            
+        } else {
+<span class="fc bfc" id="L1225" title="All 2 branches covered.">            for (int i = topLeftRow; i &lt;= bottomRightRow; i++) {</span>
+<span class="fc bfc" id="L1226" title="All 2 branches covered.">                for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
+<span class="fc" id="L1227">                    result[counter] = buffer[columnIndex[j] + i];</span>
+<span class="fc" id="L1228">                    counter++;</span>
+                }
+            }
+        }        
+<span class="fc" id="L1232">    }</span>
+    
+    /**
+     * Retrieves a submatrix of current matrix instance as an array of values 
+     * using column order and storing the result in provided array. 
+     * Submatrix is obtained by copying all elements contained within provided 
+     * coordinates (both top-left and bottom-right points are included within 
+     * submatrix).
+     * @param topLeftRow Top-left row index where submatrix starts
+     * @param topLeftColumn Top-left column index where submatrix starts
+     * @param bottomRightRow Bottom-right row index where submatrix ends
+     * @param bottomRightColumn Bottom-right column index where submatrix ends.
+     * @param array Array where submatrix data is stored.
+     * @throws IllegalArgumentException Thrown if provided coordinates lie
+     * outside of matrix boundaries or if top-left corner is at the bottom or 
+     * right side of bottom-right corner
+     * @throws WrongSizeException thrown if length of provided array does not
+     * match the number of elements to be extracted from this matrix
+     */
+    public void getSubmatrixAsArray(int topLeftRow, int topLeftColumn,
+            int bottomRightRow, int bottomRightColumn, double[] array)
+            throws IllegalArgumentException, WrongSizeException {
+<span class="pc bpc" id="L1254" title="10 of 20 branches missed.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+                topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
+                bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
+                bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
+                topLeftRow &gt; bottomRightRow || 
+                topLeftColumn &gt; bottomRightColumn) {
+<span class="nc" id="L1260">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L1263">        int length = (bottomRightRow - topLeftRow + 1) *</span>
+                (bottomRightColumn - topLeftColumn + 1);        
+<span class="pc bpc" id="L1265" title="1 of 2 branches missed.">        if (array.length != length) {</span>
+<span class="nc" id="L1266">            throw new WrongSizeException();</span>
+        }
+        
+<span class="fc" id="L1269">        getSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow,</span>
+                bottomRightColumn, DEFAULT_USE_COLUMN_ORDER, array);
+<span class="fc" id="L1271">    }</span>
+    
+    /**
+     * Retrieves a submatrix of current matrix instance as an array of values
+     * using provided column order and storing the result in provided array. 
+     * Submatrix is obtained by copying all elements contained within provided 
+     * coordinates (both top-left and bottom-right points are included within 
+     * submatrix).
+     * @param topLeftRow Top-left row index where submatrix starts
+     * @param topLeftColumn Top-left column index where submatrix starts
+     * @param bottomRightRow Bottom-right row index where submatrix ends
+     * @param bottomRightColumn Bottom-right column index where submatrix ends.
+     * @param isColumnOrder If true, picks elements from matrix using column
+     * order, otherwise row order is used.
+     * @param array Array where submatrix data is stored.
+     * @throws IllegalArgumentException Exception raised whenever top-left or
+     * bottom-right corners lie outside current matrix instance, or if top-left
+     * corner is indeed located below or at right side of bottom-right corner.
+     * @throws WrongSizeException If provided array doesn't have proper length,
+     * which must be equal to the amount of elements in desired submatrix.
+     */        
+    public void getSubmatrixAsArray(int topLeftRow, int topLeftColumn,
+            int bottomRightRow, int bottomRightColumn, boolean isColumnOrder,
+            double[] array) throws IllegalArgumentException, WrongSizeException {
+<span class="pc bpc" id="L1295" title="10 of 20 branches missed.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+                topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
+                bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
+                bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
+                topLeftRow &gt; bottomRightRow || 
+                topLeftColumn &gt; bottomRightColumn) {
+<span class="nc" id="L1301">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L1304">        int length = (bottomRightRow - topLeftRow + 1) *</span>
+                (bottomRightColumn - topLeftColumn + 1);
+<span class="pc bpc" id="L1306" title="1 of 2 branches missed.">        if (array.length != length) {</span>
+<span class="nc" id="L1307">            throw new WrongSizeException();</span>
+        }
+        
+<span class="fc" id="L1310">        internalGetSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow, </span>
+                bottomRightColumn, isColumnOrder, array);        
+<span class="fc" id="L1312">    }</span>
+    
+    /**
+     * Obtains submatrix of current matrix instance as an array of values using
+     * DEFAULT_USE_COLUMN_ORDER. Array is obtained by copying all elements 
+     * contained within provided coordinates (both top-left
+     * and bottom-right points are included within submatrix).
+     * @param topLeftRow Top-left row index where submatrix starts
+     * @param topLeftColumn Top-left column index where submatrix starts
+     * @param bottomRightRow Bottom-right row index where submatrix ends
+     * @param bottomRightColumn Bottom-right column index where submatrix ends.
+     * @return An array containing submatrix elements
+     * @throws IllegalArgumentException Exception raised whenever top-left or
+     * bottom-right corners lie outside current matrix instance, or if top-left
+     * corner is indeed located belo or at right side of bottom-right corner.
+     */    
+    public double[] getSubmatrixAsArray(int topLeftRow, int topLeftColumn,
+            int bottomRightRow, int bottomRightColumn)
+            throws IllegalArgumentException {
+<span class="fc" id="L1331">        return getSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow,</span>
+                bottomRightColumn, DEFAULT_USE_COLUMN_ORDER);
+    }
+
+    /**
+     * Obtains submatrix of current matrix instance as an array of values using
+     * provided order. Array is obtained by copying all elements 
+     * contained within provided coordinates (both top-left
+     * and bottom-right points are included within submatrix).
+     * @param topLeftRow Top-left row index where submatrix starts
+     * @param topLeftColumn Top-left column index where submatrix starts
+     * @param bottomRightRow Bottom-right row index where submatrix ends
+     * @param bottomRightColumn Bottom-right column index where submatrix ends.
+     * @param isColumnOrder If true, picks elements from matrix using column
+     * order, otherwise row order is used.
+     * @return An array containing submatrix elements
+     * @throws IllegalArgumentException Exception raised whenever top-left or
+     * bottom-right corners lie outside current matrix instance, or if top-left
+     * corner is indeed located below or at right side of bottom-right corner.
+     */        
+    public double[] getSubmatrixAsArray(int topLeftRow, int topLeftColumn,
+            int bottomRightRow, int bottomRightColumn, boolean isColumnOrder)
+            throws IllegalArgumentException {
+<span class="pc bpc" id="L1354" title="4 of 20 branches missed.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+                topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
+                bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
+                bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
+                topLeftRow &gt; bottomRightRow || 
+                topLeftColumn &gt; bottomRightColumn) {
+<span class="fc" id="L1360">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L1363">        int length = (bottomRightRow - topLeftRow + 1) *</span>
+                (bottomRightColumn - topLeftColumn + 1);
+        
+<span class="fc" id="L1366">        double[] out = new double[length];</span>
+<span class="fc" id="L1367">        internalGetSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow,</span>
+                bottomRightColumn, isColumnOrder, out);
+<span class="fc" id="L1369">        return out;</span>
+    }
+    
+    /**
+     * Copies elements from provided submatrix into this matrix at provided
+     * location.
+     * @param topLeftRow Top-left row index where submatrix copy starts
+     * @param topLeftColumn Top-left column index where submatrix copy starts
+     * @param bottomRightRow Bottom-right row index where submatrix copy ends
+     * @param bottomRightColumn Bottom-right column index where submatrix copy 
+     * ends.
+     * @param submatrix Submatrix to be copied
+     * @throws IllegalArgumentException Exception raised whenever top-left or
+     * bottom-right corners lie outside current matrix instance, or if top-left
+     * corner is indeed located below or at right side of bottom-right corner.
+     */
+    public void setSubmatrix(int topLeftRow, int topLeftColumn, 
+            int bottomRightRow, int bottomRightColumn, Matrix submatrix)
+            throws IllegalArgumentException {
+<span class="fc" id="L1388">        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, </span>
+<span class="fc" id="L1389">                bottomRightColumn, submatrix, 0, 0, submatrix.getRows() - 1,</span>
+<span class="fc" id="L1390">                submatrix.getColumns() - 1);</span>
+<span class="fc" id="L1391">    }</span>
+    
+    /**
+     * Copies elements from provided submatrix into this matrix at provided
+     * location
+     * @param topLeftRow Top-left row index where submatrix copy starts
+     * @param topLeftColumn Top-left column index where submatrix copy starts
+     * @param bottomRightRow Bottom-right row index where submatrix copy ends
+     * @param bottomRightColumn Bottom-right column index where submatrix copy
+     * ends.
+     * @param submatrix Submatrix to be copied
+     * @param submatrixTopLeftRow Top-left row index of submatrix where copy 
+     * starts
+     * @param submatrixTopLeftColumn Top-left column index of submatrix where
+     * copy starts
+     * @param submatrixBottomRightRow Bottom-right row index of submatrix where
+     * copy ends
+     * @param submatrixBottomRightColumn Bottom-right column index of submatrix
+     * where copy ends
+     * @throws IllegalArgumentException  Exception raised whenever top-left or
+     * bottom-right corners lie outside current or provided matrices, or if
+     * top-left corners are indeed located below or at right side of 
+     * bottom-right corners.
+     */
+    public void setSubmatrix(int topLeftRow, int topLeftColumn, 
+            int bottomRightRow, int bottomRightColumn, Matrix submatrix,
+            int submatrixTopLeftRow, int submatrixTopLeftColumn,
+            int submatrixBottomRightRow, int submatrixBottomRightColumn)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L1420" title="All 20 branches covered.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+                topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
+                bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
+                bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
+                topLeftRow &gt; bottomRightRow || 
+                topLeftColumn &gt; bottomRightColumn) {
+<span class="fc" id="L1426">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="pc bpc" id="L1429" title="2 of 20 branches missed.">        if (submatrixTopLeftRow &lt; 0 || submatrixTopLeftRow &gt;= submatrix.rows ||</span>
+                submatrixTopLeftColumn &lt; 0 || 
+                submatrixTopLeftColumn &gt;= submatrix.columns ||
+                submatrixBottomRightRow &lt; 0 || 
+                submatrixBottomRightRow &gt;= submatrix.rows ||
+                submatrixBottomRightColumn &lt; 0 || 
+                submatrixBottomRightColumn &gt;= submatrix.columns ||
+                submatrixTopLeftRow &gt; submatrixBottomRightRow ||
+                submatrixTopLeftColumn &gt; submatrixBottomRightColumn) {
+<span class="fc" id="L1438">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L1441">        int matrixRows = bottomRightRow - topLeftRow + 1;</span>
+<span class="fc" id="L1442">        int matrixColumns = bottomRightColumn - topLeftColumn + 1;</span>
+<span class="fc" id="L1443">        int submatrixRows = submatrixBottomRightRow - submatrixTopLeftRow + 1;</span>
+<span class="fc" id="L1444">        int submatrixColumns = submatrixBottomRightColumn -                 </span>
+                submatrixTopLeftColumn + 1;
+<span class="fc bfc" id="L1446" title="All 4 branches covered.">        if (matrixRows != submatrixRows || matrixColumns != submatrixColumns) {</span>
+<span class="fc" id="L1447">            throw new IllegalArgumentException();</span>
+        }
+        
+        //int i2 = submatrixTopLeftRow;
+<span class="fc" id="L1451">        int j2 = submatrixTopLeftColumn;</span>
+        int destPos, sourcePos;
+<span class="fc bfc" id="L1453" title="All 2 branches covered.">        for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
+<span class="fc" id="L1454">            destPos = columnIndex[j] + topLeftRow;</span>
+<span class="fc" id="L1455">            sourcePos = submatrix.columnIndex[j2] + submatrixTopLeftRow; //i2;</span>
+<span class="fc bfc" id="L1456" title="All 2 branches covered.">            for(int i = topLeftRow; i &lt;= bottomRightRow; i++){</span>
+                //Lines below are equivalent to commented code
+<span class="fc" id="L1458">                buffer[destPos] = submatrix.buffer[sourcePos];</span>
+<span class="fc" id="L1459">                destPos++;</span>
+<span class="fc" id="L1460">                sourcePos++;</span>
+                //buffer[columnIndex[j] + i] = 
+                //submatrix.buffer[submatrix.columnIndex[j2] + i2];
+                //i2++;
+            }
+            //i2 = submatrixTopLeftRow;
+<span class="fc" id="L1466">            j2++;</span>
+        }
+<span class="fc" id="L1468">    }</span>
+    
+    /**
+     * Sets elements in provided region to provided value.
+     * @param topLeftRow Top-left row index of region (inclusive).
+     * @param topLeftColumn Top-left column index of region (inclusive).
+     * @param bottomRightRow Bottom-right row index of region (inclusive).
+     * @param bottomRightColumn Bottom-right column index of region (inclusive).
+     * @param value Value to be set.
+     * @throws IllegalArgumentException Exception raised whenever top-left or
+     * bottom-right corners lie outside current matrix instance, or if top-left
+     * corner is indeed located below or at right side of bottom-right corner.
+     */
+    public void setSubmatrix(int topLeftRow, int topLeftColumn, 
+            int bottomRightRow, int bottomRightColumn, double value)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L1484" title="All 20 branches covered.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+                topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
+                bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
+                bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
+                topLeftRow &gt; bottomRightRow || 
+                topLeftColumn &gt; bottomRightColumn) {
+<span class="fc" id="L1490">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc bfc" id="L1493" title="All 2 branches covered.">        for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
+<span class="fc bfc" id="L1494" title="All 2 branches covered.">            for(int i = topLeftRow; i &lt;= bottomRightRow; i++){</span>
+<span class="fc" id="L1495">                buffer[columnIndex[j] + i] = value;</span>
+            }
+        }
+<span class="fc" id="L1498">    }</span>
+    
+    /**
+     * Copies elements from provided array into this matrix at provided
+     * location. Elements in array are copied into this matrix considering
+     * DEFAULT_USE_COLUMN_ORDER.
+     * @param topLeftRow Top-left row index where copy starts.
+     * @param topLeftColumn Top-left column index where copy starts.
+     * @param bottomRightRow Bottom-right row index where copy ends.
+     * @param bottomRightColumn Bottom-right column index where copy
+     * ends.
+     * @param values Array to be copied.
+     * @throws IllegalArgumentException Exception raised whenever top-left or
+     * bottom-right corners lie outside current matrix instance, or if top-left
+     * corner is indeed located below or at right side of bottom-right corner.
+     */    
+    public void setSubmatrix(int topLeftRow, int topLeftColumn,
+            int bottomRightRow, int bottomRightColumn, double[] values)
+            throws IllegalArgumentException {
+<span class="fc" id="L1517">        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, </span>
+                bottomRightColumn, values, DEFAULT_USE_COLUMN_ORDER);
+<span class="fc" id="L1519">    }</span>
+    
+    /**
+     * Copies elements from provided array into this matrix at provided 
+     * location. Elements in array are copied into this matrix following
+     * provided order (either row or column order).
+     * @param topLeftRow Top-left row index where copy starts.
+     * @param topLeftColumn Top-left column index where copy ends.
+     * @param bottomRightRow Bottom-right row index where copy ends.
+     * @param bottomRightColumn Bottom-right column index where copy ends.
+     * @param values Array to be copied.
+     * @param isColumnOrder If true values are copied consecutively from array
+     * following column order on the destination matrix, otherwise row order is
+     * used.
+     * @throws IllegalArgumentException Exception raised whenever top-left or
+     * bottom-right corners lie outside current matrix instance, or if top-left
+     * corner is indeed located below or at right side of bottom-right corner.
+     */
+    public void setSubmatrix(int topLeftRow, int topLeftColumn,
+            int bottomRightRow, int bottomRightColumn, double[] values,
+            boolean isColumnOrder) throws IllegalArgumentException {
+<span class="fc" id="L1540">        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, </span>
+                bottomRightColumn, values, 0, values.length - 1, isColumnOrder);
+<span class="fc" id="L1542">    }</span>
+    
+    /**
+     * Copies elements from provided array into this matrix at provided
+     * location. Elements in array are copied into this matrix considering
+     * DEFAULT_USE_COLUMN_ORDER starting at provided location until end provided
+     * position.
+     * @param topLeftRow Top-left row index where copy starts (inclusive).
+     * @param topLeftColumn Top-left column index where copy starts (inclusive).
+     * @param bottomRightRow Bottom-right row index where copy ends (inclusive).
+     * @param bottomRightColumn Bottom-right column index where copy
+     * ends. (inclusive)
+     * @param values Array to be copied.
+     * @param valuesStart Position where copy from array will start (inclusive).
+     * @param valuesEnd Position where copy from array will finish (inclusive).
+     * @throws IllegalArgumentException Exception raised whenever top-left or
+     * bottom-right corners lie outside current matrix instance, or if top-left
+     * corner is indeed located below or at right side of bottom-right corner, 
+     * or if valuesStart and valuesEnd lie outside of valid array positions or
+     * start is greater than end position.
+     */        
+    public void setSubmatrix(int topLeftRow, int topLeftColumn,
+            int bottomRightRow, int bottomRightColumn, double[] values,
+            int valuesStart, int valuesEnd) throws IllegalArgumentException {
+<span class="fc" id="L1566">        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, </span>
+                bottomRightColumn, values, valuesStart, valuesEnd, 
+                DEFAULT_USE_COLUMN_ORDER);
+<span class="fc" id="L1569">    }</span>
+
+    /**
+     * Copies elements from provided array into this matrix at provided
+     * location. Elements in array are copied into this matrix following
+     * provided order (either row or column order) starting at provided location
+     * until end provided position.
+     * @param topLeftRow Top-left row index where copy starts (inclusive)
+     * @param topLeftColumn Top-left column index where copy starts (inclusive)
+     * @param bottomRightRow Bottom-right row index where copy ends (inclusive)
+     * @param bottomRightColumn Bottom-right column index where copy 
+     * ends. (inclusive)
+     * @param values Array to be copied.
+     * @param valuesStart Position where copy from array will start (inclusive).
+     * @param valuesEnd Position where copy from array will finish (inclusive).
+     * @param isColumnOrder If true values are copied consecutively from array
+     * following column order on the destination matrix, otherwise row order is
+     * used.
+     * @throws IllegalArgumentException Exception raised whenever top-left or
+     * bottom-right corners lie outside current matrix instance, or if top-left
+     * corner is indeed located below or at right side of bottom-right corner, 
+     * or if valuesStart and valuesEnd lie outside of valid array positions or
+     * start is greater than end position.
+     */            
+    public void setSubmatrix(int topLeftRow, int topLeftColumn,
+            int bottomRightRow, int bottomRightColumn, double[] values,
+            int valuesStart, int valuesEnd, boolean isColumnOrder) 
+            throws IllegalArgumentException {
+        
+<span class="fc bfc" id="L1598" title="All 20 branches covered.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+                topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
+                bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
+                bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
+                topLeftRow &gt; bottomRightRow || 
+                topLeftColumn &gt; bottomRightColumn) {
+<span class="fc" id="L1604">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="pc bpc" id="L1607" title="4 of 10 branches missed.">        if (valuesStart &lt; 0 || valuesStart &gt;= values.length ||</span>
+                valuesEnd &lt; 0 || valuesEnd &gt;= values.length ||
+                valuesStart &gt; valuesEnd) {
+<span class="fc" id="L1610">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L1613">        int matrixRows = bottomRightRow - topLeftRow + 1;</span>
+<span class="fc" id="L1614">        int matrixColumns = bottomRightColumn - topLeftColumn + 1;        </span>
+<span class="fc" id="L1615">        int matrixLength = matrixRows * matrixColumns;</span>
+<span class="fc" id="L1616">        int valuesLength = valuesEnd - valuesStart + 1;</span>
+        
+<span class="fc bfc" id="L1618" title="All 2 branches covered.">        if (matrixLength != valuesLength) {</span>
+<span class="fc" id="L1619">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L1622">        int counter = valuesStart;</span>
+<span class="fc bfc" id="L1623" title="All 2 branches covered.">        if (isColumnOrder) {</span>
+            int destPos;
+<span class="fc bfc" id="L1625" title="All 2 branches covered.">            for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
+<span class="fc" id="L1626">                destPos = columnIndex[j] + topLeftRow;</span>
+<span class="fc bfc" id="L1627" title="All 2 branches covered.">                for(int i = topLeftRow; i &lt;= bottomRightRow; i++){</span>
+                    //Two Lines belo are equivalent to:
+                    //buffer[columnIndex[j] + i] = values[counter];                    
+<span class="fc" id="L1630">                    buffer[destPos] = values[counter];</span>
+<span class="fc" id="L1631">                    destPos++;</span>
+<span class="fc" id="L1632">                    counter++;</span>
+                }
+            }        
+            
+        } else {
+<span class="fc bfc" id="L1637" title="All 2 branches covered.">            for (int i = topLeftRow; i &lt;= bottomRightRow; i++) {</span>
+<span class="fc bfc" id="L1638" title="All 2 branches covered.">                for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
+<span class="fc" id="L1639">                    buffer[columnIndex[j] + i] = values[counter];</span>
+<span class="fc" id="L1640">                    counter++;</span>
+                }
+            }
+        }
+<span class="fc" id="L1644">    }</span>
+    
+    /**
+     * Sets values into provided matrix to make it an identity matrix (all 
+     * elements in the diagonal equal to one, and remaining elements to zero).
+     * @param m Matrix where identity values are set.
+     */
+    public static void identity(Matrix m) {
+<span class="fc" id="L1652">        m.initialize(0.0);</span>
+        
+<span class="fc bfc" id="L1654" title="All 2 branches covered.">        int minSize = (m.rows &lt; m.columns) ? m.rows : m.columns;</span>
+<span class="fc bfc" id="L1655" title="All 2 branches covered.">        for (int i = 0; i &lt; minSize; i++) {</span>
+<span class="fc" id="L1656">            m.buffer[m.columnIndex[i] + i] = 1.0;</span>
+        }        
+<span class="fc" id="L1658">    }</span>
+    
+    /**
+     * Creates and returns a new matrix instance having all the elements on
+     * the diagonal equal to one and the remainng ones equal to zero.
+     * @param rows Number of rows of created instance
+     * @param columns Number of columns of created instance
+     * @return An identity matrix
+     * @throws WrongSizeException Raised if either rows or columns is 
+     * equal to zero
+     */
+    public static Matrix identity(int rows, int columns) 
+            throws WrongSizeException {
+        
+<span class="fc" id="L1672">        Matrix out = new Matrix(rows, columns);</span>
+<span class="fc" id="L1673">        identity(out);</span>
+<span class="fc" id="L1674">        return out;</span>
+    }    
+    
+    /**
+     * Fills provided matrix with random uniform values ranging from minValue to
+     * maxValue.
+     * @param minValue Minimum value of uniform random generated values
+     * @param maxValue Maximum value of uniform random generated values
+     * @param random Random generator
+     * @param result Matrix where random values are stored.
+     * @throws IllegalArgumentException if minValue &amp;lt;= maxValue
+     * @throws NullPointerException if either provided random or result 
+     * instances are null
+     */
+    public static void fillWithUniformRandomValues(double minValue, 
+            double maxValue, Random random, Matrix result) 
+            throws IllegalArgumentException, NullPointerException {
+<span class="fc" id="L1691">        UniformRandomizer randomizer = new UniformRandomizer(random);</span>
+        
+<span class="fc" id="L1693">        int length = result.rows * result.columns;</span>
+        
+<span class="fc bfc" id="L1695" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L1696">            result.buffer[i] = randomizer.nextDouble(minValue, maxValue);</span>
+        }
+<span class="fc" id="L1698">    }</span>
+    
+    /**
+     * Fills provided matrix with random uniform values ranging from minValue to
+     * maxValue.
+     * @param minValue Minimum value of uniform random generated values
+     * @param maxValue Maximum value of uniform random generated values
+     * @param result Matrix where random values are stored
+     * @throws IllegalArgumentException if minValue &amp;lt;= maxValue
+     * @throws NullPointerException if provided result matrix is null
+     */
+    public static void fillWithUniformRandomValues(double minValue, 
+            double maxValue, Matrix result) throws IllegalArgumentException,
+            NullPointerException {
+<span class="nc" id="L1712">        fillWithUniformRandomValues(minValue, maxValue, new Random(), result);</span>
+<span class="nc" id="L1713">    }</span>
+    
+    /**
+     * Creates new matrix instance using provided size and containing uniformly
+     * distributed random values with provided range.
+     * @param rows Number of rows of instantiated matrix
+     * @param columns Number of columns of instantiated matrix
+     * @param minValue Minimum value of uniform random generated values
+     * @param maxValue Maximum value of uniform random generated values
+     * @return A new matrix containing uniform random values
+     * @throws WrongSizeException Exception thrown if either rows or
+     * columns is zero, or if the minimum random value is greater or equal
+     * than the maximum random value
+     * @throws IllegalArgumentException if minValue &amp;lt;= maxValue
+     */
+    public static Matrix createWithUniformRandomValues(int rows, int columns,
+            double minValue, double maxValue) throws WrongSizeException,
+            IllegalArgumentException {
+<span class="fc" id="L1731">        return createWithUniformRandomValues(rows, columns, minValue, maxValue,</span>
+                new Random());
+    }
+    
+    /**
+     * Creates new matrix instance using provided size and containing uniformly
+     * distributed random values with provided range and using provided random
+     * generator
+     * @param rows Number of rows of instantiated matrix
+     * @param columns Number of columns of instantiated matrix
+     * @param minValue Minimum value of uniform random generated values
+     * @param maxValue Maximum value of uniform random generated values
+     * @param random A random generator.
+     * @return A new matrix containing uniform random values
+     * @throws WrongSizeException Exception thrown if either rows or
+     * columns is zero, or if the minimum random value is greater or equal
+     * than the maximum random value
+     * @throws IllegalArgumentException if minValue &amp;lt;= maxValue
+     */    
+    public static Matrix createWithUniformRandomValues(int rows, int columns,
+            double minValue, double maxValue, Random random) 
+            throws WrongSizeException, IllegalArgumentException {
+        
+<span class="fc" id="L1754">        Matrix out = new Matrix(rows, columns);</span>
+<span class="fc" id="L1755">        fillWithUniformRandomValues(minValue, maxValue, random, out);</span>
+<span class="fc" id="L1756">        return out;</span>
+    }
+    
+    /**
+     * Fills provided matrix with random Gaussian values with provided mean and
+     * standard deviation.
+     * @param mean Mean value of generated random values
+     * @param standardDeviation Standard deviation of generated random values
+     * @param random Random generator
+     * @param result Matrix where random values are stored
+     * @throws IllegalArgumentException if standard deviation is negative or 
+     * zero
+     * @throws NullPointerException if provided result matrix is null
+     */    
+    public static void fillWithGaussianRandomValues(double mean, 
+            double standardDeviation, Random random, Matrix result)
+            throws IllegalArgumentException, NullPointerException {
+        
+<span class="fc" id="L1774">        GaussianRandomizer randomizer = new GaussianRandomizer(random, mean, </span>
+                standardDeviation);
+        
+<span class="fc" id="L1777">        int length = result.rows * result.columns;</span>
+        
+<span class="fc bfc" id="L1779" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L1780">            result.buffer[i] = randomizer.nextDouble();</span>
+        }        
+<span class="fc" id="L1782">    }</span>
+    
+    /**
+     * Fills provided matrix with random Gaussian values with provided mean and
+     * standard deviation
+     * @param mean Mean value of generated random values
+     * @param standardDeviation Standard deviation of generated random values
+     * @param result Matrix where random values are stored
+     * @throws IllegalArgumentException if standard deviation is negative or
+     * zero
+     * @throws NullPointerException if provided result matrix is null
+     */
+    public static void fillWithGaussianRandomValues(double mean, 
+            double standardDeviation, Matrix result) 
+            throws IllegalArgumentException, NullPointerException {
+<span class="nc" id="L1797">        fillWithGaussianRandomValues(mean, standardDeviation, new Random(), </span>
+                result);
+<span class="nc" id="L1799">    }</span>
+    
+    /**
+     * Creates new matrix instance using provided size and containing 
+     * gaussian/normal distributed random values with provided median and 
+     * standard deviation.
+     * @param rows Number of rows of instantiated matrix
+     * @param columns Number of columns of instantiated matrix
+     * @param mean Mean value of gaussian random generated values
+     * @param standardDeviation Standard deviation of gaussian random generated 
+     * values
+     * @return A new matrix containing gaussian random values
+     * @throws WrongSizeException Exception thrown if either rows or 
+     * columns is zero, or if the standard deviation is negative or zero.
+     * @throws IllegalArgumentException  thrown if provided standard deviation
+     * is negative or zero.
+     */
+    public static Matrix createWithGaussianRandomValues(int rows, int columns,
+            double mean, double standardDeviation) 
+            throws WrongSizeException, IllegalArgumentException {
+<span class="fc" id="L1819">        return createWithGaussianRandomValues(rows, columns, mean, </span>
+                standardDeviation, new Random());
+    }
+
+    /**
+     * Creates new matrix instance using provided size and containing 
+     * gaussian/normal distributed random values with provided median and 
+     * standard deviation and using provided random generator
+     * @param rows Number of rows of instantiated matrix
+     * @param columns Number of columns of instantiated matrix
+     * @param mean Mean value of gaussian random generated values
+     * @param standardDeviation Standard deviation of gaussian random generated 
+     * values
+     * @param random A random generator.
+     * @return A new matrix containing gaussian random values
+     * @throws WrongSizeException Exception thrown if either rows or 
+     * columns is zero, or if the standard deviation is negative or zero.
+     * @throws IllegalArgumentException  thrown if provided standard deviation
+     * is negative or zero.
+     */    
+    public static Matrix createWithGaussianRandomValues(int rows, int columns,
+            double mean, double standardDeviation, Random random) 
+            throws WrongSizeException, IllegalArgumentException {
+        
+<span class="fc" id="L1843">        Matrix out = new Matrix(rows, columns);</span>
+<span class="fc" id="L1844">        fillWithGaussianRandomValues(mean, standardDeviation, random, out);</span>
+<span class="fc" id="L1845">        return out;</span>
+    }
+    
+    /**
+     * Makes provided result matrix a diagonal matrix containing provided 
+     * elements in the diagonal. Elements outside the diagonal will be set to 
+     * zero
+     * @param diagonal Array containing the elements to be set on the diagonal
+     * @param result Matrix where values are stored
+     * @throws NullPointerException Exception thrown if provided parameters are
+     * null
+     */
+    public static void diagonal(double[] diagonal, Matrix result)
+            throws NullPointerException {
+        
+<span class="fc" id="L1860">        result.initialize(0.0);</span>
+        //set diagonal elements
+        //noinspection all
+<span class="fc bfc" id="L1863" title="All 2 branches covered.">        for(int i = 0; i &lt; diagonal.length; i++){</span>
+<span class="fc" id="L1864">            result.buffer[result.columnIndex[i] + i] = diagonal[i];</span>
+        }
+<span class="fc" id="L1866">    }</span>
+    
+    /**
+     * Creates a diagonal matrix having all the elements in provided array in
+     * its diagonal and the remaining elements equal to zero.
+     * Returned matrix will have size n x n, where n is the length of the array
+     * @param diagonal Array containing the elements to be set on the diagonal
+     * @return A diagonal matrix
+     * @throws NullPointerException Raised if provided diagonal array is null
+     */
+    public static Matrix diagonal(double[] diagonal) 
+            throws NullPointerException {
+        
+<span class="fc" id="L1879">        Matrix out = null;</span>
+        try {
+<span class="fc" id="L1881">            out = new Matrix(diagonal.length, diagonal.length);</span>
+<span class="fc" id="L1882">            diagonal(diagonal, out);</span>
+<span class="pc" id="L1883">        } catch (WrongSizeException ignore) { }</span>
+
+<span class="fc" id="L1885">        return out;</span>
+    }
+    
+    /**
+     * Instantiates new matrix from array using DEFAULT_USE_COLUMN_ORDER
+     * @param array Array used as source to copy values from
+     * @return Returns matrix created from array
+     */
+    public static Matrix newFromArray(double[] array) {
+<span class="fc" id="L1894">        return newFromArray(array, DEFAULT_USE_COLUMN_ORDER);</span>
+    }
+    
+    /**
+     * Instantiates new matrix from array using either column or row order
+     * @param array Array used as source to copy values from
+     * @param isColumnOrder True if column order must be used, false otherwise
+     * @return Returns matrix created from array
+     */
+    public static Matrix newFromArray(double[] array, boolean isColumnOrder) {
+<span class="fc" id="L1904">        Matrix m = null;</span>
+        try {
+<span class="fc bfc" id="L1906" title="All 2 branches covered.">            if (isColumnOrder) {</span>
+<span class="fc" id="L1907">                m = new Matrix(array.length, 1);</span>
+<span class="fc" id="L1908">                m.setSubmatrix(0, 0, array.length - 1, 0, array);</span>
+            } else {
+<span class="fc" id="L1910">                m = new Matrix(1, array.length);</span>
+<span class="fc" id="L1911">                m.setSubmatrix(0, 0, 0, array.length - 1, array);</span>
+            }
+<span class="pc" id="L1913">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L1914">        return m;        </span>
+    }
+    
+    /**
+     * Copies elements of array into this instance using column order.
+     * @param array array to copy values from.
+     * @throws WrongSizeException if provided array length is not equal to the
+     * number of rows multiplied per the number of columns of this instance.
+     */
+    public void fromArray(double[] array) throws WrongSizeException {
+<span class="fc" id="L1924">        fromArray(array, DEFAULT_USE_COLUMN_ORDER);</span>
+<span class="fc" id="L1925">    }</span>
+    
+    /**
+     * Copies elements of array into this instance using provided order.
+     * @param array array to copy values from.
+     * @param isColumnOrder true to use column order, false otherwise.
+     * @throws WrongSizeException if provided array length is not equal to the
+     * number of rows multiplied per the number of columns of this instance.
+     */
+    public void fromArray(double[] array, boolean isColumnOrder) 
+            throws WrongSizeException {
+<span class="fc bfc" id="L1936" title="All 2 branches covered.">        if (array.length != buffer.length) {</span>
+<span class="fc" id="L1937">            throw new WrongSizeException(</span>
+                    &quot;array length must be equal to rows x columns&quot;);
+        }   
+        
+<span class="fc bfc" id="L1941" title="All 2 branches covered.">        if (isColumnOrder) {</span>
+<span class="fc" id="L1942">            System.arraycopy(array, 0, buffer, 0, array.length);</span>
+        } else {
+<span class="fc" id="L1944">            int counter = 0;</span>
+            
+<span class="fc bfc" id="L1946" title="All 2 branches covered.">            for (int j = 0; j &lt; rows; j++) {</span>
+<span class="fc bfc" id="L1947" title="All 2 branches covered.">                for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc" id="L1948">                    buffer[columnIndex[i] + j] = array[counter];</span>
+<span class="fc" id="L1949">                    counter++;</span>
+                }
+            }                        
+        }
+<span class="fc" id="L1953">    }</span>
+    
+    /**
+     * Symmetrizes this instance and stores the result into provided instance.
+     * Symmetrization is done by averaging this instance with its transpose
+     * (i.e. S = (M+M')/2
+     * @param result instance where symmetrized version of this instance will be
+     * stored.
+     * @throws WrongSizeException if this instance is not square or provided
+     * result instance doesn't have the same size as this instance.
+     */
+    public void symmetrize(Matrix result) throws WrongSizeException {
+<span class="fc bfc" id="L1965" title="All 2 branches covered.">        if (rows != columns) {</span>
+<span class="fc" id="L1966">            throw new WrongSizeException(&quot;matrix must be square&quot;);</span>
+        }
+<span class="pc bpc" id="L1968" title="1 of 4 branches missed.">        if (result.getRows() != rows || result.getColumns() != columns) {</span>
+<span class="fc" id="L1969">            throw new WrongSizeException(</span>
+                    &quot;result matrix must have the size of this instance&quot;);
+        }
+        
+        //S = (M+M')/2
+        double value1, value2, avg;
+        int pos1, pos2;
+<span class="fc bfc" id="L1976" title="All 2 branches covered.">        for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc bfc" id="L1977" title="All 2 branches covered.">            for (int j = i; j &lt; rows; j++) {</span>
+                //value at (i, j)
+<span class="fc" id="L1979">                pos1 = columnIndex[i] + j;</span>
+<span class="fc" id="L1980">                value1 = buffer[pos1];</span>
+                //transposed value (i.e. value at (j,i))
+<span class="fc" id="L1982">                pos2 = columnIndex[j] + i;</span>
+<span class="fc" id="L1983">                value2 = buffer[pos2];</span>
+                
+<span class="fc" id="L1985">                avg = 0.5*(value1 + value2);</span>
+<span class="fc" id="L1986">                result.buffer[pos1] = avg;</span>
+<span class="fc" id="L1987">                result.buffer[pos2] = avg;</span>
+            }
+        }
+<span class="fc" id="L1990">    }</span>
+    
+    /**
+     * Symmetrizes this instance and returns the result as a new matrix 
+     * instance.
+     * Symmetrization is done by averaging this instance with its transpose
+     * (i.e. S = (M+M')/2
+     * @return a new symmetrizes version of this instance.
+     * @throws WrongSizeException if this instance is not square.
+     */
+    public Matrix symmetrizeAndReturnNew() throws WrongSizeException {
+<span class="fc" id="L2001">        Matrix m = new Matrix(rows, columns);</span>
+<span class="fc" id="L2002">        symmetrize(m);</span>
+<span class="fc" id="L2003">        return m;</span>
+    }
+    
+    /**
+     * Symmetrizes this instance and updates it with computed value.
+     * Symmetrization is done by averaging this instance with its transpose
+     * (i.e. S = (M+M')/2
+     * @throws WrongSizeException if this instance is not square.
+     */
+    public void symmetrize() throws WrongSizeException {
+<span class="fc" id="L2013">        symmetrize(this);</span>
+<span class="fc" id="L2014">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

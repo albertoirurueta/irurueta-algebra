@@ -1,0 +1,974 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MultivariateNormalDist.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-algebra</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.statistics</a> &gt; <span class="el_source">MultivariateNormalDist.java</span></div><h1>MultivariateNormalDist.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.statistics;
+
+import com.irurueta.algebra.*;
+
+import java.util.Arrays;
+
+/**
+ * Contains methods to work with multivariate normal (i.e. Gaussian) 
+ * distributions.
+ */
+@SuppressWarnings(&quot;WeakerAccess&quot;)
+public class MultivariateNormalDist {
+    
+    /**
+     * Mean value of Gaussian distribution.
+     */
+    private double[] mMu;
+    
+    /**
+     * Covariance of Gaussian distribution.
+     */
+    private Matrix mCov;
+    
+    /**
+     * Basis in which the covariance matrix is expressed.
+     * This value is obtained after decomposition.
+     */
+    private Matrix mCovBasis;
+    
+    /**
+     * Variances on each direction of the basis.
+     */
+    private double[] mVariances;    
+    
+    /**
+     * Constructor.
+     * Creates a normal distribution of 1 dimension.
+     */
+    public MultivariateNormalDist(){
+<span class="fc" id="L55">        this(1);</span>
+<span class="fc" id="L56">    }</span>
+    
+    /**
+     * Constructor.
+     * Creates a multivariate normal distribution having the provided
+     * number of dimensions, with zero mean and unitary independent variances.
+     * @param dims number of dimensions. Must be greater than zero.
+     * @throws IllegalArgumentException if provided number of dimensions is 
+     * zero or less.
+     */
+<span class="fc" id="L66">    public MultivariateNormalDist(int dims) throws IllegalArgumentException {</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (dims &lt;= 0) {</span>
+<span class="fc" id="L68">            throw new IllegalArgumentException(</span>
+                    &quot;number of dimensions must be greater than zero&quot;);
+        }
+
+<span class="fc" id="L72">        mMu = new double[dims];</span>
+        try {
+<span class="fc" id="L74">            mCov = Matrix.identity(dims, dims);</span>
+<span class="nc" id="L75">        } catch (WrongSizeException e) {</span>
+<span class="nc" id="L76">            throw new IllegalArgumentException(</span>
+                    &quot;number of dimensions must be greater than zero&quot;, e);
+<span class="fc" id="L78">        }</span>
+<span class="fc" id="L79">    }</span>
+    
+    /**
+     * Constructor.
+     * Creates a multivariate normal distribution having provided mean and 
+     * covariance.
+     * @param mean array containing mean. Must have the same number of rows as
+     * provided covariance matrix
+     * @param covariance matrix containing covariance. Must be square, symmetric 
+     * and positive definite (i.e. non singular) and must have the same number 
+     * of rows as provided mean.
+     * @throws IllegalArgumentException if provided mean array has length 
+     * smaller than 1 or if length of mean array is not the same as the number
+     * of rows of covariance matrix.
+     * @throws InvalidCovarianceMatrixException if provided covariance matrix is
+     * not square, symmetric and positive definite (i.e. non singular).
+     */
+    public MultivariateNormalDist(double[] mean, Matrix covariance)
+<span class="fc" id="L97">            throws IllegalArgumentException, InvalidCovarianceMatrixException {</span>
+<span class="fc" id="L98">        setMeanAndCovariance(mean, covariance);</span>
+<span class="fc" id="L99">    }</span>
+    
+    /**
+     * Constructor.
+     * Creates a multivariate normal distribution having provided mean and
+     * covariance.
+     * @param mean array containing mean. Must have the same number of rows as
+     * provided covariance matrix.
+     * @param covariance matrix containing covariance. Must be square, symmetric
+     * and positive definite (i.e. non singular) and must have the same number
+     * of rows as provided mean.
+     * @param validateSymmetricPositiveDefinite true if covariance matrix must 
+     * be validated to be positive definite, false to skip validation.
+     * @throws IllegalArgumentException if provided mean array has length 
+     * smaller than 1 or if length of mean array is not the same as the number
+     * of rows of covariance matrix.
+     * @throws InvalidCovarianceMatrixException if provided matrix is not
+     * valid (nor square or symmetric positive definite if validation is 
+     * enabled).
+     */
+    public MultivariateNormalDist(double[] mean, Matrix covariance, 
+            boolean validateSymmetricPositiveDefinite) 
+<span class="fc" id="L121">            throws IllegalArgumentException, InvalidCovarianceMatrixException {</span>
+<span class="fc" id="L122">        setMeanAndCovariance(mean, covariance, </span>
+                validateSymmetricPositiveDefinite);
+<span class="fc" id="L124">    }</span>
+    
+    /**
+     * Gets array containing mean of this multivariate Gaussian distribution.
+     * @return mean of multivariate Gaussian distribution.
+     */
+    public double[] getMean(){
+<span class="fc" id="L131">        return mMu;</span>
+    }
+    
+    /**
+     * Sets mean of this multivariate Gaussian distribution.
+     * Length of provided mean must be equal to the number of rows of provided
+     * covariance, otherwise instance won't be ready.
+     * @param mu mean of multivariate Gaussian distribution.
+     * @throws IllegalArgumentException if provided array has a length smaller
+     * than 1.
+     */
+    public void setMean(double[] mu) throws IllegalArgumentException {
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (mu.length == 0) {</span>
+<span class="fc" id="L144">            throw new IllegalArgumentException(</span>
+                    &quot;length of mean array must be greater than zero&quot;);
+        }
+<span class="fc" id="L147">        mMu = mu;</span>
+<span class="fc" id="L148">    }</span>
+    
+    /**
+     * Gets matrix containing covariance of this multivariate Gaussian 
+     * distribution.
+     * @return covariance of multivariate Gaussian distribution.
+     */
+    public Matrix getCovariance() {
+<span class="fc" id="L156">        return mCov.clone();</span>
+    }  
+    
+    /**
+     * Gets matrix containing covariance of this multivariate Gaussian
+     * distribution.
+     * @param result instance where covariance of multivariate Gaussian 
+     * distribution will be stored.
+     */
+    public void getCovariance(Matrix result) {
+<span class="fc" id="L166">        mCov.copyTo(result);</span>
+<span class="fc" id="L167">    }</span>
+    
+    /**
+     * Sets covariance of this multivariate Gaussian distribution.
+     * @param cov covariance of this multivariate Gaussian distribution.
+     * @throws InvalidCovarianceMatrixException if provided matrix is not valid
+     * (not square or symmetric positive definite).
+     */    
+    public void setCovariance(Matrix cov) 
+            throws InvalidCovarianceMatrixException {
+<span class="fc" id="L177">        setCovariance(cov, true);</span>
+<span class="fc" id="L178">    }</span>
+    
+    /**
+     * Sets covariance of this multivariate Gaussian distribution.
+     * @param cov covariance of this multivariate Gaussian distribution.
+     * @param validateSymmetricPositiveDefinite true if matrix must be
+     * validated to be positive definite, false to skip validation.
+     * @throws InvalidCovarianceMatrixException if provided matrix is not
+     * valid (nor square or symmetric positive definite if validation is 
+     * enabled).
+     */
+    public void setCovariance(Matrix cov, 
+            boolean validateSymmetricPositiveDefinite) 
+            throws InvalidCovarianceMatrixException {
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        if (cov.getRows() != cov.getColumns()) {</span>
+<span class="fc" id="L193">            throw new InvalidCovarianceMatrixException(</span>
+                    &quot;covariance matrix must be square&quot;);            
+        }
+        
+        try {
+<span class="fc bfc" id="L198" title="All 2 branches covered.">            if (validateSymmetricPositiveDefinite) {</span>
+<span class="fc" id="L199">                CholeskyDecomposer decomposer = new CholeskyDecomposer(cov);</span>
+<span class="fc" id="L200">                decomposer.decompose();</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">                if (!decomposer.isSPD()) {</span>
+<span class="fc" id="L202">                    throw new InvalidCovarianceMatrixException(</span>
+                            &quot;covariance matrix must be symmetric positive &quot; + 
+                            &quot;definite (non singular)&quot;);
+                }
+            }
+            
+<span class="fc" id="L208">            mCov = cov.clone();</span>
+<span class="fc" id="L209">            mCovBasis = null;</span>
+<span class="fc" id="L210">            mVariances = null;</span>
+<span class="nc" id="L211">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L212">            throw new InvalidCovarianceMatrixException(</span>
+                    &quot;covariance matrix must be square&quot;, e);
+<span class="fc" id="L214">        }</span>
+<span class="fc" id="L215">    }</span>
+        
+    /**
+     * Sets mean and covariance of this multivariate Gaussian distribution.
+     * @param mu array containing mean. Must have the same number of rows as
+     * provided covariance matrix
+     * @param cov matrix containing covariance. Must be square, symmetric 
+     * and positive definite (i.e. non singular) and must have the same number 
+     * of rows as provided mean.
+     * @throws IllegalArgumentException if provided mean array has length 
+     * smaller than 1 or if length of mean array is not the same as the number
+     * of rows of covariance matrix.
+     * @throws InvalidCovarianceMatrixException if provided covariance matrix is
+     * not square, symmetric and positive definite (i.e. non singular).
+     */
+    public final void setMeanAndCovariance(double[] mu, Matrix cov) 
+            throws IllegalArgumentException, InvalidCovarianceMatrixException {
+<span class="fc" id="L232">        setMeanAndCovariance(mu, cov, true);</span>
+<span class="fc" id="L233">    }</span>
+    
+    /**
+     * Sets mean and covariance of this multivariate Gaussian distribution.
+     * @param mu array containing mean. Must have the same number of rows as
+     * provided covariance matrix
+     * @param cov matrix containing covariance. Must be square, symmetric 
+     * and positive definite (i.e. non singular) and must have the same number 
+     * of rows as provided mean.
+     * @param validateSymmetricPositiveDefinite true if matrix must be
+     * validated to be positive definite, false to skip validation.
+     * @throws IllegalArgumentException if provided mean array has length 
+     * smaller than 1 or if length of mean array is not the same as the number
+     * of rows of covariance matrix.
+     * @throws InvalidCovarianceMatrixException if provided covariance matrix is
+     * not square, symmetric and positive definite (i.e. non singular).
+     */
+    public final void setMeanAndCovariance(double[] mu, Matrix cov, 
+            boolean validateSymmetricPositiveDefinite) 
+            throws IllegalArgumentException, InvalidCovarianceMatrixException {
+<span class="fc bfc" id="L253" title="All 2 branches covered.">        if (mu.length != cov.getRows()) {</span>
+<span class="fc" id="L254">            throw new IllegalArgumentException(&quot;mean array length must be &quot; + </span>
+                    &quot;equal to covariance number of rows&quot;);
+        }
+        
+<span class="fc" id="L258">        setCovariance(cov, validateSymmetricPositiveDefinite);</span>
+<span class="fc" id="L259">        setMean(mu);        </span>
+<span class="fc" id="L260">    }</span>
+    
+    /**
+     * Indicates whether provided matrix is a valid covariance matrix.
+     * A valid covariance matrix must be square, symmetric and positive definite
+     * (i.e. non-singular).
+     * @param cov matrix to be checked.
+     * @return true if matrix is a valid covariance matrix, false otherwise.
+     */
+    public static boolean isValidCovariance(Matrix cov) {
+<span class="fc bfc" id="L270" title="All 2 branches covered.">        if (cov.getRows() != cov.getColumns()) {</span>
+<span class="fc" id="L271">            return false;</span>
+        }
+        
+        try {
+<span class="fc" id="L275">            CholeskyDecomposer decomposer = new CholeskyDecomposer(cov);</span>
+<span class="fc" id="L276">            decomposer.decompose();</span>
+<span class="fc" id="L277">            return decomposer.isSPD();            </span>
+<span class="nc" id="L278">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L279">            return false;</span>
+        }
+    }
+    
+    /**
+     * Indicates whether this instance is ready for any computation, false
+     * otherwise.
+     * @return true if instance is ready, false otherwise.
+     */
+    public boolean isReady() {
+<span class="pc bpc" id="L289" title="2 of 4 branches missed.">        return mMu != null &amp;&amp; mCov != null &amp;&amp; </span>
+<span class="fc bfc" id="L290" title="All 2 branches covered.">                mMu.length == mCov.getRows();</span>
+    }
+    
+    /**
+     * Basis containing on each column the direction of each variance in the 
+     * multidimensional Gaussian distribution, which is obtained from provided 
+     * covariance matrix.
+     * This value is available only after the p.d.f. has been evaluated.
+     * @return basis containing on each column the direction of each variance
+     * in the multidimensional Gaussian distribution.
+     */
+    public Matrix getCovarianceBasis() {
+<span class="fc" id="L302">        return mCovBasis;</span>
+    }
+    
+    /**
+     * Array containing the amount of variance on each direction of the basis
+     * of the covariance in the multidimensional Gaussian distribution.
+     * This value is available only after the p.d.f. has been evaluated.
+     * @return variance on each direction of the basis of the covariance.
+     */
+    public double[] getVariances() {
+<span class="fc" id="L312">        return mVariances;</span>
+    }
+    
+    /**
+     * Evaluates the probability density function (p.d.f.) of a multivariate
+     * Gaussian distribution having current mean and covariance at point x.
+     * @param x array containing coordinates where p.d.f. is evaluated.
+     * @return evaluation of p.d.f.
+     * @throws NotReadyException if this instance is not ready (mean and 
+     * covariance have not been provided or are not valid).
+     * @throws IllegalArgumentException if provided point length is not valid.
+     * @throws DecomposerException happens if covariance is numerically 
+     * unstable (i.e. contains NaNs or very large numbers).
+     * @throws RankDeficientMatrixException happens if covariance is singular.
+     */
+    public double p(double[] x) throws NotReadyException, 
+            IllegalArgumentException, DecomposerException, 
+            RankDeficientMatrixException {
+<span class="fc bfc" id="L330" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L331">            throw new NotReadyException(</span>
+                    &quot;mean and covariance not provided or invalid&quot;);
+        }
+        
+<span class="fc" id="L335">        int k = x.length;</span>
+<span class="fc bfc" id="L336" title="All 2 branches covered.">        if (k != mMu.length) {</span>
+<span class="fc" id="L337">            throw new IllegalArgumentException(</span>
+                    &quot;length of point must be equal to the length of mean&quot;);
+        }
+                
+<span class="fc" id="L341">        double detCov = 0.0;</span>
+        try {
+<span class="fc" id="L343">            detCov = Utils.det(mCov);            </span>
+<span class="pc" id="L344">        } catch (WrongSizeException ignore) { /* never thrown */ }</span>
+        
+<span class="fc" id="L346">        double factor = 1.0 / (Math.sqrt(Math.pow(2.0 * Math.PI, k) * </span>
+                detCov));
+<span class="fc" id="L348">        return factor * Math.exp(-0.5*squaredMahalanobisDistance(x));        </span>
+    }
+    
+    /**
+     * Evaluates the cumulative distribution function (c.d.f.) of a Gaussian
+     * distribution having current mean and covariance values.
+     * The c.d.f. is equivalent to the joint probability of the multivariate
+     * Gaussian distribution of having a value less than x on each direction
+     * of the basis of independent variances obtained from covariance matrix.
+     * Because the c.d.f is a probability, it always returns values between 0.0
+     * and 1.0.
+     * NOTE: this method will resize provided basis instance if needed.
+     * @param x point where c.d.f. is evaluated. 
+     * @param basis instance where is stored the basis of each direction of 
+     * independent covariances, if provided.
+     * @return evaluation of c.d.f.
+     * @throws IllegalArgumentException if length of provided point is not equal
+     * to length of current mean.
+     * @throws NotReadyException if this instance is not ready (mean and 
+     * covariance have not been provided or are not valid).
+     * @throws DecomposerException if covariance is numerically unstable (i.e.
+     * contains NaNs or very large numbers).
+     */
+    public double cdf(double[] x, Matrix basis) throws IllegalArgumentException,
+            NotReadyException, DecomposerException {
+<span class="fc bfc" id="L373" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L374">            throw new NotReadyException(</span>
+                    &quot;mean and covariance not provided or invalid&quot;);
+        }        
+        
+<span class="fc" id="L378">        int k = x.length;</span>
+<span class="fc bfc" id="L379" title="All 2 branches covered.">        if (k != mMu.length) {</span>
+<span class="fc" id="L380">            throw new IllegalArgumentException(</span>
+                    &quot;length of point must be equal to the length of mean&quot;);            
+        }
+                
+<span class="fc" id="L384">        double p = 1.0;</span>
+        try {
+<span class="fc" id="L386">            processCovariance();</span>
+            
+<span class="fc bfc" id="L388" title="All 2 branches covered.">            if (basis != null) {</span>
+<span class="fc" id="L389">                basis.copyFrom(mCovBasis);            </span>
+            }
+            
+<span class="fc bfc" id="L392" title="All 2 branches covered.">            for (int i = 0; i &lt; k; i++) {</span>
+<span class="fc" id="L393">                double[] singleBasis = </span>
+<span class="fc" id="L394">                        mCovBasis.getSubmatrixAsArray(0, i, k - 1, i);</span>
+<span class="fc" id="L395">                double coordX = ArrayUtils.dotProduct(x, singleBasis);</span>
+<span class="fc" id="L396">                double coordMu = ArrayUtils.dotProduct(mMu, singleBasis);</span>
+<span class="fc" id="L397">                p *= NormalDist.internalCdf(coordX, coordMu, </span>
+<span class="fc" id="L398">                        Math.sqrt(mVariances[i]));</span>
+            }
+            
+<span class="nc" id="L401">        } catch (DecomposerException e) {</span>
+<span class="nc" id="L402">            throw e;</span>
+<span class="pc" id="L403">        } catch (AlgebraException ignore) { /* never thrown */ }</span>
+        
+<span class="fc" id="L405">        return p;</span>
+    }
+    
+    /**
+     * Evaluates the cumulative distribution function (c.d.f.) of a Gaussian
+     * distribution having current mean and covariance values.
+     * The c.d.f. is equivalent to the joint probability of the multivariate
+     * Gaussian distribution of having a value less than x on each direction
+     * of the basis of independent variances obtained from covariance matrix.
+     * Because the c.d.f is a probability, it always returns values between 0.0
+     * and 1.0.
+     * @param x point where c.d.f. is evaluated. 
+     * @return evaluation of c.d.f.
+     * @throws IllegalArgumentException if length of provided point is not equal
+     * to length of current mean.
+     * @throws NotReadyException if this instance is not ready (mean and 
+     * covariance have not been provided or are not valid).
+     * @throws DecomposerException if covariance is numerically unstable (i.e.
+     * contains NaNs or very large numbers).
+     */    
+    public double cdf(double[] x) throws IllegalArgumentException, 
+            NotReadyException, DecomposerException {
+<span class="fc" id="L427">        return cdf(x, null);</span>
+    }
+    
+    /**
+     * Computes the joint probability of all probabilities provided in the 
+     * array. The joint probability is computed by multiplying all components of
+     * the array, assuming that all probabilities are independent.
+     * @param p array containing probabilities for each independent variance
+     * direction that can be obtained from provided covariance matrix.
+     * @return joint probability.
+     */
+    public static double jointProbability(double[] p) {
+<span class="fc" id="L439">        double jointP = 1.0;</span>
+<span class="fc bfc" id="L440" title="All 2 branches covered.">        for (double aP : p) {</span>
+<span class="fc" id="L441">            jointP *= aP;</span>
+        }
+<span class="fc" id="L443">        return jointP;        </span>
+    }
+    
+    /**
+     * Evaluates the inverse cumulative distribution function of a multivariate
+     * Gaussian distribution for current mean and covariance values and provided
+     * probability values for each dimension of the multivariate Gaussian 
+     * distribution.
+     * NOTE: this method will resize provided basis instance if needed.
+     * @param p array containing probability values to evaluate the inverse 
+     * c.d.f. on each dimension. Values in the array must be between 0.0 and 
+     * 1.0.
+     * @param result coordinates of the value x for which the c.d.f. has values
+     * p.
+     * @param basis instance where is stored the basis of each direction of 
+     * independent covariances, if provided.
+     * @throws IllegalArgumentException if length of probabilities is not equal
+     * to mean length, or if result and length of probabilities are not equal,
+     * or if provided probabilities are not between 0.0 and 1.0.
+     * @throws NotReadyException if this instance is not ready (mean and 
+     * covariance have not been provided or are not valid).
+     * @throws DecomposerException if covariance is numerically unstable (i.e.
+     * contains NaNs or very large numbers).
+     */
+    public void invcdf(double[] p, double[] result, Matrix basis)
+            throws IllegalArgumentException, NotReadyException, 
+            DecomposerException {
+<span class="fc bfc" id="L470" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L471">            throw new NotReadyException(</span>
+                    &quot;mean and covariance not provided or invalid&quot;);
+        }        
+        
+<span class="fc" id="L475">        int k = p.length;</span>
+<span class="fc bfc" id="L476" title="All 2 branches covered.">        if (k != mMu.length) {</span>
+<span class="fc" id="L477">            throw new IllegalArgumentException(</span>
+                    &quot;length of probabilities must be equal to the length of &quot;
+                            + &quot;mean&quot;);            
+        }
+<span class="fc bfc" id="L481" title="All 2 branches covered.">        if (k != result.length) {</span>
+<span class="fc" id="L482">            throw new IllegalArgumentException(&quot;length of result must be equal &quot;</span>
+                    + &quot;to the length of mean&quot;);
+        }
+                
+        try {
+<span class="fc" id="L487">            processCovariance();</span>
+            
+<span class="fc bfc" id="L489" title="All 2 branches covered.">            if (basis != null) {</span>
+<span class="fc" id="L490">                basis.copyFrom(mCovBasis);            </span>
+            }
+            
+            //initialize to mean
+<span class="fc" id="L494">            System.arraycopy(mMu, 0, result, 0, k);</span>
+<span class="fc bfc" id="L495" title="All 2 branches covered.">            for (int i = 0; i &lt; k; i++) {</span>
+<span class="fc" id="L496">                double[] singleBasis = </span>
+<span class="fc" id="L497">                        mCovBasis.getSubmatrixAsArray(0, i, k - 1, i);                </span>
+<span class="fc" id="L498">                double coord = NormalDist.internalInvcdf(p[i], mMu[i], </span>
+<span class="fc" id="L499">                        Math.sqrt(mVariances[i])) - mMu[i];</span>
+                //coord*singleBasis
+<span class="fc" id="L501">                ArrayUtils.multiplyByScalar(singleBasis, coord, singleBasis);</span>
+                
+                //result = mean + coord*singleBasis
+<span class="fc" id="L504">                ArrayUtils.sum(result, singleBasis, result);</span>
+            }            
+<span class="nc" id="L506">        } catch (DecomposerException e) {</span>
+<span class="nc" id="L507">            throw e;</span>
+<span class="pc" id="L508">        } catch (AlgebraException ignore) { /* never thrown */ }</span>
+<span class="fc" id="L509">    }</span>
+    
+    /**
+     * Evaluates the inverse cumulative distribution function of a multivariate
+     * Gaussian distribution for current mean and covariance values and provided
+     * probability values for each dimension of the multivariate Gaussian 
+     * distribution.
+     * NOTE: this method will resize provided basis instance if needed.
+     * @param p array containing probability values to evaluate the inverse 
+     * c.d.f. on each dimension. Values in the array must be between 0.0 and 
+     * 1.0.
+     * @param basis instance where is stored the basis of each direction of
+     * independent covariances, if provided.
+     * @return a new array containing coordinates of the value x for which the 
+     * c.d.f. has values p.
+     * @throws IllegalArgumentException if length of probabilities is not equal
+     * to mean length, or if provided probabilities are not between 0.0 and 1.0.
+     * @throws NotReadyException if this instance is not ready (mean and 
+     * covariance have not been provided or are not valid).
+     * @throws DecomposerException if covariance is numerically unstable (i.e.
+     * contains NaNs or very large numbers).
+     */
+    public double[] invcdf(double[] p, Matrix basis) 
+            throws IllegalArgumentException, NotReadyException, 
+            DecomposerException {
+<span class="pc bpc" id="L534" title="1 of 2 branches missed.">        if (mMu == null) {</span>
+<span class="nc" id="L535">            throw new NotReadyException(&quot;mean not defined&quot;);</span>
+        }
+        
+<span class="fc" id="L538">        double[] result = new double[mMu.length];</span>
+<span class="fc" id="L539">        invcdf(p, result, basis);</span>
+<span class="fc" id="L540">        return result;</span>
+    }
+    
+    /**
+     * Evaluates the inverse cumulative distribution function of a multivariate
+     * Gaussian distribution for current mean and covariance values and provided
+     * probability values for each dimension of the multivariate Gaussian 
+     * distribution.
+     * @param p array containing probability values to evaluate the inverse
+     * c.d.f. on each dimension. Values in the array must be between 0.0 and 
+     * 1.0.
+     * @param result coordinates of the value x for which the c.d.f. has values
+     * p.
+     * @throws IllegalArgumentException if length of probabilities is not equal
+     * to mean length, or if result and length of probabilities are not equal,
+     * or if provided probabilities are not between 0.0 and 1.0.
+     * @throws NotReadyException if this instance is not ready (mean and
+     * covariance have not been provided or are not valid).
+     * @throws DecomposerException if covariance is numerically unstable (i.e.
+     * contains NaNs or very large numbers).
+     */
+    public void invcdf(double[] p, double[] result) 
+            throws IllegalArgumentException, NotReadyException, 
+            DecomposerException {
+<span class="fc" id="L564">        invcdf(p, result, null);</span>
+<span class="fc" id="L565">    }</span>
+
+    /**
+     * Evaluates the inverse cumulative distribution function of a multivariate
+     * Gaussian distribution for current mean and covariance values and provided
+     * probability values for each dimension of the multivariate Gaussian
+     * distribution.
+     * @param p array containing probability values to evaluate the inverse
+     * c.d.f. on each dimension. Values in the array must be between 0.0 and
+     * 1.0.
+     * @return coordinates of the value x for which the c.d.f. has values
+     *      * p.
+     * @throws IllegalArgumentException if length of probabilities is not equal
+     * to mean length, or if result and length of probabilities are not equal,
+     * or if provided probabilities are not between 0.0 and 1.0.
+     * @throws NotReadyException if this instance is not ready (mean and
+     * covariance have not been provided or are not valid).
+     * @throws DecomposerException if covariance is numerically unstable (i.e.
+     * contains NaNs or very large numbers).
+     */
+    public double[] invcdf(double[] p) throws IllegalArgumentException,
+            NotReadyException, DecomposerException {
+<span class="fc" id="L587">        return invcdf(p, (Matrix)null);</span>
+    }
+        
+    /**
+     * Evaluates the inverse cumulative distribution function of a multivariate
+     * Gaussian distribution for current mean and covariance values and provided
+     * probability value.
+     * Obtained result coordinates are computed taking into account the basis
+     * of independent variances computed from current covariance matrix.
+     * NOTE: notice that the inverse cdf of a mutivariate Gaussian distribution
+     * does not have a unique solution. This method simply returns one of the
+     * possible solutions by assuming equal probabilities on each dimension.
+     * NOTE: this method will resize provided basis instance if needed.
+     * @param p probability value to evaluate the inverse c.d.f. at. This value
+     * must be between 0.0 and 1.0
+     * @param result coordinates of the value x for which the c.d.f. has value
+     * p.
+     * @param basis instance where is stored the basis of each direction of 
+     * independent covariances, if provided.
+     * @throws IllegalArgumentException if provided probability value is not
+     * between 0.0 and 1.0, if length of provided result array is not equal
+     * to length of current mean.
+     * @throws NotReadyException if this instance is not ready (mean and 
+     * covariance have not been provided or are not valid).
+     * @throws DecomposerException if covariance is numerically unstable (i.e.
+     * contains NaNs or very large numbers).
+     */
+    public void invcdf(double p, double[] result, Matrix basis) 
+            throws IllegalArgumentException, NotReadyException, 
+            DecomposerException {
+<span class="fc bfc" id="L617" title="All 4 branches covered.">	    if (p &lt;= 0.0 || p &gt;= 1.0) {</span>
+<span class="fc" id="L618">            throw new IllegalArgumentException(</span>
+                    &quot;probability value must be between 0.0 and 1.0&quot;);
+        }       
+        
+<span class="pc bpc" id="L622" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L623">            throw new NotReadyException(</span>
+                    &quot;mean and covariance not provided or invalid&quot;);
+        }                
+        
+<span class="fc" id="L627">        int k = result.length;</span>
+<span class="fc bfc" id="L628" title="All 2 branches covered.">        if (k != mMu.length) {</span>
+<span class="fc" id="L629">            throw new IllegalArgumentException(</span>
+                    &quot;length of result must be equal to mean length&quot;);
+        }
+        
+<span class="fc" id="L633">        double[] probs = new double[k];</span>
+<span class="fc" id="L634">        Arrays.fill(probs, Math.pow(p, 1.0 / k));</span>
+<span class="fc" id="L635">        invcdf(probs, result, basis);</span>
+<span class="fc" id="L636">    }</span>
+    
+    /**
+     * Evaluates the inverse cumulative distribution function of a multivariate
+     * Gaussian distribution for current mean and covariance values and provided
+     * probability value.
+     * Obtained result coordinates are computed taking into account the basis
+     * of independent variances computed from current covariance matrix.
+     * NOTE: notice that the inverse cdf of a mutivariate Gaussian distribution
+     * does not have a unique solution. This method simply returns one of the
+     * possible solutions by assuming equal probabilities on each dimension.
+     * NOTE: this method will resize provided basis instance if needed.
+     * @param p probability value to evaluate the inverse c.d.f. at. This value
+     * must be between 0.0 and 1.0
+     * @param basis instance where is stored the basis of each direction of 
+     * independent covariances, if provided.
+     * @return a new array containing the coordinates of the value x for which 
+     * the c.d.f. has value p.
+     * @throws IllegalArgumentException if provided probability value is not
+     * between 0.0 and 1.0.
+     * @throws NotReadyException if this instance is not ready (mean and 
+     * covariance have not been provided or are not valid).
+     * @throws DecomposerException f covariance is numerically unstable (i.e.
+     * contains NaNs or very large numbers).
+     */
+    public double[] invcdf(double p, Matrix basis) 
+            throws IllegalArgumentException, NotReadyException, 
+            DecomposerException{
+<span class="pc bpc" id="L664" title="1 of 2 branches missed.">        if (mMu == null) {</span>
+<span class="nc" id="L665">            throw new NotReadyException(&quot;mean not defined&quot;);</span>
+        }
+        
+<span class="fc" id="L668">        double[] result = new double[mMu.length];</span>
+<span class="fc" id="L669">        invcdf(p, result, basis);</span>
+<span class="fc" id="L670">        return result;</span>
+    }
+
+    /**
+     * Evaluates the inverse cumulative distribution function of a multivariate
+     * Gaussian distribution for current mean and covariance values and provided
+     * probability value.
+     * Obtained result coordinates are computed taking into account the basis
+     * of independent variances computed from current covariance matrix.
+     * NOTE: notice that the inverse cdf of a mutivariate Gaussian distribution
+     * does not have a unique solution. This method simply returns one of the
+     * possible solutions by assuming equal probabilities on each dimension.
+     * @param p probability value to evaluate the inverse c.d.f. at. This value
+     * must be between 0.0 and 1.0
+     * @param result coordinates of the value x for which the c.d.f. has value
+     * p.
+     * @throws IllegalArgumentException if provided probability value is not
+     * between 0.0 and 1.0, if length of provided result array is not equal
+     * to length of current mean.
+     * @throws NotReadyException if this instance is not ready (mean and 
+     * covariance have not been provided or are not valid).
+     * @throws DecomposerException f covariance is numerically unstable (i.e.
+     * contains NaNs or very large numbers).
+     */
+    public void invcdf(double p, double[] result) 
+            throws IllegalArgumentException, NotReadyException, 
+            DecomposerException {
+<span class="fc" id="L697">        invcdf(p, result, null);</span>
+<span class="fc" id="L698">    }</span>
+    
+    /**
+     * Evaluates the inverse cumulative distribution function of a multivariate
+     * Gaussian distribution for current mean and covariance values and provided
+     * probability value.
+     * Obtained result coordinates are computed taking into account the basis
+     * of independent variances computed from current covariance matrix.
+     * NOTE: notice that the inverse cdf of a mutivariate Gaussian distribution
+     * does not have a unique solution. This method simply returns one of the
+     * possible solutions by assuming equal probabilities on each dimension.
+     * @param p probability value to evaluate the inverse c.d.f. at. This value
+     * must be between 0.0 and 1.0
+     * @return a new array containing the coordinates of the value x for which 
+     * the c.d.f. has value p.
+     * @throws IllegalArgumentException if provided probability value is not
+     * between 0.0 and 1.0.
+     * @throws NotReadyException if this instance is not ready (mean and 
+     * covariance have not been provided or are not valid).
+     * @throws DecomposerException f covariance is numerically unstable (i.e.
+     * contains NaNs or very large numbers).
+     */
+    public double[] invcdf(double p) throws IllegalArgumentException, 
+            NotReadyException, DecomposerException {
+<span class="fc" id="L722">        return invcdf(p, (Matrix)null);</span>
+    }
+    
+    /**
+     * Computes the Mahalanobis distance of provided multivariate pot x for
+     * current mean and covariance values.
+     * @param x point where Mahalanobis distance is evaluated.
+     * @return Mahalanobis distance of provided point respect to mean.
+     * @throws DecomposerException happens if covariance is numerically 
+     * unstable (i.e. contains NaNs or very large numbers).
+     * @throws RankDeficientMatrixException happens if covariance is singular.
+     */    
+    public double mahalanobisDistance(double[] x) throws DecomposerException,
+            RankDeficientMatrixException {
+<span class="fc" id="L736">        return Math.sqrt(squaredMahalanobisDistance(x));</span>
+    }
+    
+    /**
+     * Computes the squared Mahalanobis distance of provided multivariate pot x 
+     * for current mean and covariance values.
+     * @param x point where Mahalanobis distance is evaluated.
+     * @return Mahalanobis distance of provided point respect to mean.
+     * @throws DecomposerException happens if covariance is numerically 
+     * unstable (i.e. contains NaNs or very large numbers).
+     * @throws RankDeficientMatrixException happens if covariance is singular.
+     */
+    public double squaredMahalanobisDistance(double[] x) throws DecomposerException, 
+            RankDeficientMatrixException {
+<span class="fc" id="L750">        double[] diff = ArrayUtils.subtractAndReturnNew(x, mMu);</span>
+<span class="fc" id="L751">        Matrix diffMatrix = Matrix.newFromArray(diff, true);</span>
+<span class="fc" id="L752">        Matrix transDiffMatrix = diffMatrix.transposeAndReturnNew();</span>
+        
+        try {
+<span class="fc" id="L755">            Matrix invCov = Utils.inverse(mCov);</span>
+<span class="fc" id="L756">            transDiffMatrix.multiply(invCov);</span>
+<span class="fc" id="L757">            transDiffMatrix.multiply(diffMatrix);</span>
+                        
+<span class="pc" id="L759">        } catch (WrongSizeException ignore) { /* never thrown */ }</span>
+        
+<span class="fc" id="L761">        return transDiffMatrix.getElementAtIndex(0);</span>
+    }
+    
+    /**
+     * Processes current covariance by decomposing it into a basis and its 
+     * corresponding variances if needed.
+     * @throws DecomposerException happens if covariance is numerically 
+     * unstable (i.e. contains NaNs or very large numbers).
+     * @throws NotReadyException never thrown because decomposer will always be
+     * ready.
+     * @throws LockedException never thrown because decomposer never will be 
+     * locked.
+     * @throws NotAvailableException never thrown because first a 
+     * DecomposerException will be thrown before attempting to get V or 
+     * singular values.
+     */
+    public void processCovariance() throws DecomposerException, 
+            NotReadyException, LockedException, NotAvailableException {
+<span class="pc bpc" id="L779" title="1 of 2 branches missed.">        if (mCov == null) {</span>
+<span class="nc" id="L780">            throw new NotReadyException(&quot;covariance must be defined&quot;);</span>
+        }
+        
+<span class="pc bpc" id="L783" title="1 of 4 branches missed.">        if (mCovBasis == null || mVariances == null) {</span>
+<span class="fc" id="L784">            SingularValueDecomposer decomposer = </span>
+                    new SingularValueDecomposer(mCov);
+<span class="fc" id="L786">            decomposer.decompose();</span>
+        
+            //because matrix is symmetric positive definite:
+            //And matrices U and V are orthonormal
+            //Cov = A'*A = (U*S*V')'*(U*S*V')=V*S*U'*U*S*V' = V*S^2*V',
+        
+            //where matrix S is diagonal, and contains the standard deviations
+            //on each direction of the basis V, and hence S^2 is also diagonal but
+            //containing variances on each direction.
+            //The values of S^2 are the eigenvalues of Cov, and V are the 
+            //eigenvectors of Cov, hence covariance can be expressed as variances
+            //on each direction of the basis V.
+        
+            //matrix containing eigenvectors (basis of directions)
+<span class="fc" id="L800">            mCovBasis = decomposer.getV();</span>
+        
+            //array containing the eigenvalues (variances on each direction)
+<span class="fc" id="L803">            mVariances = decomposer.getSingularValues();</span>
+        }        
+<span class="fc" id="L805">    }    </span>
+    
+    /**
+     * Evaluates the Jacobian and a multivariate function at a certain mean 
+     * point and computes the non-linear propagation of Gaussian uncertainty 
+     * through such function at such point.
+     * @param evaluator interface to evaluate a multivariate function and its 
+     * Jacobian at a certain point.
+     * @param mean mean of original multivariate Gaussian distribution to be
+     * propagated. Must have the length of the number of input variables of the
+     * multivariate function to be evaluated.
+     * @param covariance covariance of original Gaussian distribution to be
+     * propagated. Must be symmetric positive definite having size NxN where N
+     * is the length of provided mean.
+     * @param result instance where propagated multiavariate Gaussian 
+     * distribution will be stored.
+     * @throws WrongSizeException if evaluator returns an invalid number of 
+     * variables (i.e. negative or zero).
+     * @throws InvalidCovarianceMatrixException if provided covariance matrix is
+     * not valid (i.e. is not symmetric positive definite).
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;propagateUncertainty.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void propagate(JacobianEvaluator evaluator, double[] mean, 
+            Matrix covariance, MultivariateNormalDist result) 
+            throws WrongSizeException, InvalidCovarianceMatrixException {
+
+<span class="fc" id="L831">        int ndims = mean.length;</span>
+<span class="fc" id="L832">        int nvars = evaluator.getNumberOfVariables();</span>
+<span class="fc" id="L833">        double[] evaluation = new double[nvars];</span>
+<span class="fc" id="L834">        Matrix jacobian = new Matrix(nvars, ndims);</span>
+<span class="fc" id="L835">        evaluator.evaluate(mean, evaluation, jacobian);</span>
+        
+        //[y, Y_x] = f(x)
+        //Y = Y_x * X * Y_x'        
+<span class="fc" id="L839">        Matrix jacobianTrans = jacobian.transposeAndReturnNew();</span>
+<span class="fc" id="L840">        jacobian.multiply(covariance);</span>
+<span class="fc" id="L841">        jacobian.multiply(jacobianTrans);</span>
+        
+        //ensure that new covariance is symmetric positive definite
+<span class="fc" id="L844">        jacobian.symmetrize();</span>
+        
+<span class="fc" id="L846">        result.setMean(evaluation);</span>
+<span class="fc" id="L847">        result.setCovariance(jacobian, false);</span>
+<span class="fc" id="L848">    }</span>
+    
+    /**
+     * Evaluates the Jacobian and a multivariate function at a certain mean 
+     * point and computes the non-linear propagation of Gaussian uncertainty 
+     * through such function at such point.
+     * @param evaluator interface to evaluate a multivariate function and its
+     * Jacobian at a certain point.
+     * @param mean mean of original multivariate Gaussian distribution to be
+     * propagated. Must have the length of the number of input variables of the
+     * multivariate function to be evaluated.
+     * @param covariance covariance of original Gaussian distribution to be
+     * propagated. Must be symmetric positive definite having size NxN where N
+     * is the length of provided mean.
+     * @return a new propagated multivariate Gaussian distribution.
+     * @throws WrongSizeException if evaluator returns an invalid number of
+     * variables (i.e. negative or zero).
+     * @throws InvalidCovarianceMatrixException if provided covariance matrix is
+     * not valid (i.e. is not symmetric positive definite).
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;propagateUncertainty.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static MultivariateNormalDist propagate(
+            JacobianEvaluator evaluator, double[] mean, Matrix covariance) 
+            throws WrongSizeException, InvalidCovarianceMatrixException {
+<span class="fc" id="L872">        MultivariateNormalDist result = new MultivariateNormalDist();</span>
+<span class="fc" id="L873">        propagate(evaluator, mean, covariance, result);</span>
+<span class="fc" id="L874">        return result;</span>
+    }
+    
+    /**
+     * Evaluates the Jacobian and a multivariate function at a certain mean
+     * point and computes the non-linear propagation of Gaussian uncertainty
+     * through such function at such point.
+     * @param evaluator interface to evaluate a multivariate function and its
+     * Jacobian at a certain point.
+     * @param dist multivariate Gaussian distribution to be propagated.
+     * @param result instance where propagated multivariate Gaussian 
+     * distribution will be stored.
+     * @throws WrongSizeException if evaluator returns an invalid number of 
+     * variables (i.e. negative or zero).
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;propagateUncertainty.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void propagate(JacobianEvaluator evaluator, 
+            MultivariateNormalDist dist, MultivariateNormalDist result) 
+            throws WrongSizeException {
+        try {
+<span class="fc" id="L894">            propagate(evaluator, dist.getMean(), dist.getCovariance(), result);</span>
+<span class="pc" id="L895">        } catch (InvalidCovarianceMatrixException ignore) { /* never thrown */ }</span>
+<span class="fc" id="L896">    }</span>
+    
+    /**
+     * Evaluates the Jacobian and a multivariate function at a certain mean
+     * point and computes the non-linear propagation of Gaussian uncertainty
+     * through such function at such point.
+     * @param evaluator interface to evaluate a multivariate function and its
+     * Jacobian at a certain point.
+     * @param dist multivariate Gaussian distribution to be propagated.
+     * @return a new propagated multivariate Gaussian distribution.
+     * @throws WrongSizeException if evaluator returns an invalid number of
+     * variables (i.e. negative or zero).
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;propagateUncertainty.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static MultivariateNormalDist propagate(JacobianEvaluator evaluator,
+            MultivariateNormalDist dist) throws WrongSizeException {
+<span class="fc" id="L912">        MultivariateNormalDist result = new MultivariateNormalDist();</span>
+<span class="fc" id="L913">        propagate(evaluator, dist, result);</span>
+<span class="fc" id="L914">        return result;</span>
+    }
+    
+    /**
+     * Evaluates the Jacobian and a multivariate function at the mean point of 
+     * this distribution and computes the non-linear propagation of Gaussian 
+     * uncertainty through such function at such point.
+     * @param evaluator interface to evaluate a multivariate function and its
+     * Jacobian at a certain point.
+     * @param result instance where propagated multivariate Gaussian 
+     * distribution will be stored.
+     * @throws WrongSizeException if evaluator returns an invalid number of
+     * variables (i.e. negative or zero).
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;propagateUncertainty.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public void propagateThisDistribution(JacobianEvaluator evaluator, 
+            MultivariateNormalDist result) throws WrongSizeException {
+<span class="fc" id="L931">        propagate(evaluator, this, result);</span>
+<span class="fc" id="L932">    }</span>
+    
+    /**
+     * Evaluates the Jacobian and a multivariate function at the mean point of
+     * this distribution and computes the non-linear propagation of Gaussian
+     * uncertainty through such function at such point.
+     * @param evaluator interface to evaluate a multivariate function and its
+     * Jacobian at a certain point.
+     * @return a new propagated multivariate Gaussian distribution.
+     * @throws WrongSizeException if evaluator returns an invalid number of
+     * variables (i.e. negative or zero).
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;propagateUncertainty.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public MultivariateNormalDist propagateThisDistribution(
+            JacobianEvaluator evaluator) throws WrongSizeException {
+<span class="fc" id="L947">        MultivariateNormalDist result = new MultivariateNormalDist();</span>
+<span class="fc" id="L948">        propagateThisDistribution(evaluator, result);</span>
+<span class="fc" id="L949">        return result;</span>
+    }
+    
+    /**
+     * Interface to evaluate a multivariate function at multivariate point x to
+     * obtain multivariate result y and its corresponding jacobian at point x.
+     */
+    public interface JacobianEvaluator {
+        /**
+         * Evaluates multivariate point
+         * @param x array containing multivariate point where function is 
+         * evaluated.
+         * @param y result of evaluating multivariate point.
+         * @param jacobian jacobian of multivariate function at point x.
+         */
+        void evaluate(double[] x, double[] y, Matrix jacobian);
+        
+        /**
+         * Number of variables in output of evaluated function. This is equal
+         * to the length of the array y obtained as function evaluations.
+         * @return number of variables of the function.
+         */
+        int getNumberOfVariables();
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

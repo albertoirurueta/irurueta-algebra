@@ -1,0 +1,860 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ArrayUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-algebra</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.algebra</a> &gt; <span class="el_source">ArrayUtils.java</span></div><h1>ArrayUtils.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.algebra;
+
+/**
+ * Class containing utility methods for common operations with arrays of values.
+ */
+@SuppressWarnings(&quot;WeakerAccess&quot;)
+public class ArrayUtils {
+    
+    /**
+     * Constructor.
+     */
+    private ArrayUtils() { }
+    
+    /**
+     * Internal method that multiplied by scalar provided input array without
+     * comparing length of input array and result array.
+     * @param inputArray Array to be multiplied.
+     * @param scalar Scalar used for multiplication.
+     * @param result Array where result is stored.
+     * @see #multiplyByScalar(double[], double, double[])
+     */
+    private static void internalMultiplyByScalar(double[] inputArray, 
+            double scalar, double[] result) {
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        for (int i = 0; i &lt; inputArray.length; ++i) {</span>
+<span class="fc" id="L40">            result[i] = scalar * inputArray[i];</span>
+        }        
+<span class="fc" id="L42">    }</span>
+    
+    /**
+     * Multiplies values in provided input array by provided scalar value
+     * and stores the result in provided result array.
+     * @param inputArray Array to be multiplied.
+     * @param scalar Scalar used for multiplication.
+     * @param result Array where result is stored.
+     * @throws IllegalArgumentException Thrown if inputArray length and result
+     * array length are not equal.
+     */
+    public static void multiplyByScalar(double[] inputArray, double scalar, 
+            double[] result) throws IllegalArgumentException {
+        
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (inputArray.length != result.length) {</span>
+<span class="fc" id="L57">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L59">        internalMultiplyByScalar(inputArray, scalar, result);</span>
+<span class="fc" id="L60">    }</span>
+    
+    /**
+     * Multiplies values in provided array by provided scalar value and returns
+     * the result in a new array.
+     * @param inputArray Array to be multiplied.
+     * @param scalar Scalar used for multiplication.
+     * @return Result obtained after multiplying input array by provided scalar
+     * value.
+     */
+    public static double[] multiplyByScalarAndReturnNew(double[] inputArray, 
+            double scalar) {
+<span class="fc" id="L72">        double[] result = new double[inputArray.length];</span>
+<span class="fc" id="L73">        internalMultiplyByScalar(inputArray, scalar, result);</span>
+<span class="fc" id="L74">        return result;</span>
+    }
+    
+    /**
+     * Sums provided operands arrays and stores the result in provided result
+     * array (i.e. result = firstOperand + secondOperand). Summation is done in
+     * an element by element basis.
+     * Provided array result must be initialized.
+     * All arrays must have the same length.
+     * This method does not check array lengths.
+     * @param firstOperand First operand.
+     * @param secondOperand Second operand.
+     * @param result Result of summation.
+     */
+    private static void internalSum(double[] firstOperand, 
+            double[] secondOperand, double[] result) {
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        for (int i = 0; i &lt; firstOperand.length; i++) {</span>
+<span class="fc" id="L91">            result[i] = firstOperand[i] + secondOperand[i];</span>
+        }
+<span class="fc" id="L93">    }</span>
+    
+    /**
+     * Sums provided operands arrays and stores the result in provided result
+     * array (i.e. result = firstOperand + secondOperand). Summation is done
+     * in an element by element basis.
+     * Provided array result must be initialized.
+     * All arrays must have the same length.
+     * @param firstOperand First operand.
+     * @param secondOperand Second operand.
+     * @param result Result of summation.
+     * @throws IllegalArgumentException Raised if not all arrays have the same
+     * length.
+     */
+    public static void sum(double[] firstOperand, double[] secondOperand,
+            double[] result) throws IllegalArgumentException {
+<span class="pc bpc" id="L109" title="1 of 4 branches missed.">        if (firstOperand.length != secondOperand.length ||</span>
+                firstOperand.length != result.length) {
+<span class="fc" id="L111">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L113">        internalSum(firstOperand, secondOperand, result);</span>
+<span class="fc" id="L114">    }</span>
+    
+    /**
+     * Sums provided operands and returns the result as a new array instance.
+     * Summation is done in an element by element basis.
+     * @param firstOperand First operand.
+     * @param secondOperand Second operand.
+     * @return Sum of first and second operands.
+     * @throws IllegalArgumentException Raised if first and second operands
+     * arrays don't have the same length.
+     */
+    public static double[] sumAndReturnNew(double[] firstOperand, 
+            double[] secondOperand) throws IllegalArgumentException {
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        if (firstOperand.length != secondOperand.length) {</span>
+<span class="fc" id="L128">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L131">        double[] result = new double[firstOperand.length];</span>
+<span class="fc" id="L132">        internalSum(firstOperand, secondOperand, result);</span>
+<span class="fc" id="L133">        return result;</span>
+    }
+    
+    /**
+     * Subtracts provided operands arrays and stores the result in provided 
+     * result array (i.e. result = firstOperand - secondOperand). Subtraction is
+     * done in an element by element basis.
+     * Provided array result must be initialized.
+     * All arrays must have the same length.
+     * This method does not check array lengths.
+     * @param firstOperand First operand.
+     * @param secondOperand Second operand.
+     * @param result Result of subtraction.
+     */
+    private static void internalSubtract(double[] firstOperand, 
+            double[] secondOperand, double[] result) {
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        for (int i = 0; i &lt; firstOperand.length; i++) {</span>
+<span class="fc" id="L150">            result[i] = firstOperand[i] - secondOperand[i];</span>
+        }
+<span class="fc" id="L152">    }</span>
+    
+    /**
+     * Subtracts provided operands arrays and stores the result in provided 
+     * result array (i.e. result = firstOperand - secondOperand). Subtraction is
+     * done in an element by element basis.
+     * Provided array result must be initialized.
+     * All arrays must have the same length.
+     * @param firstOperand First operand.
+     * @param secondOperand Second operand.
+     * @param result Result of subtraction.
+     * @throws IllegalArgumentException Raised if not all arrays have the same
+     * length.
+     */
+    public static void subtract(double[] firstOperand, double[] secondOperand,
+            double[] result) throws IllegalArgumentException {
+<span class="pc bpc" id="L168" title="1 of 4 branches missed.">        if (firstOperand.length != secondOperand.length ||</span>
+                firstOperand.length != result.length) {
+<span class="fc" id="L170">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L172">        internalSubtract(firstOperand, secondOperand, result);</span>
+<span class="fc" id="L173">    }</span>
+    
+    /**
+     * Subtracts provided operands and returns the result as a new array 
+     * instance.
+     * Subtraction is done in an element by element basis.
+     * @param firstOperand First operand
+     * @param secondOperand Second operand
+     * @return Subtraction of first and second operands
+     * @throws IllegalArgumentException Raised if first and second operands
+     * arrays don't have the same length
+     */
+    public static double[] subtractAndReturnNew(double[] firstOperand, 
+            double[] secondOperand) throws IllegalArgumentException {
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (firstOperand.length != secondOperand.length) {</span>
+<span class="fc" id="L188">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L191">        double[] result = new double[firstOperand.length];</span>
+<span class="fc" id="L192">        internalSubtract(firstOperand, secondOperand, result);</span>
+<span class="fc" id="L193">        return result;</span>
+    }    
+    
+    /**
+     * Computes the dot product of provided arrays as the sum of the product
+     * of the elements of both arrays.
+     * @param firstOperand First operand.
+     * @param secondOperand Second operand.
+     * @return Dot product.
+     * @throws IllegalArgumentException Raised if first and second operands
+     * arrays don't have the same length.
+     */
+    public static double dotProduct(double[] firstOperand, 
+            double[] secondOperand) throws IllegalArgumentException {
+<span class="fc bfc" id="L207" title="All 2 branches covered.">        if (firstOperand.length != secondOperand.length) {</span>
+<span class="fc" id="L208">            throw new IllegalArgumentException(</span>
+                    &quot;both operands must have same length&quot;);
+        }
+        
+<span class="fc" id="L212">        double result = 0.0;</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">        for (int i = 0; i &lt; firstOperand.length; i++) {</span>
+<span class="fc" id="L214">            result += firstOperand[i] * secondOperand[i];</span>
+        }
+<span class="fc" id="L216">        return result;</span>
+    }
+    
+    /**
+     * Computes the dot product of provided arrays as the sum of the product of
+     * the elements of both arrays.
+     * @param firstOperand first operand.
+     * @param secondOperand second operand.
+     * @param jacobianFirst matrix where jacobian of first operand will be 
+     * stored. Must be a column matrix having the same number of rows as the
+     * first operand length.
+     * @param jacobianSecond matrix where jacobian of second operand will be
+     * stored. Must be a column matrix having the same number of rows as the
+     * second operand length.
+     * @return dot product.
+     * @throws IllegalArgumentException if first and second operands don't have 
+     * the same length or if jacobian matrices are not column vectors having
+     * the same length as their respective operands.
+     */
+    public static double dotProduct(double[] firstOperand, 
+            double[] secondOperand, Matrix jacobianFirst, Matrix jacobianSecond)
+            throws IllegalArgumentException {
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">        if (jacobianFirst != null &amp;&amp;</span>
+<span class="pc bpc" id="L239" title="1 of 2 branches missed.">                (jacobianFirst.getRows() != 1 ||</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">                jacobianFirst.getColumns() != firstOperand.length)) {</span>
+<span class="fc" id="L241">            throw new IllegalArgumentException(&quot;jacobian first must be a &quot; + </span>
+                    &quot;row vector having the same number of columns as &quot; + 
+                    &quot;first operand length&quot;);
+        }
+<span class="pc bpc" id="L245" title="1 of 2 branches missed.">        if (jacobianSecond != null &amp;&amp;</span>
+<span class="pc bpc" id="L246" title="1 of 2 branches missed.">                (jacobianSecond.getRows() != 1 || </span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">                jacobianSecond.getColumns() != secondOperand.length)) {</span>
+<span class="fc" id="L248">            throw new IllegalArgumentException(&quot;jacobian second must be a &quot; +</span>
+                    &quot;row vector havnig the same number of columns as &quot; +
+                    &quot;second operand length&quot;);
+        }
+
+<span class="pc bpc" id="L253" title="1 of 2 branches missed.">        if (jacobianFirst != null) {</span>
+<span class="fc" id="L254">            jacobianFirst.setSubmatrix(0, 0, 0, firstOperand.length - 1, </span>
+                    firstOperand);
+        }
+<span class="pc bpc" id="L257" title="1 of 2 branches missed.">        if (jacobianSecond != null) {</span>
+<span class="fc" id="L258">            jacobianSecond.setSubmatrix(0, 0, 0, secondOperand.length - 1,</span>
+                    secondOperand);
+        }
+        
+<span class="fc" id="L262">        return dotProduct(firstOperand, secondOperand);</span>
+    }
+    
+    /**
+     * Computes the angle between two vectors.
+     * The angle is defined between -PI/2 and PI/2.
+     * @param firstOperand first operand.
+     * @param secondOperand second operand.
+     * @return angle between arrays.
+     * @throws IllegalArgumentException if first and second operands don't have
+     * the same length.
+     */
+    public static double angle(double[] firstOperand, double[] secondOperand) 
+            throws IllegalArgumentException {
+<span class="fc" id="L276">        double angle = Math.acos(dotProduct(firstOperand, secondOperand));</span>
+<span class="pc bpc" id="L277" title="1 of 2 branches missed.">        return angle &gt; Math.PI/2.0 ? Math.PI - angle : angle;</span>
+    }
+    
+    //The same for Complex arrays
+    
+    /**
+     * Internal method that multiplied by scalar provided input array without
+     * comparing length of input array and result array.
+     * @param inputArray Array to be multiplied.
+     * @param scalar Scalar used for multiplication.
+     * @param result Array where result is stored.
+     * @see #multiplyByScalar(double[], double, double[])
+     */
+    private static void internalMultiplyByScalar(Complex[] inputArray, 
+            double scalar, Complex[] result) {
+<span class="fc bfc" id="L292" title="All 2 branches covered.">        for (int i = 0; i &lt; inputArray.length; ++i) {</span>
+<span class="fc" id="L293">            result[i].setReal(inputArray[i].getReal() * scalar);</span>
+<span class="fc" id="L294">            result[i].setImaginary(inputArray[i].getImaginary() * scalar);</span>
+        }        
+<span class="fc" id="L296">    }</span>
+    
+    /**
+     * Multiplies values in provided input array by provided scalar value
+     * and stores the result in provided result array.
+     * @param inputArray Array to be multiplied.
+     * @param scalar Scalar used for multiplication.
+     * @param result Array where result is stored.
+     * @throws IllegalArgumentException Thrown if inputArray length and result
+     * array length are not equal.
+     */
+    public static void multiplyByScalar(Complex[] inputArray, double scalar, 
+            Complex[] result) throws IllegalArgumentException {
+        
+<span class="fc bfc" id="L310" title="All 2 branches covered.">        if (inputArray.length != result.length) {</span>
+<span class="fc" id="L311">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L313">        internalMultiplyByScalar(inputArray, scalar, result);</span>
+<span class="fc" id="L314">    }</span>
+    
+    /**
+     * Multiplies values in provided array by provided scalar value and returns
+     * the result in a new array.
+     * @param inputArray Array to be multiplied.
+     * @param scalar Scalar used for multiplication.
+     * @return Result obtained after multiplying input array by provided scalar
+     * value.
+     */
+    public static Complex[] multiplyByScalarAndReturnNew(Complex[] inputArray, 
+            double scalar) {
+<span class="fc" id="L326">        Complex[] result = new Complex[inputArray.length];</span>
+        //instantiate Complex instances in result array containing values of
+        //provided array multiplied by scalar value
+<span class="fc bfc" id="L329" title="All 2 branches covered.">        for (int i = 0; i &lt; inputArray.length; i++) {</span>
+<span class="fc" id="L330">            result[i] = new Complex(inputArray[i].getReal() * scalar,</span>
+<span class="fc" id="L331">                    inputArray[i].getImaginary() * scalar);</span>
+        }
+<span class="fc" id="L333">        return result;</span>
+    }  
+    
+    /**
+     * Sums provided operands arrays and stores the result in provided result
+     * array (i.e. result = firstOperand + secondOperand). Summation is done in
+     * an element by element basis.
+     * Provided array result must be initialized.
+     * All arrays must have the same length.
+     * This method does not check array lengths.
+     * @param firstOperand First operand.
+     * @param secondOperand Second operand.
+     * @param result Result of summation.
+     */
+    private static void internalSum(Complex[] firstOperand, 
+            Complex[] secondOperand, Complex[] result) {
+<span class="fc bfc" id="L349" title="All 2 branches covered.">        for (int i = 0; i &lt; firstOperand.length; i++) {</span>
+<span class="fc" id="L350">            result[i].setReal(firstOperand[i].getReal() + </span>
+<span class="fc" id="L351">                    secondOperand[i].getReal());</span>
+<span class="fc" id="L352">            result[i].setImaginary(firstOperand[i].getImaginary() +</span>
+<span class="fc" id="L353">                    secondOperand[i].getImaginary());</span>
+        }
+<span class="fc" id="L355">    }</span>
+    
+    /**
+     * Sums provided operands arrays and stores the result in provided result
+     * array (i.e. result = firstOperand + secondOperand). Summation is done
+     * in an element by element basis.
+     * Provided array result must be initialized.
+     * All arrays must have the same length.
+     * @param firstOperand First operand.
+     * @param secondOperand Second operand.
+     * @param result Result of summation.
+     * @throws IllegalArgumentException Raised if not all arrays have the same
+     * length.
+     */
+    public static void sum(Complex[] firstOperand, Complex[] secondOperand,
+            Complex[] result) throws IllegalArgumentException {
+<span class="pc bpc" id="L371" title="1 of 4 branches missed.">        if (firstOperand.length != secondOperand.length ||</span>
+                firstOperand.length != result.length) {
+<span class="fc" id="L373">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L375">        internalSum(firstOperand, secondOperand, result);</span>
+<span class="fc" id="L376">    }</span>
+    
+    /**
+     * Sums provided operands and returns the result as a new array instance.
+     * Summation is done in an element by element basis
+     * @param firstOperand First operand
+     * @param secondOperand Second operand
+     * @return Sum of first and second operands
+     * @throws IllegalArgumentException Raised if first and second operands
+     * arrays don't have the same length
+     */
+    public static Complex[] sumAndReturnNew(Complex[] firstOperand, 
+            Complex[] secondOperand) throws IllegalArgumentException {
+<span class="fc bfc" id="L389" title="All 2 branches covered.">        if (firstOperand.length != secondOperand.length) {</span>
+<span class="fc" id="L390">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L393">        Complex[] result = new Complex[firstOperand.length];</span>
+        //initialize each element of result matrix
+<span class="fc bfc" id="L395" title="All 2 branches covered.">        for(int i = 0; i &lt; firstOperand.length; i++)</span>
+<span class="fc" id="L396">            result[i] = firstOperand[i].addAndReturnNew(secondOperand[i]);</span>
+<span class="fc" id="L397">        return result;</span>
+    }    
+    
+    /**
+     * Subtracts provided operands arrays and stores the result in provided 
+     * result array (i.e. result = firstOperand - secondOperand). Subtraction is
+     * done in an element by element basis
+     * Provided array result must be initialized.
+     * All arrays must have the same length
+     * This method does not check array lengths
+     * @param firstOperand First operand
+     * @param secondOperand Second operand
+     * @param result Result of subtraction
+     */
+    private static void internalSubtract(Complex[] firstOperand, 
+            Complex[] secondOperand, Complex[] result) {
+<span class="fc bfc" id="L413" title="All 2 branches covered.">        for (int i = 0; i &lt; firstOperand.length; i++) {</span>
+<span class="fc" id="L414">            result[i].setReal(firstOperand[i].getReal() - </span>
+<span class="fc" id="L415">                    secondOperand[i].getReal());</span>
+<span class="fc" id="L416">            result[i].setImaginary(firstOperand[i].getImaginary() -</span>
+<span class="fc" id="L417">                    secondOperand[i].getImaginary());</span>
+        }
+<span class="fc" id="L419">    }</span>
+    
+    /**
+     * Subtracts provided operands arrays and stores the result in provided 
+     * result array (i.e. result = firstOperand - secondOperand). Subtraction is
+     * done in an element by element basis
+     * Provided array result must be initialized.
+     * All arrays must have the same length
+     * @param firstOperand First operand
+     * @param secondOperand Second operand
+     * @param result Result of subtraction
+     * @throws IllegalArgumentException Raised if not all arrays have the same
+     * length
+     */
+    public static void subtract(Complex[] firstOperand, Complex[] secondOperand,
+            Complex[] result) throws IllegalArgumentException {
+<span class="pc bpc" id="L435" title="1 of 4 branches missed.">        if (firstOperand.length != secondOperand.length ||</span>
+                firstOperand.length != result.length) {
+<span class="fc" id="L437">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L439">        internalSubtract(firstOperand, secondOperand, result);</span>
+<span class="fc" id="L440">    }</span>
+    
+    /**
+     * Subtracts provided operands and returns the result as a new array 
+     * instance.
+     * Subtraction is done in an element by element basis
+     * @param firstOperand First operand
+     * @param secondOperand Second operand
+     * @return Subtraction of first and second operands
+     * @throws IllegalArgumentException Raised if first and second operands
+     * arrays don't have the same length
+     */
+    public static Complex[] subtractAndReturnNew(Complex[] firstOperand, 
+            Complex[] secondOperand) throws IllegalArgumentException {
+<span class="fc bfc" id="L454" title="All 2 branches covered.">        if (firstOperand.length != secondOperand.length) {</span>
+<span class="fc" id="L455">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L458">        Complex[] result = new Complex[firstOperand.length];</span>
+        //initialize each element of result matrix
+<span class="fc bfc" id="L460" title="All 2 branches covered.">        for (int i = 0; i &lt; firstOperand.length; i++) {</span>
+<span class="fc" id="L461">            result[i] = firstOperand[i].subtractAndReturnNew(secondOperand[i]);</span>
+        }
+<span class="fc" id="L463">        return result;</span>
+    }    
+    
+    /**
+     * Computes the dot product of provided arrays as the sum of the product
+     * of the elements of both arrays
+     * @param firstOperand First operand
+     * @param secondOperand Second operand
+     * @return Dot product
+     * @throws IllegalArgumentException Raised if first and second operands
+     * arrays don't have the same length
+     */
+    public static Complex dotProduct(Complex[] firstOperand, 
+            Complex[] secondOperand) throws IllegalArgumentException {
+<span class="fc bfc" id="L477" title="All 2 branches covered.">        if (firstOperand.length != secondOperand.length) {</span>
+<span class="fc" id="L478">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L481">        Complex result = new Complex(0.0);</span>
+<span class="fc bfc" id="L482" title="All 2 branches covered.">        for (int i = 0; i &lt; firstOperand.length; i++) {</span>
+<span class="fc" id="L483">            result.add(firstOperand[i].multiplyAndReturnNew(secondOperand[i]));</span>
+        }
+<span class="fc" id="L485">        return result;</span>
+    }
+    
+    /**
+     * Normalizes provided array and computes corresponding jacobian.
+     * @param v array to be normalized.
+     * @param result array where result of normalized array will be stored.
+     * @param jacobian matrix where jacobian will be stored.
+     * @throws IllegalArgumentException if provided arrays don't have the same 
+     * length or if provided jacobian is not NxN, where N is length of arrays.
+     */
+    public static void normalize(double[] v, double[] result, Matrix jacobian) 
+            throws IllegalArgumentException {
+<span class="fc" id="L498">        double s = v.length;        </span>
+        
+<span class="fc bfc" id="L500" title="All 2 branches covered.">        if (s != result.length) {</span>
+<span class="fc" id="L501">            throw new IllegalArgumentException(</span>
+                    &quot;both arrays must have the same length&quot;);
+        }
+        
+<span class="fc bfc" id="L505" title="All 4 branches covered.">        if (jacobian != null &amp;&amp; (jacobian.getRows() != s ||</span>
+<span class="pc bpc" id="L506" title="1 of 2 branches missed.">                jacobian.getColumns() != s)) {</span>
+<span class="fc" id="L507">            throw new IllegalArgumentException(</span>
+                    &quot;provided jacobian is not NxN where N is length of v&quot;);
+        }
+        
+<span class="fc" id="L511">        double n2 = dotProduct(v, v);</span>
+<span class="fc" id="L512">        double n = Math.sqrt(n2);</span>
+                
+<span class="fc bfc" id="L514" title="All 2 branches covered.">        if (jacobian != null) {</span>
+
+            try {
+<span class="fc" id="L517">                double n3 = n*n2;</span>
+            
+                //VN_v = (n2*eye(s) - v*v') / n3
+<span class="fc" id="L520">                Matrix.identity(jacobian);</span>
+<span class="fc" id="L521">                jacobian.multiplyByScalar(n2);</span>
+<span class="fc" id="L522">                jacobian.subtract(Matrix.newFromArray(v, true).</span>
+<span class="fc" id="L523">                        multiplyAndReturnNew(Matrix.newFromArray(v, false)));</span>
+<span class="fc" id="L524">                jacobian.multiplyByScalar(1.0 / n3);            </span>
+<span class="pc" id="L525">            } catch (WrongSizeException ignore){ /* never thrown */ }</span>
+        }  
+        
+<span class="fc" id="L528">        internalMultiplyByScalar(v, 1.0 / n, result);        </span>
+<span class="fc" id="L529">    }</span>
+    
+    /**
+     * Normalizes provided array and computes corresponding jacobian.
+     * @param v array to be normalized.
+     * @param jacobian matrix where jacobian will be stored.
+     * @return a new array instance containing normalized array.
+     * @throws IllegalArgumentException if provided jacobian is not NxN, where N
+     * is length of arrays.
+     */
+    public static double[] normalizeAndReturnNew(double[] v, Matrix jacobian) 
+            throws IllegalArgumentException {
+<span class="fc" id="L541">        double[] result = new double[v.length];</span>
+<span class="fc" id="L542">        normalize(v, result, jacobian);</span>
+<span class="fc" id="L543">        return result;</span>
+    }
+    
+    /**
+     * Normalizes provided array, updates its values and computes corresponding 
+     * jacobian.
+     * @param v array to be normalized and updated.
+     * @param jacobian matrix where jacobian will be stored.
+     * @throws IllegalArgumentException if provided jacobian is not NxN, where N
+     * is length of arrays.
+     */
+    public static void normalize(double[] v, Matrix jacobian) 
+            throws IllegalArgumentException {
+<span class="fc" id="L556">        normalize(v, v, jacobian);</span>
+<span class="fc" id="L557">    }</span>
+    
+    /**
+     * Normalizes provided array.
+     * @param v array to be normalized.
+     * @param result array where result of normalized array will be stored.
+     * @throws IllegalArgumentException if provided arrays don't have the same 
+     * length.
+     */
+    public static void normalize(double[] v, double[] result) 
+            throws IllegalArgumentException {
+<span class="nc" id="L568">        normalize(v, result, null);</span>
+<span class="nc" id="L569">    }</span>
+    
+    /**
+     * Normalizes provided array.
+     * @param v array to be normalized.
+     * @return a new array instance containing normalized array.
+     */
+    public static double[] normalizeAndReturnNew(double[] v) {
+<span class="fc" id="L577">        return normalizeAndReturnNew(v, null);</span>
+    }
+    
+    /**
+     * Normalizes provided array and updates its values.
+     * @param v array to be normalized and updated.
+     */
+    public static void normalize(double[] v) {
+<span class="fc" id="L585">        normalize(v, (Matrix)null);</span>
+<span class="fc" id="L586">    }</span>
+    
+    /**
+     * Reverses the order of elements in the array.
+     * @param v array to be reversed.
+     * @param result instance where results will be stored.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     * length.
+     */
+    public static void reverse(double[] v, double[] result)
+            throws IllegalArgumentException {
+        
+<span class="fc" id="L598">        int length = v.length;</span>
+        
+<span class="pc bpc" id="L600" title="1 of 2 branches missed.">        if (result.length != length) {</span>
+<span class="nc" id="L601">            throw new IllegalArgumentException(&quot;lengths must be equal&quot;);</span>
+        }
+        
+<span class="fc" id="L604">        int halfLength = length / 2;</span>
+        double tmp;
+<span class="fc bfc" id="L606" title="All 2 branches covered.">        for (int i = 0, j = length - 1; i &lt; halfLength; i++, j--) {</span>
+<span class="fc" id="L607">            tmp = v[i];</span>
+<span class="fc" id="L608">            result[i] = v[j];</span>
+<span class="fc" id="L609">            result[j] = tmp;</span>
+        }
+        
+<span class="fc bfc" id="L612" title="All 2 branches covered.">        if (length % 2 != 0) {</span>
+            //if length is odd, copy central value
+<span class="fc" id="L614">            result[halfLength] = v[halfLength];</span>
+        }
+<span class="fc" id="L616">    }</span>
+    
+    /**
+     * Reverses provided array. This method updates provided array to contain
+     * its reversed values.
+     * @param v array to be reversed.
+     */
+    public static void reverse(double[] v) {
+<span class="fc" id="L624">        reverse(v, v);</span>
+<span class="fc" id="L625">    }</span>
+    
+    /**
+     * Returns a new array containing provided array having its elements in
+     * reversed order.
+     * @param v array to be reversed.
+     * @return a new instance containing reversed array.
+     */
+    public static double[] reverseAndReturnNew(double[] v) {
+<span class="fc" id="L634">        double[] result = new double[v.length];</span>
+<span class="fc" id="L635">        reverse(v, result);</span>
+<span class="fc" id="L636">        return result;</span>
+    }
+    
+    /**
+     * Reverses the order of elements in the array.
+     * @param v array to be reversed.
+     * @param result instance where results will be stored.
+     * @throws IllegalArgumentException if provided arrays don't have the same
+     * length.
+     */
+    public static void reverse(Complex[] v, Complex[] result)
+            throws IllegalArgumentException {
+        
+<span class="fc" id="L649">        int length = v.length;</span>
+        
+<span class="pc bpc" id="L651" title="1 of 2 branches missed.">        if (result.length != length) {</span>
+<span class="nc" id="L652">            throw new IllegalArgumentException(&quot;lengths must be equal&quot;);</span>
+        }
+        
+<span class="fc" id="L655">        int halfLength = length / 2;</span>
+        Complex tmp;
+<span class="fc bfc" id="L657" title="All 2 branches covered.">        if (v != result) {</span>
+            //for different instances, copy values
+<span class="fc bfc" id="L659" title="All 2 branches covered.">            for (int i = 0, j = length - 1; i &lt; halfLength; i++, j--) {</span>
+<span class="fc" id="L660">                tmp = v[i].clone();</span>
+<span class="fc" id="L661">                result[i] = v[j].clone();</span>
+<span class="fc" id="L662">                result[j] = tmp;</span>
+            }
+            
+<span class="fc bfc" id="L665" title="All 2 branches covered.">            if (length % 2 != 0) {</span>
+                //if length is odd, copy central value
+<span class="fc" id="L667">                result[halfLength] = v[halfLength].clone();</span>
+            }            
+        } else {
+            //for same instances, rearrange values
+<span class="fc bfc" id="L671" title="All 2 branches covered.">            for (int i = 0, j = length - 1; i &lt; halfLength; i++, j--) {</span>
+<span class="fc" id="L672">                tmp = v[i];</span>
+<span class="fc" id="L673">                result[i] = v[j];</span>
+<span class="fc" id="L674">                result[j] = tmp;</span>
+            }         
+            
+<span class="fc bfc" id="L677" title="All 2 branches covered.">            if (length % 2 != 0) {</span>
+                //if length is odd, copy central value
+<span class="fc" id="L679">                result[halfLength] = v[halfLength];</span>
+            }                        
+        }
+<span class="fc" id="L682">    }</span>
+    
+    /**
+     * Reverses provided array. This method updates provided array to contain
+     * its reversed values.
+     * @param v array to be reversed.
+     */
+    public static void reverse(Complex[] v) {
+<span class="fc" id="L690">        reverse(v, v);</span>
+<span class="fc" id="L691">    }</span>
+    
+    /**
+     * Returns a new array containing provided array having its elements in 
+     * reversed order.
+     * @param v array to be reversed.
+     * @return a new instance containing reversed array.
+     */
+    public static Complex[] reverseAndReturnNew(Complex[] v) {
+<span class="fc" id="L700">        Complex[] result = new Complex[v.length];</span>
+<span class="fc" id="L701">        reverse(v, result);</span>
+<span class="fc" id="L702">        return result;</span>
+    }
+    
+    /**
+     * Computes the squared root of each element of provided array and sets the
+     * result into provided result array.
+     * @param v input array to compute the squared root of each element.
+     * @param result array where results will be stored.
+     * @throws IllegalArgumentException if provided arrays don't have the same 
+     * length.
+     */
+    public static void sqrt(double[] v, double[] result) 
+            throws IllegalArgumentException {
+<span class="fc" id="L715">        int length = v.length;</span>
+        
+<span class="pc bpc" id="L717" title="1 of 2 branches missed.">        if (result.length != length) {</span>
+<span class="nc" id="L718">            throw new IllegalArgumentException(&quot;lengths must be equal&quot;);</span>
+        }
+
+<span class="fc bfc" id="L721" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L722">            result[i] = Math.sqrt(v[i]);</span>
+        }
+<span class="fc" id="L724">    }</span>
+    
+    /**
+     * Computes the squared root of each element of provided array and returns 
+     * the result as a new array.
+     * @param v input array to compute the squared root of each element.
+     * @return a new array containing the squared root of each element of input
+     * array.
+     */
+    public static double[] sqrtAndReturnNew(double[] v) {
+<span class="fc" id="L734">        double[] result = new double[v.length];</span>
+<span class="fc" id="L735">        sqrt(v, result);</span>
+<span class="fc" id="L736">        return result;</span>
+    }
+    
+    /**
+     * Updates provided array by setting on each element its squared root.
+     * @param v input array to be updated with its squared root elements.
+     */
+    public static void sqrt(double[] v) {
+<span class="fc" id="L744">        sqrt(v, v);</span>
+<span class="fc" id="L745">    }</span>
+    
+    /**
+     * Finds the minimum value into provided array.
+     * @param v array where minimum must be found.
+     * @param pos position where minimum was found. Position will be stored at 
+     * position zero of the array, if provided.
+     * @return minimum value.
+     */
+    public static double min(double[] v, int[] pos) {
+<span class="fc" id="L755">        int length = v.length;</span>
+<span class="fc" id="L756">        double min = Double.MAX_VALUE;</span>
+<span class="fc" id="L757">        int foundPos = -1;</span>
+<span class="fc bfc" id="L758" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc bfc" id="L759" title="All 2 branches covered.">            if (v[i] &lt; min) {</span>
+<span class="fc" id="L760">                min = v[i];</span>
+<span class="fc" id="L761">                foundPos = i;</span>
+            }
+        }
+
+<span class="pc bpc" id="L765" title="1 of 4 branches missed.">        if(pos != null &amp;&amp; pos.length &gt; 0) {</span>
+<span class="fc" id="L766">            pos[0] = foundPos;</span>
+        }
+        
+<span class="fc" id="L769">        return min;</span>
+    }
+    
+    /**
+     * Finds the minimum value into provided array.
+     * @param v array where minimum must be found.
+     * @return minimum value.
+     */
+    public static double min(double[] v) {
+<span class="fc" id="L778">        return min(v, null);</span>
+    }
+    
+    /**
+     * Finds the maximum value into provided array.
+     * @param v array where maximum must be found.
+     * @param pos position where maximum was found. Position will be stored at
+     * position zero of the array, if provided.
+     * @return maximum value.
+     */
+    public static double max(double[] v, int[] pos) {
+<span class="fc" id="L789">        int length = v.length;</span>
+<span class="fc" id="L790">        double max = -Double.MAX_VALUE;</span>
+<span class="fc" id="L791">        int foundPos = -1;</span>
+<span class="fc bfc" id="L792" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc bfc" id="L793" title="All 2 branches covered.">            if (v[i] &gt; max) {</span>
+<span class="fc" id="L794">                max = v[i];</span>
+<span class="fc" id="L795">                foundPos = i;</span>
+            }
+        }
+        
+<span class="pc bpc" id="L799" title="1 of 4 branches missed.">        if (pos != null &amp;&amp; pos.length &gt; 0) {</span>
+<span class="fc" id="L800">            pos[0] = foundPos;</span>
+        }
+        
+<span class="fc" id="L803">        return max;</span>
+    }
+    
+    /**
+     * Finds the maximum value into provided array.
+     * @param v array where maximum must be found.
+     * @return maximum value.
+     */
+    public static double max(double[] v) {
+<span class="fc" id="L812">        return max(v, null);</span>
+    }
+    
+    /**
+     * Finds the minimum and maximum values into provided array and finds their
+     * positions.
+     * @param v array where minimum and maximum must be found.
+     * @param result array of length 2 containing found minimum and maximum 
+     * values at positions 0 and 1 respectively.
+     * @param pos array of length 2 containing positions where minimum and 
+     * maximum where found in v array. Position 0 will contain minimum position,
+     * position 1 will contain maximum position.
+     * @throws IllegalArgumentException if provided result or pos array don't
+     * have length 2.
+     */
+    public static void minMax(double[] v, double[] result, int[] pos) 
+            throws IllegalArgumentException {
+<span class="pc bpc" id="L829" title="1 of 2 branches missed.">        if (result.length != 2) {</span>
+<span class="nc" id="L830">            throw new IllegalArgumentException(&quot;result must have length 2&quot;);</span>
+        }
+<span class="pc bpc" id="L832" title="2 of 4 branches missed.">        if (pos != null &amp;&amp; pos.length != 2) {</span>
+<span class="nc" id="L833">            throw new IllegalArgumentException(&quot;pos must have length 2&quot;);</span>
+        }
+        
+<span class="fc" id="L836">        int length = v.length;</span>
+<span class="fc" id="L837">        double min = Double.MAX_VALUE;</span>
+<span class="fc" id="L838">        double max = -Double.MAX_VALUE;</span>
+<span class="fc" id="L839">        int minPos = -1;</span>
+<span class="fc" id="L840">        int maxPos = -1;</span>
+<span class="fc bfc" id="L841" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc bfc" id="L842" title="All 2 branches covered.">            if (v[i] &lt; min) {</span>
+<span class="fc" id="L843">                min = v[i];</span>
+<span class="fc" id="L844">                minPos = i;</span>
+            }
+<span class="fc bfc" id="L846" title="All 2 branches covered.">            if (v[i] &gt; max) {</span>
+<span class="fc" id="L847">                max = v[i];</span>
+<span class="fc" id="L848">                maxPos = i;</span>
+            }
+        }
+        
+<span class="fc" id="L852">        result[0] = min;</span>
+<span class="fc" id="L853">        result[1] = max;</span>
+<span class="pc bpc" id="L854" title="1 of 2 branches missed.">        if(pos != null) {</span>
+<span class="fc" id="L855">            pos[0] = minPos;</span>
+<span class="fc" id="L856">            pos[1] = maxPos;</span>
+        }
+<span class="fc" id="L858">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
