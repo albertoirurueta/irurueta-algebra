@@ -1148,11 +1148,11 @@ public class Matrix implements Serializable{
         
 <span class="fc" id="L1149">        int subRows = bottomRightRow - topLeftRow + 1;</span>
 <span class="fc" id="L1150">        int subCols = bottomRightColumn - topLeftColumn + 1;</span>
-<span class="pc bpc" id="L1151" title="2 of 4 branches missed.">        if (result.getRows() != subRows || result.getColumns() != subCols) {</span>
+<span class="pc bpc" id="L1151" title="1 of 4 branches missed.">        if (result.getRows() != subRows || result.getColumns() != subCols) {</span>
             //resize result
             try {
-<span class="nc" id="L1154">                result.resize(subRows, subCols);</span>
-<span class="nc" id="L1155">            } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L1154">                result.resize(subRows, subCols);</span>
+<span class="pc" id="L1155">            } catch (WrongSizeException ignore) { }</span>
         }
 <span class="fc" id="L1157">        internalGetSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,</span>
                 bottomRightColumn, result);
