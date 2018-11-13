@@ -476,7 +476,7 @@ public class SingularValueDecomposer extends Decomposer {
         }
         
 <span class="fc" id="L478">        int columns = inputMatrix.getColumns();</span>
-<span class="pc bpc" id="L479" title="1 of 4 branches missed.">        return (w[0] &lt;= 0.0 || w[columns - 1] &lt;= 0.0) ? 0.0 : </span>
+<span class="pc bpc" id="L479" title="2 of 4 branches missed.">        return (w[0] &lt;= 0.0 || w[columns - 1] &lt;= 0.0) ? 0.0 : </span>
                 w[columns - 1] / w[0];
     }
     
@@ -1292,7 +1292,7 @@ public class SingularValueDecomposer extends Decomposer {
 <span class="fc bfc" id="L1292" title="All 2 branches covered.">		        for (k = i; k &lt; m; k++) {</span>
 <span class="fc" id="L1293">                    scale += Math.abs(u.getElementAt(k, i));</span>
                 }
-<span class="pc bpc" id="L1295" title="1 of 2 branches missed.">                if (scale != 0.0) {</span>
+<span class="fc bfc" id="L1295" title="All 2 branches covered.">                if (scale != 0.0) {</span>
 <span class="fc bfc" id="L1296" title="All 2 branches covered.">                    for (k = i; k &lt; m; k++) {</span>
 <span class="fc" id="L1297">                        u.setElementAt(k, i, u.getElementAt(k,i) / scale);</span>
 <span class="fc" id="L1298">                        s += Math.pow(u.getElementAt(k,i), 2.0);</span>
@@ -1387,7 +1387,7 @@ public class SingularValueDecomposer extends Decomposer {
 <span class="fc bfc" id="L1387" title="All 2 branches covered.">            for (j = l; j &lt; n; j++) {</span>
 <span class="fc" id="L1388">                u.setElementAt(i,j, 0.0);</span>
             }
-<span class="pc bpc" id="L1390" title="1 of 2 branches missed.">            if (g != 0.0) {</span>
+<span class="fc bfc" id="L1390" title="All 2 branches covered.">            if (g != 0.0) {</span>
 <span class="fc" id="L1391">                g = 1.0 / g;</span>
 <span class="fc bfc" id="L1392" title="All 2 branches covered.">                for (j = l; j &lt; n; j++) {</span>
 <span class="fc bfc" id="L1393" title="All 2 branches covered.">                    for (s = 0.0, k = l; k &lt; m; k++) {</span>
@@ -1403,8 +1403,8 @@ public class SingularValueDecomposer extends Decomposer {
 <span class="fc" id="L1403">                    u.setElementAt(j, i, u.getElementAt(j, i) * g);</span>
                 }
             } else {
-<span class="nc bnc" id="L1406" title="All 2 branches missed.">                for (j = i; j &lt; m; j++) {</span>
-<span class="nc" id="L1407">                    u.setElementAt(j,i, 0.0);</span>
+<span class="fc bfc" id="L1406" title="All 2 branches covered.">                for (j = i; j &lt; m; j++) {</span>
+<span class="fc" id="L1407">                    u.setElementAt(j,i, 0.0);</span>
                 }
             }
 <span class="fc" id="L1410">            u.setElementAt(i,i, u.getElementAt(i,i) + 1.0);</span>
