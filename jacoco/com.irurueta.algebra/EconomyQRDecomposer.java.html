@@ -326,7 +326,7 @@ public class EconomyQRDecomposer extends Decomposer {
         }
         
 <span class="fc bfc" id="L328" title="All 2 branches covered.">        for (int i = 0; i &lt; columns; i++) {</span>
-<span class="fc bfc" id="L329" title="All 2 branches covered.">            if (i &lt; rows) {</span>
+<span class="pc bpc" id="L329" title="1 of 2 branches missed.">            if (i &lt; rows) {</span>
 <span class="fc bfc" id="L330" title="All 2 branches covered.">                for (int j = 0; j &lt; columns; j++) {</span>
 <span class="fc bfc" id="L331" title="All 2 branches covered.">                    if (i &lt; j) {</span>
 <span class="fc" id="L332">                        r.setElementAt(i, j, qr.getElementAt(i, j));</span>
@@ -337,8 +337,8 @@ public class EconomyQRDecomposer extends Decomposer {
                     }
                 }
             } else {
-<span class="fc bfc" id="L340" title="All 2 branches covered.">                for (int j = 0; j &lt; columns; j++) {</span>
-<span class="fc" id="L341">                    r.setElementAt(i, j, 0.0);</span>
+<span class="nc bnc" id="L340" title="All 2 branches missed.">                for (int j = 0; j &lt; columns; j++) {</span>
+<span class="nc" id="L341">                    r.setElementAt(i, j, 0.0);</span>
                 }
             }
         }      

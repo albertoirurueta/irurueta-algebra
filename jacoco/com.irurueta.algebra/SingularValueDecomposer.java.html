@@ -1501,7 +1501,7 @@ public class SingularValueDecomposer extends Decomposer {
 <span class="fc" id="L1501">                    z = pythag(f, h);</span>
                     //Rotation can be arbitrary if z = 0
 <span class="fc" id="L1503">                    w[j] = z;</span>
-<span class="fc bfc" id="L1504" title="All 2 branches covered.">                    if (z != 0.0) {</span>
+<span class="pc bpc" id="L1504" title="1 of 2 branches missed.">                    if (z != 0.0) {</span>
 <span class="fc" id="L1505">			            z = 1.0 / z;</span>
 <span class="fc" id="L1506">			            c = f * z;</span>
 <span class="fc" id="L1507">			            s = h * z;</span>
@@ -1631,7 +1631,7 @@ public class SingularValueDecomposer extends Decomposer {
 <span class="fc bfc" id="L1631" title="All 2 branches covered.">	    if (absa &gt; absb) {</span>
 <span class="fc" id="L1632">	        return absa * Math.sqrt(1.0 + (absb/absa)*(absb/absa));</span>
         } else {
-<span class="fc bfc" id="L1634" title="All 2 branches covered.">	        return (absb == 0.0 ?</span>
+<span class="pc bpc" id="L1634" title="1 of 2 branches missed.">	        return (absb == 0.0 ?</span>
 <span class="fc" id="L1635">                    0.0 : absb * Math.sqrt(1.0 + (absa/absb)*(absa/absb)));</span>
         }
     }
