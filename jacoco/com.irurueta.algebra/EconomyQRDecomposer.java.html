@@ -133,48 +133,49 @@ public class EconomyQRDecomposer extends Decomposer {
 <span class="fc" id="L133">        qr = inputMatrix.clone();</span>
         
 <span class="fc" id="L135">        rDiag = new double[columns];</span>
-        double nrm, s;
+        double nrm;
+        double s;
 
         //Main loop
-<span class="fc bfc" id="L139" title="All 2 branches covered.">        for (int k = 0; k &lt; columns; k++) {</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        for (int k = 0; k &lt; columns; k++) {</span>
             //Compute 2-norm of k-th column without under/overflow
-<span class="fc" id="L141">            nrm = 0.0;</span>
+<span class="fc" id="L142">            nrm = 0.0;</span>
             
-<span class="fc bfc" id="L143" title="All 2 branches covered.">            for (int i = k; i &lt; rows; i++) {</span>
-<span class="fc" id="L144">                nrm = Math.sqrt(nrm * nrm + </span>
-<span class="fc" id="L145">                        Math.pow(qr.getElementAt(i, k), 2.0));</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">            for (int i = k; i &lt; rows; i++) {</span>
+<span class="fc" id="L145">                nrm = Math.sqrt(nrm * nrm + </span>
+<span class="fc" id="L146">                        Math.pow(qr.getElementAt(i, k), 2.0));</span>
             }
             
-<span class="fc bfc" id="L148" title="All 2 branches covered.">            if (nrm != 0.0) {</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">            if (nrm != 0.0) {</span>
                 //Form k-th Householder vector
-<span class="fc bfc" id="L150" title="All 2 branches covered.">                if (qr.getElementAt(k, k) &lt; 0.0) {</span>
-<span class="fc" id="L151">                    nrm = -nrm;</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">                if (qr.getElementAt(k, k) &lt; 0.0) {</span>
+<span class="fc" id="L152">                    nrm = -nrm;</span>
                 }
                 
-<span class="fc bfc" id="L154" title="All 2 branches covered.">                for (int i = k; i &lt; rows; i++) {</span>
-<span class="fc" id="L155">                    qr.setElementAt(i, k, qr.getElementAt(i, k) /nrm);</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">                for (int i = k; i &lt; rows; i++) {</span>
+<span class="fc" id="L156">                    qr.setElementAt(i, k, qr.getElementAt(i, k) /nrm);</span>
                 }
-<span class="fc" id="L157">                qr.setElementAt(k, k, qr.getElementAt(k, k) + 1.0);</span>
+<span class="fc" id="L158">                qr.setElementAt(k, k, qr.getElementAt(k, k) + 1.0);</span>
                 
                 //Apply transformation to remaining columns
-<span class="fc bfc" id="L160" title="All 2 branches covered.">                for (int j = k + 1; j &lt; columns; j++) {</span>
-<span class="fc" id="L161">                    s = 0.0;</span>
-<span class="fc bfc" id="L162" title="All 2 branches covered.">                    for (int i = k; i &lt; rows; i++) {</span>
-<span class="fc" id="L163">                        s += qr.getElementAt(i, k) * qr.getElementAt(i, j);</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">                for (int j = k + 1; j &lt; columns; j++) {</span>
+<span class="fc" id="L162">                    s = 0.0;</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">                    for (int i = k; i &lt; rows; i++) {</span>
+<span class="fc" id="L164">                        s += qr.getElementAt(i, k) * qr.getElementAt(i, j);</span>
                     }
-<span class="fc" id="L165">                    s = -s / qr.getElementAt(k, k);</span>
-<span class="fc bfc" id="L166" title="All 2 branches covered.">                    for (int i = k; i &lt; rows; i++) {</span>
-<span class="fc" id="L167">                        qr.setElementAt(i, j, qr.getElementAt(i, j) + </span>
-<span class="fc" id="L168">                                s * qr.getElementAt(i, k));</span>
+<span class="fc" id="L166">                    s = -s / qr.getElementAt(k, k);</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">                    for (int i = k; i &lt; rows; i++) {</span>
+<span class="fc" id="L168">                        qr.setElementAt(i, j, qr.getElementAt(i, j) + </span>
+<span class="fc" id="L169">                                s * qr.getElementAt(i, k));</span>
                     }
                 }
             }
             
-<span class="fc" id="L173">            rDiag[k] = -nrm;</span>
+<span class="fc" id="L174">            rDiag[k] = -nrm;</span>
         }
         
-<span class="fc" id="L176">        locked = false;</span>
-<span class="fc" id="L177">    }</span>
+<span class="fc" id="L177">        locked = false;</span>
+<span class="fc" id="L178">    }</span>
     
     /**
      * Returns boolean indicating whether provided input matrix has full rank or
@@ -196,7 +197,7 @@ public class EconomyQRDecomposer extends Decomposer {
      */
     public boolean isFullRank() throws NotAvailableException, 
             WrongSizeException {
-<span class="nc" id="L199">        return isFullRank(DEFAULT_ROUND_ERROR);</span>
+<span class="nc" id="L200">        return isFullRank(DEFAULT_ROUND_ERROR);</span>
     }
     
     /**
@@ -224,8 +225,7 @@ public class EconomyQRDecomposer extends Decomposer {
      * @see #decompose()
      */
     public boolean isFullRank(double roundingError) 
-            throws NotAvailableException, WrongSizeException, 
-            IllegalArgumentException {
+            throws NotAvailableException, WrongSizeException {
         
 <span class="fc bfc" id="L230" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
 <span class="fc" id="L231">            throw new NotAvailableException();</span>
@@ -268,19 +268,21 @@ public class EconomyQRDecomposer extends Decomposer {
 <span class="pc bpc" id="L268" title="2 of 4 branches missed.">        if (h.getRows() != rows || h.getColumns() != columns) {</span>
             try {
 <span class="nc" id="L270">                h.resize(rows, columns);</span>
-<span class="nc" id="L271">            } catch (WrongSizeException ignore) { }</span>
+<span class="nc" id="L271">            } catch (WrongSizeException ignore) {</span>
+                //never happens
+<span class="nc" id="L273">            }</span>
         }
         
-<span class="fc bfc" id="L274" title="All 2 branches covered.">        for (int i = 0; i &lt; rows; i++) {</span>
-<span class="fc bfc" id="L275" title="All 2 branches covered.">            for (int j = 0; j &lt; columns; j++) {</span>
-<span class="fc bfc" id="L276" title="All 2 branches covered.">                if (i &gt;= j) {</span>
-<span class="fc" id="L277">                    h.setElementAt(i, j, qr.getElementAt(i, j));</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        for (int i = 0; i &lt; rows; i++) {</span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">            for (int j = 0; j &lt; columns; j++) {</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">                if (i &gt;= j) {</span>
+<span class="fc" id="L279">                    h.setElementAt(i, j, qr.getElementAt(i, j));</span>
                 } else {
-<span class="fc" id="L279">                    h.setElementAt(i, j, 0.0);</span>
+<span class="fc" id="L281">                    h.setElementAt(i, j, 0.0);</span>
                 }
             }
         }
-<span class="fc" id="L283">    }</span>
+<span class="fc" id="L285">    }</span>
     
     /**
      * Returns the Householder vectors.
@@ -291,14 +293,16 @@ public class EconomyQRDecomposer extends Decomposer {
      * @see #decompose()
      */
     public Matrix getH() throws NotAvailableException {
-<span class="fc" id="L294">        int rows = inputMatrix.getRows();</span>
-<span class="fc" id="L295">        int columns = inputMatrix.getColumns();</span>
-<span class="fc" id="L296">        Matrix out = null;</span>
+<span class="fc" id="L296">        int rows = inputMatrix.getRows();</span>
+<span class="fc" id="L297">        int columns = inputMatrix.getColumns();</span>
+<span class="fc" id="L298">        Matrix out = null;</span>
         try {
-<span class="fc" id="L298">            out = new Matrix(rows, columns);</span>
-<span class="pc" id="L299">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L300">        getH(out);</span>
-<span class="fc" id="L301">        return out;</span>
+<span class="fc" id="L300">            out = new Matrix(rows, columns);</span>
+<span class="nc" id="L301">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L303">        }</span>
+<span class="fc" id="L304">        getH(out);</span>
+<span class="fc" id="L305">        return out;</span>
     }
     
     /**
@@ -313,36 +317,38 @@ public class EconomyQRDecomposer extends Decomposer {
      * @see #decompose()
      */    
     public void getR(Matrix r) throws NotAvailableException {
-<span class="fc bfc" id="L316" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
-<span class="fc" id="L317">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L320" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
+<span class="fc" id="L321">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L319">        int columns = inputMatrix.getColumns();</span>
-<span class="fc" id="L320">        int rows = inputMatrix.getRows();</span>
+<span class="fc" id="L323">        int columns = inputMatrix.getColumns();</span>
+<span class="fc" id="L324">        int rows = inputMatrix.getRows();</span>
         
-<span class="pc bpc" id="L322" title="2 of 4 branches missed.">        if (r.getRows() != columns || r.getColumns() != columns) {</span>
+<span class="pc bpc" id="L326" title="2 of 4 branches missed.">        if (r.getRows() != columns || r.getColumns() != columns) {</span>
             try {
-<span class="nc" id="L324">                r.resize(columns, columns);</span>
-<span class="nc" id="L325">            } catch (WrongSizeException ignore) { }</span>
+<span class="nc" id="L328">                r.resize(columns, columns);</span>
+<span class="nc" id="L329">            } catch (WrongSizeException ignore) {</span>
+                //never happens
+<span class="nc" id="L331">            }</span>
         }
         
-<span class="fc bfc" id="L328" title="All 2 branches covered.">        for (int i = 0; i &lt; columns; i++) {</span>
-<span class="fc bfc" id="L329" title="All 2 branches covered.">            if (i &lt; rows) {</span>
-<span class="fc bfc" id="L330" title="All 2 branches covered.">                for (int j = 0; j &lt; columns; j++) {</span>
-<span class="fc bfc" id="L331" title="All 2 branches covered.">                    if (i &lt; j) {</span>
-<span class="fc" id="L332">                        r.setElementAt(i, j, qr.getElementAt(i, j));</span>
-<span class="fc bfc" id="L333" title="All 2 branches covered.">                    } else if (i == j) {</span>
-<span class="fc" id="L334">                        r.setElementAt(i, j, rDiag[i]);</span>
+<span class="fc bfc" id="L334" title="All 2 branches covered.">        for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc bfc" id="L335" title="All 2 branches covered.">            if (i &lt; rows) {</span>
+<span class="fc bfc" id="L336" title="All 2 branches covered.">                for (int j = 0; j &lt; columns; j++) {</span>
+<span class="fc bfc" id="L337" title="All 2 branches covered.">                    if (i &lt; j) {</span>
+<span class="fc" id="L338">                        r.setElementAt(i, j, qr.getElementAt(i, j));</span>
+<span class="fc bfc" id="L339" title="All 2 branches covered.">                    } else if (i == j) {</span>
+<span class="fc" id="L340">                        r.setElementAt(i, j, rDiag[i]);</span>
                     } else {
-<span class="fc" id="L336">                        r.setElementAt(i, j, 0.0);</span>
+<span class="fc" id="L342">                        r.setElementAt(i, j, 0.0);</span>
                     }
                 }
             } else {
-<span class="fc bfc" id="L340" title="All 2 branches covered.">                for (int j = 0; j &lt; columns; j++) {</span>
-<span class="fc" id="L341">                    r.setElementAt(i, j, 0.0);</span>
+<span class="fc bfc" id="L346" title="All 2 branches covered.">                for (int j = 0; j &lt; columns; j++) {</span>
+<span class="fc" id="L347">                    r.setElementAt(i, j, 0.0);</span>
                 }
             }
         }      
-<span class="fc" id="L345">    }</span>
+<span class="fc" id="L351">    }</span>
     
     /**
      * Return upper triangular factor matrix.
@@ -355,13 +361,15 @@ public class EconomyQRDecomposer extends Decomposer {
      * @see #decompose()
      */
     public Matrix getR() throws NotAvailableException {
-<span class="fc" id="L358">        int columns = inputMatrix.getColumns();</span>
-<span class="fc" id="L359">        Matrix out = null;</span>
+<span class="fc" id="L364">        int columns = inputMatrix.getColumns();</span>
+<span class="fc" id="L365">        Matrix out = null;</span>
         try {
-<span class="fc" id="L361">            out = new Matrix(columns, columns);</span>
-<span class="pc" id="L362">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L363">        getR(out);</span>
-<span class="fc" id="L364">        return out;</span>
+<span class="fc" id="L367">            out = new Matrix(columns, columns);</span>
+<span class="nc" id="L368">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L370">        }</span>
+<span class="fc" id="L371">        getR(out);</span>
+<span class="fc" id="L372">        return out;</span>
     }
     
     /**
@@ -376,45 +384,47 @@ public class EconomyQRDecomposer extends Decomposer {
      * @see #decompose()
      */    
     public void getQ(Matrix q) throws NotAvailableException, WrongSizeException {
-<span class="fc bfc" id="L379" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
-<span class="fc" id="L380">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L387" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
+<span class="fc" id="L388">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L383">        int rows = inputMatrix.getRows();</span>
-<span class="fc" id="L384">        int columns = inputMatrix.getColumns();</span>
+<span class="fc" id="L391">        int rows = inputMatrix.getRows();</span>
+<span class="fc" id="L392">        int columns = inputMatrix.getColumns();</span>
         double s;
         
-<span class="fc bfc" id="L387" title="All 2 branches covered.">        if (rows &lt; columns) {</span>
-<span class="fc" id="L388">            throw new WrongSizeException();</span>
+<span class="fc bfc" id="L395" title="All 2 branches covered.">        if (rows &lt; columns) {</span>
+<span class="fc" id="L396">            throw new WrongSizeException();</span>
         }
         
-<span class="pc bpc" id="L391" title="2 of 4 branches missed.">        if (q.getRows() != rows || q.getColumns() != columns) {</span>
+<span class="pc bpc" id="L399" title="2 of 4 branches missed.">        if (q.getRows() != rows || q.getColumns() != columns) {</span>
             try {
-<span class="nc" id="L393">                q.resize(rows, columns);</span>
-<span class="nc" id="L394">            } catch (WrongSizeException ignore){}</span>
+<span class="nc" id="L401">                q.resize(rows, columns);</span>
+<span class="nc" id="L402">            } catch (WrongSizeException ignore) {</span>
+                //never happens
+<span class="nc" id="L404">            }</span>
         }
                 
-<span class="fc bfc" id="L397" title="All 2 branches covered.">        for (int k = columns - 1; k &gt;= 0; k--) {</span>
-<span class="fc bfc" id="L398" title="All 2 branches covered.">            for (int i = 0; i &lt; rows; i++) {</span>
-<span class="fc" id="L399">                q.setElementAt(i, k, 0.0);</span>
+<span class="fc bfc" id="L407" title="All 2 branches covered.">        for (int k = columns - 1; k &gt;= 0; k--) {</span>
+<span class="fc bfc" id="L408" title="All 2 branches covered.">            for (int i = 0; i &lt; rows; i++) {</span>
+<span class="fc" id="L409">                q.setElementAt(i, k, 0.0);</span>
             }
-<span class="fc" id="L401">            q.setElementAt(k, k, 1.0);</span>
-<span class="fc bfc" id="L402" title="All 2 branches covered.">            for (int j = k; j &lt; columns; j++) {</span>
-<span class="pc bpc" id="L403" title="1 of 2 branches missed.">                if (qr.getElementAt(k, k) != 0) {</span>
-<span class="fc" id="L404">                    s = 0.0;</span>
-<span class="fc bfc" id="L405" title="All 2 branches covered.">                    for (int i = k; i &lt; rows; i++) {</span>
-<span class="fc" id="L406">                        s += qr.getElementAt(i, k) * q.getElementAt(i, j);</span>
+<span class="fc" id="L411">            q.setElementAt(k, k, 1.0);</span>
+<span class="fc bfc" id="L412" title="All 2 branches covered.">            for (int j = k; j &lt; columns; j++) {</span>
+<span class="pc bpc" id="L413" title="1 of 2 branches missed.">                if (qr.getElementAt(k, k) != 0) {</span>
+<span class="fc" id="L414">                    s = 0.0;</span>
+<span class="fc bfc" id="L415" title="All 2 branches covered.">                    for (int i = k; i &lt; rows; i++) {</span>
+<span class="fc" id="L416">                        s += qr.getElementAt(i, k) * q.getElementAt(i, j);</span>
                     }
                     
-<span class="fc" id="L409">                    s = -s / qr.getElementAt(k, k);</span>
-<span class="fc bfc" id="L410" title="All 2 branches covered.">                    for (int i = k; i &lt; rows; i++) {</span>
-<span class="fc" id="L411">                        q.setElementAt(i, j, q.getElementAt(i, j) + </span>
-<span class="fc" id="L412">                                s * qr.getElementAt(i, k));</span>
+<span class="fc" id="L419">                    s = -s / qr.getElementAt(k, k);</span>
+<span class="fc bfc" id="L420" title="All 2 branches covered.">                    for (int i = k; i &lt; rows; i++) {</span>
+<span class="fc" id="L421">                        q.setElementAt(i, j, q.getElementAt(i, j) + </span>
+<span class="fc" id="L422">                                s * qr.getElementAt(i, k));</span>
                     }
                 }
             }
         }
-<span class="fc" id="L417">    }</span>
+<span class="fc" id="L427">    }</span>
     
     /**
      * Return the economy-sized orthogonal factor matrix.
@@ -428,12 +438,12 @@ public class EconomyQRDecomposer extends Decomposer {
      */
     public Matrix getQ() throws NotAvailableException, WrongSizeException {
 
-<span class="fc" id="L431">        int rows = inputMatrix.getRows();</span>
-<span class="fc" id="L432">        int columns = inputMatrix.getColumns();</span>
+<span class="fc" id="L441">        int rows = inputMatrix.getRows();</span>
+<span class="fc" id="L442">        int columns = inputMatrix.getColumns();</span>
 
-<span class="fc" id="L434">        Matrix out = new Matrix(rows, columns);</span>
-<span class="fc" id="L435">        getQ(out);</span>
-<span class="fc" id="L436">        return out;</span>
+<span class="fc" id="L444">        Matrix out = new Matrix(rows, columns);</span>
+<span class="fc" id="L445">        getQ(out);</span>
+<span class="fc" id="L446">        return out;</span>
     }
     
     /**
@@ -475,78 +485,118 @@ public class EconomyQRDecomposer extends Decomposer {
      */    
     public void solve(Matrix b, Matrix result) throws NotAvailableException, 
             WrongSizeException, RankDeficientMatrixException {
-<span class="fc" id="L478">        solve(b, DEFAULT_ROUND_ERROR, result);</span>
-<span class="fc" id="L479">    }</span>
-    
+<span class="fc" id="L488">        solve(b, DEFAULT_ROUND_ERROR, result);</span>
+<span class="fc" id="L489">    }</span>
+
+    /**
+     * Solves a linear system of equations of the following form:
+     * A * X = B, where A is the input matrix provided for QR decomposition,
+     * X is the solution to the system of equations, and B is the parameters
+     * vector/matrix.
+     * Note: This method can be reused for different b vector/matrices without
+     * having to recompute QR decomposition on the same input matrix.
+     * Note: Provided b matrix must have the same number of rows as provided
+     * input matrix A, otherwise a WrongSizeException will be raised.
+     * Note: Provided input matrix A must have at least as many rows as columns,
+     * otherwise a WrongSizeException will be raised as well. For input matrices
+     * having a higher number of rows than columns, the system of equations will
+     * be overdetermined and a least squares solution will be found.
+     * Note: If provided input matrix A is rank deficient, a
+     * RankDeficientMatrixException will be thrown.
+     * Note: In order to execute this method, a QR decomposition must be
+     * available, otherwise a NotAvailableException will be raised. In order to
+     * avoid this exception call decompose() method first.
+     * @param b Parameters matrix that determine a linear system of equations.
+     * Provided matrix must have the same number of rows as provided input
+     * matrix for QR decomposition. Besides, each column on parameters matrix
+     * will represent a new system of equations, whose solution will be returned
+     * on appropriate column as an output of this method.
+     * @param roundingError threshold to determine whether matrix b has full rank or not.
+     *                      By default this is typically a tiny value close to zero.
+     * @param result Matrix containing solution of linear system of equations on
+     * each column for each column of provided matrix of parameters b. Provided
+     * matrix will be resized if needed
+     * @throws NotAvailableException Exception thrown if attempting to call this
+     * method before computing QR decomposition. To avoid this exception call
+     * decompose() method first.
+     * @throws WrongSizeException Exception thrown if attempting to call this
+     * method using an input matrix with less rows than columns; or if provided
+     * parameters matrix (b) does not have the same number of rows as input
+     * matrix being QR decomposed.
+     * @throws RankDeficientMatrixException Exception thrown if provided input
+     * matrix to be QR decomposed is rank deficient. In this case linear system
+     * of equations cannot be solved.
+     * @throws IllegalArgumentException if provided rounding error is negative.
+     */
     public void solve(Matrix b, double roundingError, Matrix result) 
             throws NotAvailableException, WrongSizeException, 
-            RankDeficientMatrixException, IllegalArgumentException {
+            RankDeficientMatrixException {
         
-<span class="fc bfc" id="L485" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
-<span class="fc" id="L486">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L535" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
+<span class="fc" id="L536">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L489">        int rows = inputMatrix.getRows();</span>
-<span class="fc" id="L490">        int columns = inputMatrix.getColumns();</span>
-<span class="fc" id="L491">        int rowsB = b.getRows();</span>
-<span class="fc" id="L492">        int colsB = b.getColumns();</span>
+<span class="fc" id="L539">        int rows = inputMatrix.getRows();</span>
+<span class="fc" id="L540">        int columns = inputMatrix.getColumns();</span>
+<span class="fc" id="L541">        int rowsB = b.getRows();</span>
+<span class="fc" id="L542">        int colsB = b.getColumns();</span>
         double s;
         
-<span class="fc bfc" id="L495" title="All 2 branches covered.">        if (rowsB != rows) {</span>
-<span class="fc" id="L496">            throw new WrongSizeException();</span>
+<span class="fc bfc" id="L545" title="All 2 branches covered.">        if (rowsB != rows) {</span>
+<span class="fc" id="L546">            throw new WrongSizeException();</span>
         }
         
-<span class="fc bfc" id="L499" title="All 2 branches covered.">        if (roundingError &lt; MIN_ROUND_ERROR) {</span>
-<span class="fc" id="L500">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L549" title="All 2 branches covered.">        if (roundingError &lt; MIN_ROUND_ERROR) {</span>
+<span class="fc" id="L550">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc bfc" id="L503" title="All 2 branches covered.">        if (rows &lt; columns) {</span>
-<span class="fc" id="L504">            throw new WrongSizeException();</span>
+<span class="fc bfc" id="L553" title="All 2 branches covered.">        if (rows &lt; columns) {</span>
+<span class="fc" id="L554">            throw new WrongSizeException();</span>
         }
-<span class="fc bfc" id="L506" title="All 2 branches covered.">        if (!isFullRank(roundingError)) {</span>
-<span class="fc" id="L507">            throw new RankDeficientMatrixException();</span>
+<span class="fc bfc" id="L556" title="All 2 branches covered.">        if (!isFullRank(roundingError)) {</span>
+<span class="fc" id="L557">            throw new RankDeficientMatrixException();</span>
         }
         
         //Copy b into X
-<span class="fc" id="L511">        Matrix x = b.clone();</span>
+<span class="fc" id="L561">        Matrix x = b.clone();</span>
         
         //Compute Y = transpose(Q) * B
-<span class="fc bfc" id="L514" title="All 2 branches covered.">        for (int k = 0; k &lt; columns; k++) {</span>
-<span class="fc bfc" id="L515" title="All 2 branches covered.">            for (int j = 0; j &lt; colsB; j++) {</span>
-<span class="fc" id="L516">                s = 0.0;</span>
-<span class="fc bfc" id="L517" title="All 2 branches covered.">                for (int i = k; i &lt; rows; i++) {</span>
-<span class="fc" id="L518">                    s += qr.getElementAt(i, k) * x.getElementAt(i, j);</span>
+<span class="fc bfc" id="L564" title="All 2 branches covered.">        for (int k = 0; k &lt; columns; k++) {</span>
+<span class="fc bfc" id="L565" title="All 2 branches covered.">            for (int j = 0; j &lt; colsB; j++) {</span>
+<span class="fc" id="L566">                s = 0.0;</span>
+<span class="fc bfc" id="L567" title="All 2 branches covered.">                for (int i = k; i &lt; rows; i++) {</span>
+<span class="fc" id="L568">                    s += qr.getElementAt(i, k) * x.getElementAt(i, j);</span>
                 }
-<span class="fc" id="L520">                s = -s / qr.getElementAt(k, k);</span>
-<span class="fc bfc" id="L521" title="All 2 branches covered.">                for (int i = k; i &lt; rows; i++) {</span>
-<span class="fc" id="L522">                    x.setElementAt(i, j, x.getElementAt(i, j) + </span>
-<span class="fc" id="L523">                            s * qr.getElementAt(i, k));</span>
+<span class="fc" id="L570">                s = -s / qr.getElementAt(k, k);</span>
+<span class="fc bfc" id="L571" title="All 2 branches covered.">                for (int i = k; i &lt; rows; i++) {</span>
+<span class="fc" id="L572">                    x.setElementAt(i, j, x.getElementAt(i, j) + </span>
+<span class="fc" id="L573">                            s * qr.getElementAt(i, k));</span>
                 }
             }
         }
         
         //Solve R * X = Y
-<span class="fc bfc" id="L529" title="All 2 branches covered.">        for (int k = columns - 1; k &gt;= 0; k--) {</span>
-<span class="fc bfc" id="L530" title="All 2 branches covered.">            for (int j = 0; j &lt; colsB; j++) {</span>
-<span class="fc" id="L531">                x.setElementAt(k, j, x.getElementAt(k, j) / rDiag[k]);</span>
+<span class="fc bfc" id="L579" title="All 2 branches covered.">        for (int k = columns - 1; k &gt;= 0; k--) {</span>
+<span class="fc bfc" id="L580" title="All 2 branches covered.">            for (int j = 0; j &lt; colsB; j++) {</span>
+<span class="fc" id="L581">                x.setElementAt(k, j, x.getElementAt(k, j) / rDiag[k]);</span>
             }
-<span class="fc bfc" id="L533" title="All 2 branches covered.">            for (int i = 0; i &lt; k; i++) {</span>
-<span class="fc bfc" id="L534" title="All 2 branches covered.">                for (int j = 0; j &lt; colsB; j++) {</span>
-<span class="fc" id="L535">                    x.setElementAt(i, j, x.getElementAt(i, j) - </span>
-<span class="fc" id="L536">                            x.getElementAt(k, j) * qr.getElementAt(i, k));</span>
+<span class="fc bfc" id="L583" title="All 2 branches covered.">            for (int i = 0; i &lt; k; i++) {</span>
+<span class="fc bfc" id="L584" title="All 2 branches covered.">                for (int j = 0; j &lt; colsB; j++) {</span>
+<span class="fc" id="L585">                    x.setElementAt(i, j, x.getElementAt(i, j) - </span>
+<span class="fc" id="L586">                            x.getElementAt(k, j) * qr.getElementAt(i, k));</span>
                 }
             }
         }
         
         //Pick only first columns rows of X in case of everdetermined systems
         //(where rows &gt; columns), othersise rows == columns and we pick them all
-<span class="pc bpc" id="L543" title="2 of 4 branches missed.">        if (result.getRows() != columns || result.getColumns() != colsB) {</span>
+<span class="pc bpc" id="L593" title="2 of 4 branches missed.">        if (result.getRows() != columns || result.getColumns() != colsB) {</span>
             //resize result
-<span class="nc" id="L545">            result.resize(columns, colsB);</span>
+<span class="nc" id="L595">            result.resize(columns, colsB);</span>
         }
-<span class="fc" id="L547">        result.setSubmatrix(0, 0, columns - 1, colsB - 1, x, 0, 0, columns - 1, </span>
+<span class="fc" id="L597">        result.setSubmatrix(0, 0, columns - 1, colsB - 1, x, 0, 0, columns - 1, </span>
                 colsB - 1);
-<span class="fc" id="L549">    }    </span>
+<span class="fc" id="L599">    }    </span>
     
     /**
      * Solves a linear system of equations of the following form:
@@ -586,7 +636,7 @@ public class EconomyQRDecomposer extends Decomposer {
      */
     public Matrix solve(Matrix b) throws NotAvailableException, 
             WrongSizeException, RankDeficientMatrixException {
-<span class="fc" id="L589">        return solve(b, DEFAULT_ROUND_ERROR);</span>
+<span class="fc" id="L639">        return solve(b, DEFAULT_ROUND_ERROR);</span>
     }
     
     /**
@@ -634,13 +684,13 @@ public class EconomyQRDecomposer extends Decomposer {
      */    
     public Matrix solve(Matrix b, double roundingError) 
             throws NotAvailableException, WrongSizeException, 
-            RankDeficientMatrixException, IllegalArgumentException {
+            RankDeficientMatrixException {
         
-<span class="fc" id="L639">        int columns = inputMatrix.getColumns();</span>
-<span class="fc" id="L640">        int colsB = b.getColumns();</span>
-<span class="fc" id="L641">        Matrix out = new Matrix(columns, colsB);</span>
-<span class="fc" id="L642">        solve(b, roundingError, out);</span>
-<span class="fc" id="L643">        return out;</span>
+<span class="fc" id="L689">        int columns = inputMatrix.getColumns();</span>
+<span class="fc" id="L690">        int colsB = b.getColumns();</span>
+<span class="fc" id="L691">        Matrix out = new Matrix(columns, colsB);</span>
+<span class="fc" id="L692">        solve(b, roundingError, out);</span>
+<span class="fc" id="L693">        return out;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

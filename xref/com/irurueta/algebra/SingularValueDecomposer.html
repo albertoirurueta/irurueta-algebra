@@ -1358,8 +1358,8 @@
 <a class="jxr_linenumber" name="L1350" href="#L1350">1350</a>             }
 <a class="jxr_linenumber" name="L1351" href="#L1351">1351</a>             anorm = Math.max(anorm, Math.abs(w[i]) + Math.abs(rv1[i]));			
 <a class="jxr_linenumber" name="L1352" href="#L1352">1352</a> 	    }
-<a class="jxr_linenumber" name="L1353" href="#L1353">1353</a> 		
-<a class="jxr_linenumber" name="L1354" href="#L1354">1354</a> 	    <em class="jxr_comment">//Accumulation of right-hand transformations</em>
+<a class="jxr_linenumber" name="L1353" href="#L1353">1353</a> 
+<a class="jxr_linenumber" name="L1354" href="#L1354">1354</a>         <em class="jxr_comment">//Accumulation of right-hand transformations</em>
 <a class="jxr_linenumber" name="L1355" href="#L1355">1355</a>         <strong class="jxr_keyword">for</strong> (i = n - 1; i &gt;= 0; i--) {
 <a class="jxr_linenumber" name="L1356" href="#L1356">1356</a>             <strong class="jxr_keyword">if</strong> (i &lt; (n - 1)) {
 <a class="jxr_linenumber" name="L1357" href="#L1357">1357</a>                 <strong class="jxr_keyword">if</strong> (g != 0.0) {
@@ -1448,213 +1448,222 @@
 <a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> 			            g = w[i];
 <a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> 			            h = pythag(f, g);
 <a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> 			            w[i] = h;
-<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a>                         h = 1.0 / h;
-<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> 			            c = g * h;
-<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> 			            s = -f * h;
-<a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> 			            <strong class="jxr_keyword">for</strong> (j = 0; j &lt; m; j++) {
-<a class="jxr_linenumber" name="L1447" href="#L1447">1447</a>                             y = u.getElementAt(j,nm);
-<a class="jxr_linenumber" name="L1448" href="#L1448">1448</a>                             z = u.getElementAt(j,i);
-<a class="jxr_linenumber" name="L1449" href="#L1449">1449</a>                             u.setElementAt(j,nm, y * c + z * s);
-<a class="jxr_linenumber" name="L1450" href="#L1450">1450</a>                             u.setElementAt(j,i, z * c - y * s);
-<a class="jxr_linenumber" name="L1451" href="#L1451">1451</a> 			            }
-<a class="jxr_linenumber" name="L1452" href="#L1452">1452</a>                     }
-<a class="jxr_linenumber" name="L1453" href="#L1453">1453</a> 		        }
-<a class="jxr_linenumber" name="L1454" href="#L1454">1454</a> 		        z = w[k];
-<a class="jxr_linenumber" name="L1455" href="#L1455">1455</a> 		        <em class="jxr_comment">//Convergence.</em>
-<a class="jxr_linenumber" name="L1456" href="#L1456">1456</a> 		        <strong class="jxr_keyword">if</strong> (l == k) {
-<a class="jxr_linenumber" name="L1457" href="#L1457">1457</a>                     <em class="jxr_comment">//Singular value is made nonnegative</em>
-<a class="jxr_linenumber" name="L1458" href="#L1458">1458</a>                     <strong class="jxr_keyword">if</strong> (z &lt; 0.0) {
-<a class="jxr_linenumber" name="L1459" href="#L1459">1459</a> 			            w[k] = -z;
-<a class="jxr_linenumber" name="L1460" href="#L1460">1460</a> 			            <strong class="jxr_keyword">for</strong> (j = 0; j &lt; n; j++) {
-<a class="jxr_linenumber" name="L1461" href="#L1461">1461</a>                             v.setElementAt(j, k, -v.getElementAt(j, k));
-<a class="jxr_linenumber" name="L1462" href="#L1462">1462</a>                         }
-<a class="jxr_linenumber" name="L1463" href="#L1463">1463</a>                     }
-<a class="jxr_linenumber" name="L1464" href="#L1464">1464</a>                     <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L1465" href="#L1465">1465</a> 		        }
-<a class="jxr_linenumber" name="L1466" href="#L1466">1466</a> 		        <strong class="jxr_keyword">if</strong> (its == maxIters - 1) {
-<a class="jxr_linenumber" name="L1467" href="#L1467">1467</a> 		            <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoConvergenceException();
-<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a>                 }
-<a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> 				
-<a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> 		        <em class="jxr_comment">//Shift from bottom 2-by-2 minor.</em>
-<a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> 		        x = w[l];
-<a class="jxr_linenumber" name="L1472" href="#L1472">1472</a> 		        nm = k - 1;
-<a class="jxr_linenumber" name="L1473" href="#L1473">1473</a> 		        y = w[nm];
-<a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> 		        g = rv1[nm];
-<a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> 		        h = rv1[k];
-<a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> 		        f = ((y - z) * (y + z) + (g - h) * (g + h)) / (2.0 * h * y);
-<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 		        g = pythag(f, 1.0);
-<a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 		        f = ((x - z) * (x + z) + h * ((y / (f + sign(g, f))) - h)) / x;
-<a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 		        c = s = 1.0;
-<a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> 		        <em class="jxr_comment">//Next QR transformation</em>
-<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> 		        <strong class="jxr_keyword">for</strong> (j = l; j &lt;= nm; j++) {
-<a class="jxr_linenumber" name="L1482" href="#L1482">1482</a>                     i = j + 1;
-<a class="jxr_linenumber" name="L1483" href="#L1483">1483</a>                     g = rv1[i];
-<a class="jxr_linenumber" name="L1484" href="#L1484">1484</a>                     y = w[i];
-<a class="jxr_linenumber" name="L1485" href="#L1485">1485</a>                     h = s * g;
-<a class="jxr_linenumber" name="L1486" href="#L1486">1486</a>                     g = c * g;
-<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a>                     z = pythag(f, h);
-<a class="jxr_linenumber" name="L1488" href="#L1488">1488</a>                     rv1[j] = z;
-<a class="jxr_linenumber" name="L1489" href="#L1489">1489</a>                     c = f / z;
-<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a>                     s = h / z;
-<a class="jxr_linenumber" name="L1491" href="#L1491">1491</a>                     f = x * c + g * s;
-<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a>                     g = g * c - x * s;
-<a class="jxr_linenumber" name="L1493" href="#L1493">1493</a>                     h = y * s;
-<a class="jxr_linenumber" name="L1494" href="#L1494">1494</a>                     y *= c;
-<a class="jxr_linenumber" name="L1495" href="#L1495">1495</a>                     <strong class="jxr_keyword">for</strong> (jj = 0; jj &lt; n; jj++) {
-<a class="jxr_linenumber" name="L1496" href="#L1496">1496</a> 			            x = v.getElementAt(jj,j);
-<a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> 			            z = v.getElementAt(jj,i);
-<a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> 			            v.setElementAt(jj,j, x * c + z * s);
-<a class="jxr_linenumber" name="L1499" href="#L1499">1499</a> 			            v.setElementAt(jj,i, z * c - x * s);
-<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a>                     }
-<a class="jxr_linenumber" name="L1501" href="#L1501">1501</a>                     z = pythag(f, h);
-<a class="jxr_linenumber" name="L1502" href="#L1502">1502</a>                     <em class="jxr_comment">//Rotation can be arbitrary if z = 0</em>
-<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a>                     w[j] = z;
-<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a>                     <strong class="jxr_keyword">if</strong> (z != 0.0) {
-<a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> 			            z = 1.0 / z;
-<a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> 			            c = f * z;
-<a class="jxr_linenumber" name="L1507" href="#L1507">1507</a> 			            s = h * z;
-<a class="jxr_linenumber" name="L1508" href="#L1508">1508</a>                     }
-<a class="jxr_linenumber" name="L1509" href="#L1509">1509</a>                     f = c * g + s * y;
-<a class="jxr_linenumber" name="L1510" href="#L1510">1510</a>                     x = c * y - s * g;
-<a class="jxr_linenumber" name="L1511" href="#L1511">1511</a>                     <strong class="jxr_keyword">for</strong> (jj = 0; jj &lt; m; jj++) {
-<a class="jxr_linenumber" name="L1512" href="#L1512">1512</a> 			            y = u.getElementAt(jj,j);
-<a class="jxr_linenumber" name="L1513" href="#L1513">1513</a>                         z = u.getElementAt(jj,i);
-<a class="jxr_linenumber" name="L1514" href="#L1514">1514</a> 			            u.setElementAt(jj,j, y * c + z * s);
-<a class="jxr_linenumber" name="L1515" href="#L1515">1515</a> 			            u.setElementAt(jj,i, z * c - y * s);
-<a class="jxr_linenumber" name="L1516" href="#L1516">1516</a>                     }
-<a class="jxr_linenumber" name="L1517" href="#L1517">1517</a> 		        }
-<a class="jxr_linenumber" name="L1518" href="#L1518">1518</a> 		        rv1[l] = 0.0;
-<a class="jxr_linenumber" name="L1519" href="#L1519">1519</a> 		        rv1[k] = f;
-<a class="jxr_linenumber" name="L1520" href="#L1520">1520</a> 		        w[k] = x;
-<a class="jxr_linenumber" name="L1521" href="#L1521">1521</a>             }
-<a class="jxr_linenumber" name="L1522" href="#L1522">1522</a>         }
-<a class="jxr_linenumber" name="L1523" href="#L1523">1523</a>     }
-<a class="jxr_linenumber" name="L1524" href="#L1524">1524</a>     
-<a class="jxr_linenumber" name="L1525" href="#L1525">1525</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1526" href="#L1526">1526</a> <em class="jxr_javadoccomment">     * Reorders singular values from maximal to minimal, and also reorders</em>
-<a class="jxr_linenumber" name="L1527" href="#L1527">1527</a> <em class="jxr_javadoccomment">     * columns and rows of U and V to ensure that Singular Value Decomposition</em>
-<a class="jxr_linenumber" name="L1528" href="#L1528">1528</a> <em class="jxr_javadoccomment">     * still remains valid.</em>
-<a class="jxr_linenumber" name="L1529" href="#L1529">1529</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L1530" href="#L1530">1530</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> reorder() {
-<a class="jxr_linenumber" name="L1531" href="#L1531">1531</a>         <strong class="jxr_keyword">int</strong> m = inputMatrix.getRows();
-<a class="jxr_linenumber" name="L1532" href="#L1532">1532</a> 	    <strong class="jxr_keyword">int</strong> n = inputMatrix.getColumns();
-<a class="jxr_linenumber" name="L1533" href="#L1533">1533</a> 		
-<a class="jxr_linenumber" name="L1534" href="#L1534">1534</a> 	    <strong class="jxr_keyword">int</strong> i, j, k, s, inc = 1;
-<a class="jxr_linenumber" name="L1535" href="#L1535">1535</a> 	    <strong class="jxr_keyword">double</strong> sw;
-<a class="jxr_linenumber" name="L1536" href="#L1536">1536</a> 	    <strong class="jxr_keyword">double</strong>[] su = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[m];
-<a class="jxr_linenumber" name="L1537" href="#L1537">1537</a> 	    <strong class="jxr_keyword">double</strong>[] sv = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[n];
-<a class="jxr_linenumber" name="L1538" href="#L1538">1538</a> 		
-<a class="jxr_linenumber" name="L1539" href="#L1539">1539</a> 	    <strong class="jxr_keyword">do</strong> {
-<a class="jxr_linenumber" name="L1540" href="#L1540">1540</a> 	        inc *= 3; inc++;
-<a class="jxr_linenumber" name="L1541" href="#L1541">1541</a> 	    } <strong class="jxr_keyword">while</strong>(inc &lt;= n);
-<a class="jxr_linenumber" name="L1542" href="#L1542">1542</a>         <strong class="jxr_keyword">do</strong> {
-<a class="jxr_linenumber" name="L1543" href="#L1543">1543</a>             inc /= 3;
-<a class="jxr_linenumber" name="L1544" href="#L1544">1544</a>             <strong class="jxr_keyword">for</strong> (i = inc; i &lt; n; i++) {
-<a class="jxr_linenumber" name="L1545" href="#L1545">1545</a>                 sw = w[i];
-<a class="jxr_linenumber" name="L1546" href="#L1546">1546</a> 		        <strong class="jxr_keyword">for</strong> (k = 0; k &lt; m; k++) {
-<a class="jxr_linenumber" name="L1547" href="#L1547">1547</a>                     su[k] = u.getElementAt(k, i);
-<a class="jxr_linenumber" name="L1548" href="#L1548">1548</a>                 }
-<a class="jxr_linenumber" name="L1549" href="#L1549">1549</a> 		        <strong class="jxr_keyword">for</strong> (k = 0; k &lt; n; k++) {
-<a class="jxr_linenumber" name="L1550" href="#L1550">1550</a>                     sv[k] = v.getElementAt(k, i);
-<a class="jxr_linenumber" name="L1551" href="#L1551">1551</a>                 }
-<a class="jxr_linenumber" name="L1552" href="#L1552">1552</a> 		        j = i;
-<a class="jxr_linenumber" name="L1553" href="#L1553">1553</a> 		        <strong class="jxr_keyword">while</strong> (w[j - inc] &lt; sw) {
-<a class="jxr_linenumber" name="L1554" href="#L1554">1554</a>                     w[j] = w[j - inc];
-<a class="jxr_linenumber" name="L1555" href="#L1555">1555</a>                     <strong class="jxr_keyword">for</strong> (k = 0; k &lt; m; k++) {
-<a class="jxr_linenumber" name="L1556" href="#L1556">1556</a>                         u.setElementAt(k, j, u.getElementAt(k, j - inc));
-<a class="jxr_linenumber" name="L1557" href="#L1557">1557</a>                     }
-<a class="jxr_linenumber" name="L1558" href="#L1558">1558</a>                     <strong class="jxr_keyword">for</strong> (k = 0; k &lt; n; k++) {
-<a class="jxr_linenumber" name="L1559" href="#L1559">1559</a>                         v.setElementAt(k, j, v.getElementAt(k, j - inc));
-<a class="jxr_linenumber" name="L1560" href="#L1560">1560</a>                     }
-<a class="jxr_linenumber" name="L1561" href="#L1561">1561</a>                     j -= inc;
-<a class="jxr_linenumber" name="L1562" href="#L1562">1562</a>                     <strong class="jxr_keyword">if</strong> (j &lt; inc) {
-<a class="jxr_linenumber" name="L1563" href="#L1563">1563</a>                         <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L1564" href="#L1564">1564</a>                     }
-<a class="jxr_linenumber" name="L1565" href="#L1565">1565</a>                 }
-<a class="jxr_linenumber" name="L1566" href="#L1566">1566</a>                 w[j] = sw;
-<a class="jxr_linenumber" name="L1567" href="#L1567">1567</a>                 <strong class="jxr_keyword">for</strong> (k = 0; k &lt; m; k++) {
-<a class="jxr_linenumber" name="L1568" href="#L1568">1568</a>                     u.setElementAt(k, j, su[k]);
-<a class="jxr_linenumber" name="L1569" href="#L1569">1569</a>                 }
-<a class="jxr_linenumber" name="L1570" href="#L1570">1570</a>                 <strong class="jxr_keyword">for</strong> (k = 0; k &lt; n; k++) {
-<a class="jxr_linenumber" name="L1571" href="#L1571">1571</a>                     v.setElementAt(k, j, sv[k]);
-<a class="jxr_linenumber" name="L1572" href="#L1572">1572</a>                 }
-<a class="jxr_linenumber" name="L1573" href="#L1573">1573</a>             }
-<a class="jxr_linenumber" name="L1574" href="#L1574">1574</a> 	    } <strong class="jxr_keyword">while</strong> (inc &gt; 1);
-<a class="jxr_linenumber" name="L1575" href="#L1575">1575</a> 		
-<a class="jxr_linenumber" name="L1576" href="#L1576">1576</a> 	    <strong class="jxr_keyword">for</strong> (k = 0; k &lt; n; k++) {
-<a class="jxr_linenumber" name="L1577" href="#L1577">1577</a>             s = 0;
-<a class="jxr_linenumber" name="L1578" href="#L1578">1578</a>             <strong class="jxr_keyword">for</strong> (i = 0; i &lt; m; i++) {
-<a class="jxr_linenumber" name="L1579" href="#L1579">1579</a>                 <strong class="jxr_keyword">if</strong> (u.getElementAt(i, k) &lt; 0.0) {
-<a class="jxr_linenumber" name="L1580" href="#L1580">1580</a>                     s++;
+<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> 			            <strong class="jxr_keyword">if</strong> (h != 0.0) {
+<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a>                             h = 1.0 / h;
+<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a>                         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> 			                h = Double.MAX_VALUE;
+<a class="jxr_linenumber" name="L1447" href="#L1447">1447</a>                         }
+<a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> 			            c = g * h;
+<a class="jxr_linenumber" name="L1449" href="#L1449">1449</a> 			            s = -f * h;
+<a class="jxr_linenumber" name="L1450" href="#L1450">1450</a> 			            <strong class="jxr_keyword">for</strong> (j = 0; j &lt; m; j++) {
+<a class="jxr_linenumber" name="L1451" href="#L1451">1451</a>                             y = u.getElementAt(j,nm);
+<a class="jxr_linenumber" name="L1452" href="#L1452">1452</a>                             z = u.getElementAt(j,i);
+<a class="jxr_linenumber" name="L1453" href="#L1453">1453</a>                             u.setElementAt(j,nm, y * c + z * s);
+<a class="jxr_linenumber" name="L1454" href="#L1454">1454</a>                             u.setElementAt(j,i, z * c - y * s);
+<a class="jxr_linenumber" name="L1455" href="#L1455">1455</a> 			            }
+<a class="jxr_linenumber" name="L1456" href="#L1456">1456</a>                     }
+<a class="jxr_linenumber" name="L1457" href="#L1457">1457</a> 		        }
+<a class="jxr_linenumber" name="L1458" href="#L1458">1458</a> 		        z = w[k];
+<a class="jxr_linenumber" name="L1459" href="#L1459">1459</a> 		        <em class="jxr_comment">//Convergence.</em>
+<a class="jxr_linenumber" name="L1460" href="#L1460">1460</a> 		        <strong class="jxr_keyword">if</strong> (l == k) {
+<a class="jxr_linenumber" name="L1461" href="#L1461">1461</a>                     <em class="jxr_comment">//Singular value is made nonnegative</em>
+<a class="jxr_linenumber" name="L1462" href="#L1462">1462</a>                     <strong class="jxr_keyword">if</strong> (z &lt; 0.0) {
+<a class="jxr_linenumber" name="L1463" href="#L1463">1463</a> 			            w[k] = -z;
+<a class="jxr_linenumber" name="L1464" href="#L1464">1464</a> 			            <strong class="jxr_keyword">for</strong> (j = 0; j &lt; n; j++) {
+<a class="jxr_linenumber" name="L1465" href="#L1465">1465</a>                             v.setElementAt(j, k, -v.getElementAt(j, k));
+<a class="jxr_linenumber" name="L1466" href="#L1466">1466</a>                         }
+<a class="jxr_linenumber" name="L1467" href="#L1467">1467</a>                     }
+<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a>                     <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> 		        }
+<a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> 		        <strong class="jxr_keyword">if</strong> (its == maxIters - 1) {
+<a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> 		            <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoConvergenceException();
+<a class="jxr_linenumber" name="L1472" href="#L1472">1472</a>                 }
+<a class="jxr_linenumber" name="L1473" href="#L1473">1473</a> 				
+<a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> 		        <em class="jxr_comment">//Shift from bottom 2-by-2 minor.</em>
+<a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> 		        x = w[l];
+<a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> 		        nm = k - 1;
+<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 		        y = w[nm];
+<a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 		        g = rv1[nm];
+<a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 		        h = rv1[k];
+<a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> 		        f = ((y - z) * (y + z) + (g - h) * (g + h)) / (2.0 * h * y);
+<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> 		        g = pythag(f, 1.0);
+<a class="jxr_linenumber" name="L1482" href="#L1482">1482</a> 		        f = ((x - z) * (x + z) + h * ((y / (f + sign(g, f))) - h)) / x;
+<a class="jxr_linenumber" name="L1483" href="#L1483">1483</a> 		        c = s = 1.0;
+<a class="jxr_linenumber" name="L1484" href="#L1484">1484</a> 		        <em class="jxr_comment">//Next QR transformation</em>
+<a class="jxr_linenumber" name="L1485" href="#L1485">1485</a> 		        <strong class="jxr_keyword">for</strong> (j = l; j &lt;= nm; j++) {
+<a class="jxr_linenumber" name="L1486" href="#L1486">1486</a>                     i = j + 1;
+<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a>                     g = rv1[i];
+<a class="jxr_linenumber" name="L1488" href="#L1488">1488</a>                     y = w[i];
+<a class="jxr_linenumber" name="L1489" href="#L1489">1489</a>                     h = s * g;
+<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a>                     g = c * g;
+<a class="jxr_linenumber" name="L1491" href="#L1491">1491</a>                     z = pythag(f, h);
+<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a>                     rv1[j] = z;
+<a class="jxr_linenumber" name="L1493" href="#L1493">1493</a>                     <strong class="jxr_keyword">if</strong> (z != 0.0) {
+<a class="jxr_linenumber" name="L1494" href="#L1494">1494</a>                         c = f / z;
+<a class="jxr_linenumber" name="L1495" href="#L1495">1495</a>                         s = h / z;
+<a class="jxr_linenumber" name="L1496" href="#L1496">1496</a>                     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L1497" href="#L1497">1497</a>                         c = Math.signum(f) * Double.MAX_VALUE;
+<a class="jxr_linenumber" name="L1498" href="#L1498">1498</a>                         s = Math.signum(h) * Double.MAX_VALUE;
+<a class="jxr_linenumber" name="L1499" href="#L1499">1499</a>                     }
+<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a>                     f = x * c + g * s;
+<a class="jxr_linenumber" name="L1501" href="#L1501">1501</a>                     g = g * c - x * s;
+<a class="jxr_linenumber" name="L1502" href="#L1502">1502</a>                     h = y * s;
+<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a>                     y *= c;
+<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a>                     <strong class="jxr_keyword">for</strong> (jj = 0; jj &lt; n; jj++) {
+<a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> 			            x = v.getElementAt(jj,j);
+<a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> 			            z = v.getElementAt(jj,i);
+<a class="jxr_linenumber" name="L1507" href="#L1507">1507</a> 			            v.setElementAt(jj,j, x * c + z * s);
+<a class="jxr_linenumber" name="L1508" href="#L1508">1508</a> 			            v.setElementAt(jj,i, z * c - x * s);
+<a class="jxr_linenumber" name="L1509" href="#L1509">1509</a>                     }
+<a class="jxr_linenumber" name="L1510" href="#L1510">1510</a>                     z = pythag(f, h);
+<a class="jxr_linenumber" name="L1511" href="#L1511">1511</a>                     <em class="jxr_comment">//Rotation can be arbitrary if z = 0</em>
+<a class="jxr_linenumber" name="L1512" href="#L1512">1512</a>                     w[j] = z;
+<a class="jxr_linenumber" name="L1513" href="#L1513">1513</a>                     <strong class="jxr_keyword">if</strong> (z != 0.0) {
+<a class="jxr_linenumber" name="L1514" href="#L1514">1514</a> 			            z = 1.0 / z;
+<a class="jxr_linenumber" name="L1515" href="#L1515">1515</a> 			            c = f * z;
+<a class="jxr_linenumber" name="L1516" href="#L1516">1516</a> 			            s = h * z;
+<a class="jxr_linenumber" name="L1517" href="#L1517">1517</a>                     }
+<a class="jxr_linenumber" name="L1518" href="#L1518">1518</a>                     f = c * g + s * y;
+<a class="jxr_linenumber" name="L1519" href="#L1519">1519</a>                     x = c * y - s * g;
+<a class="jxr_linenumber" name="L1520" href="#L1520">1520</a>                     <strong class="jxr_keyword">for</strong> (jj = 0; jj &lt; m; jj++) {
+<a class="jxr_linenumber" name="L1521" href="#L1521">1521</a> 			            y = u.getElementAt(jj,j);
+<a class="jxr_linenumber" name="L1522" href="#L1522">1522</a>                         z = u.getElementAt(jj,i);
+<a class="jxr_linenumber" name="L1523" href="#L1523">1523</a> 			            u.setElementAt(jj,j, y * c + z * s);
+<a class="jxr_linenumber" name="L1524" href="#L1524">1524</a> 			            u.setElementAt(jj,i, z * c - y * s);
+<a class="jxr_linenumber" name="L1525" href="#L1525">1525</a>                     }
+<a class="jxr_linenumber" name="L1526" href="#L1526">1526</a> 		        }
+<a class="jxr_linenumber" name="L1527" href="#L1527">1527</a> 		        rv1[l] = 0.0;
+<a class="jxr_linenumber" name="L1528" href="#L1528">1528</a> 		        rv1[k] = f;
+<a class="jxr_linenumber" name="L1529" href="#L1529">1529</a> 		        w[k] = x;
+<a class="jxr_linenumber" name="L1530" href="#L1530">1530</a>             }
+<a class="jxr_linenumber" name="L1531" href="#L1531">1531</a>         }
+<a class="jxr_linenumber" name="L1532" href="#L1532">1532</a>     }
+<a class="jxr_linenumber" name="L1533" href="#L1533">1533</a>     
+<a class="jxr_linenumber" name="L1534" href="#L1534">1534</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1535" href="#L1535">1535</a> <em class="jxr_javadoccomment">     * Reorders singular values from maximal to minimal, and also reorders</em>
+<a class="jxr_linenumber" name="L1536" href="#L1536">1536</a> <em class="jxr_javadoccomment">     * columns and rows of U and V to ensure that Singular Value Decomposition</em>
+<a class="jxr_linenumber" name="L1537" href="#L1537">1537</a> <em class="jxr_javadoccomment">     * still remains valid.</em>
+<a class="jxr_linenumber" name="L1538" href="#L1538">1538</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L1539" href="#L1539">1539</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> reorder() {
+<a class="jxr_linenumber" name="L1540" href="#L1540">1540</a>         <strong class="jxr_keyword">int</strong> m = inputMatrix.getRows();
+<a class="jxr_linenumber" name="L1541" href="#L1541">1541</a> 	    <strong class="jxr_keyword">int</strong> n = inputMatrix.getColumns();
+<a class="jxr_linenumber" name="L1542" href="#L1542">1542</a> 		
+<a class="jxr_linenumber" name="L1543" href="#L1543">1543</a> 	    <strong class="jxr_keyword">int</strong> i, j, k, s, inc = 1;
+<a class="jxr_linenumber" name="L1544" href="#L1544">1544</a> 	    <strong class="jxr_keyword">double</strong> sw;
+<a class="jxr_linenumber" name="L1545" href="#L1545">1545</a> 	    <strong class="jxr_keyword">double</strong>[] su = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[m];
+<a class="jxr_linenumber" name="L1546" href="#L1546">1546</a> 	    <strong class="jxr_keyword">double</strong>[] sv = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[n];
+<a class="jxr_linenumber" name="L1547" href="#L1547">1547</a> 		
+<a class="jxr_linenumber" name="L1548" href="#L1548">1548</a> 	    <strong class="jxr_keyword">do</strong> {
+<a class="jxr_linenumber" name="L1549" href="#L1549">1549</a> 	        inc *= 3; inc++;
+<a class="jxr_linenumber" name="L1550" href="#L1550">1550</a> 	    } <strong class="jxr_keyword">while</strong>(inc &lt;= n);
+<a class="jxr_linenumber" name="L1551" href="#L1551">1551</a>         <strong class="jxr_keyword">do</strong> {
+<a class="jxr_linenumber" name="L1552" href="#L1552">1552</a>             inc /= 3;
+<a class="jxr_linenumber" name="L1553" href="#L1553">1553</a>             <strong class="jxr_keyword">for</strong> (i = inc; i &lt; n; i++) {
+<a class="jxr_linenumber" name="L1554" href="#L1554">1554</a>                 sw = w[i];
+<a class="jxr_linenumber" name="L1555" href="#L1555">1555</a> 		        <strong class="jxr_keyword">for</strong> (k = 0; k &lt; m; k++) {
+<a class="jxr_linenumber" name="L1556" href="#L1556">1556</a>                     su[k] = u.getElementAt(k, i);
+<a class="jxr_linenumber" name="L1557" href="#L1557">1557</a>                 }
+<a class="jxr_linenumber" name="L1558" href="#L1558">1558</a> 		        <strong class="jxr_keyword">for</strong> (k = 0; k &lt; n; k++) {
+<a class="jxr_linenumber" name="L1559" href="#L1559">1559</a>                     sv[k] = v.getElementAt(k, i);
+<a class="jxr_linenumber" name="L1560" href="#L1560">1560</a>                 }
+<a class="jxr_linenumber" name="L1561" href="#L1561">1561</a> 		        j = i;
+<a class="jxr_linenumber" name="L1562" href="#L1562">1562</a> 		        <strong class="jxr_keyword">while</strong> (w[j - inc] &lt; sw) {
+<a class="jxr_linenumber" name="L1563" href="#L1563">1563</a>                     w[j] = w[j - inc];
+<a class="jxr_linenumber" name="L1564" href="#L1564">1564</a>                     <strong class="jxr_keyword">for</strong> (k = 0; k &lt; m; k++) {
+<a class="jxr_linenumber" name="L1565" href="#L1565">1565</a>                         u.setElementAt(k, j, u.getElementAt(k, j - inc));
+<a class="jxr_linenumber" name="L1566" href="#L1566">1566</a>                     }
+<a class="jxr_linenumber" name="L1567" href="#L1567">1567</a>                     <strong class="jxr_keyword">for</strong> (k = 0; k &lt; n; k++) {
+<a class="jxr_linenumber" name="L1568" href="#L1568">1568</a>                         v.setElementAt(k, j, v.getElementAt(k, j - inc));
+<a class="jxr_linenumber" name="L1569" href="#L1569">1569</a>                     }
+<a class="jxr_linenumber" name="L1570" href="#L1570">1570</a>                     j -= inc;
+<a class="jxr_linenumber" name="L1571" href="#L1571">1571</a>                     <strong class="jxr_keyword">if</strong> (j &lt; inc) {
+<a class="jxr_linenumber" name="L1572" href="#L1572">1572</a>                         <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L1573" href="#L1573">1573</a>                     }
+<a class="jxr_linenumber" name="L1574" href="#L1574">1574</a>                 }
+<a class="jxr_linenumber" name="L1575" href="#L1575">1575</a>                 w[j] = sw;
+<a class="jxr_linenumber" name="L1576" href="#L1576">1576</a>                 <strong class="jxr_keyword">for</strong> (k = 0; k &lt; m; k++) {
+<a class="jxr_linenumber" name="L1577" href="#L1577">1577</a>                     u.setElementAt(k, j, su[k]);
+<a class="jxr_linenumber" name="L1578" href="#L1578">1578</a>                 }
+<a class="jxr_linenumber" name="L1579" href="#L1579">1579</a>                 <strong class="jxr_keyword">for</strong> (k = 0; k &lt; n; k++) {
+<a class="jxr_linenumber" name="L1580" href="#L1580">1580</a>                     v.setElementAt(k, j, sv[k]);
 <a class="jxr_linenumber" name="L1581" href="#L1581">1581</a>                 }
 <a class="jxr_linenumber" name="L1582" href="#L1582">1582</a>             }
-<a class="jxr_linenumber" name="L1583" href="#L1583">1583</a>             <strong class="jxr_keyword">for</strong> (j = 0; j &lt; n; j++) {
-<a class="jxr_linenumber" name="L1584" href="#L1584">1584</a>                 <strong class="jxr_keyword">if</strong> (v.getElementAt(j, k) &lt; 0.0) {
-<a class="jxr_linenumber" name="L1585" href="#L1585">1585</a>                     s++;
-<a class="jxr_linenumber" name="L1586" href="#L1586">1586</a>                 }
-<a class="jxr_linenumber" name="L1587" href="#L1587">1587</a>             }
-<a class="jxr_linenumber" name="L1588" href="#L1588">1588</a>             <strong class="jxr_keyword">if</strong> (s &gt; (m + n) / 2) {
-<a class="jxr_linenumber" name="L1589" href="#L1589">1589</a> 		        <strong class="jxr_keyword">for</strong> (i = 0; i &lt; m; i++) {
-<a class="jxr_linenumber" name="L1590" href="#L1590">1590</a>                     u.setElementAt(i, k, -u.getElementAt(i, k));
-<a class="jxr_linenumber" name="L1591" href="#L1591">1591</a>                 }
-<a class="jxr_linenumber" name="L1592" href="#L1592">1592</a> 		        <strong class="jxr_keyword">for</strong> (j = 0; j &lt; n; j++) {
-<a class="jxr_linenumber" name="L1593" href="#L1593">1593</a>                     v.setElementAt(j, k, -v.getElementAt(j, k));
-<a class="jxr_linenumber" name="L1594" href="#L1594">1594</a>                 }
-<a class="jxr_linenumber" name="L1595" href="#L1595">1595</a>             }
-<a class="jxr_linenumber" name="L1596" href="#L1596">1596</a> 	    }
-<a class="jxr_linenumber" name="L1597" href="#L1597">1597</a>     }
-<a class="jxr_linenumber" name="L1598" href="#L1598">1598</a>     
-<a class="jxr_linenumber" name="L1599" href="#L1599">1599</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1600" href="#L1600">1600</a> <em class="jxr_javadoccomment">     * Sets threshold to be used to determine whether a singular value is</em>
-<a class="jxr_linenumber" name="L1601" href="#L1601">1601</a> <em class="jxr_javadoccomment">     * negligible or not.</em>
-<a class="jxr_linenumber" name="L1602" href="#L1602">1602</a> <em class="jxr_javadoccomment">     * This threshold can be used to consider a singular value as zero or not,</em>
-<a class="jxr_linenumber" name="L1603" href="#L1603">1603</a> <em class="jxr_javadoccomment">     * since small singular values might appear in places where they should be</em>
-<a class="jxr_linenumber" name="L1604" href="#L1604">1604</a> <em class="jxr_javadoccomment">     * zero because of rounding errors and machine precision.</em>
-<a class="jxr_linenumber" name="L1605" href="#L1605">1605</a> <em class="jxr_javadoccomment">     * Singular values considered as zero determine aspects such as rank,</em>
-<a class="jxr_linenumber" name="L1606" href="#L1606">1606</a> <em class="jxr_javadoccomment">     * nullability, nullspace or range space.</em>
-<a class="jxr_linenumber" name="L1607" href="#L1607">1607</a> <em class="jxr_javadoccomment">     * @param threshold Threshold to be used to determine whether a singular</em>
-<a class="jxr_linenumber" name="L1608" href="#L1608">1608</a> <em class="jxr_javadoccomment">     * value is negligible or not.</em>
-<a class="jxr_linenumber" name="L1609" href="#L1609">1609</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L1610" href="#L1610">1610</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> setNegligibleSingularValueThreshold(<strong class="jxr_keyword">double</strong> threshold) {
-<a class="jxr_linenumber" name="L1611" href="#L1611">1611</a>         tsh = threshold;
-<a class="jxr_linenumber" name="L1612" href="#L1612">1612</a>     }
-<a class="jxr_linenumber" name="L1613" href="#L1613">1613</a>     
-<a class="jxr_linenumber" name="L1614" href="#L1614">1614</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1615" href="#L1615">1615</a> <em class="jxr_javadoccomment">     * Computes norm of a vector of 2 components 'a' and 'b' as</em>
-<a class="jxr_linenumber" name="L1616" href="#L1616">1616</a> <em class="jxr_javadoccomment">     * sqrt(pow(a, 2.0)  + pow(b, 2.0)) without destructive underflow or</em>
-<a class="jxr_linenumber" name="L1617" href="#L1617">1617</a> <em class="jxr_javadoccomment">     * overflow, that is when a or b are close to maximum or minimum values</em>
-<a class="jxr_linenumber" name="L1618" href="#L1618">1618</a> <em class="jxr_javadoccomment">     * allowed by machine precision, computing the previous expression might</em>
-<a class="jxr_linenumber" name="L1619" href="#L1619">1619</a> <em class="jxr_javadoccomment">     * lead to highly inaccurate results.</em>
-<a class="jxr_linenumber" name="L1620" href="#L1620">1620</a> <em class="jxr_javadoccomment">     * This method implements previous expression to avoid this effect as</em>
-<a class="jxr_linenumber" name="L1621" href="#L1621">1621</a> <em class="jxr_javadoccomment">     * much as possible and increase accuracy.</em>
-<a class="jxr_linenumber" name="L1622" href="#L1622">1622</a> <em class="jxr_javadoccomment">     * @param a 1st value</em>
-<a class="jxr_linenumber" name="L1623" href="#L1623">1623</a> <em class="jxr_javadoccomment">     * @param b 2nd value</em>
-<a class="jxr_linenumber" name="L1624" href="#L1624">1624</a> <em class="jxr_javadoccomment">     * @return Norm of (a, b).</em>
-<a class="jxr_linenumber" name="L1625" href="#L1625">1625</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L1626" href="#L1626">1626</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">double</strong> pythag(<strong class="jxr_keyword">double</strong> a, <strong class="jxr_keyword">double</strong> b) {
-<a class="jxr_linenumber" name="L1627" href="#L1627">1627</a>         <strong class="jxr_keyword">double</strong> absa, absb;
-<a class="jxr_linenumber" name="L1628" href="#L1628">1628</a> 	    absa = Math.abs(a);
-<a class="jxr_linenumber" name="L1629" href="#L1629">1629</a> 	    absb = Math.abs(b);
-<a class="jxr_linenumber" name="L1630" href="#L1630">1630</a> 		
-<a class="jxr_linenumber" name="L1631" href="#L1631">1631</a> 	    <strong class="jxr_keyword">if</strong> (absa &gt; absb) {
-<a class="jxr_linenumber" name="L1632" href="#L1632">1632</a> 	        <strong class="jxr_keyword">return</strong> absa * Math.sqrt(1.0 + (absb/absa)*(absb/absa));
-<a class="jxr_linenumber" name="L1633" href="#L1633">1633</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L1634" href="#L1634">1634</a> 	        <strong class="jxr_keyword">return</strong> (absb == 0.0 ?
-<a class="jxr_linenumber" name="L1635" href="#L1635">1635</a>                     0.0 : absb * Math.sqrt(1.0 + (absa/absb)*(absa/absb)));
-<a class="jxr_linenumber" name="L1636" href="#L1636">1636</a>         }
-<a class="jxr_linenumber" name="L1637" href="#L1637">1637</a>     }
-<a class="jxr_linenumber" name="L1638" href="#L1638">1638</a>     
-<a class="jxr_linenumber" name="L1639" href="#L1639">1639</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1640" href="#L1640">1640</a> <em class="jxr_javadoccomment">     * Returns a or -a depending on b sign. If b is positive, this method</em>
-<a class="jxr_linenumber" name="L1641" href="#L1641">1641</a> <em class="jxr_javadoccomment">     * returns a, otherwise it returns -a</em>
-<a class="jxr_linenumber" name="L1642" href="#L1642">1642</a> <em class="jxr_javadoccomment">     * @param a 1st value</em>
-<a class="jxr_linenumber" name="L1643" href="#L1643">1643</a> <em class="jxr_javadoccomment">     * @param b 2nd value</em>
-<a class="jxr_linenumber" name="L1644" href="#L1644">1644</a> <em class="jxr_javadoccomment">     * @return a or -a depending on b sign.</em>
-<a class="jxr_linenumber" name="L1645" href="#L1645">1645</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L1646" href="#L1646">1646</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">double</strong> sign(<strong class="jxr_keyword">double</strong> a, <strong class="jxr_keyword">double</strong> b) {
-<a class="jxr_linenumber" name="L1647" href="#L1647">1647</a>         <strong class="jxr_keyword">return</strong> (b &gt;= 0.0 ? (a &gt;= 0.0 ? a : -a) : (a &gt;= 0.0 ? -a : a));
-<a class="jxr_linenumber" name="L1648" href="#L1648">1648</a>     }
-<a class="jxr_linenumber" name="L1649" href="#L1649">1649</a> }
+<a class="jxr_linenumber" name="L1583" href="#L1583">1583</a> 	    } <strong class="jxr_keyword">while</strong> (inc &gt; 1);
+<a class="jxr_linenumber" name="L1584" href="#L1584">1584</a> 		
+<a class="jxr_linenumber" name="L1585" href="#L1585">1585</a> 	    <strong class="jxr_keyword">for</strong> (k = 0; k &lt; n; k++) {
+<a class="jxr_linenumber" name="L1586" href="#L1586">1586</a>             s = 0;
+<a class="jxr_linenumber" name="L1587" href="#L1587">1587</a>             <strong class="jxr_keyword">for</strong> (i = 0; i &lt; m; i++) {
+<a class="jxr_linenumber" name="L1588" href="#L1588">1588</a>                 <strong class="jxr_keyword">if</strong> (u.getElementAt(i, k) &lt; 0.0) {
+<a class="jxr_linenumber" name="L1589" href="#L1589">1589</a>                     s++;
+<a class="jxr_linenumber" name="L1590" href="#L1590">1590</a>                 }
+<a class="jxr_linenumber" name="L1591" href="#L1591">1591</a>             }
+<a class="jxr_linenumber" name="L1592" href="#L1592">1592</a>             <strong class="jxr_keyword">for</strong> (j = 0; j &lt; n; j++) {
+<a class="jxr_linenumber" name="L1593" href="#L1593">1593</a>                 <strong class="jxr_keyword">if</strong> (v.getElementAt(j, k) &lt; 0.0) {
+<a class="jxr_linenumber" name="L1594" href="#L1594">1594</a>                     s++;
+<a class="jxr_linenumber" name="L1595" href="#L1595">1595</a>                 }
+<a class="jxr_linenumber" name="L1596" href="#L1596">1596</a>             }
+<a class="jxr_linenumber" name="L1597" href="#L1597">1597</a>             <strong class="jxr_keyword">if</strong> (s &gt; (m + n) / 2) {
+<a class="jxr_linenumber" name="L1598" href="#L1598">1598</a> 		        <strong class="jxr_keyword">for</strong> (i = 0; i &lt; m; i++) {
+<a class="jxr_linenumber" name="L1599" href="#L1599">1599</a>                     u.setElementAt(i, k, -u.getElementAt(i, k));
+<a class="jxr_linenumber" name="L1600" href="#L1600">1600</a>                 }
+<a class="jxr_linenumber" name="L1601" href="#L1601">1601</a> 		        <strong class="jxr_keyword">for</strong> (j = 0; j &lt; n; j++) {
+<a class="jxr_linenumber" name="L1602" href="#L1602">1602</a>                     v.setElementAt(j, k, -v.getElementAt(j, k));
+<a class="jxr_linenumber" name="L1603" href="#L1603">1603</a>                 }
+<a class="jxr_linenumber" name="L1604" href="#L1604">1604</a>             }
+<a class="jxr_linenumber" name="L1605" href="#L1605">1605</a> 	    }
+<a class="jxr_linenumber" name="L1606" href="#L1606">1606</a>     }
+<a class="jxr_linenumber" name="L1607" href="#L1607">1607</a>     
+<a class="jxr_linenumber" name="L1608" href="#L1608">1608</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1609" href="#L1609">1609</a> <em class="jxr_javadoccomment">     * Sets threshold to be used to determine whether a singular value is</em>
+<a class="jxr_linenumber" name="L1610" href="#L1610">1610</a> <em class="jxr_javadoccomment">     * negligible or not.</em>
+<a class="jxr_linenumber" name="L1611" href="#L1611">1611</a> <em class="jxr_javadoccomment">     * This threshold can be used to consider a singular value as zero or not,</em>
+<a class="jxr_linenumber" name="L1612" href="#L1612">1612</a> <em class="jxr_javadoccomment">     * since small singular values might appear in places where they should be</em>
+<a class="jxr_linenumber" name="L1613" href="#L1613">1613</a> <em class="jxr_javadoccomment">     * zero because of rounding errors and machine precision.</em>
+<a class="jxr_linenumber" name="L1614" href="#L1614">1614</a> <em class="jxr_javadoccomment">     * Singular values considered as zero determine aspects such as rank,</em>
+<a class="jxr_linenumber" name="L1615" href="#L1615">1615</a> <em class="jxr_javadoccomment">     * nullability, nullspace or range space.</em>
+<a class="jxr_linenumber" name="L1616" href="#L1616">1616</a> <em class="jxr_javadoccomment">     * @param threshold Threshold to be used to determine whether a singular</em>
+<a class="jxr_linenumber" name="L1617" href="#L1617">1617</a> <em class="jxr_javadoccomment">     * value is negligible or not.</em>
+<a class="jxr_linenumber" name="L1618" href="#L1618">1618</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L1619" href="#L1619">1619</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> setNegligibleSingularValueThreshold(<strong class="jxr_keyword">double</strong> threshold) {
+<a class="jxr_linenumber" name="L1620" href="#L1620">1620</a>         tsh = threshold;
+<a class="jxr_linenumber" name="L1621" href="#L1621">1621</a>     }
+<a class="jxr_linenumber" name="L1622" href="#L1622">1622</a>     
+<a class="jxr_linenumber" name="L1623" href="#L1623">1623</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1624" href="#L1624">1624</a> <em class="jxr_javadoccomment">     * Computes norm of a vector of 2 components 'a' and 'b' as</em>
+<a class="jxr_linenumber" name="L1625" href="#L1625">1625</a> <em class="jxr_javadoccomment">     * sqrt(pow(a, 2.0)  + pow(b, 2.0)) without destructive underflow or</em>
+<a class="jxr_linenumber" name="L1626" href="#L1626">1626</a> <em class="jxr_javadoccomment">     * overflow, that is when a or b are close to maximum or minimum values</em>
+<a class="jxr_linenumber" name="L1627" href="#L1627">1627</a> <em class="jxr_javadoccomment">     * allowed by machine precision, computing the previous expression might</em>
+<a class="jxr_linenumber" name="L1628" href="#L1628">1628</a> <em class="jxr_javadoccomment">     * lead to highly inaccurate results.</em>
+<a class="jxr_linenumber" name="L1629" href="#L1629">1629</a> <em class="jxr_javadoccomment">     * This method implements previous expression to avoid this effect as</em>
+<a class="jxr_linenumber" name="L1630" href="#L1630">1630</a> <em class="jxr_javadoccomment">     * much as possible and increase accuracy.</em>
+<a class="jxr_linenumber" name="L1631" href="#L1631">1631</a> <em class="jxr_javadoccomment">     * @param a 1st value</em>
+<a class="jxr_linenumber" name="L1632" href="#L1632">1632</a> <em class="jxr_javadoccomment">     * @param b 2nd value</em>
+<a class="jxr_linenumber" name="L1633" href="#L1633">1633</a> <em class="jxr_javadoccomment">     * @return Norm of (a, b).</em>
+<a class="jxr_linenumber" name="L1634" href="#L1634">1634</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L1635" href="#L1635">1635</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">double</strong> pythag(<strong class="jxr_keyword">double</strong> a, <strong class="jxr_keyword">double</strong> b) {
+<a class="jxr_linenumber" name="L1636" href="#L1636">1636</a>         <strong class="jxr_keyword">double</strong> absa, absb;
+<a class="jxr_linenumber" name="L1637" href="#L1637">1637</a> 	    absa = Math.abs(a);
+<a class="jxr_linenumber" name="L1638" href="#L1638">1638</a> 	    absb = Math.abs(b);
+<a class="jxr_linenumber" name="L1639" href="#L1639">1639</a> 		
+<a class="jxr_linenumber" name="L1640" href="#L1640">1640</a> 	    <strong class="jxr_keyword">if</strong> (absa &gt; absb) {
+<a class="jxr_linenumber" name="L1641" href="#L1641">1641</a> 	        <strong class="jxr_keyword">return</strong> absa * Math.sqrt(1.0 + (absb/absa)*(absb/absa));
+<a class="jxr_linenumber" name="L1642" href="#L1642">1642</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L1643" href="#L1643">1643</a> 	        <strong class="jxr_keyword">return</strong> (absb == 0.0 ?
+<a class="jxr_linenumber" name="L1644" href="#L1644">1644</a>                     0.0 : absb * Math.sqrt(1.0 + (absa/absb)*(absa/absb)));
+<a class="jxr_linenumber" name="L1645" href="#L1645">1645</a>         }
+<a class="jxr_linenumber" name="L1646" href="#L1646">1646</a>     }
+<a class="jxr_linenumber" name="L1647" href="#L1647">1647</a>     
+<a class="jxr_linenumber" name="L1648" href="#L1648">1648</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1649" href="#L1649">1649</a> <em class="jxr_javadoccomment">     * Returns a or -a depending on b sign. If b is positive, this method</em>
+<a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> <em class="jxr_javadoccomment">     * returns a, otherwise it returns -a</em>
+<a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> <em class="jxr_javadoccomment">     * @param a 1st value</em>
+<a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> <em class="jxr_javadoccomment">     * @param b 2nd value</em>
+<a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> <em class="jxr_javadoccomment">     * @return a or -a depending on b sign.</em>
+<a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L1655" href="#L1655">1655</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">double</strong> sign(<strong class="jxr_keyword">double</strong> a, <strong class="jxr_keyword">double</strong> b) {
+<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a>         <strong class="jxr_keyword">return</strong> (b &gt;= 0.0 ? (a &gt;= 0.0 ? a : -a) : (a &gt;= 0.0 ? -a : a));
+<a class="jxr_linenumber" name="L1657" href="#L1657">1657</a>     }
+<a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>

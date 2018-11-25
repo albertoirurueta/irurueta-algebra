@@ -476,7 +476,7 @@ public class SingularValueDecomposer extends Decomposer {
         }
         
 <span class="fc" id="L478">        int columns = inputMatrix.getColumns();</span>
-<span class="pc bpc" id="L479" title="2 of 4 branches missed.">        return (w[0] &lt;= 0.0 || w[columns - 1] &lt;= 0.0) ? 0.0 : </span>
+<span class="pc bpc" id="L479" title="1 of 4 branches missed.">        return (w[0] &lt;= 0.0 || w[columns - 1] &lt;= 0.0) ? 0.0 : </span>
 <span class="fc" id="L480">                w[columns - 1] / w[0];</span>
     }
     
@@ -1350,8 +1350,8 @@ public class SingularValueDecomposer extends Decomposer {
             }
 <span class="fc" id="L1351">            anorm = Math.max(anorm, Math.abs(w[i]) + Math.abs(rv1[i]));			</span>
 	    }
-		
-	    //Accumulation of right-hand transformations
+
+        //Accumulation of right-hand transformations
 <span class="fc bfc" id="L1355" title="All 2 branches covered.">        for (i = n - 1; i &gt;= 0; i--) {</span>
 <span class="fc bfc" id="L1356" title="All 2 branches covered.">            if (i &lt; (n - 1)) {</span>
 <span class="fc bfc" id="L1357" title="All 2 branches covered.">                if (g != 0.0) {</span>
@@ -1440,87 +1440,96 @@ public class SingularValueDecomposer extends Decomposer {
 <span class="fc" id="L1440">			            g = w[i];</span>
 <span class="fc" id="L1441">			            h = pythag(f, g);</span>
 <span class="fc" id="L1442">			            w[i] = h;</span>
-<span class="fc" id="L1443">                        h = 1.0 / h;</span>
-<span class="fc" id="L1444">			            c = g * h;</span>
-<span class="fc" id="L1445">			            s = -f * h;</span>
-<span class="fc bfc" id="L1446" title="All 2 branches covered.">			            for (j = 0; j &lt; m; j++) {</span>
-<span class="fc" id="L1447">                            y = u.getElementAt(j,nm);</span>
-<span class="fc" id="L1448">                            z = u.getElementAt(j,i);</span>
-<span class="fc" id="L1449">                            u.setElementAt(j,nm, y * c + z * s);</span>
-<span class="fc" id="L1450">                            u.setElementAt(j,i, z * c - y * s);</span>
+<span class="pc bpc" id="L1443" title="1 of 2 branches missed.">			            if (h != 0.0) {</span>
+<span class="fc" id="L1444">                            h = 1.0 / h;</span>
+                        } else {
+<span class="nc" id="L1446">			                h = Double.MAX_VALUE;</span>
+                        }
+<span class="fc" id="L1448">			            c = g * h;</span>
+<span class="fc" id="L1449">			            s = -f * h;</span>
+<span class="fc bfc" id="L1450" title="All 2 branches covered.">			            for (j = 0; j &lt; m; j++) {</span>
+<span class="fc" id="L1451">                            y = u.getElementAt(j,nm);</span>
+<span class="fc" id="L1452">                            z = u.getElementAt(j,i);</span>
+<span class="fc" id="L1453">                            u.setElementAt(j,nm, y * c + z * s);</span>
+<span class="fc" id="L1454">                            u.setElementAt(j,i, z * c - y * s);</span>
 			            }
                     }
 		        }
-<span class="fc" id="L1454">		        z = w[k];</span>
+<span class="fc" id="L1458">		        z = w[k];</span>
 		        //Convergence.
-<span class="fc bfc" id="L1456" title="All 2 branches covered.">		        if (l == k) {</span>
+<span class="fc bfc" id="L1460" title="All 2 branches covered.">		        if (l == k) {</span>
                     //Singular value is made nonnegative
-<span class="fc bfc" id="L1458" title="All 2 branches covered.">                    if (z &lt; 0.0) {</span>
-<span class="fc" id="L1459">			            w[k] = -z;</span>
-<span class="fc bfc" id="L1460" title="All 2 branches covered.">			            for (j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L1461">                            v.setElementAt(j, k, -v.getElementAt(j, k));</span>
+<span class="fc bfc" id="L1462" title="All 2 branches covered.">                    if (z &lt; 0.0) {</span>
+<span class="fc" id="L1463">			            w[k] = -z;</span>
+<span class="fc bfc" id="L1464" title="All 2 branches covered.">			            for (j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L1465">                            v.setElementAt(j, k, -v.getElementAt(j, k));</span>
                         }
                     }
                     break;
 		        }
-<span class="pc bpc" id="L1466" title="1 of 2 branches missed.">		        if (its == maxIters - 1) {</span>
-<span class="nc" id="L1467">		            throw new NoConvergenceException();</span>
+<span class="pc bpc" id="L1470" title="1 of 2 branches missed.">		        if (its == maxIters - 1) {</span>
+<span class="nc" id="L1471">		            throw new NoConvergenceException();</span>
                 }
 				
 		        //Shift from bottom 2-by-2 minor.
-<span class="fc" id="L1471">		        x = w[l];</span>
-<span class="fc" id="L1472">		        nm = k - 1;</span>
-<span class="fc" id="L1473">		        y = w[nm];</span>
-<span class="fc" id="L1474">		        g = rv1[nm];</span>
-<span class="fc" id="L1475">		        h = rv1[k];</span>
-<span class="fc" id="L1476">		        f = ((y - z) * (y + z) + (g - h) * (g + h)) / (2.0 * h * y);</span>
-<span class="fc" id="L1477">		        g = pythag(f, 1.0);</span>
-<span class="fc" id="L1478">		        f = ((x - z) * (x + z) + h * ((y / (f + sign(g, f))) - h)) / x;</span>
-<span class="fc" id="L1479">		        c = s = 1.0;</span>
+<span class="fc" id="L1475">		        x = w[l];</span>
+<span class="fc" id="L1476">		        nm = k - 1;</span>
+<span class="fc" id="L1477">		        y = w[nm];</span>
+<span class="fc" id="L1478">		        g = rv1[nm];</span>
+<span class="fc" id="L1479">		        h = rv1[k];</span>
+<span class="fc" id="L1480">		        f = ((y - z) * (y + z) + (g - h) * (g + h)) / (2.0 * h * y);</span>
+<span class="fc" id="L1481">		        g = pythag(f, 1.0);</span>
+<span class="fc" id="L1482">		        f = ((x - z) * (x + z) + h * ((y / (f + sign(g, f))) - h)) / x;</span>
+<span class="fc" id="L1483">		        c = s = 1.0;</span>
 		        //Next QR transformation
-<span class="fc bfc" id="L1481" title="All 2 branches covered.">		        for (j = l; j &lt;= nm; j++) {</span>
-<span class="fc" id="L1482">                    i = j + 1;</span>
-<span class="fc" id="L1483">                    g = rv1[i];</span>
-<span class="fc" id="L1484">                    y = w[i];</span>
-<span class="fc" id="L1485">                    h = s * g;</span>
-<span class="fc" id="L1486">                    g = c * g;</span>
-<span class="fc" id="L1487">                    z = pythag(f, h);</span>
-<span class="fc" id="L1488">                    rv1[j] = z;</span>
-<span class="fc" id="L1489">                    c = f / z;</span>
-<span class="fc" id="L1490">                    s = h / z;</span>
-<span class="fc" id="L1491">                    f = x * c + g * s;</span>
-<span class="fc" id="L1492">                    g = g * c - x * s;</span>
-<span class="fc" id="L1493">                    h = y * s;</span>
-<span class="fc" id="L1494">                    y *= c;</span>
-<span class="fc bfc" id="L1495" title="All 2 branches covered.">                    for (jj = 0; jj &lt; n; jj++) {</span>
-<span class="fc" id="L1496">			            x = v.getElementAt(jj,j);</span>
-<span class="fc" id="L1497">			            z = v.getElementAt(jj,i);</span>
-<span class="fc" id="L1498">			            v.setElementAt(jj,j, x * c + z * s);</span>
-<span class="fc" id="L1499">			            v.setElementAt(jj,i, z * c - x * s);</span>
+<span class="fc bfc" id="L1485" title="All 2 branches covered.">		        for (j = l; j &lt;= nm; j++) {</span>
+<span class="fc" id="L1486">                    i = j + 1;</span>
+<span class="fc" id="L1487">                    g = rv1[i];</span>
+<span class="fc" id="L1488">                    y = w[i];</span>
+<span class="fc" id="L1489">                    h = s * g;</span>
+<span class="fc" id="L1490">                    g = c * g;</span>
+<span class="fc" id="L1491">                    z = pythag(f, h);</span>
+<span class="fc" id="L1492">                    rv1[j] = z;</span>
+<span class="pc bpc" id="L1493" title="1 of 2 branches missed.">                    if (z != 0.0) {</span>
+<span class="fc" id="L1494">                        c = f / z;</span>
+<span class="fc" id="L1495">                        s = h / z;</span>
+                    } else {
+<span class="nc" id="L1497">                        c = Math.signum(f) * Double.MAX_VALUE;</span>
+<span class="nc" id="L1498">                        s = Math.signum(h) * Double.MAX_VALUE;</span>
                     }
-<span class="fc" id="L1501">                    z = pythag(f, h);</span>
+<span class="fc" id="L1500">                    f = x * c + g * s;</span>
+<span class="fc" id="L1501">                    g = g * c - x * s;</span>
+<span class="fc" id="L1502">                    h = y * s;</span>
+<span class="fc" id="L1503">                    y *= c;</span>
+<span class="fc bfc" id="L1504" title="All 2 branches covered.">                    for (jj = 0; jj &lt; n; jj++) {</span>
+<span class="fc" id="L1505">			            x = v.getElementAt(jj,j);</span>
+<span class="fc" id="L1506">			            z = v.getElementAt(jj,i);</span>
+<span class="fc" id="L1507">			            v.setElementAt(jj,j, x * c + z * s);</span>
+<span class="fc" id="L1508">			            v.setElementAt(jj,i, z * c - x * s);</span>
+                    }
+<span class="fc" id="L1510">                    z = pythag(f, h);</span>
                     //Rotation can be arbitrary if z = 0
-<span class="fc" id="L1503">                    w[j] = z;</span>
-<span class="fc bfc" id="L1504" title="All 2 branches covered.">                    if (z != 0.0) {</span>
-<span class="fc" id="L1505">			            z = 1.0 / z;</span>
-<span class="fc" id="L1506">			            c = f * z;</span>
-<span class="fc" id="L1507">			            s = h * z;</span>
+<span class="fc" id="L1512">                    w[j] = z;</span>
+<span class="fc bfc" id="L1513" title="All 2 branches covered.">                    if (z != 0.0) {</span>
+<span class="fc" id="L1514">			            z = 1.0 / z;</span>
+<span class="fc" id="L1515">			            c = f * z;</span>
+<span class="fc" id="L1516">			            s = h * z;</span>
                     }
-<span class="fc" id="L1509">                    f = c * g + s * y;</span>
-<span class="fc" id="L1510">                    x = c * y - s * g;</span>
-<span class="fc bfc" id="L1511" title="All 2 branches covered.">                    for (jj = 0; jj &lt; m; jj++) {</span>
-<span class="fc" id="L1512">			            y = u.getElementAt(jj,j);</span>
-<span class="fc" id="L1513">                        z = u.getElementAt(jj,i);</span>
-<span class="fc" id="L1514">			            u.setElementAt(jj,j, y * c + z * s);</span>
-<span class="fc" id="L1515">			            u.setElementAt(jj,i, z * c - y * s);</span>
+<span class="fc" id="L1518">                    f = c * g + s * y;</span>
+<span class="fc" id="L1519">                    x = c * y - s * g;</span>
+<span class="fc bfc" id="L1520" title="All 2 branches covered.">                    for (jj = 0; jj &lt; m; jj++) {</span>
+<span class="fc" id="L1521">			            y = u.getElementAt(jj,j);</span>
+<span class="fc" id="L1522">                        z = u.getElementAt(jj,i);</span>
+<span class="fc" id="L1523">			            u.setElementAt(jj,j, y * c + z * s);</span>
+<span class="fc" id="L1524">			            u.setElementAt(jj,i, z * c - y * s);</span>
                     }
 		        }
-<span class="fc" id="L1518">		        rv1[l] = 0.0;</span>
-<span class="fc" id="L1519">		        rv1[k] = f;</span>
-<span class="fc" id="L1520">		        w[k] = x;</span>
+<span class="fc" id="L1527">		        rv1[l] = 0.0;</span>
+<span class="fc" id="L1528">		        rv1[k] = f;</span>
+<span class="fc" id="L1529">		        w[k] = x;</span>
             }
         }
-<span class="fc" id="L1523">    }</span>
+<span class="fc" id="L1532">    }</span>
     
     /**
      * Reorders singular values from maximal to minimal, and also reorders
@@ -1528,73 +1537,73 @@ public class SingularValueDecomposer extends Decomposer {
      * still remains valid.
      */
     private void reorder() {
-<span class="fc" id="L1531">        int m = inputMatrix.getRows();</span>
-<span class="fc" id="L1532">	    int n = inputMatrix.getColumns();</span>
+<span class="fc" id="L1540">        int m = inputMatrix.getRows();</span>
+<span class="fc" id="L1541">	    int n = inputMatrix.getColumns();</span>
 		
-<span class="fc" id="L1534">	    int i, j, k, s, inc = 1;</span>
+<span class="fc" id="L1543">	    int i, j, k, s, inc = 1;</span>
 	    double sw;
-<span class="fc" id="L1536">	    double[] su = new double[m];</span>
-<span class="fc" id="L1537">	    double[] sv = new double[n];</span>
+<span class="fc" id="L1545">	    double[] su = new double[m];</span>
+<span class="fc" id="L1546">	    double[] sv = new double[n];</span>
 		
 	    do {
-<span class="fc" id="L1540">	        inc *= 3; inc++;</span>
-<span class="fc bfc" id="L1541" title="All 2 branches covered.">	    } while(inc &lt;= n);</span>
+<span class="fc" id="L1549">	        inc *= 3; inc++;</span>
+<span class="fc bfc" id="L1550" title="All 2 branches covered.">	    } while(inc &lt;= n);</span>
         do {
-<span class="fc" id="L1543">            inc /= 3;</span>
-<span class="fc bfc" id="L1544" title="All 2 branches covered.">            for (i = inc; i &lt; n; i++) {</span>
-<span class="fc" id="L1545">                sw = w[i];</span>
-<span class="fc bfc" id="L1546" title="All 2 branches covered.">		        for (k = 0; k &lt; m; k++) {</span>
-<span class="fc" id="L1547">                    su[k] = u.getElementAt(k, i);</span>
+<span class="fc" id="L1552">            inc /= 3;</span>
+<span class="fc bfc" id="L1553" title="All 2 branches covered.">            for (i = inc; i &lt; n; i++) {</span>
+<span class="fc" id="L1554">                sw = w[i];</span>
+<span class="fc bfc" id="L1555" title="All 2 branches covered.">		        for (k = 0; k &lt; m; k++) {</span>
+<span class="fc" id="L1556">                    su[k] = u.getElementAt(k, i);</span>
                 }
-<span class="fc bfc" id="L1549" title="All 2 branches covered.">		        for (k = 0; k &lt; n; k++) {</span>
-<span class="fc" id="L1550">                    sv[k] = v.getElementAt(k, i);</span>
+<span class="fc bfc" id="L1558" title="All 2 branches covered.">		        for (k = 0; k &lt; n; k++) {</span>
+<span class="fc" id="L1559">                    sv[k] = v.getElementAt(k, i);</span>
                 }
-<span class="fc" id="L1552">		        j = i;</span>
-<span class="fc bfc" id="L1553" title="All 2 branches covered.">		        while (w[j - inc] &lt; sw) {</span>
-<span class="fc" id="L1554">                    w[j] = w[j - inc];</span>
-<span class="fc bfc" id="L1555" title="All 2 branches covered.">                    for (k = 0; k &lt; m; k++) {</span>
-<span class="fc" id="L1556">                        u.setElementAt(k, j, u.getElementAt(k, j - inc));</span>
+<span class="fc" id="L1561">		        j = i;</span>
+<span class="fc bfc" id="L1562" title="All 2 branches covered.">		        while (w[j - inc] &lt; sw) {</span>
+<span class="fc" id="L1563">                    w[j] = w[j - inc];</span>
+<span class="fc bfc" id="L1564" title="All 2 branches covered.">                    for (k = 0; k &lt; m; k++) {</span>
+<span class="fc" id="L1565">                        u.setElementAt(k, j, u.getElementAt(k, j - inc));</span>
                     }
-<span class="fc bfc" id="L1558" title="All 2 branches covered.">                    for (k = 0; k &lt; n; k++) {</span>
-<span class="fc" id="L1559">                        v.setElementAt(k, j, v.getElementAt(k, j - inc));</span>
+<span class="fc bfc" id="L1567" title="All 2 branches covered.">                    for (k = 0; k &lt; n; k++) {</span>
+<span class="fc" id="L1568">                        v.setElementAt(k, j, v.getElementAt(k, j - inc));</span>
                     }
-<span class="fc" id="L1561">                    j -= inc;</span>
-<span class="fc bfc" id="L1562" title="All 2 branches covered.">                    if (j &lt; inc) {</span>
-<span class="fc" id="L1563">                        break;</span>
+<span class="fc" id="L1570">                    j -= inc;</span>
+<span class="fc bfc" id="L1571" title="All 2 branches covered.">                    if (j &lt; inc) {</span>
+<span class="fc" id="L1572">                        break;</span>
                     }
                 }
-<span class="fc" id="L1566">                w[j] = sw;</span>
-<span class="fc bfc" id="L1567" title="All 2 branches covered.">                for (k = 0; k &lt; m; k++) {</span>
-<span class="fc" id="L1568">                    u.setElementAt(k, j, su[k]);</span>
+<span class="fc" id="L1575">                w[j] = sw;</span>
+<span class="fc bfc" id="L1576" title="All 2 branches covered.">                for (k = 0; k &lt; m; k++) {</span>
+<span class="fc" id="L1577">                    u.setElementAt(k, j, su[k]);</span>
                 }
-<span class="fc bfc" id="L1570" title="All 2 branches covered.">                for (k = 0; k &lt; n; k++) {</span>
-<span class="fc" id="L1571">                    v.setElementAt(k, j, sv[k]);</span>
+<span class="fc bfc" id="L1579" title="All 2 branches covered.">                for (k = 0; k &lt; n; k++) {</span>
+<span class="fc" id="L1580">                    v.setElementAt(k, j, sv[k]);</span>
                 }
             }
-<span class="fc bfc" id="L1574" title="All 2 branches covered.">	    } while (inc &gt; 1);</span>
+<span class="fc bfc" id="L1583" title="All 2 branches covered.">	    } while (inc &gt; 1);</span>
 		
-<span class="fc bfc" id="L1576" title="All 2 branches covered.">	    for (k = 0; k &lt; n; k++) {</span>
-<span class="fc" id="L1577">            s = 0;</span>
-<span class="fc bfc" id="L1578" title="All 2 branches covered.">            for (i = 0; i &lt; m; i++) {</span>
-<span class="fc bfc" id="L1579" title="All 2 branches covered.">                if (u.getElementAt(i, k) &lt; 0.0) {</span>
-<span class="fc" id="L1580">                    s++;</span>
+<span class="fc bfc" id="L1585" title="All 2 branches covered.">	    for (k = 0; k &lt; n; k++) {</span>
+<span class="fc" id="L1586">            s = 0;</span>
+<span class="fc bfc" id="L1587" title="All 2 branches covered.">            for (i = 0; i &lt; m; i++) {</span>
+<span class="fc bfc" id="L1588" title="All 2 branches covered.">                if (u.getElementAt(i, k) &lt; 0.0) {</span>
+<span class="fc" id="L1589">                    s++;</span>
                 }
             }
-<span class="fc bfc" id="L1583" title="All 2 branches covered.">            for (j = 0; j &lt; n; j++) {</span>
-<span class="fc bfc" id="L1584" title="All 2 branches covered.">                if (v.getElementAt(j, k) &lt; 0.0) {</span>
-<span class="fc" id="L1585">                    s++;</span>
+<span class="fc bfc" id="L1592" title="All 2 branches covered.">            for (j = 0; j &lt; n; j++) {</span>
+<span class="fc bfc" id="L1593" title="All 2 branches covered.">                if (v.getElementAt(j, k) &lt; 0.0) {</span>
+<span class="fc" id="L1594">                    s++;</span>
                 }
             }
-<span class="fc bfc" id="L1588" title="All 2 branches covered.">            if (s &gt; (m + n) / 2) {</span>
-<span class="fc bfc" id="L1589" title="All 2 branches covered.">		        for (i = 0; i &lt; m; i++) {</span>
-<span class="fc" id="L1590">                    u.setElementAt(i, k, -u.getElementAt(i, k));</span>
+<span class="fc bfc" id="L1597" title="All 2 branches covered.">            if (s &gt; (m + n) / 2) {</span>
+<span class="fc bfc" id="L1598" title="All 2 branches covered.">		        for (i = 0; i &lt; m; i++) {</span>
+<span class="fc" id="L1599">                    u.setElementAt(i, k, -u.getElementAt(i, k));</span>
                 }
-<span class="fc bfc" id="L1592" title="All 2 branches covered.">		        for (j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L1593">                    v.setElementAt(j, k, -v.getElementAt(j, k));</span>
+<span class="fc bfc" id="L1601" title="All 2 branches covered.">		        for (j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L1602">                    v.setElementAt(j, k, -v.getElementAt(j, k));</span>
                 }
             }
 	    }
-<span class="fc" id="L1597">    }</span>
+<span class="fc" id="L1606">    }</span>
     
     /**
      * Sets threshold to be used to determine whether a singular value is
@@ -1608,8 +1617,8 @@ public class SingularValueDecomposer extends Decomposer {
      * value is negligible or not.
      */
     private void setNegligibleSingularValueThreshold(double threshold) {
-<span class="fc" id="L1611">        tsh = threshold;</span>
-<span class="fc" id="L1612">    }</span>
+<span class="fc" id="L1620">        tsh = threshold;</span>
+<span class="fc" id="L1621">    }</span>
     
     /**
      * Computes norm of a vector of 2 components 'a' and 'b' as
@@ -1625,14 +1634,14 @@ public class SingularValueDecomposer extends Decomposer {
      */
     private double pythag(double a, double b) {
         double absa, absb;
-<span class="fc" id="L1628">	    absa = Math.abs(a);</span>
-<span class="fc" id="L1629">	    absb = Math.abs(b);</span>
+<span class="fc" id="L1637">	    absa = Math.abs(a);</span>
+<span class="fc" id="L1638">	    absb = Math.abs(b);</span>
 		
-<span class="fc bfc" id="L1631" title="All 2 branches covered.">	    if (absa &gt; absb) {</span>
-<span class="fc" id="L1632">	        return absa * Math.sqrt(1.0 + (absb/absa)*(absb/absa));</span>
+<span class="fc bfc" id="L1640" title="All 2 branches covered.">	    if (absa &gt; absb) {</span>
+<span class="fc" id="L1641">	        return absa * Math.sqrt(1.0 + (absb/absa)*(absb/absa));</span>
         } else {
-<span class="fc bfc" id="L1634" title="All 2 branches covered.">	        return (absb == 0.0 ?</span>
-<span class="fc" id="L1635">                    0.0 : absb * Math.sqrt(1.0 + (absa/absb)*(absa/absb)));</span>
+<span class="fc bfc" id="L1643" title="All 2 branches covered.">	        return (absb == 0.0 ?</span>
+<span class="fc" id="L1644">                    0.0 : absb * Math.sqrt(1.0 + (absa/absb)*(absa/absb)));</span>
         }
     }
     
@@ -1644,7 +1653,7 @@ public class SingularValueDecomposer extends Decomposer {
      * @return a or -a depending on b sign.
      */
     private double sign(double a, double b) {
-<span class="pc bpc" id="L1647" title="2 of 6 branches missed.">        return (b &gt;= 0.0 ? (a &gt;= 0.0 ? a : -a) : (a &gt;= 0.0 ? -a : a));</span>
+<span class="pc bpc" id="L1656" title="2 of 6 branches missed.">        return (b &gt;= 0.0 ? (a &gt;= 0.0 ? a : -a) : (a &gt;= 0.0 ? -a : a));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

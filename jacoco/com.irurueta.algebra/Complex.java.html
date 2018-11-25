@@ -437,8 +437,10 @@ public class Complex implements Serializable {
      * equal.
      */
     public boolean equals(Complex other, double tolerance) {
-<span class="fc bfc" id="L440" title="All 2 branches covered.">        if(Math.abs(real - other.real) &gt; tolerance) return false;</span>
-<span class="pc bpc" id="L441" title="1 of 2 branches missed.">        return !(Math.abs(imaginary - other.imaginary) &gt; tolerance);</span>
+<span class="fc bfc" id="L440" title="All 2 branches covered.">        if(Math.abs(real - other.real) &gt; tolerance) {</span>
+<span class="fc" id="L441">            return false;</span>
+        }
+<span class="pc bpc" id="L443" title="1 of 2 branches missed.">        return Math.abs(imaginary - other.imaginary) &lt;= tolerance;</span>
     }
     
     /**
@@ -447,7 +449,7 @@ public class Complex implements Serializable {
      */
     @Override
     public Complex clone() {
-<span class="fc" id="L450">        return new Complex(real, imaginary);</span>
+<span class="fc" id="L452">        return new Complex(real, imaginary);</span>
     }
     
     /**
@@ -455,8 +457,8 @@ public class Complex implements Serializable {
      * @param value Value to copy from
      */
     public void copyFrom(Complex value) {
-<span class="fc" id="L458">        this.real = value.real;</span>
-<span class="fc" id="L459">        this.imaginary = value.imaginary;</span>
-<span class="fc" id="L460">    }</span>
+<span class="fc" id="L460">        this.real = value.real;</span>
+<span class="fc" id="L461">        this.imaginary = value.imaginary;</span>
+<span class="fc" id="L462">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

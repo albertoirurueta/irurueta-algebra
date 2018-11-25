@@ -109,10 +109,14 @@ public class OneNormComputer extends NormComputer {
         
 <span class="pc bpc" id="L110" title="1 of 2 branches missed.">        if (jacobian != null) {</span>
 <span class="fc" id="L111">            jacobian.fromArray(array);</span>
-<span class="fc" id="L112">            jacobian.multiplyByScalar(1.0 / norm);</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">            if (norm != 0.0) {</span>
+<span class="fc" id="L113">                jacobian.multiplyByScalar(1.0 / norm);</span>
+            } else {
+<span class="fc" id="L115">                jacobian.initialize(Double.MAX_VALUE);</span>
+            }
         }
         
-<span class="fc" id="L115">        return norm;        </span>
+<span class="fc" id="L119">        return norm;        </span>
     }
 
     /**
@@ -122,7 +126,7 @@ public class OneNormComputer extends NormComputer {
      */    
     @Override
     public double getNorm(double[] array) {
-<span class="fc" id="L125">        return norm(array);</span>
+<span class="fc" id="L129">        return norm(array);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

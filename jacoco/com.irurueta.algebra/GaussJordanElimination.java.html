@@ -23,7 +23,13 @@ package com.irurueta.algebra;
  * elimination both inverts matrix A and finds solution x at the same time.
  */
 @SuppressWarnings(&quot;WeakerAccess&quot;)
-<span class="nc" id="L26">public class GaussJordanElimination {</span>
+public class GaussJordanElimination {
+
+    /**
+     * Constructor.
+     * Prevents instantiation.
+     */
+    private GaussJordanElimination() { }
     
     /**
      * Computes Gauss-Jordan elimination by attempting to solve linear system
@@ -45,91 +51,101 @@ package com.irurueta.algebra;
      */
     public static void process(Matrix a, Matrix b) 
             throws SingularMatrixException, WrongSizeException {
-<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (a.getRows() != a.getColumns()) {</span>
-<span class="fc" id="L49">            throw new WrongSizeException();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (a.getRows() != a.getColumns()) {</span>
+<span class="fc" id="L55">            throw new WrongSizeException();</span>
         }
-<span class="fc bfc" id="L51" title="All 4 branches covered.">        if (b != null &amp;&amp; b.getRows() != a.getRows()) {</span>
-<span class="fc" id="L52">            throw new WrongSizeException();</span>
+<span class="fc bfc" id="L57" title="All 4 branches covered.">        if (b != null &amp;&amp; b.getRows() != a.getRows()) {</span>
+<span class="fc" id="L58">            throw new WrongSizeException();</span>
         }
         
-<span class="fc" id="L55">        int i, icol = 0, irow = 0, j, k, l, ll, n = a.getRows();</span>
-<span class="fc bfc" id="L56" title="All 2 branches covered.">        int m = b != null ? b.getColumns() : 0;</span>
+        int i;
+<span class="fc" id="L62">        int icol = 0;</span>
+<span class="fc" id="L63">        int irow = 0;</span>
+        int j;
+        int k;
+        int l;
+        int ll;
+<span class="fc" id="L68">        int n = a.getRows();</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        int m = b != null ? b.getColumns() : 0;</span>
         
-        double big, dum, pivinv, value;
-<span class="fc" id="L59">        int[] indxc = new int[n];</span>
-<span class="fc" id="L60">        int[] indxr = new int[n];</span>
-<span class="fc" id="L61">        int[] ipiv = new int[n];</span>
+        double big;
+        double dum;
+        double pivinv;
+        double value;
+<span class="fc" id="L75">        int[] indxc = new int[n];</span>
+<span class="fc" id="L76">        int[] indxr = new int[n];</span>
+<span class="fc" id="L77">        int[] ipiv = new int[n];</span>
         
-<span class="fc bfc" id="L63" title="All 2 branches covered.">        for (j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L64">            ipiv[j] = 0;</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L80">            ipiv[j] = 0;</span>
         }
-<span class="fc bfc" id="L66" title="All 2 branches covered.">        for (i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L67">            big = 0.0;</span>
-<span class="fc bfc" id="L68" title="All 2 branches covered.">            for (j = 0; j &lt; n; j++) {</span>
-<span class="fc bfc" id="L69" title="All 2 branches covered.">                if (ipiv[j] != 1) {</span>
-<span class="fc bfc" id="L70" title="All 2 branches covered.">                    for (k = 0; k &lt; n; k++) {</span>
-<span class="fc bfc" id="L71" title="All 2 branches covered.">			            if (ipiv[k] == 0) {</span>
-<span class="fc" id="L72">                            value = Math.abs(a.getElementAt(j, k));</span>
-<span class="fc bfc" id="L73" title="All 2 branches covered.">                            if (value &gt;= big) {</span>
-<span class="fc" id="L74">                                big=value;</span>
-<span class="fc" id="L75">				                irow=j;</span>
-<span class="fc" id="L76">				                icol=k;</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        for (i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L83">            big = 0.0;</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">            for (j = 0; j &lt; n; j++) {</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">                if (ipiv[j] != 1) {</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">                    for (k = 0; k &lt; n; k++) {</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">			            if (ipiv[k] == 0) {</span>
+<span class="fc" id="L88">                            value = Math.abs(a.getElementAt(j, k));</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">                            if (value &gt;= big) {</span>
+<span class="fc" id="L90">                                big=value;</span>
+<span class="fc" id="L91">				                irow=j;</span>
+<span class="fc" id="L92">				                icol=k;</span>
                             }
 			            }
                     }
                 }
             }
-<span class="fc" id="L82">            ++(ipiv[icol]);</span>
-<span class="fc bfc" id="L83" title="All 2 branches covered.">            if (irow != icol) {</span>
-<span class="fc bfc" id="L84" title="All 2 branches covered.">                for (l = 0; l &lt; n; l++) {</span>
-<span class="fc" id="L85">                    swap(a.getBuffer(), a.getBuffer(), </span>
-<span class="fc" id="L86">                            a.getIndex(irow, l),</span>
-<span class="fc" id="L87">                            a.getIndex(icol, l));</span>
+<span class="fc" id="L98">            ++(ipiv[icol]);</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">            if (irow != icol) {</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">                for (l = 0; l &lt; n; l++) {</span>
+<span class="fc" id="L101">                    swap(a.getBuffer(), a.getBuffer(), </span>
+<span class="fc" id="L102">                            a.getIndex(irow, l),</span>
+<span class="fc" id="L103">                            a.getIndex(icol, l));</span>
                 }
-<span class="fc bfc" id="L89" title="All 2 branches covered.">                for (l = 0; l &lt; m; l++) {</span>
-<span class="fc" id="L90">                    swap(b.getBuffer(), b.getBuffer(),</span>
-<span class="fc" id="L91">                            b.getIndex(irow, l),</span>
-<span class="fc" id="L92">                            b.getIndex(icol, l));</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">                for (l = 0; l &lt; m; l++) {</span>
+<span class="fc" id="L106">                    swap(b.getBuffer(), b.getBuffer(),</span>
+<span class="fc" id="L107">                            b.getIndex(irow, l),</span>
+<span class="fc" id="L108">                            b.getIndex(icol, l));</span>
                 }
             }
-<span class="fc" id="L95">            indxr[i]=irow;</span>
-<span class="fc" id="L96">            indxc[i]=icol;</span>
-<span class="fc" id="L97">            value = a.getElementAt(icol, icol);</span>
-<span class="fc bfc" id="L98" title="All 2 branches covered.">            if (value == 0.0) {</span>
-<span class="fc" id="L99">                throw new SingularMatrixException();</span>
+<span class="fc" id="L111">            indxr[i]=irow;</span>
+<span class="fc" id="L112">            indxc[i]=icol;</span>
+<span class="fc" id="L113">            value = a.getElementAt(icol, icol);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">            if (value == 0.0) {</span>
+<span class="fc" id="L115">                throw new SingularMatrixException();</span>
             }
-<span class="fc" id="L101">            pivinv=1.0/value;</span>
-<span class="fc" id="L102">            a.setElementAt(icol, icol, 1.0);</span>
-<span class="fc bfc" id="L103" title="All 2 branches covered.">            for (l = 0; l &lt; n; l++) {</span>
-<span class="fc" id="L104">                a.setElementAt(icol, l, a.getElementAt(icol, l) * pivinv);</span>
+<span class="fc" id="L117">            pivinv=1.0/value;</span>
+<span class="fc" id="L118">            a.setElementAt(icol, icol, 1.0);</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">            for (l = 0; l &lt; n; l++) {</span>
+<span class="fc" id="L120">                a.setElementAt(icol, l, a.getElementAt(icol, l) * pivinv);</span>
             }
-<span class="fc bfc" id="L106" title="All 2 branches covered.">            for (l = 0; l &lt; m; l++) {</span>
-<span class="fc" id="L107">                b.setElementAt(icol, l, b.getElementAt(icol, l) * pivinv);</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">            for (l = 0; l &lt; m; l++) {</span>
+<span class="fc" id="L123">                b.setElementAt(icol, l, b.getElementAt(icol, l) * pivinv);</span>
             }
-<span class="fc bfc" id="L109" title="All 2 branches covered.">            for (ll = 0; ll &lt; n; ll++) {</span>
-<span class="fc bfc" id="L110" title="All 2 branches covered.">                if (ll != icol) {</span>
-<span class="fc" id="L111">                    dum = a.getElementAt(ll, icol);</span>
-<span class="fc" id="L112">                    a.setElementAt(ll, icol, 0.0);</span>
-<span class="fc bfc" id="L113" title="All 2 branches covered.">                    for (l = 0; l &lt; n; l++) {</span>
-<span class="fc" id="L114">                        a.setElementAt(ll, l, a.getElementAt(ll, l) - </span>
-<span class="fc" id="L115">                                a.getElementAt(icol, l) * dum);</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">            for (ll = 0; ll &lt; n; ll++) {</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">                if (ll != icol) {</span>
+<span class="fc" id="L127">                    dum = a.getElementAt(ll, icol);</span>
+<span class="fc" id="L128">                    a.setElementAt(ll, icol, 0.0);</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">                    for (l = 0; l &lt; n; l++) {</span>
+<span class="fc" id="L130">                        a.setElementAt(ll, l, a.getElementAt(ll, l) - </span>
+<span class="fc" id="L131">                                a.getElementAt(icol, l) * dum);</span>
                     }
-<span class="fc bfc" id="L117" title="All 2 branches covered.">                    for (l = 0; l &lt; m; l++) {</span>
-<span class="fc" id="L118">                        b.setElementAt(ll, l, b.getElementAt(ll, l) - </span>
-<span class="fc" id="L119">                                b.getElementAt(icol, l) * dum);</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">                    for (l = 0; l &lt; m; l++) {</span>
+<span class="fc" id="L134">                        b.setElementAt(ll, l, b.getElementAt(ll, l) - </span>
+<span class="fc" id="L135">                                b.getElementAt(icol, l) * dum);</span>
                     }
                 }
             }
 	    }
-<span class="fc bfc" id="L124" title="All 2 branches covered.">	    for(l = n - 1; l &gt;= 0; l--) {</span>
-<span class="fc bfc" id="L125" title="All 2 branches covered.">            if (indxr[l] != indxc[l]) {</span>
-<span class="fc bfc" id="L126" title="All 2 branches covered.">		        for (k = 0; k &lt; n; k++) {</span>
-<span class="fc" id="L127">                    swap(a.getBuffer(), a.getBuffer(),</span>
-<span class="fc" id="L128">                            a.getIndex(k, indxr[l]), a.getIndex(k, indxc[l]));</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">	    for(l = n - 1; l &gt;= 0; l--) {</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">            if (indxr[l] != indxc[l]) {</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">		        for (k = 0; k &lt; n; k++) {</span>
+<span class="fc" id="L143">                    swap(a.getBuffer(), a.getBuffer(),</span>
+<span class="fc" id="L144">                            a.getIndex(k, indxr[l]), a.getIndex(k, indxc[l]));</span>
                 }
             }
 	    }
-<span class="fc" id="L132">    }</span>
+<span class="fc" id="L148">    }</span>
     
     /**
      * Computes Gauss-Jordan elimination by attempting to solve linear system
@@ -149,13 +165,13 @@ package com.irurueta.algebra;
      */    
     public static void process(Matrix a, double[] b) 
             throws SingularMatrixException, WrongSizeException {
-<span class="pc bpc" id="L152" title="1 of 2 branches missed.">        Matrix mb = b != null ? Matrix.newFromArray(b) : null;</span>
-<span class="fc" id="L153">        process(a, mb);</span>
-<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        if (mb != null) {</span>
-<span class="fc" id="L155">            double[] buffer = mb.getBuffer();</span>
-<span class="fc" id="L156">            System.arraycopy(buffer, 0, b, 0, b.length);</span>
+<span class="pc bpc" id="L168" title="1 of 2 branches missed.">        Matrix mb = b != null ? Matrix.newFromArray(b) : null;</span>
+<span class="fc" id="L169">        process(a, mb);</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">        if (mb != null) {</span>
+<span class="fc" id="L171">            double[] buffer = mb.getBuffer();</span>
+<span class="fc" id="L172">            System.arraycopy(buffer, 0, b, 0, b.length);</span>
         }
-<span class="fc" id="L158">    }</span>
+<span class="fc" id="L174">    }</span>
     
     /**
      * Computes inverse of matrix a. No solution of a linear system of equations
@@ -168,8 +184,8 @@ package com.irurueta.algebra;
      */
     public static void inverse(Matrix a) 
             throws SingularMatrixException, WrongSizeException {
-<span class="fc" id="L171">        process(a, (Matrix)null);</span>
-<span class="fc" id="L172">    }</span>
+<span class="fc" id="L187">        process(a, (Matrix)null);</span>
+<span class="fc" id="L188">    }</span>
     
     /**
      * Swaps values in arrays at provided positions
@@ -180,11 +196,11 @@ package com.irurueta.algebra;
      */
     private static void swap(double[] array1, double[] array2, 
             int pos1, int pos2) {
-<span class="fc" id="L183">        double value1 = array1[pos1];</span>
-<span class="fc" id="L184">        double value2 = array2[pos2];</span>
+<span class="fc" id="L199">        double value1 = array1[pos1];</span>
+<span class="fc" id="L200">        double value2 = array2[pos2];</span>
         
-<span class="fc" id="L186">        array1[pos1] = value2;</span>
-<span class="fc" id="L187">        array2[pos1] = value1;</span>
-<span class="fc" id="L188">    }</span>
+<span class="fc" id="L202">        array1[pos1] = value2;</span>
+<span class="fc" id="L203">        array2[pos1] = value1;</span>
+<span class="fc" id="L204">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

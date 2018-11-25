@@ -445,28 +445,30 @@
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">     * equal.</em>
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L439" href="#L439">439</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(<a href="../../../com/irurueta/algebra/Complex.html">Complex</a> other, <strong class="jxr_keyword">double</strong> tolerance) {
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>         <strong class="jxr_keyword">if</strong>(Math.abs(real - other.real) &gt; tolerance) <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>         <strong class="jxr_keyword">return</strong> !(Math.abs(imaginary - other.imaginary) &gt; tolerance);
-<a class="jxr_linenumber" name="L442" href="#L442">442</a>     }
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>     
-<a class="jxr_linenumber" name="L444" href="#L444">444</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">     * Makes a copy of this instance having the same real and imaginary parts</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">     * @return a copy of this instance</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a>     @Override
-<a class="jxr_linenumber" name="L449" href="#L449">449</a>     <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/algebra/Complex.html">Complex</a> clone() {
-<a class="jxr_linenumber" name="L450" href="#L450">450</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/algebra/Complex.html">Complex</a>(real, imaginary);
-<a class="jxr_linenumber" name="L451" href="#L451">451</a>     }
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>     
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">     * Copies provided value into current instance</em>
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">     * @param value Value to copy from</em>
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L457" href="#L457">457</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> copyFrom(<a href="../../../com/irurueta/algebra/Complex.html">Complex</a> value) {
-<a class="jxr_linenumber" name="L458" href="#L458">458</a>         <strong class="jxr_keyword">this</strong>.real = value.real;
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>         <strong class="jxr_keyword">this</strong>.imaginary = value.imaginary;
-<a class="jxr_linenumber" name="L460" href="#L460">460</a>     }
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> }
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>         <strong class="jxr_keyword">if</strong>(Math.abs(real - other.real) &gt; tolerance) {
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>             <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>         }
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>         <strong class="jxr_keyword">return</strong> Math.abs(imaginary - other.imaginary) &lt;= tolerance;
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>     }
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>     
+<a class="jxr_linenumber" name="L446" href="#L446">446</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">     * Makes a copy of this instance having the same real and imaginary parts</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">     * @return a copy of this instance</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>     @Override
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>     <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/algebra/Complex.html">Complex</a> clone() {
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/algebra/Complex.html">Complex</a>(real, imaginary);
+<a class="jxr_linenumber" name="L453" href="#L453">453</a>     }
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>     
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">     * Copies provided value into current instance</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">     * @param value Value to copy from</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> copyFrom(<a href="../../../com/irurueta/algebra/Complex.html">Complex</a> value) {
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>         <strong class="jxr_keyword">this</strong>.real = value.real;
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>         <strong class="jxr_keyword">this</strong>.imaginary = value.imaginary;
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>     }
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>
