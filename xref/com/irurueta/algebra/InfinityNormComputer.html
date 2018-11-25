@@ -58,39 +58,39 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">double</strong> norm(<a href="../../../com/irurueta/algebra/Matrix.html">Matrix</a> m) {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>          <strong class="jxr_keyword">int</strong> rows = m.getRows();
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">int</strong> columns = m.getColumns();
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>          <strong class="jxr_keyword">double</strong> rowSum, maxRowSum = 0.0;
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>          
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>          <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; rows; i++) {
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>              rowSum = 0.0;
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>              <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; columns; j++) {
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>                  rowSum += Math.abs(m.getElementAt(i, j));
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>              }
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>              
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>              maxRowSum = rowSum &gt; maxRowSum ? rowSum : maxRowSum;
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>          }
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>          
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">return</strong> maxRowSum;        
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      }
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">     * Computes norm of provided array and stores the jacobian into provided</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">     * instance.</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">     * @param array array being used for norm computation.</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">     * @param jacobian instance where jacobian will be stored. Must be 1xN,</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">     * where N is length of array.</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">     * @return norm of provided vector.</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">     * @throws WrongSizeException if provided jacobian is not 1xN, where N is</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">     * length of array.</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">double</strong> norm(<strong class="jxr_keyword">double</strong>[] array, <a href="../../../com/irurueta/algebra/Matrix.html">Matrix</a> jacobian)
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>              <strong class="jxr_keyword">throws</strong> <a href="../../../com/irurueta/algebra/WrongSizeException.html">WrongSizeException</a> {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>          <strong class="jxr_keyword">if</strong> (jacobian != <strong class="jxr_keyword">null</strong> &amp;&amp; (jacobian.getRows() != 1 ||
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  jacobian.getColumns() != array.length)) {
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/algebra/WrongSizeException.html">WrongSizeException</a>(<span class="jxr_string">"jacobian must be 1xN, where "</span> + 
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>                      <span class="jxr_string">"N is length of array"</span>);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>          <strong class="jxr_keyword">double</strong> rowSum;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>          <strong class="jxr_keyword">double</strong> maxRowSum = 0.0;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>          
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; rows; i++) {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>              rowSum = 0.0;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>              <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; columns; j++) {
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>                  rowSum += Math.abs(m.getElementAt(i, j));
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>              }
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>              
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>              maxRowSum = rowSum &gt; maxRowSum ? rowSum : maxRowSum;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">return</strong> maxRowSum;        
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      }
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">     * Computes norm of provided array and stores the jacobian into provided</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">     * instance.</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">     * @param array array being used for norm computation.</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">     * @param jacobian instance where jacobian will be stored. Must be 1xN,</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">     * where N is length of array.</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">     * @return norm of provided vector.</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">     * @throws WrongSizeException if provided jacobian is not 1xN, where N is</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">     * length of array.</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">double</strong> norm(<strong class="jxr_keyword">double</strong>[] array, <a href="../../../com/irurueta/algebra/Matrix.html">Matrix</a> jacobian)
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>              <strong class="jxr_keyword">throws</strong> <a href="../../../com/irurueta/algebra/WrongSizeException.html">WrongSizeException</a> {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>          <strong class="jxr_keyword">if</strong> (jacobian != <strong class="jxr_keyword">null</strong> &amp;&amp; (jacobian.getRows() != 1 ||
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                  jacobian.getColumns() != array.length)) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/algebra/WrongSizeException.html">WrongSizeException</a>();
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>          }
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>          
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">double</strong> norm = norm(array);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">double</strong> norm = InfinityNormComputer.norm(array);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>          <strong class="jxr_keyword">if</strong> (jacobian != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>              jacobian.fromArray(array);

@@ -70,18 +70,17 @@ public class FrobeniusNormComputer extends NormComputer {
             throws WrongSizeException{
 <span class="pc bpc" id="L71" title="1 of 4 branches missed.">        if (jacobian != null &amp;&amp; (jacobian.getRows() != 1 ||</span>
 <span class="pc bpc" id="L72" title="1 of 2 branches missed.">                jacobian.getColumns() != array.length)) {</span>
-<span class="fc" id="L73">            throw new WrongSizeException(&quot;jacobian must be 1xN, where &quot; + </span>
-                    &quot;N is length of array&quot;);
+<span class="fc" id="L73">            throw new WrongSizeException();</span>
         }
         
-<span class="fc" id="L77">        double norm = norm(array);</span>
+<span class="fc" id="L76">        double norm = FrobeniusNormComputer.norm(array);</span>
         
-<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (jacobian != null) {</span>
-<span class="fc" id="L80">            jacobian.fromArray(array);</span>
-<span class="fc" id="L81">            jacobian.multiplyByScalar(1.0 / norm);</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (jacobian != null) {</span>
+<span class="fc" id="L79">            jacobian.fromArray(array);</span>
+<span class="fc" id="L80">            jacobian.multiplyByScalar(1.0 / norm);</span>
         }
         
-<span class="fc" id="L84">        return norm;        </span>
+<span class="fc" id="L83">        return norm;        </span>
     }    
 
     /**
@@ -91,7 +90,7 @@ public class FrobeniusNormComputer extends NormComputer {
      */    
     @Override
     public double getNorm(Matrix m) {
-<span class="fc" id="L94">        return norm(m);</span>
+<span class="fc" id="L93">        return norm(m);</span>
     }
     
     /**
@@ -100,11 +99,11 @@ public class FrobeniusNormComputer extends NormComputer {
      * @return norm of provided vector.
      */
     public static double norm(double[] array) {
-<span class="fc" id="L103">        double sum = 0.0;</span>
-<span class="fc bfc" id="L104" title="All 2 branches covered.">        for (double value : array) {</span>
-<span class="fc" id="L105">            sum += value * value;</span>
+<span class="fc" id="L102">        double sum = 0.0;</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        for (double value : array) {</span>
+<span class="fc" id="L104">            sum += value * value;</span>
         }
-<span class="fc" id="L107">        return Math.sqrt(sum);        </span>
+<span class="fc" id="L106">        return Math.sqrt(sum);        </span>
     }
 
     /**
@@ -114,7 +113,7 @@ public class FrobeniusNormComputer extends NormComputer {
      */    
     @Override
     public double getNorm(double[] array) {
-<span class="fc" id="L117">        return norm(array);</span>
+<span class="fc" id="L116">        return norm(array);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

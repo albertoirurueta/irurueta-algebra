@@ -476,7 +476,7 @@ public class SingularValueDecomposer extends Decomposer {
         }
         
 <span class="fc" id="L478">        int columns = inputMatrix.getColumns();</span>
-<span class="pc bpc" id="L479" title="1 of 4 branches missed.">        return (w[0] &lt;= 0.0 || w[columns - 1] &lt;= 0.0) ? 0.0 : </span>
+<span class="pc bpc" id="L479" title="2 of 4 branches missed.">        return (w[0] &lt;= 0.0 || w[columns - 1] &lt;= 0.0) ? 0.0 : </span>
 <span class="fc" id="L480">                w[columns - 1] / w[0];</span>
     }
     
@@ -1510,7 +1510,7 @@ public class SingularValueDecomposer extends Decomposer {
 <span class="fc" id="L1510">                    z = pythag(f, h);</span>
                     //Rotation can be arbitrary if z = 0
 <span class="fc" id="L1512">                    w[j] = z;</span>
-<span class="fc bfc" id="L1513" title="All 2 branches covered.">                    if (z != 0.0) {</span>
+<span class="pc bpc" id="L1513" title="1 of 2 branches missed.">                    if (z != 0.0) {</span>
 <span class="fc" id="L1514">			            z = 1.0 / z;</span>
 <span class="fc" id="L1515">			            c = f * z;</span>
 <span class="fc" id="L1516">			            s = h * z;</span>
@@ -1640,8 +1640,8 @@ public class SingularValueDecomposer extends Decomposer {
 <span class="fc bfc" id="L1640" title="All 2 branches covered.">	    if (absa &gt; absb) {</span>
 <span class="fc" id="L1641">	        return absa * Math.sqrt(1.0 + (absb/absa)*(absb/absa));</span>
         } else {
-<span class="fc bfc" id="L1643" title="All 2 branches covered.">	        return (absb == 0.0 ?</span>
-<span class="fc" id="L1644">                    0.0 : absb * Math.sqrt(1.0 + (absa/absb)*(absa/absb)));</span>
+<span class="pc bpc" id="L1643" title="1 of 2 branches missed.">	        return (absb == 0.0 ?</span>
+<span class="pc" id="L1644">                    0.0 : absb * Math.sqrt(1.0 + (absa/absb)*(absa/absb)));</span>
         }
     }
     

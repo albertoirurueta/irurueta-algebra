@@ -256,34 +256,33 @@ public class LUDecomposer extends Decomposer {
      * @see #decompose()
      */
     public boolean isSingular(double roundingError) 
-            throws NotAvailableException, WrongSizeException, 
-            IllegalArgumentException {
+            throws NotAvailableException, WrongSizeException {
         
-<span class="fc bfc" id="L262" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
-<span class="fc" id="L263">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L261" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
+<span class="fc" id="L262">            throw new NotAvailableException();</span>
         }
-<span class="fc bfc" id="L265" title="All 2 branches covered.">        if (roundingError &lt; MIN_ROUND_ERROR) {</span>
-<span class="fc" id="L266">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L264" title="All 2 branches covered.">        if (roundingError &lt; MIN_ROUND_ERROR) {</span>
+<span class="fc" id="L265">            throw new IllegalArgumentException();</span>
         }
         
         //A matrix is singular when its determinant is zero. Hence, in order to
         //compute singularity matrix must be square
-<span class="fc" id="L271">        int rows = inputMatrix.getRows();</span>
-<span class="fc" id="L272">        int columns = inputMatrix.getColumns();</span>
-<span class="fc bfc" id="L273" title="All 2 branches covered.">        if (rows != columns) {</span>
-<span class="fc" id="L274">            throw new WrongSizeException();</span>
+<span class="fc" id="L270">        int rows = inputMatrix.getRows();</span>
+<span class="fc" id="L271">        int columns = inputMatrix.getColumns();</span>
+<span class="fc bfc" id="L272" title="All 2 branches covered.">        if (rows != columns) {</span>
+<span class="fc" id="L273">            throw new WrongSizeException();</span>
         }
         
         //Since we have computed LU decomposition into triangular matrices. The
         //determinant of a triangular matrix is the product of its diagonal
         //elements. Hence, if any element in the diagonal is zero, input matrix
         //will be singular.
-<span class="fc bfc" id="L281" title="All 2 branches covered.">        for (int j = 0; j &lt; columns; j++) {</span>
-<span class="fc bfc" id="L282" title="All 2 branches covered.">            if (lu.getElementAt(j, j) == 0.0) {</span>
-<span class="fc" id="L283">                return true;</span>
+<span class="fc bfc" id="L280" title="All 2 branches covered.">        for (int j = 0; j &lt; columns; j++) {</span>
+<span class="fc bfc" id="L281" title="All 2 branches covered.">            if (lu.getElementAt(j, j) == 0.0) {</span>
+<span class="fc" id="L282">                return true;</span>
             }
         }
-<span class="fc" id="L286">        return false;</span>
+<span class="fc" id="L285">        return false;</span>
     }
     
     /**
@@ -303,31 +302,33 @@ public class LUDecomposer extends Decomposer {
      */    
     public void getPivottedL(Matrix pivottedL) throws NotAvailableException {
         
-<span class="pc bpc" id="L306" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L307">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L305" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L306">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L310">        int rows = lu.getRows();</span>
-<span class="fc" id="L311">        int columns = lu.getColumns();</span>
+<span class="fc" id="L309">        int rows = lu.getRows();</span>
+<span class="fc" id="L310">        int columns = lu.getColumns();</span>
         
-<span class="pc bpc" id="L313" title="2 of 4 branches missed.">        if (pivottedL.getRows() != rows || pivottedL.getColumns() != columns) {</span>
+<span class="pc bpc" id="L312" title="2 of 4 branches missed.">        if (pivottedL.getRows() != rows || pivottedL.getColumns() != columns) {</span>
             try {
-<span class="nc" id="L315">                pivottedL.resize(rows, columns);</span>
-<span class="nc" id="L316">            } catch (WrongSizeException ignore) { }</span>
+<span class="nc" id="L314">                pivottedL.resize(rows, columns);</span>
+<span class="nc" id="L315">            } catch (WrongSizeException ignore) {</span>
+                //never happens
+<span class="nc" id="L317">            }</span>
         }
         
-<span class="fc bfc" id="L319" title="All 2 branches covered.">        for (int i = 0; i &lt; rows; i++) {</span>
-<span class="fc bfc" id="L320" title="All 2 branches covered.">            for (int j = 0; j &lt; columns; j++) {</span>
-<span class="fc bfc" id="L321" title="All 2 branches covered.">                if (i &gt; j) {</span>
-<span class="fc" id="L322">                    pivottedL.setElementAt(i, j, lu.getElementAt(i, j));</span>
-<span class="fc bfc" id="L323" title="All 2 branches covered.">                } else if (i == j) {</span>
-<span class="fc" id="L324">                    pivottedL.setElementAt(i, j, 1.0);</span>
+<span class="fc bfc" id="L320" title="All 2 branches covered.">        for (int i = 0; i &lt; rows; i++) {</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">            for (int j = 0; j &lt; columns; j++) {</span>
+<span class="fc bfc" id="L322" title="All 2 branches covered.">                if (i &gt; j) {</span>
+<span class="fc" id="L323">                    pivottedL.setElementAt(i, j, lu.getElementAt(i, j));</span>
+<span class="fc bfc" id="L324" title="All 2 branches covered.">                } else if (i == j) {</span>
+<span class="fc" id="L325">                    pivottedL.setElementAt(i, j, 1.0);</span>
                 } else {
-<span class="fc" id="L326">                    pivottedL.setElementAt(i, j, 0.0);</span>
+<span class="fc" id="L327">                    pivottedL.setElementAt(i, j, 0.0);</span>
                 }
             }
         }   
-<span class="fc" id="L330">    }</span>
+<span class="fc" id="L331">    }</span>
     
     /**
      * Returns a new matrix instance containing the Lower triangular matrix
@@ -346,19 +347,21 @@ public class LUDecomposer extends Decomposer {
      */
     public Matrix getPivottedL() throws NotAvailableException {
 
-<span class="fc bfc" id="L349" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
-<span class="fc" id="L350">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L350" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
+<span class="fc" id="L351">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L353">        int rows = lu.getRows();</span>
-<span class="fc" id="L354">        int columns = lu.getColumns();</span>
+<span class="fc" id="L354">        int rows = lu.getRows();</span>
+<span class="fc" id="L355">        int columns = lu.getColumns();</span>
         
-<span class="fc" id="L356">        Matrix out = null;</span>
+<span class="fc" id="L357">        Matrix out = null;</span>
         try {
-<span class="fc" id="L358">            out = new Matrix(rows, columns);</span>
-<span class="pc" id="L359">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L360">        getPivottedL(out);</span>
-<span class="fc" id="L361">        return out;</span>
+<span class="fc" id="L359">            out = new Matrix(rows, columns);</span>
+<span class="nc" id="L360">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L362">        }</span>
+<span class="fc" id="L363">        getPivottedL(out);</span>
+<span class="fc" id="L364">        return out;</span>
     }
     
     /**
@@ -378,31 +381,33 @@ public class LUDecomposer extends Decomposer {
      * @see #decompose()
      */    
     public void getL(Matrix l) throws NotAvailableException {
-<span class="pc bpc" id="L381" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L382">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L384" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L385">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L385">        int rows = lu.getRows();</span>
-<span class="fc" id="L386">        int columns = lu.getColumns();</span>
+<span class="fc" id="L388">        int rows = lu.getRows();</span>
+<span class="fc" id="L389">        int columns = lu.getColumns();</span>
         
-<span class="pc bpc" id="L388" title="2 of 4 branches missed.">        if (l.getRows() != rows || l.getColumns() != columns) {</span>
+<span class="pc bpc" id="L391" title="2 of 4 branches missed.">        if (l.getRows() != rows || l.getColumns() != columns) {</span>
             try {
-<span class="nc" id="L390">                l.resize(rows, columns);</span>
-<span class="nc" id="L391">            } catch (WrongSizeException ignore) { }</span>
+<span class="nc" id="L393">                l.resize(rows, columns);</span>
+<span class="nc" id="L394">            } catch (WrongSizeException ignore) {</span>
+                //never happens
+<span class="nc" id="L396">            }</span>
         }
         
-<span class="fc bfc" id="L394" title="All 2 branches covered.">        for (int i = 0; i &lt; rows; i++) {</span>
-<span class="fc bfc" id="L395" title="All 2 branches covered.">            for (int j = 0; j &lt; columns; j++) {</span>
-<span class="fc bfc" id="L396" title="All 2 branches covered.">                if (i &gt; j) {</span>
-<span class="fc" id="L397">                    l.setElementAt(piv[i], j, lu.getElementAt(i, j));</span>
-<span class="fc bfc" id="L398" title="All 2 branches covered.">                } else if (i == j) {</span>
-<span class="fc" id="L399">                    l.setElementAt(piv[i], j, 1.0);</span>
+<span class="fc bfc" id="L399" title="All 2 branches covered.">        for (int i = 0; i &lt; rows; i++) {</span>
+<span class="fc bfc" id="L400" title="All 2 branches covered.">            for (int j = 0; j &lt; columns; j++) {</span>
+<span class="fc bfc" id="L401" title="All 2 branches covered.">                if (i &gt; j) {</span>
+<span class="fc" id="L402">                    l.setElementAt(piv[i], j, lu.getElementAt(i, j));</span>
+<span class="fc bfc" id="L403" title="All 2 branches covered.">                } else if (i == j) {</span>
+<span class="fc" id="L404">                    l.setElementAt(piv[i], j, 1.0);</span>
                 } else {
-<span class="fc" id="L401">                    l.setElementAt(piv[i], j, 0.0);</span>
+<span class="fc" id="L406">                    l.setElementAt(piv[i], j, 0.0);</span>
                 }
             }
         }
-<span class="fc" id="L405">    }</span>
+<span class="fc" id="L410">    }</span>
     
     /**
      * Returns a new matrix instance containing the pivot corrected Lower
@@ -421,18 +426,20 @@ public class LUDecomposer extends Decomposer {
      * @see #decompose()
      */
     public Matrix getL() throws NotAvailableException{
-<span class="fc bfc" id="L424" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
-<span class="fc" id="L425">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L429" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
+<span class="fc" id="L430">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L428">        int rows = lu.getRows();</span>
-<span class="fc" id="L429">        int columns = lu.getColumns();</span>
-<span class="fc" id="L430">        Matrix out = null;</span>
+<span class="fc" id="L433">        int rows = lu.getRows();</span>
+<span class="fc" id="L434">        int columns = lu.getColumns();</span>
+<span class="fc" id="L435">        Matrix out = null;</span>
         try {
-<span class="fc" id="L432">            out = new Matrix(rows, columns);</span>
-<span class="pc" id="L433">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L434">        getL(out);        </span>
-<span class="fc" id="L435">        return out;</span>
+<span class="fc" id="L437">            out = new Matrix(rows, columns);</span>
+<span class="nc" id="L438">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L440">        }</span>
+<span class="fc" id="L441">        getL(out);        </span>
+<span class="fc" id="L442">        return out;</span>
     }
     
     /**
@@ -449,27 +456,29 @@ public class LUDecomposer extends Decomposer {
      * @see #decompose()
      */    
     public void getU(Matrix u) throws NotAvailableException {
-<span class="pc bpc" id="L452" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L453">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L459" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L460">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L456">        int columns = lu.getColumns();</span>
+<span class="fc" id="L463">        int columns = lu.getColumns();</span>
         
-<span class="pc bpc" id="L458" title="2 of 4 branches missed.">        if (u.getRows() != columns || u.getColumns() != columns) {</span>
+<span class="pc bpc" id="L465" title="2 of 4 branches missed.">        if (u.getRows() != columns || u.getColumns() != columns) {</span>
             try {
-<span class="nc" id="L460">                u.resize(columns, columns);</span>
-<span class="nc" id="L461">            } catch (WrongSizeException ignore) { }</span>
+<span class="nc" id="L467">                u.resize(columns, columns);</span>
+<span class="nc" id="L468">            } catch (WrongSizeException ignore) {</span>
+                //never happens
+<span class="nc" id="L470">            }</span>
         }
-<span class="fc bfc" id="L463" title="All 2 branches covered.">        for (int i = 0; i &lt; columns; i++) {</span>
-<span class="fc bfc" id="L464" title="All 2 branches covered.">            for (int j = 0; j &lt; columns; j++) {</span>
-<span class="fc bfc" id="L465" title="All 2 branches covered.">                if (i &lt;= j) {</span>
-<span class="fc" id="L466">                    u.setElementAt(i, j, lu.getElementAt(i, j));</span>
+<span class="fc bfc" id="L472" title="All 2 branches covered.">        for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc bfc" id="L473" title="All 2 branches covered.">            for (int j = 0; j &lt; columns; j++) {</span>
+<span class="fc bfc" id="L474" title="All 2 branches covered.">                if (i &lt;= j) {</span>
+<span class="fc" id="L475">                    u.setElementAt(i, j, lu.getElementAt(i, j));</span>
                 } else {
-<span class="fc" id="L468">                    u.setElementAt(i, j, 0.0);</span>
+<span class="fc" id="L477">                    u.setElementAt(i, j, 0.0);</span>
                 }
             }
         }
-<span class="fc" id="L472">    }</span>
+<span class="fc" id="L481">    }</span>
     
     /**
      * Returns a new matrix instance containing the Upper triangular matrix
@@ -485,17 +494,19 @@ public class LUDecomposer extends Decomposer {
      * @see #decompose()
      */
     public Matrix getU() throws NotAvailableException {
-<span class="fc bfc" id="L488" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
-<span class="fc" id="L489">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L497" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
+<span class="fc" id="L498">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L492">        int columns = lu.getColumns();</span>
-<span class="fc" id="L493">        Matrix out = null;</span>
+<span class="fc" id="L501">        int columns = lu.getColumns();</span>
+<span class="fc" id="L502">        Matrix out = null;</span>
         try {
-<span class="fc" id="L495">            out = new Matrix(columns, columns);</span>
-<span class="pc" id="L496">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L497">        getU(out);</span>
-<span class="fc" id="L498">        return out;</span>
+<span class="fc" id="L504">            out = new Matrix(columns, columns);</span>
+<span class="nc" id="L505">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L507">        }</span>
+<span class="fc" id="L508">        getU(out);</span>
+<span class="fc" id="L509">        return out;</span>
     }
     
     /**
@@ -507,10 +518,10 @@ public class LUDecomposer extends Decomposer {
      */
     public int[] getPivot() throws NotAvailableException {
         
-<span class="fc bfc" id="L510" title="All 2 branches covered.">        if (!this.isDecompositionAvailable()) {</span>
-<span class="fc" id="L511">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L521" title="All 2 branches covered.">        if (!this.isDecompositionAvailable()) {</span>
+<span class="fc" id="L522">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L513">        return piv;</span>
+<span class="fc" id="L524">        return piv;</span>
     }
     
     /**
@@ -540,24 +551,24 @@ public class LUDecomposer extends Decomposer {
     public double determinant() throws NotAvailableException, 
             WrongSizeException {
         
-<span class="fc bfc" id="L543" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
-<span class="fc" id="L544">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L554" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
+<span class="fc" id="L555">            throw new NotAvailableException();</span>
         }
         
         //Determinants can only be computed on squared matrices
-<span class="fc" id="L548">        int rows = inputMatrix.getRows();</span>
-<span class="fc" id="L549">        int columns = inputMatrix.getColumns();</span>
+<span class="fc" id="L559">        int rows = inputMatrix.getRows();</span>
+<span class="fc" id="L560">        int columns = inputMatrix.getColumns();</span>
         
-<span class="fc bfc" id="L551" title="All 2 branches covered.">        if (rows != columns) {</span>
-<span class="fc" id="L552">            throw new WrongSizeException();</span>
+<span class="fc bfc" id="L562" title="All 2 branches covered.">        if (rows != columns) {</span>
+<span class="fc" id="L563">            throw new WrongSizeException();</span>
         }
         
-<span class="fc" id="L555">        double d = pivSign;</span>
-<span class="fc bfc" id="L556" title="All 2 branches covered.">        for (int j = 0; j &lt; columns; j++) {</span>
-<span class="fc" id="L557">            d *= lu.getElementAt(j, j);</span>
+<span class="fc" id="L566">        double d = pivSign;</span>
+<span class="fc bfc" id="L567" title="All 2 branches covered.">        for (int j = 0; j &lt; columns; j++) {</span>
+<span class="fc" id="L568">            d *= lu.getElementAt(j, j);</span>
         }
         
-<span class="fc" id="L560">        return d;</span>
+<span class="fc" id="L571">        return d;</span>
     }
     
     
@@ -604,8 +615,8 @@ public class LUDecomposer extends Decomposer {
      */        
     public void solve(Matrix b, Matrix result) throws NotAvailableException, 
             WrongSizeException, SingularMatrixException {
-<span class="fc" id="L607">        solve(b, DEFAULT_ROUND_ERROR, result);</span>
-<span class="fc" id="L608">    }</span>
+<span class="fc" id="L618">        solve(b, DEFAULT_ROUND_ERROR, result);</span>
+<span class="fc" id="L619">    }</span>
     
     /**
      * Solves a linear system of equations of the following form:
@@ -655,66 +666,66 @@ public class LUDecomposer extends Decomposer {
             throws NotAvailableException, WrongSizeException, 
             SingularMatrixException {
         
-<span class="pc bpc" id="L658" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L659">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L669" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L670">            throw new NotAvailableException();</span>
         }
         
-<span class="pc bpc" id="L662" title="1 of 2 branches missed.">        if (b.getRows() != inputMatrix.getRows()) {</span>
-<span class="nc" id="L663">            throw new WrongSizeException();</span>
+<span class="pc bpc" id="L673" title="1 of 2 branches missed.">        if (b.getRows() != inputMatrix.getRows()) {</span>
+<span class="nc" id="L674">            throw new WrongSizeException();</span>
         }
         
-<span class="fc bfc" id="L666" title="All 2 branches covered.">        if (roundingError &lt; MIN_ROUND_ERROR) {</span>
-<span class="fc" id="L667">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L677" title="All 2 branches covered.">        if (roundingError &lt; MIN_ROUND_ERROR) {</span>
+<span class="fc" id="L678">            throw new IllegalArgumentException();</span>
         }
         
         //Copy right hand side with pivoting
-<span class="fc" id="L671">        int rows = lu.getRows();</span>
-<span class="fc" id="L672">        int columns = lu.getColumns();</span>
-<span class="fc" id="L673">        int colsB = b.getColumns();</span>
+<span class="fc" id="L682">        int rows = lu.getRows();</span>
+<span class="fc" id="L683">        int columns = lu.getColumns();</span>
+<span class="fc" id="L684">        int colsB = b.getColumns();</span>
         
-<span class="fc bfc" id="L675" title="All 2 branches covered.">        if (rows != columns) {</span>
-<span class="fc" id="L676">            throw new WrongSizeException();</span>
+<span class="fc bfc" id="L686" title="All 2 branches covered.">        if (rows != columns) {</span>
+<span class="fc" id="L687">            throw new WrongSizeException();</span>
         }
-<span class="fc bfc" id="L678" title="All 2 branches covered.">        if (isSingular(roundingError)) {</span>
-<span class="fc" id="L679">            throw new SingularMatrixException();</span>
+<span class="fc bfc" id="L689" title="All 2 branches covered.">        if (isSingular(roundingError)) {</span>
+<span class="fc" id="L690">            throw new SingularMatrixException();</span>
         }
         
         //resize result matrix if needed
-<span class="pc bpc" id="L683" title="2 of 4 branches missed.">        if (result.getRows() != columns || result.getColumns() != colsB) {</span>
-<span class="nc" id="L684">            result.resize(columns, colsB);</span>
+<span class="pc bpc" id="L694" title="2 of 4 branches missed.">        if (result.getRows() != columns || result.getColumns() != colsB) {</span>
+<span class="nc" id="L695">            result.resize(columns, colsB);</span>
         }
-<span class="fc" id="L686">        result.initialize(0.0);</span>
+<span class="fc" id="L697">        result.initialize(0.0);</span>
         
-<span class="fc bfc" id="L688" title="All 2 branches covered.">        for (int i = 0; i &lt; columns; i++) {</span>
-<span class="fc bfc" id="L689" title="All 2 branches covered.">            for (int j = 0; j &lt; colsB; j++) {</span>
-<span class="fc" id="L690">                result.setElementAt(i, j, b.getElementAt(piv[i], j));</span>
+<span class="fc bfc" id="L699" title="All 2 branches covered.">        for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc bfc" id="L700" title="All 2 branches covered.">            for (int j = 0; j &lt; colsB; j++) {</span>
+<span class="fc" id="L701">                result.setElementAt(i, j, b.getElementAt(piv[i], j));</span>
             }
         }
         
         //Solve L * Y = b(piv, :)
-<span class="fc bfc" id="L695" title="All 2 branches covered.">        for (int k = 0; k &lt; columns; k++) {</span>
-<span class="fc bfc" id="L696" title="All 2 branches covered.">            for (int i = k + 1; i &lt; columns; i++) {</span>
-<span class="fc bfc" id="L697" title="All 2 branches covered.">                for (int j = 0; j &lt; colsB; j++) {</span>
-<span class="fc" id="L698">                    result.setElementAt(i, j, result.getElementAt(i, j) - </span>
-<span class="fc" id="L699">                            result.getElementAt(k, j) * lu.getElementAt(i, k));</span>
+<span class="fc bfc" id="L706" title="All 2 branches covered.">        for (int k = 0; k &lt; columns; k++) {</span>
+<span class="fc bfc" id="L707" title="All 2 branches covered.">            for (int i = k + 1; i &lt; columns; i++) {</span>
+<span class="fc bfc" id="L708" title="All 2 branches covered.">                for (int j = 0; j &lt; colsB; j++) {</span>
+<span class="fc" id="L709">                    result.setElementAt(i, j, result.getElementAt(i, j) - </span>
+<span class="fc" id="L710">                            result.getElementAt(k, j) * lu.getElementAt(i, k));</span>
                 }
             }
         }
         
         //Solve U * X = Y
-<span class="fc bfc" id="L705" title="All 2 branches covered.">        for (int k = columns - 1; k &gt;= 0; k--) {</span>
-<span class="fc bfc" id="L706" title="All 2 branches covered.">            for (int j = 0; j &lt; colsB; j++) {</span>
-<span class="fc" id="L707">                result.setElementAt(k, j, result.getElementAt(k, j) / </span>
-<span class="fc" id="L708">                        lu.getElementAt(k, k));</span>
+<span class="fc bfc" id="L716" title="All 2 branches covered.">        for (int k = columns - 1; k &gt;= 0; k--) {</span>
+<span class="fc bfc" id="L717" title="All 2 branches covered.">            for (int j = 0; j &lt; colsB; j++) {</span>
+<span class="fc" id="L718">                result.setElementAt(k, j, result.getElementAt(k, j) / </span>
+<span class="fc" id="L719">                        lu.getElementAt(k, k));</span>
             }
-<span class="fc bfc" id="L710" title="All 2 branches covered.">            for (int i = 0; i &lt; k; i++) {</span>
-<span class="fc bfc" id="L711" title="All 2 branches covered.">                for (int j = 0; j &lt; colsB; j++) {</span>
-<span class="fc" id="L712">                    result.setElementAt(i, j, result.getElementAt(i, j) -</span>
-<span class="fc" id="L713">                            result.getElementAt(k, j) * lu.getElementAt(i, k));</span>
+<span class="fc bfc" id="L721" title="All 2 branches covered.">            for (int i = 0; i &lt; k; i++) {</span>
+<span class="fc bfc" id="L722" title="All 2 branches covered.">                for (int j = 0; j &lt; colsB; j++) {</span>
+<span class="fc" id="L723">                    result.setElementAt(i, j, result.getElementAt(i, j) -</span>
+<span class="fc" id="L724">                            result.getElementAt(k, j) * lu.getElementAt(i, k));</span>
                 }
             }
         }
-<span class="fc" id="L717">    }</span>
+<span class="fc" id="L728">    }</span>
 
     /**
      * Solves a linear system of equations of the following form:
@@ -757,7 +768,7 @@ public class LUDecomposer extends Decomposer {
      */    
     public Matrix solve(Matrix b) throws NotAvailableException, 
             WrongSizeException, SingularMatrixException {
-<span class="fc" id="L760">        return solve(b, DEFAULT_ROUND_ERROR);</span>
+<span class="fc" id="L771">        return solve(b, DEFAULT_ROUND_ERROR);</span>
     }
     
     /**
@@ -804,17 +815,17 @@ public class LUDecomposer extends Decomposer {
      */
     public Matrix solve(Matrix b, double roundingError) 
             throws NotAvailableException, WrongSizeException, 
-            SingularMatrixException, IllegalArgumentException {
+            SingularMatrixException {
         
-<span class="pc bpc" id="L809" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L810">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L820" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L821">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L813">        int columns = lu.getColumns();</span>
-<span class="fc" id="L814">        int colsB = b.getColumns();</span>
-<span class="fc" id="L815">        Matrix out = new Matrix(columns, colsB);        </span>
-<span class="fc" id="L816">        solve(b, roundingError, out);</span>
-<span class="fc" id="L817">        return out;</span>
+<span class="fc" id="L824">        int columns = lu.getColumns();</span>
+<span class="fc" id="L825">        int colsB = b.getColumns();</span>
+<span class="fc" id="L826">        Matrix out = new Matrix(columns, colsB);        </span>
+<span class="fc" id="L827">        solve(b, roundingError, out);</span>
+<span class="fc" id="L828">        return out;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
