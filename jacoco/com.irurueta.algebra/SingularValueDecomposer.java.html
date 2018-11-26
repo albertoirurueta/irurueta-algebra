@@ -223,20 +223,22 @@ public class SingularValueDecomposer extends Decomposer {
 <span class="fc" id="L223">        w = new double[n];</span>
         try {
 <span class="fc" id="L225">            v = new Matrix(n, n);</span>
-<span class="pc" id="L226">        } catch (WrongSizeException ignore) { }</span>
+<span class="nc" id="L226">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L228">        }</span>
         try {
-<span class="fc" id="L228">            internalDecompose();</span>
-<span class="fc" id="L229">            reorder();</span>
-<span class="fc" id="L230">            setNegligibleSingularValueThreshold(0.5 * Math.sqrt(m + n + 1.0) * </span>
+<span class="fc" id="L230">            internalDecompose();</span>
+<span class="fc" id="L231">            reorder();</span>
+<span class="fc" id="L232">            setNegligibleSingularValueThreshold(0.5 * Math.sqrt(m + n + 1.0) * </span>
                 w[0] * eps);
-<span class="fc" id="L232">            locked = false;</span>
-<span class="nc" id="L233">        } catch (DecomposerException e) {</span>
-<span class="nc" id="L234">            u = v = null;</span>
-<span class="nc" id="L235">            w = null;</span>
-<span class="nc" id="L236">            locked = false;</span>
-<span class="nc" id="L237">            throw e;</span>
-<span class="fc" id="L238">        }</span>
-<span class="fc" id="L239">    }</span>
+<span class="fc" id="L234">            locked = false;</span>
+<span class="nc" id="L235">        } catch (DecomposerException e) {</span>
+<span class="nc" id="L236">            u = v = null;</span>
+<span class="nc" id="L237">            w = null;</span>
+<span class="nc" id="L238">            locked = false;</span>
+<span class="nc" id="L239">            throw e;</span>
+<span class="fc" id="L240">        }</span>
+<span class="fc" id="L241">    }</span>
     
     /**
      * Returns maximum number of iterations to be done in order to obtain
@@ -246,7 +248,7 @@ public class SingularValueDecomposer extends Decomposer {
      * convergence.
      */
     public int getMaxIterations() {
-<span class="fc" id="L249">        return maxIters;</span>
+<span class="fc" id="L251">        return maxIters;</span>
     }
     
     /**
@@ -266,17 +268,16 @@ public class SingularValueDecomposer extends Decomposer {
      * @throws IllegalArgumentException Exception thrown if provided value
      * for maxIters is out of valid range of values.
      */
-    public void setMaxIterations(int maxIters) throws LockedException,
-            IllegalArgumentException {
-<span class="pc bpc" id="L271" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L272">            throw new LockedException();</span>
+    public void setMaxIterations(int maxIters) throws LockedException {
+<span class="pc bpc" id="L272" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L273">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L274" title="All 2 branches covered.">        if (maxIters &lt; MIN_ITERS) {</span>
-<span class="fc" id="L275">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L275" title="All 2 branches covered.">        if (maxIters &lt; MIN_ITERS) {</span>
+<span class="fc" id="L276">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L278">        this.maxIters = maxIters;</span>
-<span class="fc" id="L279">    }</span>
+<span class="fc" id="L279">        this.maxIters = maxIters;</span>
+<span class="fc" id="L280">    }</span>
     
     /**
      * Returns threshold to be used for determining whether a singular value is
@@ -294,10 +295,10 @@ public class SingularValueDecomposer extends Decomposer {
      */
     public double getNegligibleSingularValueThreshold() 
             throws NotAvailableException {
-<span class="fc bfc" id="L297" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
-<span class="fc" id="L298">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">        if (!isDecompositionAvailable()) {</span>
+<span class="fc" id="L299">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L300">        return tsh;</span>
+<span class="fc" id="L301">        return tsh;</span>
     }
     
     /**
@@ -315,10 +316,10 @@ public class SingularValueDecomposer extends Decomposer {
      * @see #decompose()
      */
     public Matrix getU() throws NotAvailableException {
-<span class="pc bpc" id="L318" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L319">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L319" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L320">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L321">        return u;</span>
+<span class="fc" id="L322">        return u;</span>
     }
     
     /**
@@ -336,10 +337,10 @@ public class SingularValueDecomposer extends Decomposer {
      * @see #decompose()
      */
     public Matrix getV() throws NotAvailableException {
-<span class="pc bpc" id="L339" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L340">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L340" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L341">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L342">        return v;</span>
+<span class="fc" id="L343">        return v;</span>
     }
     
     /**
@@ -352,10 +353,10 @@ public class SingularValueDecomposer extends Decomposer {
      * @throws NotAvailableException if decomposition has not yet been computed.
      */
     public double[] getSingularValues() throws NotAvailableException {
-<span class="pc bpc" id="L355" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L356">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L356" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L357">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L358">        return w;</span>
+<span class="fc" id="L359">        return w;</span>
     }
     
     /**
@@ -373,11 +374,11 @@ public class SingularValueDecomposer extends Decomposer {
      * @see #decompose()
      */    
     public void getW(Matrix m) throws NotAvailableException {
-<span class="nc bnc" id="L376" title="All 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L377">            throw new NotAvailableException();</span>
+<span class="nc bnc" id="L377" title="All 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L378">            throw new NotAvailableException();</span>
         }
-<span class="nc" id="L379">        Matrix.diagonal(w, m);</span>
-<span class="nc" id="L380">    }</span>
+<span class="nc" id="L380">        Matrix.diagonal(w, m);</span>
+<span class="nc" id="L381">    }</span>
     
     /**
      * Returns a new diagonal matrix instance containing all singular values on
@@ -393,12 +394,12 @@ public class SingularValueDecomposer extends Decomposer {
      * @see #decompose()
      */
     public Matrix getW() throws NotAvailableException {
-<span class="pc bpc" id="L396" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L397">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L397" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L398">            throw new NotAvailableException();</span>
         }
         
         //copy S array into a new diagonal matrix
-<span class="fc" id="L401">        return Matrix.diagonal(w);</span>
+<span class="fc" id="L402">        return Matrix.diagonal(w);</span>
     }
     
     /**
@@ -420,10 +421,10 @@ public class SingularValueDecomposer extends Decomposer {
      * @see #decompose()
      */
     public double getNorm2() throws NotAvailableException {
-<span class="pc bpc" id="L423" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L424">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L424" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L425">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L426">        return w[0];</span>
+<span class="fc" id="L427">        return w[0];</span>
     }
     
     /**
@@ -455,7 +456,7 @@ public class SingularValueDecomposer extends Decomposer {
      * @see #decompose()
      */
     public double getConditionNumber() throws NotAvailableException {
-<span class="fc" id="L458">        return 1.0 / getReciprocalConditionNumber();</span>
+<span class="fc" id="L459">        return 1.0 / getReciprocalConditionNumber();</span>
     }
     
     /**
@@ -471,13 +472,13 @@ public class SingularValueDecomposer extends Decomposer {
      * @see #getConditionNumber()
      */
     public double getReciprocalConditionNumber() throws NotAvailableException {
-<span class="pc bpc" id="L474" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L475">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L475" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L476">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L478">        int columns = inputMatrix.getColumns();</span>
-<span class="pc bpc" id="L479" title="2 of 4 branches missed.">        return (w[0] &lt;= 0.0 || w[columns - 1] &lt;= 0.0) ? 0.0 : </span>
-<span class="fc" id="L480">                w[columns - 1] / w[0];</span>
+<span class="fc" id="L479">        int columns = inputMatrix.getColumns();</span>
+<span class="pc bpc" id="L480" title="2 of 4 branches missed.">        return (w[0] &lt;= 0.0 || w[columns - 1] &lt;= 0.0) ? 0.0 : </span>
+<span class="fc" id="L481">                w[columns - 1] / w[0];</span>
     }
     
     /**
@@ -505,21 +506,21 @@ public class SingularValueDecomposer extends Decomposer {
      * @see #decompose()
      */
     public int getRank(double singularValueThreshold) 
-            throws NotAvailableException, IllegalArgumentException {
-<span class="pc bpc" id="L509" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L510">            throw new NotAvailableException();</span>
+            throws NotAvailableException {
+<span class="pc bpc" id="L510" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L511">            throw new NotAvailableException();</span>
         }
-<span class="pc bpc" id="L512" title="1 of 2 branches missed.">        if (singularValueThreshold &lt; MIN_THRESH) {</span>
-<span class="nc" id="L513">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L513" title="1 of 2 branches missed.">        if (singularValueThreshold &lt; MIN_THRESH) {</span>
+<span class="nc" id="L514">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L516">        int r = 0;</span>
-<span class="fc bfc" id="L517" title="All 2 branches covered.">        for (double aW : w) {</span>
-<span class="fc bfc" id="L518" title="All 2 branches covered.">            if (aW &gt; singularValueThreshold) {</span>
-<span class="fc" id="L519">                r++;</span>
+<span class="fc" id="L517">        int r = 0;</span>
+<span class="fc bfc" id="L518" title="All 2 branches covered.">        for (double aW : w) {</span>
+<span class="fc bfc" id="L519" title="All 2 branches covered.">            if (aW &gt; singularValueThreshold) {</span>
+<span class="fc" id="L520">                r++;</span>
             }
         }
-<span class="fc" id="L522">        return r;</span>
+<span class="fc" id="L523">        return r;</span>
     }
     
     /**
@@ -545,7 +546,7 @@ public class SingularValueDecomposer extends Decomposer {
      * @see #decompose()
      */
     public int getRank() throws NotAvailableException {
-<span class="fc" id="L548">        return getRank(getNegligibleSingularValueThreshold());</span>
+<span class="fc" id="L549">        return getRank(getNegligibleSingularValueThreshold());</span>
     }
     
     /**
@@ -571,9 +572,9 @@ public class SingularValueDecomposer extends Decomposer {
      * @see #decompose()
      */
     public int getNullity(double singularValueThreshold) 
-            throws NotAvailableException, IllegalArgumentException {
-<span class="fc" id="L575">        int n = inputMatrix.getColumns();</span>
-<span class="fc" id="L576">        return n - getRank(singularValueThreshold);</span>
+            throws NotAvailableException {
+<span class="fc" id="L576">        int n = inputMatrix.getColumns();</span>
+<span class="fc" id="L577">        return n - getRank(singularValueThreshold);</span>
     }
     
     /**
@@ -599,38 +600,9 @@ public class SingularValueDecomposer extends Decomposer {
      * @see #decompose()
      */
     public int getNullity() throws NotAvailableException {
-<span class="fc" id="L602">        return getNullity(getNegligibleSingularValueThreshold());</span>
+<span class="fc" id="L603">        return getNullity(getNegligibleSingularValueThreshold());</span>
     }
-    
-    /**
-     * Internal method to copy range space vector values into provided matrix.
-     * Provided matrix will be resized if needed
-     * @param rank Rank of range space
-     * @param singularValueThreshold Threshold to determine whether a singular
-     * value is null
-     * @param range Matrix where range space vector values are stored.
-     */
-    private void internalGetRange(int rank, double singularValueThreshold,
-            Matrix range) {
-<span class="fc" id="L615">        int rows = inputMatrix.getRows();</span>
-<span class="fc" id="L616">        int columns = inputMatrix.getColumns();</span>
-        
-<span class="pc bpc" id="L618" title="2 of 4 branches missed.">        if (range.getRows() != rows || range.getColumns() != rank) {</span>
-            try {
-<span class="nc" id="L620">                range.resize(rows, rank);</span>
-<span class="nc" id="L621">            } catch (WrongSizeException ignore) { }</span>
-        }
-        
-<span class="fc" id="L624">        int nr = 0;</span>
-<span class="fc bfc" id="L625" title="All 2 branches covered.">        for (int j = 0; j &lt; columns; j++) {</span>
-<span class="fc bfc" id="L626" title="All 2 branches covered.">            if (w[j] &gt; singularValueThreshold) {</span>
-                //copy column j of U matrix into column nr of out matrix
-<span class="fc" id="L628">                range.setSubmatrix(0, nr, rows - 1, nr, u, 0, j, rows - 1, j);</span>
-<span class="fc" id="L629">                nr++;</span>
-            }
-        }        
-<span class="fc" id="L632">    }</span>
-    
+
     /**
      * Sets into provided range matrix the Range space of provided input matrix, 
      * which spans a subspace of dimension equal to the rank of input matrix.
@@ -649,13 +621,13 @@ public class SingularValueDecomposer extends Decomposer {
      * near to zero value.
      */    
     public void getRange(double singularValueThreshold, Matrix range)
-            throws NotAvailableException, IllegalArgumentException {
-<span class="nc bnc" id="L653" title="All 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L654">            throw new NotAvailableException();</span>
+            throws NotAvailableException {
+<span class="nc bnc" id="L625" title="All 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L626">            throw new NotAvailableException();</span>
         }
-<span class="nc" id="L656">        int rank = getRank(singularValueThreshold);</span>
-<span class="nc" id="L657">        internalGetRange(rank, singularValueThreshold, range);</span>
-<span class="nc" id="L658">    }</span>
+<span class="nc" id="L628">        int rank = getRank(singularValueThreshold);</span>
+<span class="nc" id="L629">        internalGetRange(rank, singularValueThreshold, range);</span>
+<span class="nc" id="L630">    }</span>
     
     /**
      * Sets into provided range matrix the Range space of provided input matrix, 
@@ -679,8 +651,8 @@ public class SingularValueDecomposer extends Decomposer {
      */        
     public void getRange(Matrix range) throws NotAvailableException,
             IllegalArgumentException {
-<span class="nc" id="L682">        getRange(getNegligibleSingularValueThreshold(), range);</span>
-<span class="nc" id="L683">    }</span>
+<span class="nc" id="L654">        getRange(getNegligibleSingularValueThreshold(), range);</span>
+<span class="nc" id="L655">    }</span>
     
     /**
      * Returns matrix containing Range space of provided input matrix, which
@@ -701,20 +673,20 @@ public class SingularValueDecomposer extends Decomposer {
      */
     public Matrix getRange(double singularValueThreshold) 
             throws NotAvailableException, IllegalArgumentException {
-<span class="pc bpc" id="L704" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L705">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L676" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L677">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L707">        int rows = inputMatrix.getRows();</span>
-<span class="fc" id="L708">        int rank = getRank(singularValueThreshold);</span>
+<span class="fc" id="L679">        int rows = inputMatrix.getRows();</span>
+<span class="fc" id="L680">        int rank = getRank(singularValueThreshold);</span>
         
         Matrix out;
         try {
-<span class="fc" id="L712">            out = new Matrix(rows, rank);</span>
-<span class="nc" id="L713">        } catch (WrongSizeException e) {</span>
-<span class="nc" id="L714">            throw new NotAvailableException(e);</span>
-<span class="fc" id="L715">        }</span>
-<span class="fc" id="L716">        internalGetRange(rank, singularValueThreshold, out);</span>
-<span class="fc" id="L717">        return out;</span>
+<span class="fc" id="L684">            out = new Matrix(rows, rank);</span>
+<span class="nc" id="L685">        } catch (WrongSizeException e) {</span>
+<span class="nc" id="L686">            throw new NotAvailableException(e);</span>
+<span class="fc" id="L687">        }</span>
+<span class="fc" id="L688">        internalGetRange(rank, singularValueThreshold, out);</span>
+<span class="fc" id="L689">        return out;</span>
     }
         
     /**
@@ -734,38 +706,9 @@ public class SingularValueDecomposer extends Decomposer {
      * first and make sure that input matrix has non-zero rank.
      */
     public Matrix getRange() throws NotAvailableException {
-<span class="fc" id="L737">        return getRange(getNegligibleSingularValueThreshold());</span>
+<span class="fc" id="L709">        return getRange(getNegligibleSingularValueThreshold());</span>
     }
-    
-    /**
-     * Internal method to copy nullspace vector values into provided matrix.
-     * Provided matrix will be resized if needed
-     * @param nullity Nullity of nullspace
-     * @param singularValueThreshold Threshold to determine whether a singular
-     * value is null
-     * @param nullspace Matrix where nullspace vector values are stored.
-     */
-    public void internalGetNullspace(int nullity, double singularValueThreshold,
-            Matrix nullspace) {
-<span class="fc" id="L750">        int columns = inputMatrix.getColumns();</span>
-        
-<span class="pc bpc" id="L752" title="2 of 4 branches missed.">        if (nullspace.getRows() != columns || nullspace.getColumns() != nullity){</span>
-            try {
-<span class="nc" id="L754">                nullspace.resize(columns, nullity);</span>
-<span class="nc" id="L755">            } catch (WrongSizeException ignore){ }</span>
-        }
-        
-<span class="fc" id="L758">        int nn = 0;</span>
-<span class="fc bfc" id="L759" title="All 2 branches covered.">        for (int j = 0; j &lt; columns; j++) {</span>
-<span class="fc bfc" id="L760" title="All 2 branches covered.">            if (w[j] &lt;= singularValueThreshold) {</span>
-                //copy column j of U matrix into column nn of out matrix
-<span class="fc" id="L762">                nullspace.setSubmatrix(0, nn, columns - 1, nn, v, 0, j, </span>
-                        columns - 1, j);
-<span class="fc" id="L764">                nn++;</span>
-            }
-        }
-<span class="fc" id="L767">    }</span>
-    
+
     /**
      * Sets into provided matrix Nullspace of provided input matrix, which spans
      * a subspace of dimension equal to the nullity of input matrix. Nullspace 
@@ -785,12 +728,12 @@ public class SingularValueDecomposer extends Decomposer {
      */    
     public void getNullspace(double singularValueThreshold, Matrix nullspace)
             throws NotAvailableException, IllegalArgumentException {
-<span class="nc bnc" id="L788" title="All 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L789">            throw new NotAvailableException();</span>
+<span class="nc bnc" id="L731" title="All 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L732">            throw new NotAvailableException();</span>
         }
-<span class="nc" id="L791">        int nullity = getNullity(singularValueThreshold);</span>
-<span class="nc" id="L792">        internalGetNullspace(nullity, singularValueThreshold, nullspace);</span>
-<span class="nc" id="L793">    }</span>
+<span class="nc" id="L734">        int nullity = getNullity(singularValueThreshold);</span>
+<span class="nc" id="L735">        internalGetNullspace(nullity, singularValueThreshold, nullspace);</span>
+<span class="nc" id="L736">    }</span>
 
     /**
      * Sets into provided matrix Nullspace of provided input matrix, which spans
@@ -814,8 +757,8 @@ public class SingularValueDecomposer extends Decomposer {
      */        
     public void getNullspace(Matrix nullspace) throws NotAvailableException,
             IllegalArgumentException {
-<span class="nc" id="L817">        getNullspace(getNegligibleSingularValueThreshold(), nullspace);</span>
-<span class="nc" id="L818">    }</span>
+<span class="nc" id="L760">        getNullspace(getNegligibleSingularValueThreshold(), nullspace);</span>
+<span class="nc" id="L761">    }</span>
     
     /**
      * Returns matrix containing Nullspace of provided input matrix, which spans
@@ -836,20 +779,20 @@ public class SingularValueDecomposer extends Decomposer {
      */
     public Matrix getNullspace(double singularValueThreshold) 
             throws NotAvailableException, IllegalArgumentException {
-<span class="pc bpc" id="L839" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L840">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L782" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L783">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L843">        int columns = inputMatrix.getColumns();</span>
-<span class="fc" id="L844">        int nullity = getNullity(singularValueThreshold);</span>
+<span class="fc" id="L786">        int columns = inputMatrix.getColumns();</span>
+<span class="fc" id="L787">        int nullity = getNullity(singularValueThreshold);</span>
         Matrix out;
         try {
-<span class="fc" id="L847">            out = new Matrix(columns, nullity);</span>
-<span class="nc" id="L848">        } catch (WrongSizeException e) {</span>
-<span class="nc" id="L849">            throw new NotAvailableException(e);</span>
-<span class="fc" id="L850">        }</span>
-<span class="fc" id="L851">        internalGetNullspace(nullity, singularValueThreshold, out);</span>
-<span class="fc" id="L852">        return out;</span>
+<span class="fc" id="L790">            out = new Matrix(columns, nullity);</span>
+<span class="nc" id="L791">        } catch (WrongSizeException e) {</span>
+<span class="nc" id="L792">            throw new NotAvailableException(e);</span>
+<span class="fc" id="L793">        }</span>
+<span class="fc" id="L794">        internalGetNullspace(nullity, singularValueThreshold, out);</span>
+<span class="fc" id="L795">        return out;</span>
     }       
     
     /**
@@ -870,7 +813,7 @@ public class SingularValueDecomposer extends Decomposer {
      * is rank deficient.
      */
     public Matrix getNullspace() throws NotAvailableException {
-<span class="fc" id="L873">        return getNullspace(getNegligibleSingularValueThreshold());</span>
+<span class="fc" id="L816">        return getNullspace(getNegligibleSingularValueThreshold());</span>
     }
     
     /**
@@ -911,41 +854,41 @@ public class SingularValueDecomposer extends Decomposer {
     public void solve(Matrix b, double singularValueThreshold, Matrix result)
             throws NotAvailableException, WrongSizeException, 
             IllegalArgumentException {
-<span class="pc bpc" id="L914" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L915">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L857" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L858">            throw new NotAvailableException();</span>
         }
         
-<span class="fc bfc" id="L918" title="All 2 branches covered.">        if (b.getRows() != inputMatrix.getRows()) {</span>
-<span class="fc" id="L919">            throw new WrongSizeException();</span>
+<span class="fc bfc" id="L861" title="All 2 branches covered.">        if (b.getRows() != inputMatrix.getRows()) {</span>
+<span class="fc" id="L862">            throw new WrongSizeException();</span>
         }
         
-<span class="fc bfc" id="L922" title="All 2 branches covered.">        if (singularValueThreshold &lt; MIN_THRESH) {</span>
-<span class="fc" id="L923">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L865" title="All 2 branches covered.">        if (singularValueThreshold &lt; MIN_THRESH) {</span>
+<span class="fc" id="L866">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L926">        int m = inputMatrix.getRows();</span>
-<span class="fc" id="L927">        int n = inputMatrix.getColumns();</span>
-<span class="fc" id="L928">        int p = b.getColumns();</span>
+<span class="fc" id="L869">        int m = inputMatrix.getRows();</span>
+<span class="fc" id="L870">        int n = inputMatrix.getColumns();</span>
+<span class="fc" id="L871">        int p = b.getColumns();</span>
         
-<span class="fc" id="L930">        double[] bcol = new double[m];</span>
+<span class="fc" id="L873">        double[] bcol = new double[m];</span>
         double[] xx;
         
         //resize result matrix if needed
-<span class="pc bpc" id="L934" title="2 of 4 branches missed.">        if (result.getRows() != n || result.getColumns() != p) {</span>
-<span class="nc" id="L935">            result.resize(n, p);</span>
+<span class="pc bpc" id="L877" title="2 of 4 branches missed.">        if (result.getRows() != n || result.getColumns() != p) {</span>
+<span class="nc" id="L878">            result.resize(n, p);</span>
         }
         
-<span class="fc bfc" id="L938" title="All 2 branches covered.">        for (int j = 0; j &lt; p; j++) {</span>
-<span class="fc bfc" id="L939" title="All 2 branches covered.">            for (int i = 0; i &lt; m; i++) {</span>
-<span class="fc" id="L940">                bcol[i] = b.getElementAt(i, j);</span>
+<span class="fc bfc" id="L881" title="All 2 branches covered.">        for (int j = 0; j &lt; p; j++) {</span>
+<span class="fc bfc" id="L882" title="All 2 branches covered.">            for (int i = 0; i &lt; m; i++) {</span>
+<span class="fc" id="L883">                bcol[i] = b.getElementAt(i, j);</span>
             }
             
-<span class="fc" id="L943">            xx = solve(bcol, singularValueThreshold);</span>
+<span class="fc" id="L886">            xx = solve(bcol, singularValueThreshold);</span>
             //set column j of X using values in vector xx
-<span class="fc" id="L945">            result.setSubmatrix(0, j, n - 1, j, xx);</span>
+<span class="fc" id="L888">            result.setSubmatrix(0, j, n - 1, j, xx);</span>
             
         }       
-<span class="fc" id="L948">    }</span>
+<span class="fc" id="L891">    }</span>
     
     /**
      * Solves a linear system of equations of the following form: A * X = B
@@ -985,8 +928,8 @@ public class SingularValueDecomposer extends Decomposer {
      */    
     public void solve(Matrix b, Matrix result) throws NotAvailableException,
             WrongSizeException, IllegalArgumentException {
-<span class="nc" id="L988">        solve(b, getNegligibleSingularValueThreshold(), result);</span>
-<span class="nc" id="L989">    }</span>
+<span class="nc" id="L931">        solve(b, getNegligibleSingularValueThreshold(), result);</span>
+<span class="nc" id="L932">    }</span>
     
     /**
      * Solves a linear system of equations of the following form: A * X = B
@@ -1024,11 +967,11 @@ public class SingularValueDecomposer extends Decomposer {
     public Matrix solve(Matrix b, double singularValueThreshold)
             throws NotAvailableException, WrongSizeException, 
             IllegalArgumentException {
-<span class="fc" id="L1027">        int n = inputMatrix.getColumns();</span>
-<span class="fc" id="L1028">        int p = b.getColumns();</span>
-<span class="fc" id="L1029">        Matrix x = new Matrix(n, p);</span>
-<span class="fc" id="L1030">        solve(b, singularValueThreshold, x);</span>
-<span class="fc" id="L1031">        return x;</span>
+<span class="fc" id="L970">        int n = inputMatrix.getColumns();</span>
+<span class="fc" id="L971">        int p = b.getColumns();</span>
+<span class="fc" id="L972">        Matrix x = new Matrix(n, p);</span>
+<span class="fc" id="L973">        solve(b, singularValueThreshold, x);</span>
+<span class="fc" id="L974">        return x;</span>
     }
     
     /**
@@ -1067,7 +1010,7 @@ public class SingularValueDecomposer extends Decomposer {
      */
     public Matrix solve(Matrix b) throws NotAvailableException, 
             WrongSizeException {
-<span class="fc" id="L1070">        return solve(b, getNegligibleSingularValueThreshold());</span>
+<span class="fc" id="L1013">        return solve(b, getNegligibleSingularValueThreshold());</span>
     }
     
     /**
@@ -1105,42 +1048,42 @@ public class SingularValueDecomposer extends Decomposer {
     public void solve(double[] b, double singularValueThreshold, 
             double[] result) throws NotAvailableException, WrongSizeException,
             IllegalArgumentException {
-<span class="pc bpc" id="L1108" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
-<span class="nc" id="L1109">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L1051" title="1 of 2 branches missed.">        if (!isDecompositionAvailable()) {</span>
+<span class="nc" id="L1052">            throw new NotAvailableException();</span>
         }
         
-<span class="pc bpc" id="L1112" title="1 of 2 branches missed.">        if (b.length != inputMatrix.getRows()) {</span>
-<span class="nc" id="L1113">            throw new WrongSizeException();</span>
+<span class="pc bpc" id="L1055" title="1 of 2 branches missed.">        if (b.length != inputMatrix.getRows()) {</span>
+<span class="nc" id="L1056">            throw new WrongSizeException();</span>
         }
         
-<span class="fc" id="L1116">        int m = inputMatrix.getRows();</span>
-<span class="fc" id="L1117">        int n = inputMatrix.getColumns();</span>
+<span class="fc" id="L1059">        int m = inputMatrix.getRows();</span>
+<span class="fc" id="L1060">        int n = inputMatrix.getColumns();</span>
         
-<span class="pc bpc" id="L1119" title="1 of 2 branches missed.">        if (result.length != n) {</span>
-<span class="nc" id="L1120">            throw new WrongSizeException();</span>
+<span class="pc bpc" id="L1062" title="1 of 2 branches missed.">        if (result.length != n) {</span>
+<span class="nc" id="L1063">            throw new WrongSizeException();</span>
         }
                 
         double s;
-<span class="fc" id="L1124">        double[] tmp = new double[n];</span>
+<span class="fc" id="L1067">        double[] tmp = new double[n];</span>
         
-<span class="fc bfc" id="L1126" title="All 2 branches covered.">        for (int j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L1127">            s = 0.0;</span>
-<span class="pc bpc" id="L1128" title="1 of 2 branches missed.">            if (w[j] &gt; singularValueThreshold) {</span>
-<span class="fc bfc" id="L1129" title="All 2 branches covered.">                for (int i = 0; i &lt; m; i++) {</span>
-<span class="fc" id="L1130">                    s += u.getElementAt(i, j) * b[i];</span>
+<span class="fc bfc" id="L1069" title="All 2 branches covered.">        for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L1070">            s = 0.0;</span>
+<span class="pc bpc" id="L1071" title="1 of 2 branches missed.">            if (w[j] &gt; singularValueThreshold) {</span>
+<span class="fc bfc" id="L1072" title="All 2 branches covered.">                for (int i = 0; i &lt; m; i++) {</span>
+<span class="fc" id="L1073">                    s += u.getElementAt(i, j) * b[i];</span>
                 }
-<span class="fc" id="L1132">                s /= w[j];</span>
+<span class="fc" id="L1075">                s /= w[j];</span>
             }
-<span class="fc" id="L1134">            tmp[j] = s;</span>
+<span class="fc" id="L1077">            tmp[j] = s;</span>
         }
-<span class="fc bfc" id="L1136" title="All 2 branches covered.">        for (int j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L1137">            s = 0.0;</span>
-<span class="fc bfc" id="L1138" title="All 2 branches covered.">            for (int jj = 0; jj &lt; n; jj++) {</span>
-<span class="fc" id="L1139">                s += v.getElementAt(j, jj) * tmp[jj];</span>
+<span class="fc bfc" id="L1079" title="All 2 branches covered.">        for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L1080">            s = 0.0;</span>
+<span class="fc bfc" id="L1081" title="All 2 branches covered.">            for (int jj = 0; jj &lt; n; jj++) {</span>
+<span class="fc" id="L1082">                s += v.getElementAt(j, jj) * tmp[jj];</span>
             }
-<span class="fc" id="L1141">            result[j] = s;</span>
+<span class="fc" id="L1084">            result[j] = s;</span>
         }       
-<span class="fc" id="L1143">    }</span>
+<span class="fc" id="L1086">    }</span>
     
     /**
      * Solves a linear system of equations of the following form: A * X = B
@@ -1180,8 +1123,8 @@ public class SingularValueDecomposer extends Decomposer {
      */        
     public void solve(double[] b, double[] result) throws NotAvailableException,
             WrongSizeException, IllegalArgumentException {
-<span class="nc" id="L1183">        solve(b, getNegligibleSingularValueThreshold(), result);</span>
-<span class="nc" id="L1184">    }</span>
+<span class="nc" id="L1126">        solve(b, getNegligibleSingularValueThreshold(), result);</span>
+<span class="nc" id="L1127">    }</span>
     
     /**
      * Solves a linear system of equations of the following form: A * X = B
@@ -1217,11 +1160,11 @@ public class SingularValueDecomposer extends Decomposer {
     public double[] solve(double[] b, double singularValueThreshold)
             throws NotAvailableException, WrongSizeException, 
             IllegalArgumentException {
-<span class="fc" id="L1220">        int n = inputMatrix.getColumns();</span>
+<span class="fc" id="L1163">        int n = inputMatrix.getColumns();</span>
         
-<span class="fc" id="L1222">        double[] x = new double[n];</span>
-<span class="fc" id="L1223">        solve(b, singularValueThreshold, x);</span>
-<span class="fc" id="L1224">        return x;</span>
+<span class="fc" id="L1165">        double[] x = new double[n];</span>
+<span class="fc" id="L1166">        solve(b, singularValueThreshold, x);</span>
+<span class="fc" id="L1167">        return x;</span>
     }
 
     /**
@@ -1259,7 +1202,7 @@ public class SingularValueDecomposer extends Decomposer {
      */    
     public double[] solve(double[] b) throws NotAvailableException,
             WrongSizeException {
-<span class="nc" id="L1262">        return solve(b, getNegligibleSingularValueThreshold());</span>
+<span class="nc" id="L1205">        return solve(b, getNegligibleSingularValueThreshold());</span>
     }
     
     /**
@@ -1273,263 +1216,263 @@ public class SingularValueDecomposer extends Decomposer {
      * iterations.
      */
     private void internalDecompose() throws NoConvergenceException {
-<span class="fc" id="L1276">        int m = inputMatrix.getRows();</span>
-<span class="fc" id="L1277">        int n = inputMatrix.getColumns();</span>
+<span class="fc" id="L1219">        int m = inputMatrix.getRows();</span>
+<span class="fc" id="L1220">        int n = inputMatrix.getColumns();</span>
 		
 		
 	    boolean flag;
-<span class="fc" id="L1281">	    int i, its, j, jj, k, l = 0, nm = 0;</span>
+<span class="fc" id="L1224">	    int i, its, j, jj, k, l = 0, nm = 0;</span>
 	    double anorm, c, f, g, h, s, scale, x, y, z;
-<span class="fc" id="L1283">	    double[] rv1 = new double[n];</span>
+<span class="fc" id="L1226">	    double[] rv1 = new double[n];</span>
 		
 	    //Householder reduction to bidiagonal form
-<span class="fc" id="L1286">	    g = scale = anorm = 0.0;</span>
-<span class="fc bfc" id="L1287" title="All 2 branches covered.">	    for (i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L1288">            l = i + 2;</span>
-<span class="fc" id="L1289">            rv1[i] = scale * g;</span>
-<span class="fc" id="L1290">            g = s = scale = 0.0;</span>
-<span class="fc bfc" id="L1291" title="All 2 branches covered.">            if (i &lt; m) {</span>
-<span class="fc bfc" id="L1292" title="All 2 branches covered.">		        for (k = i; k &lt; m; k++) {</span>
-<span class="fc" id="L1293">                    scale += Math.abs(u.getElementAt(k, i));</span>
+<span class="fc" id="L1229">	    g = scale = anorm = 0.0;</span>
+<span class="fc bfc" id="L1230" title="All 2 branches covered.">	    for (i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L1231">            l = i + 2;</span>
+<span class="fc" id="L1232">            rv1[i] = scale * g;</span>
+<span class="fc" id="L1233">            g = s = scale = 0.0;</span>
+<span class="fc bfc" id="L1234" title="All 2 branches covered.">            if (i &lt; m) {</span>
+<span class="fc bfc" id="L1235" title="All 2 branches covered.">		        for (k = i; k &lt; m; k++) {</span>
+<span class="fc" id="L1236">                    scale += Math.abs(u.getElementAt(k, i));</span>
                 }
-<span class="pc bpc" id="L1295" title="1 of 2 branches missed.">                if (scale != 0.0) {</span>
-<span class="fc bfc" id="L1296" title="All 2 branches covered.">                    for (k = i; k &lt; m; k++) {</span>
-<span class="fc" id="L1297">                        u.setElementAt(k, i, u.getElementAt(k,i) / scale);</span>
-<span class="fc" id="L1298">                        s += Math.pow(u.getElementAt(k,i), 2.0);</span>
+<span class="pc bpc" id="L1238" title="1 of 2 branches missed.">                if (scale != 0.0) {</span>
+<span class="fc bfc" id="L1239" title="All 2 branches covered.">                    for (k = i; k &lt; m; k++) {</span>
+<span class="fc" id="L1240">                        u.setElementAt(k, i, u.getElementAt(k,i) / scale);</span>
+<span class="fc" id="L1241">                        s += Math.pow(u.getElementAt(k,i), 2.0);</span>
                     }
-<span class="fc" id="L1300">                    f = u.getElementAt(i,i);</span>
-<span class="fc" id="L1301">                    g = -sign(Math.sqrt(s), f);</span>
-<span class="fc" id="L1302">                    h = f * g - s;</span>
-<span class="fc" id="L1303">                    u.setElementAt(i,i, f - g);</span>
-<span class="fc bfc" id="L1304" title="All 2 branches covered.">                    for (j = l - 1; j &lt; n; j++) {</span>
-<span class="fc bfc" id="L1305" title="All 2 branches covered.">                        for (s = 0.0, k = i; k &lt; m; k++) {</span>
-<span class="fc" id="L1306">                            s += u.getElementAt(k, i) * u.getElementAt(k, j);</span>
+<span class="fc" id="L1243">                    f = u.getElementAt(i,i);</span>
+<span class="fc" id="L1244">                    g = -sign(Math.sqrt(s), f);</span>
+<span class="fc" id="L1245">                    h = f * g - s;</span>
+<span class="fc" id="L1246">                    u.setElementAt(i,i, f - g);</span>
+<span class="fc bfc" id="L1247" title="All 2 branches covered.">                    for (j = l - 1; j &lt; n; j++) {</span>
+<span class="fc bfc" id="L1248" title="All 2 branches covered.">                        for (s = 0.0, k = i; k &lt; m; k++) {</span>
+<span class="fc" id="L1249">                            s += u.getElementAt(k, i) * u.getElementAt(k, j);</span>
                         }
-<span class="fc" id="L1308">                        f = s / h;</span>
-<span class="fc bfc" id="L1309" title="All 2 branches covered.">                        for (k = i; k &lt; m; k++) {</span>
-<span class="fc" id="L1310">                            u.setElementAt(k, j, u.getElementAt(k, j) +</span>
-<span class="fc" id="L1311">                                    f * u.getElementAt(k, i));</span>
+<span class="fc" id="L1251">                        f = s / h;</span>
+<span class="fc bfc" id="L1252" title="All 2 branches covered.">                        for (k = i; k &lt; m; k++) {</span>
+<span class="fc" id="L1253">                            u.setElementAt(k, j, u.getElementAt(k, j) +</span>
+<span class="fc" id="L1254">                                    f * u.getElementAt(k, i));</span>
                         }
                     }
-<span class="fc bfc" id="L1314" title="All 2 branches covered.">                    for (k = i; k &lt; m; k++) {</span>
-<span class="fc" id="L1315">                        u.setElementAt(k, i, u.getElementAt(k, i) * scale);</span>
+<span class="fc bfc" id="L1257" title="All 2 branches covered.">                    for (k = i; k &lt; m; k++) {</span>
+<span class="fc" id="L1258">                        u.setElementAt(k, i, u.getElementAt(k, i) * scale);</span>
                     }
 		        }
             }
-<span class="fc" id="L1319">            w[i] = scale * g;</span>
-<span class="fc" id="L1320">            g = s = scale = 0.0;</span>
-<span class="fc bfc" id="L1321" title="All 4 branches covered.">            if (i + 1 &lt;= m &amp;&amp; i + 1 != n) {</span>
-<span class="fc bfc" id="L1322" title="All 2 branches covered.">                for (k = l - 1; k &lt; n; k++) {</span>
-<span class="fc" id="L1323">                    scale += Math.abs(u.getElementAt(i, k));</span>
+<span class="fc" id="L1262">            w[i] = scale * g;</span>
+<span class="fc" id="L1263">            g = s = scale = 0.0;</span>
+<span class="fc bfc" id="L1264" title="All 4 branches covered.">            if (i + 1 &lt;= m &amp;&amp; i + 1 != n) {</span>
+<span class="fc bfc" id="L1265" title="All 2 branches covered.">                for (k = l - 1; k &lt; n; k++) {</span>
+<span class="fc" id="L1266">                    scale += Math.abs(u.getElementAt(i, k));</span>
                 }
-<span class="pc bpc" id="L1325" title="1 of 2 branches missed.">                if (scale != 0.0) {</span>
-<span class="fc bfc" id="L1326" title="All 2 branches covered.">                    for (k = l - 1; k &lt; n; k++) {</span>
-<span class="fc" id="L1327">                        u.setElementAt(i, k, u.getElementAt(i,k) / scale);</span>
-<span class="fc" id="L1328">                        s += Math.pow(u.getElementAt(i,k), 2.0);</span>
+<span class="pc bpc" id="L1268" title="1 of 2 branches missed.">                if (scale != 0.0) {</span>
+<span class="fc bfc" id="L1269" title="All 2 branches covered.">                    for (k = l - 1; k &lt; n; k++) {</span>
+<span class="fc" id="L1270">                        u.setElementAt(i, k, u.getElementAt(i,k) / scale);</span>
+<span class="fc" id="L1271">                        s += Math.pow(u.getElementAt(i,k), 2.0);</span>
                     }
-<span class="fc" id="L1330">                    f = u.getElementAt(i, l - 1);</span>
-<span class="fc" id="L1331">                    g = -sign(Math.sqrt(s), f);</span>
-<span class="fc" id="L1332">                    h = f * g - s;</span>
-<span class="fc" id="L1333">                    u.setElementAt(i, l - 1, f - g);</span>
-<span class="fc bfc" id="L1334" title="All 2 branches covered.">                    for (k = l - 1; k &lt; n; k++) {</span>
-<span class="fc" id="L1335">                        rv1[k] = u.getElementAt(i, k) / h;</span>
+<span class="fc" id="L1273">                    f = u.getElementAt(i, l - 1);</span>
+<span class="fc" id="L1274">                    g = -sign(Math.sqrt(s), f);</span>
+<span class="fc" id="L1275">                    h = f * g - s;</span>
+<span class="fc" id="L1276">                    u.setElementAt(i, l - 1, f - g);</span>
+<span class="fc bfc" id="L1277" title="All 2 branches covered.">                    for (k = l - 1; k &lt; n; k++) {</span>
+<span class="fc" id="L1278">                        rv1[k] = u.getElementAt(i, k) / h;</span>
                     }
-<span class="fc bfc" id="L1337" title="All 2 branches covered.">                    for (j = l - 1; j &lt; m; j++) {</span>
-<span class="fc bfc" id="L1338" title="All 2 branches covered.">                        for (s = 0.0, k = l - 1; k &lt; n; k++) {</span>
-<span class="fc" id="L1339">                            s += u.getElementAt(j, k) * u.getElementAt(i, k);</span>
+<span class="fc bfc" id="L1280" title="All 2 branches covered.">                    for (j = l - 1; j &lt; m; j++) {</span>
+<span class="fc bfc" id="L1281" title="All 2 branches covered.">                        for (s = 0.0, k = l - 1; k &lt; n; k++) {</span>
+<span class="fc" id="L1282">                            s += u.getElementAt(j, k) * u.getElementAt(i, k);</span>
                         }
-<span class="fc bfc" id="L1341" title="All 2 branches covered.">                        for (k = l - 1; k &lt; n; k++) {</span>
-<span class="fc" id="L1342">                            u.setElementAt(j, k,</span>
-<span class="fc" id="L1343">                                    u.getElementAt(j, k) + s * rv1[k]);</span>
+<span class="fc bfc" id="L1284" title="All 2 branches covered.">                        for (k = l - 1; k &lt; n; k++) {</span>
+<span class="fc" id="L1285">                            u.setElementAt(j, k,</span>
+<span class="fc" id="L1286">                                    u.getElementAt(j, k) + s * rv1[k]);</span>
                         }
                     }
-<span class="fc bfc" id="L1346" title="All 2 branches covered.">                    for (k = l - 1; k &lt; n; k++) {</span>
-<span class="fc" id="L1347">                        u.setElementAt(i, k, u.getElementAt(i, k) * scale);</span>
+<span class="fc bfc" id="L1289" title="All 2 branches covered.">                    for (k = l - 1; k &lt; n; k++) {</span>
+<span class="fc" id="L1290">                        u.setElementAt(i, k, u.getElementAt(i, k) * scale);</span>
                     }
                 }
             }
-<span class="fc" id="L1351">            anorm = Math.max(anorm, Math.abs(w[i]) + Math.abs(rv1[i]));			</span>
+<span class="fc" id="L1294">            anorm = Math.max(anorm, Math.abs(w[i]) + Math.abs(rv1[i]));			</span>
 	    }
 
         //Accumulation of right-hand transformations
-<span class="fc bfc" id="L1355" title="All 2 branches covered.">        for (i = n - 1; i &gt;= 0; i--) {</span>
-<span class="fc bfc" id="L1356" title="All 2 branches covered.">            if (i &lt; (n - 1)) {</span>
-<span class="fc bfc" id="L1357" title="All 2 branches covered.">                if (g != 0.0) {</span>
+<span class="fc bfc" id="L1298" title="All 2 branches covered.">        for (i = n - 1; i &gt;= 0; i--) {</span>
+<span class="fc bfc" id="L1299" title="All 2 branches covered.">            if (i &lt; (n - 1)) {</span>
+<span class="fc bfc" id="L1300" title="All 2 branches covered.">                if (g != 0.0) {</span>
                     //Double division to avoid possible underflow.
-<span class="fc bfc" id="L1359" title="All 2 branches covered.">                    for (j = l; j &lt; n; j++) {</span>
-<span class="fc" id="L1360">                        v.setElementAt(j, i, u.getElementAt(i, j) /</span>
-<span class="fc" id="L1361">                                u.getElementAt(i, l) / g);</span>
+<span class="fc bfc" id="L1302" title="All 2 branches covered.">                    for (j = l; j &lt; n; j++) {</span>
+<span class="fc" id="L1303">                        v.setElementAt(j, i, u.getElementAt(i, j) /</span>
+<span class="fc" id="L1304">                                u.getElementAt(i, l) / g);</span>
                     }
-<span class="fc bfc" id="L1363" title="All 2 branches covered.">                    for (j = l; j &lt; n; j++) {</span>
-<span class="fc bfc" id="L1364" title="All 2 branches covered.">                        for (s = 0.0, k = l; k &lt; n; k++) {</span>
-<span class="fc" id="L1365">                            s += u.getElementAt(i, k) * v.getElementAt(k, j);</span>
+<span class="fc bfc" id="L1306" title="All 2 branches covered.">                    for (j = l; j &lt; n; j++) {</span>
+<span class="fc bfc" id="L1307" title="All 2 branches covered.">                        for (s = 0.0, k = l; k &lt; n; k++) {</span>
+<span class="fc" id="L1308">                            s += u.getElementAt(i, k) * v.getElementAt(k, j);</span>
                         }
-<span class="fc bfc" id="L1367" title="All 2 branches covered.">                        for (k = l; k &lt; n; k++) {</span>
-<span class="fc" id="L1368">                            v.setElementAt(k, j, v.getElementAt(k, j) +</span>
-<span class="fc" id="L1369">                                    s * v.getElementAt(k, i));</span>
+<span class="fc bfc" id="L1310" title="All 2 branches covered.">                        for (k = l; k &lt; n; k++) {</span>
+<span class="fc" id="L1311">                            v.setElementAt(k, j, v.getElementAt(k, j) +</span>
+<span class="fc" id="L1312">                                    s * v.getElementAt(k, i));</span>
                         }
                     }
 		        }
-<span class="fc bfc" id="L1373" title="All 2 branches covered.">		        for (j = l; j &lt; n; j++) {</span>
-<span class="fc" id="L1374">                    v.setElementAt(i,j, 0.0);</span>
-<span class="fc" id="L1375">                    v.setElementAt(j,i, 0.0);</span>
+<span class="fc bfc" id="L1316" title="All 2 branches covered.">		        for (j = l; j &lt; n; j++) {</span>
+<span class="fc" id="L1317">                    v.setElementAt(i,j, 0.0);</span>
+<span class="fc" id="L1318">                    v.setElementAt(j,i, 0.0);</span>
                 }
             }
-<span class="fc" id="L1378">            v.setElementAt(i,i, 1.0);</span>
-<span class="fc" id="L1379">            g = rv1[i];</span>
-<span class="fc" id="L1380">            l = i;			</span>
+<span class="fc" id="L1321">            v.setElementAt(i,i, 1.0);</span>
+<span class="fc" id="L1322">            g = rv1[i];</span>
+<span class="fc" id="L1323">            l = i;			</span>
 	    }
 		
 	    //Accumulation of left-hand transformations
-<span class="fc bfc" id="L1384" title="All 2 branches covered.">	    for (i = Math.min(m,n) - 1; i &gt;= 0; i--) {</span>
-<span class="fc" id="L1385">            l = i + 1;</span>
-<span class="fc" id="L1386">            g = w[i];</span>
-<span class="fc bfc" id="L1387" title="All 2 branches covered.">            for (j = l; j &lt; n; j++) {</span>
-<span class="fc" id="L1388">                u.setElementAt(i,j, 0.0);</span>
+<span class="fc bfc" id="L1327" title="All 2 branches covered.">	    for (i = Math.min(m,n) - 1; i &gt;= 0; i--) {</span>
+<span class="fc" id="L1328">            l = i + 1;</span>
+<span class="fc" id="L1329">            g = w[i];</span>
+<span class="fc bfc" id="L1330" title="All 2 branches covered.">            for (j = l; j &lt; n; j++) {</span>
+<span class="fc" id="L1331">                u.setElementAt(i,j, 0.0);</span>
             }
-<span class="pc bpc" id="L1390" title="1 of 2 branches missed.">            if (g != 0.0) {</span>
-<span class="fc" id="L1391">                g = 1.0 / g;</span>
-<span class="fc bfc" id="L1392" title="All 2 branches covered.">                for (j = l; j &lt; n; j++) {</span>
-<span class="fc bfc" id="L1393" title="All 2 branches covered.">                    for (s = 0.0, k = l; k &lt; m; k++) {</span>
-<span class="fc" id="L1394">                        s += u.getElementAt(k,i) * u.getElementAt(k,j);</span>
+<span class="pc bpc" id="L1333" title="1 of 2 branches missed.">            if (g != 0.0) {</span>
+<span class="fc" id="L1334">                g = 1.0 / g;</span>
+<span class="fc bfc" id="L1335" title="All 2 branches covered.">                for (j = l; j &lt; n; j++) {</span>
+<span class="fc bfc" id="L1336" title="All 2 branches covered.">                    for (s = 0.0, k = l; k &lt; m; k++) {</span>
+<span class="fc" id="L1337">                        s += u.getElementAt(k,i) * u.getElementAt(k,j);</span>
                     }
-<span class="fc" id="L1396">                    f = (s / u.getElementAt(i,i)) * g;</span>
-<span class="fc bfc" id="L1397" title="All 2 branches covered.">                    for (k = i; k &lt; m; k++) {</span>
-<span class="fc" id="L1398">                        u.setElementAt(k,j, u.getElementAt(k,j) +</span>
-<span class="fc" id="L1399">                                f * u.getElementAt(k,i));</span>
+<span class="fc" id="L1339">                    f = (s / u.getElementAt(i,i)) * g;</span>
+<span class="fc bfc" id="L1340" title="All 2 branches covered.">                    for (k = i; k &lt; m; k++) {</span>
+<span class="fc" id="L1341">                        u.setElementAt(k,j, u.getElementAt(k,j) +</span>
+<span class="fc" id="L1342">                                f * u.getElementAt(k,i));</span>
                     }
                 }
-<span class="fc bfc" id="L1402" title="All 2 branches covered.">                for (j = i; j &lt; m; j++) {</span>
-<span class="fc" id="L1403">                    u.setElementAt(j, i, u.getElementAt(j, i) * g);</span>
+<span class="fc bfc" id="L1345" title="All 2 branches covered.">                for (j = i; j &lt; m; j++) {</span>
+<span class="fc" id="L1346">                    u.setElementAt(j, i, u.getElementAt(j, i) * g);</span>
                 }
             } else {
-<span class="nc bnc" id="L1406" title="All 2 branches missed.">                for (j = i; j &lt; m; j++) {</span>
-<span class="nc" id="L1407">                    u.setElementAt(j,i, 0.0);</span>
+<span class="nc bnc" id="L1349" title="All 2 branches missed.">                for (j = i; j &lt; m; j++) {</span>
+<span class="nc" id="L1350">                    u.setElementAt(j,i, 0.0);</span>
                 }
             }
-<span class="fc" id="L1410">            u.setElementAt(i,i, u.getElementAt(i,i) + 1.0);</span>
+<span class="fc" id="L1353">            u.setElementAt(i,i, u.getElementAt(i,i) + 1.0);</span>
 	    }
 		
 	    //Diagonalization of the bidiagonal form: Loop over singular values and
 	    //over allowed iterations.
-<span class="fc bfc" id="L1415" title="All 2 branches covered.">	    for (k = n - 1; k &gt;= 0; k--) {</span>
-<span class="pc bpc" id="L1416" title="1 of 2 branches missed.">            for (its = 0; its &lt; maxIters; its++) {</span>
-<span class="fc" id="L1417">		        flag = true;</span>
+<span class="fc bfc" id="L1358" title="All 2 branches covered.">	    for (k = n - 1; k &gt;= 0; k--) {</span>
+<span class="pc bpc" id="L1359" title="1 of 2 branches missed.">            for (its = 0; its &lt; maxIters; its++) {</span>
+<span class="fc" id="L1360">		        flag = true;</span>
 		        //Test for splitting
 		        //Note that rrv1[0] is always zero
-<span class="pc bpc" id="L1420" title="1 of 2 branches missed.">		        for (l = k; l &gt;= 0; l--) {</span>
-<span class="fc" id="L1421">                    nm = l - 1;</span>
-<span class="fc bfc" id="L1422" title="All 4 branches covered.">                    if (l == 0 || Math.abs(rv1[l]) &lt;= eps * anorm) {</span>
-<span class="fc" id="L1423">			            flag = false;</span>
-<span class="fc" id="L1424">			            break;</span>
+<span class="pc bpc" id="L1363" title="1 of 2 branches missed.">		        for (l = k; l &gt;= 0; l--) {</span>
+<span class="fc" id="L1364">                    nm = l - 1;</span>
+<span class="fc bfc" id="L1365" title="All 4 branches covered.">                    if (l == 0 || Math.abs(rv1[l]) &lt;= eps * anorm) {</span>
+<span class="fc" id="L1366">			            flag = false;</span>
+<span class="fc" id="L1367">			            break;</span>
                     }
-<span class="fc bfc" id="L1426" title="All 2 branches covered.">                    if (Math.abs(w[nm]) &lt;= eps * anorm) {</span>
-<span class="fc" id="L1427">                        break;</span>
+<span class="fc bfc" id="L1369" title="All 2 branches covered.">                    if (Math.abs(w[nm]) &lt;= eps * anorm) {</span>
+<span class="fc" id="L1370">                        break;</span>
                     }
 		        }
 		        //Cancellation of rv1[0] if l &gt; 1
-<span class="fc bfc" id="L1431" title="All 2 branches covered.">		        if (flag) {</span>
-<span class="fc" id="L1432">                    c = 0.0;</span>
-<span class="fc" id="L1433">                    s = 1.0;</span>
-<span class="fc bfc" id="L1434" title="All 2 branches covered.">                    for (i = l; i &lt; k + 1; i++) {</span>
-<span class="fc" id="L1435">			            f = s * rv1[i];</span>
-<span class="fc" id="L1436">			            rv1[i] = c * rv1[i];</span>
-<span class="pc bpc" id="L1437" title="1 of 2 branches missed.">			            if (Math.abs(f) &lt;= eps * anorm) {</span>
-<span class="nc" id="L1438">			                break;</span>
+<span class="fc bfc" id="L1374" title="All 2 branches covered.">		        if (flag) {</span>
+<span class="fc" id="L1375">                    c = 0.0;</span>
+<span class="fc" id="L1376">                    s = 1.0;</span>
+<span class="fc bfc" id="L1377" title="All 2 branches covered.">                    for (i = l; i &lt; k + 1; i++) {</span>
+<span class="fc" id="L1378">			            f = s * rv1[i];</span>
+<span class="fc" id="L1379">			            rv1[i] = c * rv1[i];</span>
+<span class="pc bpc" id="L1380" title="1 of 2 branches missed.">			            if (Math.abs(f) &lt;= eps * anorm) {</span>
+<span class="nc" id="L1381">			                break;</span>
                         }
-<span class="fc" id="L1440">			            g = w[i];</span>
-<span class="fc" id="L1441">			            h = pythag(f, g);</span>
-<span class="fc" id="L1442">			            w[i] = h;</span>
-<span class="pc bpc" id="L1443" title="1 of 2 branches missed.">			            if (h != 0.0) {</span>
-<span class="fc" id="L1444">                            h = 1.0 / h;</span>
+<span class="fc" id="L1383">			            g = w[i];</span>
+<span class="fc" id="L1384">			            h = pythag(f, g);</span>
+<span class="fc" id="L1385">			            w[i] = h;</span>
+<span class="pc bpc" id="L1386" title="1 of 2 branches missed.">			            if (h != 0.0) {</span>
+<span class="fc" id="L1387">                            h = 1.0 / h;</span>
                         } else {
-<span class="nc" id="L1446">			                h = Double.MAX_VALUE;</span>
+<span class="nc" id="L1389">			                h = Double.MAX_VALUE;</span>
                         }
-<span class="fc" id="L1448">			            c = g * h;</span>
-<span class="fc" id="L1449">			            s = -f * h;</span>
-<span class="fc bfc" id="L1450" title="All 2 branches covered.">			            for (j = 0; j &lt; m; j++) {</span>
-<span class="fc" id="L1451">                            y = u.getElementAt(j,nm);</span>
-<span class="fc" id="L1452">                            z = u.getElementAt(j,i);</span>
-<span class="fc" id="L1453">                            u.setElementAt(j,nm, y * c + z * s);</span>
-<span class="fc" id="L1454">                            u.setElementAt(j,i, z * c - y * s);</span>
+<span class="fc" id="L1391">			            c = g * h;</span>
+<span class="fc" id="L1392">			            s = -f * h;</span>
+<span class="fc bfc" id="L1393" title="All 2 branches covered.">			            for (j = 0; j &lt; m; j++) {</span>
+<span class="fc" id="L1394">                            y = u.getElementAt(j,nm);</span>
+<span class="fc" id="L1395">                            z = u.getElementAt(j,i);</span>
+<span class="fc" id="L1396">                            u.setElementAt(j,nm, y * c + z * s);</span>
+<span class="fc" id="L1397">                            u.setElementAt(j,i, z * c - y * s);</span>
 			            }
                     }
 		        }
-<span class="fc" id="L1458">		        z = w[k];</span>
+<span class="fc" id="L1401">		        z = w[k];</span>
 		        //Convergence.
-<span class="fc bfc" id="L1460" title="All 2 branches covered.">		        if (l == k) {</span>
+<span class="fc bfc" id="L1403" title="All 2 branches covered.">		        if (l == k) {</span>
                     //Singular value is made nonnegative
-<span class="fc bfc" id="L1462" title="All 2 branches covered.">                    if (z &lt; 0.0) {</span>
-<span class="fc" id="L1463">			            w[k] = -z;</span>
-<span class="fc bfc" id="L1464" title="All 2 branches covered.">			            for (j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L1465">                            v.setElementAt(j, k, -v.getElementAt(j, k));</span>
+<span class="fc bfc" id="L1405" title="All 2 branches covered.">                    if (z &lt; 0.0) {</span>
+<span class="fc" id="L1406">			            w[k] = -z;</span>
+<span class="fc bfc" id="L1407" title="All 2 branches covered.">			            for (j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L1408">                            v.setElementAt(j, k, -v.getElementAt(j, k));</span>
                         }
                     }
                     break;
 		        }
-<span class="pc bpc" id="L1470" title="1 of 2 branches missed.">		        if (its == maxIters - 1) {</span>
-<span class="nc" id="L1471">		            throw new NoConvergenceException();</span>
+<span class="pc bpc" id="L1413" title="1 of 2 branches missed.">		        if (its == maxIters - 1) {</span>
+<span class="nc" id="L1414">		            throw new NoConvergenceException();</span>
                 }
 				
 		        //Shift from bottom 2-by-2 minor.
-<span class="fc" id="L1475">		        x = w[l];</span>
-<span class="fc" id="L1476">		        nm = k - 1;</span>
-<span class="fc" id="L1477">		        y = w[nm];</span>
-<span class="fc" id="L1478">		        g = rv1[nm];</span>
-<span class="fc" id="L1479">		        h = rv1[k];</span>
-<span class="fc" id="L1480">		        f = ((y - z) * (y + z) + (g - h) * (g + h)) / (2.0 * h * y);</span>
-<span class="fc" id="L1481">		        g = pythag(f, 1.0);</span>
-<span class="fc" id="L1482">		        f = ((x - z) * (x + z) + h * ((y / (f + sign(g, f))) - h)) / x;</span>
-<span class="fc" id="L1483">		        c = s = 1.0;</span>
+<span class="fc" id="L1418">		        x = w[l];</span>
+<span class="fc" id="L1419">		        nm = k - 1;</span>
+<span class="fc" id="L1420">		        y = w[nm];</span>
+<span class="fc" id="L1421">		        g = rv1[nm];</span>
+<span class="fc" id="L1422">		        h = rv1[k];</span>
+<span class="fc" id="L1423">		        f = ((y - z) * (y + z) + (g - h) * (g + h)) / (2.0 * h * y);</span>
+<span class="fc" id="L1424">		        g = pythag(f, 1.0);</span>
+<span class="fc" id="L1425">		        f = ((x - z) * (x + z) + h * ((y / (f + sign(g, f))) - h)) / x;</span>
+<span class="fc" id="L1426">		        c = s = 1.0;</span>
 		        //Next QR transformation
-<span class="fc bfc" id="L1485" title="All 2 branches covered.">		        for (j = l; j &lt;= nm; j++) {</span>
-<span class="fc" id="L1486">                    i = j + 1;</span>
-<span class="fc" id="L1487">                    g = rv1[i];</span>
-<span class="fc" id="L1488">                    y = w[i];</span>
-<span class="fc" id="L1489">                    h = s * g;</span>
-<span class="fc" id="L1490">                    g = c * g;</span>
-<span class="fc" id="L1491">                    z = pythag(f, h);</span>
-<span class="fc" id="L1492">                    rv1[j] = z;</span>
-<span class="pc bpc" id="L1493" title="1 of 2 branches missed.">                    if (z != 0.0) {</span>
-<span class="fc" id="L1494">                        c = f / z;</span>
-<span class="fc" id="L1495">                        s = h / z;</span>
+<span class="fc bfc" id="L1428" title="All 2 branches covered.">		        for (j = l; j &lt;= nm; j++) {</span>
+<span class="fc" id="L1429">                    i = j + 1;</span>
+<span class="fc" id="L1430">                    g = rv1[i];</span>
+<span class="fc" id="L1431">                    y = w[i];</span>
+<span class="fc" id="L1432">                    h = s * g;</span>
+<span class="fc" id="L1433">                    g = c * g;</span>
+<span class="fc" id="L1434">                    z = pythag(f, h);</span>
+<span class="fc" id="L1435">                    rv1[j] = z;</span>
+<span class="pc bpc" id="L1436" title="1 of 2 branches missed.">                    if (z != 0.0) {</span>
+<span class="fc" id="L1437">                        c = f / z;</span>
+<span class="fc" id="L1438">                        s = h / z;</span>
                     } else {
-<span class="nc" id="L1497">                        c = Math.signum(f) * Double.MAX_VALUE;</span>
-<span class="nc" id="L1498">                        s = Math.signum(h) * Double.MAX_VALUE;</span>
+<span class="nc" id="L1440">                        c = Math.signum(f) * Double.MAX_VALUE;</span>
+<span class="nc" id="L1441">                        s = Math.signum(h) * Double.MAX_VALUE;</span>
                     }
-<span class="fc" id="L1500">                    f = x * c + g * s;</span>
-<span class="fc" id="L1501">                    g = g * c - x * s;</span>
-<span class="fc" id="L1502">                    h = y * s;</span>
-<span class="fc" id="L1503">                    y *= c;</span>
-<span class="fc bfc" id="L1504" title="All 2 branches covered.">                    for (jj = 0; jj &lt; n; jj++) {</span>
-<span class="fc" id="L1505">			            x = v.getElementAt(jj,j);</span>
-<span class="fc" id="L1506">			            z = v.getElementAt(jj,i);</span>
-<span class="fc" id="L1507">			            v.setElementAt(jj,j, x * c + z * s);</span>
-<span class="fc" id="L1508">			            v.setElementAt(jj,i, z * c - x * s);</span>
+<span class="fc" id="L1443">                    f = x * c + g * s;</span>
+<span class="fc" id="L1444">                    g = g * c - x * s;</span>
+<span class="fc" id="L1445">                    h = y * s;</span>
+<span class="fc" id="L1446">                    y *= c;</span>
+<span class="fc bfc" id="L1447" title="All 2 branches covered.">                    for (jj = 0; jj &lt; n; jj++) {</span>
+<span class="fc" id="L1448">			            x = v.getElementAt(jj,j);</span>
+<span class="fc" id="L1449">			            z = v.getElementAt(jj,i);</span>
+<span class="fc" id="L1450">			            v.setElementAt(jj,j, x * c + z * s);</span>
+<span class="fc" id="L1451">			            v.setElementAt(jj,i, z * c - x * s);</span>
                     }
-<span class="fc" id="L1510">                    z = pythag(f, h);</span>
+<span class="fc" id="L1453">                    z = pythag(f, h);</span>
                     //Rotation can be arbitrary if z = 0
-<span class="fc" id="L1512">                    w[j] = z;</span>
-<span class="pc bpc" id="L1513" title="1 of 2 branches missed.">                    if (z != 0.0) {</span>
-<span class="fc" id="L1514">			            z = 1.0 / z;</span>
-<span class="fc" id="L1515">			            c = f * z;</span>
-<span class="fc" id="L1516">			            s = h * z;</span>
+<span class="fc" id="L1455">                    w[j] = z;</span>
+<span class="pc bpc" id="L1456" title="1 of 2 branches missed.">                    if (z != 0.0) {</span>
+<span class="fc" id="L1457">			            z = 1.0 / z;</span>
+<span class="fc" id="L1458">			            c = f * z;</span>
+<span class="fc" id="L1459">			            s = h * z;</span>
                     }
-<span class="fc" id="L1518">                    f = c * g + s * y;</span>
-<span class="fc" id="L1519">                    x = c * y - s * g;</span>
-<span class="fc bfc" id="L1520" title="All 2 branches covered.">                    for (jj = 0; jj &lt; m; jj++) {</span>
-<span class="fc" id="L1521">			            y = u.getElementAt(jj,j);</span>
-<span class="fc" id="L1522">                        z = u.getElementAt(jj,i);</span>
-<span class="fc" id="L1523">			            u.setElementAt(jj,j, y * c + z * s);</span>
-<span class="fc" id="L1524">			            u.setElementAt(jj,i, z * c - y * s);</span>
+<span class="fc" id="L1461">                    f = c * g + s * y;</span>
+<span class="fc" id="L1462">                    x = c * y - s * g;</span>
+<span class="fc bfc" id="L1463" title="All 2 branches covered.">                    for (jj = 0; jj &lt; m; jj++) {</span>
+<span class="fc" id="L1464">			            y = u.getElementAt(jj,j);</span>
+<span class="fc" id="L1465">                        z = u.getElementAt(jj,i);</span>
+<span class="fc" id="L1466">			            u.setElementAt(jj,j, y * c + z * s);</span>
+<span class="fc" id="L1467">			            u.setElementAt(jj,i, z * c - y * s);</span>
                     }
 		        }
-<span class="fc" id="L1527">		        rv1[l] = 0.0;</span>
-<span class="fc" id="L1528">		        rv1[k] = f;</span>
-<span class="fc" id="L1529">		        w[k] = x;</span>
+<span class="fc" id="L1470">		        rv1[l] = 0.0;</span>
+<span class="fc" id="L1471">		        rv1[k] = f;</span>
+<span class="fc" id="L1472">		        w[k] = x;</span>
             }
         }
-<span class="fc" id="L1532">    }</span>
+<span class="fc" id="L1475">    }</span>
     
     /**
      * Reorders singular values from maximal to minimal, and also reorders
@@ -1537,73 +1480,73 @@ public class SingularValueDecomposer extends Decomposer {
      * still remains valid.
      */
     private void reorder() {
-<span class="fc" id="L1540">        int m = inputMatrix.getRows();</span>
-<span class="fc" id="L1541">	    int n = inputMatrix.getColumns();</span>
+<span class="fc" id="L1483">        int m = inputMatrix.getRows();</span>
+<span class="fc" id="L1484">	    int n = inputMatrix.getColumns();</span>
 		
-<span class="fc" id="L1543">	    int i, j, k, s, inc = 1;</span>
+<span class="fc" id="L1486">	    int i, j, k, s, inc = 1;</span>
 	    double sw;
-<span class="fc" id="L1545">	    double[] su = new double[m];</span>
-<span class="fc" id="L1546">	    double[] sv = new double[n];</span>
+<span class="fc" id="L1488">	    double[] su = new double[m];</span>
+<span class="fc" id="L1489">	    double[] sv = new double[n];</span>
 		
 	    do {
-<span class="fc" id="L1549">	        inc *= 3; inc++;</span>
-<span class="fc bfc" id="L1550" title="All 2 branches covered.">	    } while(inc &lt;= n);</span>
+<span class="fc" id="L1492">	        inc *= 3; inc++;</span>
+<span class="fc bfc" id="L1493" title="All 2 branches covered.">	    } while(inc &lt;= n);</span>
         do {
-<span class="fc" id="L1552">            inc /= 3;</span>
-<span class="fc bfc" id="L1553" title="All 2 branches covered.">            for (i = inc; i &lt; n; i++) {</span>
-<span class="fc" id="L1554">                sw = w[i];</span>
-<span class="fc bfc" id="L1555" title="All 2 branches covered.">		        for (k = 0; k &lt; m; k++) {</span>
-<span class="fc" id="L1556">                    su[k] = u.getElementAt(k, i);</span>
+<span class="fc" id="L1495">            inc /= 3;</span>
+<span class="fc bfc" id="L1496" title="All 2 branches covered.">            for (i = inc; i &lt; n; i++) {</span>
+<span class="fc" id="L1497">                sw = w[i];</span>
+<span class="fc bfc" id="L1498" title="All 2 branches covered.">		        for (k = 0; k &lt; m; k++) {</span>
+<span class="fc" id="L1499">                    su[k] = u.getElementAt(k, i);</span>
                 }
-<span class="fc bfc" id="L1558" title="All 2 branches covered.">		        for (k = 0; k &lt; n; k++) {</span>
-<span class="fc" id="L1559">                    sv[k] = v.getElementAt(k, i);</span>
+<span class="fc bfc" id="L1501" title="All 2 branches covered.">		        for (k = 0; k &lt; n; k++) {</span>
+<span class="fc" id="L1502">                    sv[k] = v.getElementAt(k, i);</span>
                 }
-<span class="fc" id="L1561">		        j = i;</span>
-<span class="fc bfc" id="L1562" title="All 2 branches covered.">		        while (w[j - inc] &lt; sw) {</span>
-<span class="fc" id="L1563">                    w[j] = w[j - inc];</span>
-<span class="fc bfc" id="L1564" title="All 2 branches covered.">                    for (k = 0; k &lt; m; k++) {</span>
-<span class="fc" id="L1565">                        u.setElementAt(k, j, u.getElementAt(k, j - inc));</span>
+<span class="fc" id="L1504">		        j = i;</span>
+<span class="fc bfc" id="L1505" title="All 2 branches covered.">		        while (w[j - inc] &lt; sw) {</span>
+<span class="fc" id="L1506">                    w[j] = w[j - inc];</span>
+<span class="fc bfc" id="L1507" title="All 2 branches covered.">                    for (k = 0; k &lt; m; k++) {</span>
+<span class="fc" id="L1508">                        u.setElementAt(k, j, u.getElementAt(k, j - inc));</span>
                     }
-<span class="fc bfc" id="L1567" title="All 2 branches covered.">                    for (k = 0; k &lt; n; k++) {</span>
-<span class="fc" id="L1568">                        v.setElementAt(k, j, v.getElementAt(k, j - inc));</span>
+<span class="fc bfc" id="L1510" title="All 2 branches covered.">                    for (k = 0; k &lt; n; k++) {</span>
+<span class="fc" id="L1511">                        v.setElementAt(k, j, v.getElementAt(k, j - inc));</span>
                     }
-<span class="fc" id="L1570">                    j -= inc;</span>
-<span class="fc bfc" id="L1571" title="All 2 branches covered.">                    if (j &lt; inc) {</span>
-<span class="fc" id="L1572">                        break;</span>
+<span class="fc" id="L1513">                    j -= inc;</span>
+<span class="fc bfc" id="L1514" title="All 2 branches covered.">                    if (j &lt; inc) {</span>
+<span class="fc" id="L1515">                        break;</span>
                     }
                 }
-<span class="fc" id="L1575">                w[j] = sw;</span>
-<span class="fc bfc" id="L1576" title="All 2 branches covered.">                for (k = 0; k &lt; m; k++) {</span>
-<span class="fc" id="L1577">                    u.setElementAt(k, j, su[k]);</span>
+<span class="fc" id="L1518">                w[j] = sw;</span>
+<span class="fc bfc" id="L1519" title="All 2 branches covered.">                for (k = 0; k &lt; m; k++) {</span>
+<span class="fc" id="L1520">                    u.setElementAt(k, j, su[k]);</span>
                 }
-<span class="fc bfc" id="L1579" title="All 2 branches covered.">                for (k = 0; k &lt; n; k++) {</span>
-<span class="fc" id="L1580">                    v.setElementAt(k, j, sv[k]);</span>
+<span class="fc bfc" id="L1522" title="All 2 branches covered.">                for (k = 0; k &lt; n; k++) {</span>
+<span class="fc" id="L1523">                    v.setElementAt(k, j, sv[k]);</span>
                 }
             }
-<span class="fc bfc" id="L1583" title="All 2 branches covered.">	    } while (inc &gt; 1);</span>
+<span class="fc bfc" id="L1526" title="All 2 branches covered.">	    } while (inc &gt; 1);</span>
 		
-<span class="fc bfc" id="L1585" title="All 2 branches covered.">	    for (k = 0; k &lt; n; k++) {</span>
-<span class="fc" id="L1586">            s = 0;</span>
-<span class="fc bfc" id="L1587" title="All 2 branches covered.">            for (i = 0; i &lt; m; i++) {</span>
-<span class="fc bfc" id="L1588" title="All 2 branches covered.">                if (u.getElementAt(i, k) &lt; 0.0) {</span>
-<span class="fc" id="L1589">                    s++;</span>
+<span class="fc bfc" id="L1528" title="All 2 branches covered.">	    for (k = 0; k &lt; n; k++) {</span>
+<span class="fc" id="L1529">            s = 0;</span>
+<span class="fc bfc" id="L1530" title="All 2 branches covered.">            for (i = 0; i &lt; m; i++) {</span>
+<span class="fc bfc" id="L1531" title="All 2 branches covered.">                if (u.getElementAt(i, k) &lt; 0.0) {</span>
+<span class="fc" id="L1532">                    s++;</span>
                 }
             }
-<span class="fc bfc" id="L1592" title="All 2 branches covered.">            for (j = 0; j &lt; n; j++) {</span>
-<span class="fc bfc" id="L1593" title="All 2 branches covered.">                if (v.getElementAt(j, k) &lt; 0.0) {</span>
-<span class="fc" id="L1594">                    s++;</span>
+<span class="fc bfc" id="L1535" title="All 2 branches covered.">            for (j = 0; j &lt; n; j++) {</span>
+<span class="fc bfc" id="L1536" title="All 2 branches covered.">                if (v.getElementAt(j, k) &lt; 0.0) {</span>
+<span class="fc" id="L1537">                    s++;</span>
                 }
             }
-<span class="fc bfc" id="L1597" title="All 2 branches covered.">            if (s &gt; (m + n) / 2) {</span>
-<span class="fc bfc" id="L1598" title="All 2 branches covered.">		        for (i = 0; i &lt; m; i++) {</span>
-<span class="fc" id="L1599">                    u.setElementAt(i, k, -u.getElementAt(i, k));</span>
+<span class="fc bfc" id="L1540" title="All 2 branches covered.">            if (s &gt; (m + n) / 2) {</span>
+<span class="fc bfc" id="L1541" title="All 2 branches covered.">		        for (i = 0; i &lt; m; i++) {</span>
+<span class="fc" id="L1542">                    u.setElementAt(i, k, -u.getElementAt(i, k));</span>
                 }
-<span class="fc bfc" id="L1601" title="All 2 branches covered.">		        for (j = 0; j &lt; n; j++) {</span>
-<span class="fc" id="L1602">                    v.setElementAt(j, k, -v.getElementAt(j, k));</span>
+<span class="fc bfc" id="L1544" title="All 2 branches covered.">		        for (j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L1545">                    v.setElementAt(j, k, -v.getElementAt(j, k));</span>
                 }
             }
 	    }
-<span class="fc" id="L1606">    }</span>
+<span class="fc" id="L1549">    }</span>
     
     /**
      * Sets threshold to be used to determine whether a singular value is
@@ -1617,8 +1560,8 @@ public class SingularValueDecomposer extends Decomposer {
      * value is negligible or not.
      */
     private void setNegligibleSingularValueThreshold(double threshold) {
-<span class="fc" id="L1620">        tsh = threshold;</span>
-<span class="fc" id="L1621">    }</span>
+<span class="fc" id="L1563">        tsh = threshold;</span>
+<span class="fc" id="L1564">    }</span>
     
     /**
      * Computes norm of a vector of 2 components 'a' and 'b' as
@@ -1634,14 +1577,14 @@ public class SingularValueDecomposer extends Decomposer {
      */
     private double pythag(double a, double b) {
         double absa, absb;
-<span class="fc" id="L1637">	    absa = Math.abs(a);</span>
-<span class="fc" id="L1638">	    absb = Math.abs(b);</span>
+<span class="fc" id="L1580">	    absa = Math.abs(a);</span>
+<span class="fc" id="L1581">	    absb = Math.abs(b);</span>
 		
-<span class="fc bfc" id="L1640" title="All 2 branches covered.">	    if (absa &gt; absb) {</span>
-<span class="fc" id="L1641">	        return absa * Math.sqrt(1.0 + (absb/absa)*(absb/absa));</span>
+<span class="fc bfc" id="L1583" title="All 2 branches covered.">	    if (absa &gt; absb) {</span>
+<span class="fc" id="L1584">	        return absa * Math.sqrt(1.0 + (absb/absa)*(absb/absa));</span>
         } else {
-<span class="pc bpc" id="L1643" title="1 of 2 branches missed.">	        return (absb == 0.0 ?</span>
-<span class="pc" id="L1644">                    0.0 : absb * Math.sqrt(1.0 + (absa/absb)*(absa/absb)));</span>
+<span class="pc bpc" id="L1586" title="1 of 2 branches missed.">	        return (absb == 0.0 ?</span>
+<span class="pc" id="L1587">                    0.0 : absb * Math.sqrt(1.0 + (absa/absb)*(absa/absb)));</span>
         }
     }
     
@@ -1653,7 +1596,67 @@ public class SingularValueDecomposer extends Decomposer {
      * @return a or -a depending on b sign.
      */
     private double sign(double a, double b) {
-<span class="pc bpc" id="L1656" title="2 of 6 branches missed.">        return (b &gt;= 0.0 ? (a &gt;= 0.0 ? a : -a) : (a &gt;= 0.0 ? -a : a));</span>
+<span class="pc bpc" id="L1599" title="2 of 6 branches missed.">        return (b &gt;= 0.0 ? (a &gt;= 0.0 ? a : -a) : (a &gt;= 0.0 ? -a : a));</span>
     }
+
+    /**
+     * Internal method to copy range space vector values into provided matrix.
+     * Provided matrix will be resized if needed
+     * @param rank Rank of range space
+     * @param singularValueThreshold Threshold to determine whether a singular
+     * value is null
+     * @param range Matrix where range space vector values are stored.
+     */
+    private void internalGetRange(int rank, double singularValueThreshold,
+                                  Matrix range) {
+<span class="fc" id="L1612">        int rows = inputMatrix.getRows();</span>
+<span class="fc" id="L1613">        int columns = inputMatrix.getColumns();</span>
+
+<span class="pc bpc" id="L1615" title="2 of 4 branches missed.">        if (range.getRows() != rows || range.getColumns() != rank) {</span>
+            try {
+<span class="nc" id="L1617">                range.resize(rows, rank);</span>
+<span class="nc" id="L1618">            } catch (WrongSizeException ignore) {</span>
+                //never happens
+<span class="nc" id="L1620">            }</span>
+        }
+
+<span class="fc" id="L1623">        int nr = 0;</span>
+<span class="fc bfc" id="L1624" title="All 2 branches covered.">        for (int j = 0; j &lt; columns; j++) {</span>
+<span class="fc bfc" id="L1625" title="All 2 branches covered.">            if (w[j] &gt; singularValueThreshold) {</span>
+                //copy column j of U matrix into column nr of out matrix
+<span class="fc" id="L1627">                range.setSubmatrix(0, nr, rows - 1, nr, u, 0, j, rows - 1, j);</span>
+<span class="fc" id="L1628">                nr++;</span>
+            }
+        }
+<span class="fc" id="L1631">    }</span>
+
+    /**
+     * Internal method to copy nullspace vector values into provided matrix.
+     * Provided matrix will be resized if needed
+     * @param nullity Nullity of nullspace
+     * @param singularValueThreshold Threshold to determine whether a singular
+     * value is null
+     * @param nullspace Matrix where nullspace vector values are stored.
+     */
+    private void internalGetNullspace(int nullity, double singularValueThreshold,
+                                      Matrix nullspace) {
+<span class="fc" id="L1643">        int columns = inputMatrix.getColumns();</span>
+
+<span class="pc bpc" id="L1645" title="2 of 4 branches missed.">        if (nullspace.getRows() != columns || nullspace.getColumns() != nullity){</span>
+            try {
+<span class="nc" id="L1647">                nullspace.resize(columns, nullity);</span>
+<span class="nc" id="L1648">            } catch (WrongSizeException ignore){ }</span>
+        }
+
+<span class="fc" id="L1651">        int nn = 0;</span>
+<span class="fc bfc" id="L1652" title="All 2 branches covered.">        for (int j = 0; j &lt; columns; j++) {</span>
+<span class="fc bfc" id="L1653" title="All 2 branches covered.">            if (w[j] &lt;= singularValueThreshold) {</span>
+                //copy column j of U matrix into column nn of out matrix
+<span class="fc" id="L1655">                nullspace.setSubmatrix(0, nn, columns - 1, nn, v, 0, j,</span>
+                        columns - 1, j);
+<span class="fc" id="L1657">                nn++;</span>
+            }
+        }
+<span class="fc" id="L1660">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

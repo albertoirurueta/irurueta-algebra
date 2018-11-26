@@ -48,18 +48,19 @@ public class OneNormComputer extends NormComputer {
     public static double norm(Matrix m) {
 <span class="fc" id="L49">        int rows = m.getRows();</span>
 <span class="fc" id="L50">        int columns = m.getColumns();</span>
-<span class="fc" id="L51">        double colSum, maxColSum = 0.0;</span>
+        double colSum;
+<span class="fc" id="L52">        double maxColSum = 0.0;</span>
         
-<span class="fc bfc" id="L53" title="All 2 branches covered.">        for (int j = 0; j &lt; columns; j++) {</span>
-<span class="fc" id="L54">            colSum = 0.0;</span>
-<span class="fc bfc" id="L55" title="All 2 branches covered.">            for (int i = 0; i &lt; rows; i++) {</span>
-<span class="fc" id="L56">                colSum += Math.abs(m.getElementAt(i, j));</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        for (int j = 0; j &lt; columns; j++) {</span>
+<span class="fc" id="L55">            colSum = 0.0;</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">            for (int i = 0; i &lt; rows; i++) {</span>
+<span class="fc" id="L57">                colSum += Math.abs(m.getElementAt(i, j));</span>
             }
             
-<span class="fc bfc" id="L59" title="All 2 branches covered.">            maxColSum = colSum &gt; maxColSum ? colSum : maxColSum;</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">            maxColSum = colSum &gt; maxColSum ? colSum : maxColSum;</span>
         }
         
-<span class="fc" id="L62">        return maxColSum;        </span>
+<span class="fc" id="L63">        return maxColSum;        </span>
     }
 
     /**
@@ -69,7 +70,7 @@ public class OneNormComputer extends NormComputer {
      */    
     @Override
     public double getNorm(Matrix m) {
-<span class="fc" id="L72">        return norm(m);</span>
+<span class="fc" id="L73">        return norm(m);</span>
     }
     
     /**
@@ -78,13 +79,13 @@ public class OneNormComputer extends NormComputer {
      * @return norm of provided vector.
      */
     public static double norm(double[] array) {
-<span class="fc" id="L81">        double colSum = 0.0;</span>
+<span class="fc" id="L82">        double colSum = 0.0;</span>
 
-<span class="fc bfc" id="L83" title="All 2 branches covered.">        for (double value : array) {</span>
-<span class="fc" id="L84">            colSum += Math.abs(value);</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        for (double value : array) {</span>
+<span class="fc" id="L85">            colSum += Math.abs(value);</span>
         }
         
-<span class="fc" id="L87">        return colSum;        </span>
+<span class="fc" id="L88">        return colSum;        </span>
     }
     
     /**
@@ -99,24 +100,24 @@ public class OneNormComputer extends NormComputer {
      */
     public static double norm(double[] array, Matrix jacobian)
             throws WrongSizeException {
-<span class="pc bpc" id="L102" title="1 of 4 branches missed.">        if (jacobian != null &amp;&amp; (jacobian.getRows() != 1 ||</span>
-<span class="pc bpc" id="L103" title="1 of 2 branches missed.">                jacobian.getColumns() != array.length)) {</span>
-<span class="fc" id="L104">            throw new WrongSizeException(&quot;jacobian must be 1xN, where &quot; + </span>
+<span class="pc bpc" id="L103" title="1 of 4 branches missed.">        if (jacobian != null &amp;&amp; (jacobian.getRows() != 1 ||</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">                jacobian.getColumns() != array.length)) {</span>
+<span class="fc" id="L105">            throw new WrongSizeException(&quot;jacobian must be 1xN, where &quot; + </span>
                     &quot;N is length of array&quot;);
         }
         
-<span class="fc" id="L108">        double norm = norm(array);</span>
+<span class="fc" id="L109">        double norm = norm(array);</span>
         
-<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        if (jacobian != null) {</span>
-<span class="fc" id="L111">            jacobian.fromArray(array);</span>
-<span class="fc bfc" id="L112" title="All 2 branches covered.">            if (norm != 0.0) {</span>
-<span class="fc" id="L113">                jacobian.multiplyByScalar(1.0 / norm);</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">        if (jacobian != null) {</span>
+<span class="fc" id="L112">            jacobian.fromArray(array);</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">            if (norm != 0.0) {</span>
+<span class="fc" id="L114">                jacobian.multiplyByScalar(1.0 / norm);</span>
             } else {
-<span class="fc" id="L115">                jacobian.initialize(Double.MAX_VALUE);</span>
+<span class="fc" id="L116">                jacobian.initialize(Double.MAX_VALUE);</span>
             }
         }
         
-<span class="fc" id="L119">        return norm;        </span>
+<span class="fc" id="L120">        return norm;        </span>
     }
 
     /**
@@ -126,7 +127,7 @@ public class OneNormComputer extends NormComputer {
      */    
     @Override
     public double getNorm(double[] array) {
-<span class="fc" id="L129">        return norm(array);</span>
+<span class="fc" id="L130">        return norm(array);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

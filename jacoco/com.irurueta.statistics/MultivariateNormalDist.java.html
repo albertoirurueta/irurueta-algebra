@@ -324,28 +324,29 @@ public class MultivariateNormalDist {
      * unstable (i.e. contains NaNs or very large numbers).
      * @throws RankDeficientMatrixException happens if covariance is singular.
      */
+    @SuppressWarnings(&quot;Duplicates&quot;)
     public double p(double[] x) throws NotReadyException, 
             IllegalArgumentException, DecomposerException, 
             RankDeficientMatrixException {
-<span class="fc bfc" id="L330" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L331">            throw new NotReadyException(</span>
+<span class="fc bfc" id="L331" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L332">            throw new NotReadyException(</span>
                     &quot;mean and covariance not provided or invalid&quot;);
         }
         
-<span class="fc" id="L335">        int k = x.length;</span>
-<span class="fc bfc" id="L336" title="All 2 branches covered.">        if (k != mMu.length) {</span>
-<span class="fc" id="L337">            throw new IllegalArgumentException(</span>
+<span class="fc" id="L336">        int k = x.length;</span>
+<span class="fc bfc" id="L337" title="All 2 branches covered.">        if (k != mMu.length) {</span>
+<span class="fc" id="L338">            throw new IllegalArgumentException(</span>
                     &quot;length of point must be equal to the length of mean&quot;);
         }
                 
-<span class="fc" id="L341">        double detCov = 0.0;</span>
+<span class="fc" id="L342">        double detCov = 0.0;</span>
         try {
-<span class="fc" id="L343">            detCov = Utils.det(mCov);            </span>
-<span class="pc" id="L344">        } catch (WrongSizeException ignore) { /* never thrown */ }</span>
+<span class="fc" id="L344">            detCov = Utils.det(mCov);            </span>
+<span class="pc" id="L345">        } catch (WrongSizeException ignore) { /* never thrown */ }</span>
         
-<span class="fc" id="L346">        double factor = 1.0 / (Math.sqrt(Math.pow(2.0 * Math.PI, k) * </span>
+<span class="fc" id="L347">        double factor = 1.0 / (Math.sqrt(Math.pow(2.0 * Math.PI, k) * </span>
                 detCov));
-<span class="fc" id="L348">        return factor * Math.exp(-0.5*squaredMahalanobisDistance(x));        </span>
+<span class="fc" id="L349">        return factor * Math.exp(-0.5*squaredMahalanobisDistance(x));        </span>
     }
     
     /**
@@ -368,41 +369,42 @@ public class MultivariateNormalDist {
      * @throws DecomposerException if covariance is numerically unstable (i.e.
      * contains NaNs or very large numbers).
      */
+    @SuppressWarnings(&quot;Duplicates&quot;)
     public double cdf(double[] x, Matrix basis) throws IllegalArgumentException,
             NotReadyException, DecomposerException {
-<span class="fc bfc" id="L373" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L374">            throw new NotReadyException(</span>
+<span class="fc bfc" id="L375" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L376">            throw new NotReadyException(</span>
                     &quot;mean and covariance not provided or invalid&quot;);
         }        
         
-<span class="fc" id="L378">        int k = x.length;</span>
-<span class="fc bfc" id="L379" title="All 2 branches covered.">        if (k != mMu.length) {</span>
-<span class="fc" id="L380">            throw new IllegalArgumentException(</span>
+<span class="fc" id="L380">        int k = x.length;</span>
+<span class="fc bfc" id="L381" title="All 2 branches covered.">        if (k != mMu.length) {</span>
+<span class="fc" id="L382">            throw new IllegalArgumentException(</span>
                     &quot;length of point must be equal to the length of mean&quot;);            
         }
                 
-<span class="fc" id="L384">        double p = 1.0;</span>
+<span class="fc" id="L386">        double p = 1.0;</span>
         try {
-<span class="fc" id="L386">            processCovariance();</span>
+<span class="fc" id="L388">            processCovariance();</span>
             
-<span class="fc bfc" id="L388" title="All 2 branches covered.">            if (basis != null) {</span>
-<span class="fc" id="L389">                basis.copyFrom(mCovBasis);            </span>
+<span class="fc bfc" id="L390" title="All 2 branches covered.">            if (basis != null) {</span>
+<span class="fc" id="L391">                basis.copyFrom(mCovBasis);            </span>
             }
             
-<span class="fc bfc" id="L392" title="All 2 branches covered.">            for (int i = 0; i &lt; k; i++) {</span>
-<span class="fc" id="L393">                double[] singleBasis = </span>
-<span class="fc" id="L394">                        mCovBasis.getSubmatrixAsArray(0, i, k - 1, i);</span>
-<span class="fc" id="L395">                double coordX = ArrayUtils.dotProduct(x, singleBasis);</span>
-<span class="fc" id="L396">                double coordMu = ArrayUtils.dotProduct(mMu, singleBasis);</span>
-<span class="fc" id="L397">                p *= NormalDist.internalCdf(coordX, coordMu, </span>
-<span class="fc" id="L398">                        Math.sqrt(mVariances[i]));</span>
+<span class="fc bfc" id="L394" title="All 2 branches covered.">            for (int i = 0; i &lt; k; i++) {</span>
+<span class="fc" id="L395">                double[] singleBasis = </span>
+<span class="fc" id="L396">                        mCovBasis.getSubmatrixAsArray(0, i, k - 1, i);</span>
+<span class="fc" id="L397">                double coordX = ArrayUtils.dotProduct(x, singleBasis);</span>
+<span class="fc" id="L398">                double coordMu = ArrayUtils.dotProduct(mMu, singleBasis);</span>
+<span class="fc" id="L399">                p *= NormalDist.internalCdf(coordX, coordMu, </span>
+<span class="fc" id="L400">                        Math.sqrt(mVariances[i]));</span>
             }
             
-<span class="nc" id="L401">        } catch (DecomposerException e) {</span>
-<span class="nc" id="L402">            throw e;</span>
-<span class="pc" id="L403">        } catch (AlgebraException ignore) { /* never thrown */ }</span>
+<span class="nc" id="L403">        } catch (DecomposerException e) {</span>
+<span class="nc" id="L404">            throw e;</span>
+<span class="pc" id="L405">        } catch (AlgebraException ignore) { /* never thrown */ }</span>
         
-<span class="fc" id="L405">        return p;</span>
+<span class="fc" id="L407">        return p;</span>
     }
     
     /**
@@ -422,9 +424,8 @@ public class MultivariateNormalDist {
      * @throws DecomposerException if covariance is numerically unstable (i.e.
      * contains NaNs or very large numbers).
      */    
-    public double cdf(double[] x) throws IllegalArgumentException, 
-            NotReadyException, DecomposerException {
-<span class="fc" id="L427">        return cdf(x, null);</span>
+    public double cdf(double[] x) throws NotReadyException, DecomposerException {
+<span class="fc" id="L428">        return cdf(x, null);</span>
     }
     
     /**
@@ -436,11 +437,11 @@ public class MultivariateNormalDist {
      * @return joint probability.
      */
     public static double jointProbability(double[] p) {
-<span class="fc" id="L439">        double jointP = 1.0;</span>
-<span class="fc bfc" id="L440" title="All 2 branches covered.">        for (double aP : p) {</span>
-<span class="fc" id="L441">            jointP *= aP;</span>
+<span class="fc" id="L440">        double jointP = 1.0;</span>
+<span class="fc bfc" id="L441" title="All 2 branches covered.">        for (double aP : p) {</span>
+<span class="fc" id="L442">            jointP *= aP;</span>
         }
-<span class="fc" id="L443">        return jointP;        </span>
+<span class="fc" id="L444">        return jointP;        </span>
     }
     
     /**
@@ -465,8 +466,7 @@ public class MultivariateNormalDist {
      * contains NaNs or very large numbers).
      */
     public void invcdf(double[] p, double[] result, Matrix basis)
-            throws IllegalArgumentException, NotReadyException, 
-            DecomposerException {
+            throws NotReadyException, DecomposerException {
 <span class="fc bfc" id="L470" title="All 2 branches covered.">        if (!isReady()) {</span>
 <span class="fc" id="L471">            throw new NotReadyException(</span>
                     &quot;mean and covariance not provided or invalid&quot;);
@@ -528,9 +528,9 @@ public class MultivariateNormalDist {
      * @throws DecomposerException if covariance is numerically unstable (i.e.
      * contains NaNs or very large numbers).
      */
+    @SuppressWarnings(&quot;Duplicates&quot;)
     public double[] invcdf(double[] p, Matrix basis) 
-            throws IllegalArgumentException, NotReadyException, 
-            DecomposerException {
+            throws NotReadyException, DecomposerException {
 <span class="pc bpc" id="L534" title="1 of 2 branches missed.">        if (mMu == null) {</span>
 <span class="nc" id="L535">            throw new NotReadyException(&quot;mean not defined&quot;);</span>
         }
@@ -559,10 +559,9 @@ public class MultivariateNormalDist {
      * contains NaNs or very large numbers).
      */
     public void invcdf(double[] p, double[] result) 
-            throws IllegalArgumentException, NotReadyException, 
-            DecomposerException {
-<span class="fc" id="L564">        invcdf(p, result, null);</span>
-<span class="fc" id="L565">    }</span>
+            throws NotReadyException, DecomposerException {
+<span class="fc" id="L563">        invcdf(p, result, null);</span>
+<span class="fc" id="L564">    }</span>
 
     /**
      * Evaluates the inverse cumulative distribution function of a multivariate
@@ -582,9 +581,8 @@ public class MultivariateNormalDist {
      * @throws DecomposerException if covariance is numerically unstable (i.e.
      * contains NaNs or very large numbers).
      */
-    public double[] invcdf(double[] p) throws IllegalArgumentException,
-            NotReadyException, DecomposerException {
-<span class="fc" id="L587">        return invcdf(p, (Matrix)null);</span>
+    public double[] invcdf(double[] p) throws NotReadyException, DecomposerException {
+<span class="fc" id="L585">        return invcdf(p, (Matrix)null);</span>
     }
         
     /**
@@ -612,28 +610,27 @@ public class MultivariateNormalDist {
      * contains NaNs or very large numbers).
      */
     public void invcdf(double p, double[] result, Matrix basis) 
-            throws IllegalArgumentException, NotReadyException, 
-            DecomposerException {
-<span class="fc bfc" id="L617" title="All 4 branches covered.">	    if (p &lt;= 0.0 || p &gt;= 1.0) {</span>
-<span class="fc" id="L618">            throw new IllegalArgumentException(</span>
+            throws NotReadyException, DecomposerException {
+<span class="fc bfc" id="L614" title="All 4 branches covered.">	    if (p &lt;= 0.0 || p &gt;= 1.0) {</span>
+<span class="fc" id="L615">            throw new IllegalArgumentException(</span>
                     &quot;probability value must be between 0.0 and 1.0&quot;);
         }       
         
-<span class="pc bpc" id="L622" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L623">            throw new NotReadyException(</span>
+<span class="pc bpc" id="L619" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L620">            throw new NotReadyException(</span>
                     &quot;mean and covariance not provided or invalid&quot;);
         }                
         
-<span class="fc" id="L627">        int k = result.length;</span>
-<span class="fc bfc" id="L628" title="All 2 branches covered.">        if (k != mMu.length) {</span>
-<span class="fc" id="L629">            throw new IllegalArgumentException(</span>
+<span class="fc" id="L624">        int k = result.length;</span>
+<span class="fc bfc" id="L625" title="All 2 branches covered.">        if (k != mMu.length) {</span>
+<span class="fc" id="L626">            throw new IllegalArgumentException(</span>
                     &quot;length of result must be equal to mean length&quot;);
         }
         
-<span class="fc" id="L633">        double[] probs = new double[k];</span>
-<span class="fc" id="L634">        Arrays.fill(probs, Math.pow(p, 1.0 / k));</span>
-<span class="fc" id="L635">        invcdf(probs, result, basis);</span>
-<span class="fc" id="L636">    }</span>
+<span class="fc" id="L630">        double[] probs = new double[k];</span>
+<span class="fc" id="L631">        Arrays.fill(probs, Math.pow(p, 1.0 / k));</span>
+<span class="fc" id="L632">        invcdf(probs, result, basis);</span>
+<span class="fc" id="L633">    }</span>
     
     /**
      * Evaluates the inverse cumulative distribution function of a multivariate
@@ -658,16 +655,16 @@ public class MultivariateNormalDist {
      * @throws DecomposerException f covariance is numerically unstable (i.e.
      * contains NaNs or very large numbers).
      */
+    @SuppressWarnings(&quot;Duplicates&quot;)
     public double[] invcdf(double p, Matrix basis) 
-            throws IllegalArgumentException, NotReadyException, 
-            DecomposerException{
-<span class="pc bpc" id="L664" title="1 of 2 branches missed.">        if (mMu == null) {</span>
-<span class="nc" id="L665">            throw new NotReadyException(&quot;mean not defined&quot;);</span>
+            throws NotReadyException, DecomposerException {
+<span class="pc bpc" id="L661" title="1 of 2 branches missed.">        if (mMu == null) {</span>
+<span class="nc" id="L662">            throw new NotReadyException(&quot;mean not defined&quot;);</span>
         }
         
-<span class="fc" id="L668">        double[] result = new double[mMu.length];</span>
-<span class="fc" id="L669">        invcdf(p, result, basis);</span>
-<span class="fc" id="L670">        return result;</span>
+<span class="fc" id="L665">        double[] result = new double[mMu.length];</span>
+<span class="fc" id="L666">        invcdf(p, result, basis);</span>
+<span class="fc" id="L667">        return result;</span>
     }
 
     /**
@@ -692,10 +689,9 @@ public class MultivariateNormalDist {
      * contains NaNs or very large numbers).
      */
     public void invcdf(double p, double[] result) 
-            throws IllegalArgumentException, NotReadyException, 
-            DecomposerException {
-<span class="fc" id="L697">        invcdf(p, result, null);</span>
-<span class="fc" id="L698">    }</span>
+            throws NotReadyException, DecomposerException {
+<span class="fc" id="L693">        invcdf(p, result, null);</span>
+<span class="fc" id="L694">    }</span>
     
     /**
      * Evaluates the inverse cumulative distribution function of a multivariate
@@ -717,9 +713,8 @@ public class MultivariateNormalDist {
      * @throws DecomposerException f covariance is numerically unstable (i.e.
      * contains NaNs or very large numbers).
      */
-    public double[] invcdf(double p) throws IllegalArgumentException, 
-            NotReadyException, DecomposerException {
-<span class="fc" id="L722">        return invcdf(p, (Matrix)null);</span>
+    public double[] invcdf(double p) throws NotReadyException, DecomposerException {
+<span class="fc" id="L717">        return invcdf(p, (Matrix)null);</span>
     }
     
     /**
@@ -733,7 +728,7 @@ public class MultivariateNormalDist {
      */    
     public double mahalanobisDistance(double[] x) throws DecomposerException,
             RankDeficientMatrixException {
-<span class="fc" id="L736">        return Math.sqrt(squaredMahalanobisDistance(x));</span>
+<span class="fc" id="L731">        return Math.sqrt(squaredMahalanobisDistance(x));</span>
     }
     
     /**
@@ -747,18 +742,18 @@ public class MultivariateNormalDist {
      */
     public double squaredMahalanobisDistance(double[] x) throws DecomposerException, 
             RankDeficientMatrixException {
-<span class="fc" id="L750">        double[] diff = ArrayUtils.subtractAndReturnNew(x, mMu);</span>
-<span class="fc" id="L751">        Matrix diffMatrix = Matrix.newFromArray(diff, true);</span>
-<span class="fc" id="L752">        Matrix transDiffMatrix = diffMatrix.transposeAndReturnNew();</span>
+<span class="fc" id="L745">        double[] diff = ArrayUtils.subtractAndReturnNew(x, mMu);</span>
+<span class="fc" id="L746">        Matrix diffMatrix = Matrix.newFromArray(diff, true);</span>
+<span class="fc" id="L747">        Matrix transDiffMatrix = diffMatrix.transposeAndReturnNew();</span>
         
         try {
-<span class="fc" id="L755">            Matrix invCov = Utils.inverse(mCov);</span>
-<span class="fc" id="L756">            transDiffMatrix.multiply(invCov);</span>
-<span class="fc" id="L757">            transDiffMatrix.multiply(diffMatrix);</span>
+<span class="fc" id="L750">            Matrix invCov = Utils.inverse(mCov);</span>
+<span class="fc" id="L751">            transDiffMatrix.multiply(invCov);</span>
+<span class="fc" id="L752">            transDiffMatrix.multiply(diffMatrix);</span>
                         
-<span class="pc" id="L759">        } catch (WrongSizeException ignore) { /* never thrown */ }</span>
+<span class="pc" id="L754">        } catch (WrongSizeException ignore) { /* never thrown */ }</span>
         
-<span class="fc" id="L761">        return transDiffMatrix.getElementAtIndex(0);</span>
+<span class="fc" id="L756">        return transDiffMatrix.getElementAtIndex(0);</span>
     }
     
     /**
@@ -776,14 +771,14 @@ public class MultivariateNormalDist {
      */
     public void processCovariance() throws DecomposerException, 
             NotReadyException, LockedException, NotAvailableException {
-<span class="pc bpc" id="L779" title="1 of 2 branches missed.">        if (mCov == null) {</span>
-<span class="nc" id="L780">            throw new NotReadyException(&quot;covariance must be defined&quot;);</span>
+<span class="pc bpc" id="L774" title="1 of 2 branches missed.">        if (mCov == null) {</span>
+<span class="nc" id="L775">            throw new NotReadyException(&quot;covariance must be defined&quot;);</span>
         }
         
-<span class="pc bpc" id="L783" title="1 of 4 branches missed.">        if (mCovBasis == null || mVariances == null) {</span>
-<span class="fc" id="L784">            SingularValueDecomposer decomposer = </span>
+<span class="pc bpc" id="L778" title="1 of 4 branches missed.">        if (mCovBasis == null || mVariances == null) {</span>
+<span class="fc" id="L779">            SingularValueDecomposer decomposer = </span>
                     new SingularValueDecomposer(mCov);
-<span class="fc" id="L786">            decomposer.decompose();</span>
+<span class="fc" id="L781">            decomposer.decompose();</span>
         
             //because matrix is symmetric positive definite:
             //And matrices U and V are orthonormal
@@ -797,12 +792,12 @@ public class MultivariateNormalDist {
             //on each direction of the basis V.
         
             //matrix containing eigenvectors (basis of directions)
-<span class="fc" id="L800">            mCovBasis = decomposer.getV();</span>
+<span class="fc" id="L795">            mCovBasis = decomposer.getV();</span>
         
             //array containing the eigenvalues (variances on each direction)
-<span class="fc" id="L803">            mVariances = decomposer.getSingularValues();</span>
+<span class="fc" id="L798">            mVariances = decomposer.getSingularValues();</span>
         }        
-<span class="fc" id="L805">    }    </span>
+<span class="fc" id="L800">    }    </span>
     
     /**
      * Evaluates the Jacobian and a multivariate function at a certain mean 
@@ -828,24 +823,24 @@ public class MultivariateNormalDist {
             Matrix covariance, MultivariateNormalDist result) 
             throws WrongSizeException, InvalidCovarianceMatrixException {
 
-<span class="fc" id="L831">        int ndims = mean.length;</span>
-<span class="fc" id="L832">        int nvars = evaluator.getNumberOfVariables();</span>
-<span class="fc" id="L833">        double[] evaluation = new double[nvars];</span>
-<span class="fc" id="L834">        Matrix jacobian = new Matrix(nvars, ndims);</span>
-<span class="fc" id="L835">        evaluator.evaluate(mean, evaluation, jacobian);</span>
+<span class="fc" id="L826">        int ndims = mean.length;</span>
+<span class="fc" id="L827">        int nvars = evaluator.getNumberOfVariables();</span>
+<span class="fc" id="L828">        double[] evaluation = new double[nvars];</span>
+<span class="fc" id="L829">        Matrix jacobian = new Matrix(nvars, ndims);</span>
+<span class="fc" id="L830">        evaluator.evaluate(mean, evaluation, jacobian);</span>
         
         //[y, Y_x] = f(x)
         //Y = Y_x * X * Y_x'        
-<span class="fc" id="L839">        Matrix jacobianTrans = jacobian.transposeAndReturnNew();</span>
-<span class="fc" id="L840">        jacobian.multiply(covariance);</span>
-<span class="fc" id="L841">        jacobian.multiply(jacobianTrans);</span>
+<span class="fc" id="L834">        Matrix jacobianTrans = jacobian.transposeAndReturnNew();</span>
+<span class="fc" id="L835">        jacobian.multiply(covariance);</span>
+<span class="fc" id="L836">        jacobian.multiply(jacobianTrans);</span>
         
         //ensure that new covariance is symmetric positive definite
-<span class="fc" id="L844">        jacobian.symmetrize();</span>
+<span class="fc" id="L839">        jacobian.symmetrize();</span>
         
-<span class="fc" id="L846">        result.setMean(evaluation);</span>
-<span class="fc" id="L847">        result.setCovariance(jacobian, false);</span>
-<span class="fc" id="L848">    }</span>
+<span class="fc" id="L841">        result.setMean(evaluation);</span>
+<span class="fc" id="L842">        result.setCovariance(jacobian, false);</span>
+<span class="fc" id="L843">    }</span>
     
     /**
      * Evaluates the Jacobian and a multivariate function at a certain mean 
@@ -869,9 +864,9 @@ public class MultivariateNormalDist {
     public static MultivariateNormalDist propagate(
             JacobianEvaluator evaluator, double[] mean, Matrix covariance) 
             throws WrongSizeException, InvalidCovarianceMatrixException {
-<span class="fc" id="L872">        MultivariateNormalDist result = new MultivariateNormalDist();</span>
-<span class="fc" id="L873">        propagate(evaluator, mean, covariance, result);</span>
-<span class="fc" id="L874">        return result;</span>
+<span class="fc" id="L867">        MultivariateNormalDist result = new MultivariateNormalDist();</span>
+<span class="fc" id="L868">        propagate(evaluator, mean, covariance, result);</span>
+<span class="fc" id="L869">        return result;</span>
     }
     
     /**
@@ -891,9 +886,9 @@ public class MultivariateNormalDist {
             MultivariateNormalDist dist, MultivariateNormalDist result) 
             throws WrongSizeException {
         try {
-<span class="fc" id="L894">            propagate(evaluator, dist.getMean(), dist.getCovariance(), result);</span>
-<span class="pc" id="L895">        } catch (InvalidCovarianceMatrixException ignore) { /* never thrown */ }</span>
-<span class="fc" id="L896">    }</span>
+<span class="fc" id="L889">            propagate(evaluator, dist.getMean(), dist.getCovariance(), result);</span>
+<span class="pc" id="L890">        } catch (InvalidCovarianceMatrixException ignore) { /* never thrown */ }</span>
+<span class="fc" id="L891">    }</span>
     
     /**
      * Evaluates the Jacobian and a multivariate function at a certain mean
@@ -909,9 +904,9 @@ public class MultivariateNormalDist {
      */
     public static MultivariateNormalDist propagate(JacobianEvaluator evaluator,
             MultivariateNormalDist dist) throws WrongSizeException {
-<span class="fc" id="L912">        MultivariateNormalDist result = new MultivariateNormalDist();</span>
-<span class="fc" id="L913">        propagate(evaluator, dist, result);</span>
-<span class="fc" id="L914">        return result;</span>
+<span class="fc" id="L907">        MultivariateNormalDist result = new MultivariateNormalDist();</span>
+<span class="fc" id="L908">        propagate(evaluator, dist, result);</span>
+<span class="fc" id="L909">        return result;</span>
     }
     
     /**
@@ -928,8 +923,8 @@ public class MultivariateNormalDist {
      */
     public void propagateThisDistribution(JacobianEvaluator evaluator, 
             MultivariateNormalDist result) throws WrongSizeException {
-<span class="fc" id="L931">        propagate(evaluator, this, result);</span>
-<span class="fc" id="L932">    }</span>
+<span class="fc" id="L926">        propagate(evaluator, this, result);</span>
+<span class="fc" id="L927">    }</span>
     
     /**
      * Evaluates the Jacobian and a multivariate function at the mean point of
@@ -944,9 +939,9 @@ public class MultivariateNormalDist {
      */
     public MultivariateNormalDist propagateThisDistribution(
             JacobianEvaluator evaluator) throws WrongSizeException {
-<span class="fc" id="L947">        MultivariateNormalDist result = new MultivariateNormalDist();</span>
-<span class="fc" id="L948">        propagateThisDistribution(evaluator, result);</span>
-<span class="fc" id="L949">        return result;</span>
+<span class="fc" id="L942">        MultivariateNormalDist result = new MultivariateNormalDist();</span>
+<span class="fc" id="L943">        propagateThisDistribution(evaluator, result);</span>
+<span class="fc" id="L944">        return result;</span>
     }
     
     /**
