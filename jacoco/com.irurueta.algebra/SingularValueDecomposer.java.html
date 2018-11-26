@@ -232,11 +232,11 @@ public class SingularValueDecomposer extends Decomposer {
 <span class="fc" id="L232">            setNegligibleSingularValueThreshold(0.5 * Math.sqrt(m + n + 1.0) * </span>
                 w[0] * eps);
 <span class="fc" id="L234">            locked = false;</span>
-<span class="fc" id="L235">        } catch (DecomposerException e) {</span>
-<span class="fc" id="L236">            u = v = null;</span>
-<span class="fc" id="L237">            w = null;</span>
-<span class="fc" id="L238">            locked = false;</span>
-<span class="fc" id="L239">            throw e;</span>
+<span class="nc" id="L235">        } catch (DecomposerException e) {</span>
+<span class="nc" id="L236">            u = v = null;</span>
+<span class="nc" id="L237">            w = null;</span>
+<span class="nc" id="L238">            locked = false;</span>
+<span class="nc" id="L239">            throw e;</span>
 <span class="fc" id="L240">        }</span>
 <span class="fc" id="L241">    }</span>
     
@@ -478,7 +478,7 @@ public class SingularValueDecomposer extends Decomposer {
         
 <span class="fc" id="L479">        int columns = inputMatrix.getColumns();</span>
 <span class="pc bpc" id="L480" title="2 of 4 branches missed.">        return (w[0] &lt;= 0.0 || w[columns - 1] &lt;= 0.0) ? 0.0 : </span>
-<span class="fc" id="L481">                w[columns - 1] / w[0];</span>
+<span class="nc" id="L481">                w[columns - 1] / w[0];</span>
     }
     
     /**
@@ -1419,8 +1419,8 @@ public class SingularValueDecomposer extends Decomposer {
                     }
                     break;
 		        }
-<span class="fc bfc" id="L1422" title="All 2 branches covered.">		        if (its == maxIters - 1) {</span>
-<span class="fc" id="L1423">		            throw new NoConvergenceException();</span>
+<span class="pc bpc" id="L1422" title="1 of 2 branches missed.">		        if (its == maxIters - 1) {</span>
+<span class="nc" id="L1423">		            throw new NoConvergenceException();</span>
                 }
 				
 		        //Shift from bottom 2-by-2 minor.
