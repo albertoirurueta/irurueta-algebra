@@ -78,17 +78,19 @@ public class Matrix implements Serializable{
 <span class="fc" id="L78">    public Matrix(Matrix m) {</span>
         try {
 <span class="fc" id="L80">            internalResize(m.getRows(), m.getColumns());</span>
-<span class="pc" id="L81">        } catch (WrongSizeException ignore) { }</span>
+<span class="nc" id="L81">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L83">        }</span>
 
-<span class="fc" id="L83">        System.arraycopy(m.getBuffer(), 0, buffer, 0, buffer.length);</span>
-<span class="fc" id="L84">    }</span>
+<span class="fc" id="L85">        System.arraycopy(m.getBuffer(), 0, buffer, 0, buffer.length);</span>
+<span class="fc" id="L86">    }</span>
     
     /**
      * Returns number of rows in matrix.
      * @return Number of rows in matrix.
      */
     public int getRows() {
-<span class="fc" id="L91">        return rows;</span>
+<span class="fc" id="L93">        return rows;</span>
     }
     
     /**
@@ -96,7 +98,7 @@ public class Matrix implements Serializable{
      * @return Number of columns in matrix.
      */
     public int getColumns() {
-<span class="fc" id="L99">        return columns;</span>
+<span class="fc" id="L101">        return columns;</span>
     }
     
     /**
@@ -114,7 +116,7 @@ public class Matrix implements Serializable{
      * always raise the exception.
      */
     public double getElementAt(int row, int column) {
-<span class="fc" id="L117">        return buffer[columnIndex[column] + row];</span>
+<span class="fc" id="L119">        return buffer[columnIndex[column] + row];</span>
     }
     
     /**
@@ -125,7 +127,7 @@ public class Matrix implements Serializable{
      * @return index within internal buffer.
      */
     public int getIndex(int row, int column) {
-<span class="fc" id="L128">        return columnIndex[column] + row;</span>
+<span class="fc" id="L130">        return columnIndex[column] + row;</span>
     }
     
     /**
@@ -142,7 +144,7 @@ public class Matrix implements Serializable{
      * rows * columns (exclusive)
      */
     public double getElementAtIndex(int index) {
-<span class="fc" id="L145">        return getElementAtIndex(index, DEFAULT_USE_COLUMN_ORDER);</span>
+<span class="fc" id="L147">        return getElementAtIndex(index, DEFAULT_USE_COLUMN_ORDER);</span>
     }
     
     /**
@@ -158,12 +160,12 @@ public class Matrix implements Serializable{
      */
     public double getElementAtIndex(int index, boolean isColumnOrder) {
         
-<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (isColumnOrder) {</span>
-<span class="fc" id="L162">            return buffer[index];</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (isColumnOrder) {</span>
+<span class="fc" id="L164">            return buffer[index];</span>
         } else {
-<span class="fc" id="L164">            int row = index / columns;</span>
-<span class="fc" id="L165">            int column = index % columns;</span>
-<span class="fc" id="L166">            return buffer[columnIndex[column] + row];</span>
+<span class="fc" id="L166">            int row = index / columns;</span>
+<span class="fc" id="L167">            int column = index % columns;</span>
+<span class="fc" id="L168">            return buffer[columnIndex[column] + row];</span>
         }
     }
     
@@ -182,8 +184,8 @@ public class Matrix implements Serializable{
      */
     public void setElementAt(int row, int column, double value) {
         
-<span class="fc" id="L185">        buffer[columnIndex[column] + row] = value;</span>
-<span class="fc" id="L186">    }</span>
+<span class="fc" id="L187">        buffer[columnIndex[column] + row] = value;</span>
+<span class="fc" id="L188">    }</span>
     
     /**
      * Sets element in matrix located at provided index using the order 
@@ -200,8 +202,8 @@ public class Matrix implements Serializable{
      */
     public void setElementAtIndex(int index, double value) {
         
-<span class="fc" id="L203">        setElementAtIndex(index, value, DEFAULT_USE_COLUMN_ORDER);</span>
-<span class="fc" id="L204">    }</span>
+<span class="fc" id="L205">        setElementAtIndex(index, value, DEFAULT_USE_COLUMN_ORDER);</span>
+<span class="fc" id="L206">    }</span>
     
     /**
      * Sets element in matrix located at provided index using provided order
@@ -216,29 +218,30 @@ public class Matrix implements Serializable{
      */
     public void setElementAtIndex(int index, double value, 
             boolean isColumnOrder) {
-<span class="fc bfc" id="L219" title="All 2 branches covered.">        if (isColumnOrder) {</span>
-<span class="fc" id="L220">            buffer[index] = value;</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">        if (isColumnOrder) {</span>
+<span class="fc" id="L222">            buffer[index] = value;</span>
         } else {
-<span class="fc" id="L222">            int row = index / columns;</span>
-<span class="fc" id="L223">            int column = index % columns;</span>
-<span class="fc" id="L224">            buffer[columnIndex[column] + row] = value;</span>
+<span class="fc" id="L224">            int row = index / columns;</span>
+<span class="fc" id="L225">            int column = index % columns;</span>
+<span class="fc" id="L226">            buffer[columnIndex[column] + row] = value;</span>
         }
-<span class="fc" id="L226">    }</span>
+<span class="fc" id="L228">    }</span>
     
     /**
      * Returns a new matrix instance containing the same data as this instance.
      * @return A copy of this matrix instance.
      */
     @Override
+    @SuppressWarnings(&quot;all&quot;)
     public Matrix clone() {
-<span class="fc" id="L234">        Matrix out = null;</span>
+<span class="fc" id="L237">        Matrix out = null;</span>
         try {
-<span class="fc" id="L236">            out = new Matrix(rows, columns);</span>
-<span class="fc" id="L237">            out.copyFrom(this);</span>
-<span class="nc" id="L238">        } catch (WrongSizeException ignore) {</span>
+<span class="fc" id="L239">            out = new Matrix(rows, columns);</span>
+<span class="fc" id="L240">            out.copyFrom(this);</span>
+<span class="nc" id="L241">        } catch (WrongSizeException ignore) {</span>
             //never happens
-<span class="fc" id="L240">        }</span>
-<span class="fc" id="L241">        return out;</span>
+<span class="fc" id="L243">        }</span>
+<span class="fc" id="L244">        return out;</span>
     }
     
     /**
@@ -251,17 +254,17 @@ public class Matrix implements Serializable{
     public void copyTo(Matrix output) {
         //reset output size if not equal, otherwise reuse buffer and column 
         //index
-<span class="pc bpc" id="L254" title="1 of 4 branches missed.">        if (output.getRows() != rows || output.getColumns() != columns) {</span>
+<span class="pc bpc" id="L257" title="1 of 4 branches missed.">        if (output.getRows() != rows || output.getColumns() != columns) {</span>
             //resets size and column index
             try {
-<span class="fc" id="L257">                output.resize(rows, columns);</span>
-<span class="nc" id="L258">            } catch (WrongSizeException ignore) {</span>
+<span class="fc" id="L260">                output.resize(rows, columns);</span>
+<span class="nc" id="L261">            } catch (WrongSizeException ignore) {</span>
                 //never happens
-<span class="fc" id="L260">            }</span>
+<span class="fc" id="L263">            }</span>
         }
         //copies content
-<span class="fc" id="L263">        System.arraycopy(buffer, 0, output.buffer, 0, buffer.length);</span>
-<span class="fc" id="L264">    }</span>
+<span class="fc" id="L266">        System.arraycopy(buffer, 0, output.buffer, 0, buffer.length);</span>
+<span class="fc" id="L267">    }</span>
     
     /**
      * Copies the contents of provided matrix into this instance. This instance
@@ -272,17 +275,17 @@ public class Matrix implements Serializable{
      */
     public void copyFrom(Matrix input) {
         //reset size if not equal, otherwise reuse buffer and column index
-<span class="pc bpc" id="L275" title="1 of 4 branches missed.">        if (input.getRows() != rows || input.getColumns() != columns) {</span>
+<span class="pc bpc" id="L278" title="1 of 4 branches missed.">        if (input.getRows() != rows || input.getColumns() != columns) {</span>
             //resets size and column index
             try {
-<span class="fc" id="L278">                resize(input.getRows(), input.getColumns());</span>
-<span class="nc" id="L279">            } catch (WrongSizeException ignore) {</span>
+<span class="fc" id="L281">                resize(input.getRows(), input.getColumns());</span>
+<span class="nc" id="L282">            } catch (WrongSizeException ignore) {</span>
                 //never happens
-<span class="fc" id="L281">            }</span>
+<span class="fc" id="L284">            }</span>
         }
         //copies content
-<span class="fc" id="L284">        System.arraycopy(input.buffer, 0, buffer, 0, buffer.length);</span>
-<span class="fc" id="L285">    }</span>
+<span class="fc" id="L287">        System.arraycopy(input.buffer, 0, buffer, 0, buffer.length);</span>
+<span class="fc" id="L288">    }</span>
 
     /**
      * Adds another matrix to this matrix instance and stores the result in
@@ -296,17 +299,17 @@ public class Matrix implements Serializable{
      * null.
      */
     public void add(Matrix other, Matrix result) throws WrongSizeException {
-<span class="nc bnc" id="L299" title="All 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
-<span class="nc" id="L300">            throw new WrongSizeException();</span>
+<span class="nc bnc" id="L302" title="All 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="nc" id="L303">            throw new WrongSizeException();</span>
         }
         
         //resize result if needed
-<span class="nc bnc" id="L304" title="All 4 branches missed.">        if (result.getRows() != rows || result.getColumns() != columns) {</span>
-<span class="nc" id="L305">            result.resize(rows, columns);</span>
+<span class="nc bnc" id="L307" title="All 4 branches missed.">        if (result.getRows() != rows || result.getColumns() != columns) {</span>
+<span class="nc" id="L308">            result.resize(rows, columns);</span>
         }
         
-<span class="nc" id="L308">        internalAdd(other, result);</span>
-<span class="nc" id="L309">    }</span>
+<span class="nc" id="L311">        internalAdd(other, result);</span>
+<span class="nc" id="L312">    }</span>
     
     /**
      * Adds provided matrix to this instance and returns the result as a new
@@ -319,13 +322,13 @@ public class Matrix implements Serializable{
      * @throws NullPointerException Exception raised if provided matrix is null.
      */
     public Matrix addAndReturnNew(Matrix other) throws WrongSizeException {
-<span class="pc bpc" id="L322" title="1 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
-<span class="fc" id="L323">            throw new WrongSizeException();</span>
+<span class="pc bpc" id="L325" title="1 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="fc" id="L326">            throw new WrongSizeException();</span>
         }
         
-<span class="fc" id="L326">        Matrix out = new Matrix(rows, columns);</span>
-<span class="fc" id="L327">        internalAdd(other, out);</span>
-<span class="fc" id="L328">        return out;</span>
+<span class="fc" id="L329">        Matrix out = new Matrix(rows, columns);</span>
+<span class="fc" id="L330">        internalAdd(other, out);</span>
+<span class="fc" id="L331">        return out;</span>
     }
     
     /**
@@ -336,12 +339,12 @@ public class Matrix implements Serializable{
      * @throws NullPointerException Exception raised if provided matrix is null.
      */
     public void add(Matrix other) throws WrongSizeException {
-<span class="pc bpc" id="L339" title="1 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
-<span class="fc" id="L340">            throw new WrongSizeException();</span>
+<span class="pc bpc" id="L342" title="1 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="fc" id="L343">            throw new WrongSizeException();</span>
         }
         
-<span class="fc" id="L343">        internalAdd(other, this);</span>
-<span class="fc" id="L344">    }</span>
+<span class="fc" id="L346">        internalAdd(other, this);</span>
+<span class="fc" id="L347">    }</span>
 
     /**
      * Subtracts another matrix from this matrix instance and stores the result 
@@ -355,17 +358,17 @@ public class Matrix implements Serializable{
      * null.
      */    
     public void subtract(Matrix other, Matrix result) throws WrongSizeException {
-<span class="nc bnc" id="L358" title="All 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
-<span class="nc" id="L359">            throw new WrongSizeException();</span>
+<span class="nc bnc" id="L361" title="All 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="nc" id="L362">            throw new WrongSizeException();</span>
         }
         
         //resize result if needed
-<span class="nc bnc" id="L363" title="All 4 branches missed.">        if (result.getRows() != rows || result.getColumns() != columns) {</span>
-<span class="nc" id="L364">            result.resize(rows, columns);</span>
+<span class="nc bnc" id="L366" title="All 4 branches missed.">        if (result.getRows() != rows || result.getColumns() != columns) {</span>
+<span class="nc" id="L367">            result.resize(rows, columns);</span>
         }
         
-<span class="nc" id="L367">        internalSubtract(other, result);        </span>
-<span class="nc" id="L368">    }</span>
+<span class="nc" id="L370">        internalSubtract(other, result);        </span>
+<span class="nc" id="L371">    }</span>
     
     /**
      * Subtracts provided matrix from this instance and returns the result as a 
@@ -379,13 +382,13 @@ public class Matrix implements Serializable{
      */    
     public Matrix subtractAndReturnNew(Matrix other) 
             throws WrongSizeException {
-<span class="pc bpc" id="L382" title="1 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
-<span class="fc" id="L383">            throw new WrongSizeException();</span>
+<span class="pc bpc" id="L385" title="1 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="fc" id="L386">            throw new WrongSizeException();</span>
         }
         
-<span class="fc" id="L386">        Matrix out = new Matrix(rows, columns);</span>
-<span class="fc" id="L387">        internalSubtract(other, out);</span>
-<span class="fc" id="L388">        return out;</span>
+<span class="fc" id="L389">        Matrix out = new Matrix(rows, columns);</span>
+<span class="fc" id="L390">        internalSubtract(other, out);</span>
+<span class="fc" id="L391">        return out;</span>
     }
     
     /**
@@ -396,12 +399,12 @@ public class Matrix implements Serializable{
      * @throws NullPointerException Exception raised if provided matrix is null.
      */    
     public void subtract(Matrix other) throws WrongSizeException {
-<span class="pc bpc" id="L399" title="2 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
-<span class="nc" id="L400">            throw new WrongSizeException();</span>
+<span class="pc bpc" id="L402" title="2 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="nc" id="L403">            throw new WrongSizeException();</span>
         }
         
-<span class="fc" id="L403">        internalSubtract(other, this);</span>
-<span class="fc" id="L404">    }</span>
+<span class="fc" id="L406">        internalSubtract(other, this);</span>
+<span class="fc" id="L407">    }</span>
 
     /**
      * Multiplies another matrix to this matrix instance and stores the result 
@@ -415,17 +418,17 @@ public class Matrix implements Serializable{
      * null.
      */        
     public void multiply(Matrix other, Matrix result) throws WrongSizeException {
-<span class="pc bpc" id="L418" title="1 of 2 branches missed.">        if (columns != other.rows) {</span>
-<span class="nc" id="L419">            throw new WrongSizeException();</span>
+<span class="pc bpc" id="L421" title="1 of 2 branches missed.">        if (columns != other.rows) {</span>
+<span class="nc" id="L422">            throw new WrongSizeException();</span>
         }
         
         //resize result if needed
-<span class="pc bpc" id="L423" title="2 of 4 branches missed.">        if (result.rows != rows || result.columns != other.columns) {</span>
-<span class="nc" id="L424">            result.resize(rows, other.columns);</span>
+<span class="pc bpc" id="L426" title="2 of 4 branches missed.">        if (result.rows != rows || result.columns != other.columns) {</span>
+<span class="nc" id="L427">            result.resize(rows, other.columns);</span>
         }
         
-<span class="fc" id="L427">        internalMultiply(other, result);</span>
-<span class="fc" id="L428">    }</span>
+<span class="fc" id="L430">        internalMultiply(other, result);</span>
+<span class="fc" id="L431">    }</span>
     
     /**
      * Multiplies this matrix with provided matrix and returns the result as
@@ -443,13 +446,13 @@ public class Matrix implements Serializable{
     public Matrix multiplyAndReturnNew(Matrix other) 
             throws WrongSizeException {
         
-<span class="fc bfc" id="L446" title="All 2 branches covered.">        if (columns != other.rows) {</span>
-<span class="fc" id="L447">            throw new WrongSizeException();</span>
+<span class="fc bfc" id="L449" title="All 2 branches covered.">        if (columns != other.rows) {</span>
+<span class="fc" id="L450">            throw new WrongSizeException();</span>
         }
         
-<span class="fc" id="L450">        Matrix out = new Matrix(rows, other.columns);</span>
-<span class="fc" id="L451">        internalMultiply(other, out);</span>
-<span class="fc" id="L452">        return out;</span>
+<span class="fc" id="L453">        Matrix out = new Matrix(rows, other.columns);</span>
+<span class="fc" id="L454">        internalMultiply(other, out);</span>
+<span class="fc" id="L455">        return out;</span>
     }
     
     /**
@@ -465,25 +468,25 @@ public class Matrix implements Serializable{
      */
     public void multiply(Matrix other) throws WrongSizeException {
         
-<span class="fc bfc" id="L468" title="All 2 branches covered.">        if (columns != other.rows) {</span>
-<span class="fc" id="L469">            throw new WrongSizeException();</span>
+<span class="fc bfc" id="L471" title="All 2 branches covered.">        if (columns != other.rows) {</span>
+<span class="fc" id="L472">            throw new WrongSizeException();</span>
         }
         
         //instantiate new buffer and column index
-<span class="fc" id="L473">        double[] resultBuffer = new double[rows * other.columns];</span>
-<span class="fc" id="L474">        int[] resultColumnIndex = new int[other.columns];</span>
-<span class="fc" id="L475">        int counter = 0;</span>
-<span class="fc bfc" id="L476" title="All 2 branches covered.">        for (int i = 0; i &lt; other.columns; i++) {</span>
-<span class="fc" id="L477">            resultColumnIndex[i] = counter;</span>
-<span class="fc" id="L478">            counter += rows;</span>
+<span class="fc" id="L476">        double[] resultBuffer = new double[rows * other.columns];</span>
+<span class="fc" id="L477">        int[] resultColumnIndex = new int[other.columns];</span>
+<span class="fc" id="L478">        int counter = 0;</span>
+<span class="fc bfc" id="L479" title="All 2 branches covered.">        for (int i = 0; i &lt; other.columns; i++) {</span>
+<span class="fc" id="L480">            resultColumnIndex[i] = counter;</span>
+<span class="fc" id="L481">            counter += rows;</span>
         }
         
-<span class="fc" id="L481">        internalMultiply(other, resultBuffer, resultColumnIndex);</span>
+<span class="fc" id="L484">        internalMultiply(other, resultBuffer, resultColumnIndex);</span>
         //update matrix data        
-<span class="fc" id="L483">        columns = other.columns;        </span>
-<span class="fc" id="L484">        columnIndex = resultColumnIndex;</span>
-<span class="fc" id="L485">        buffer = resultBuffer;</span>
-<span class="fc" id="L486">    }</span>
+<span class="fc" id="L486">        columns = other.columns;        </span>
+<span class="fc" id="L487">        columnIndex = resultColumnIndex;</span>
+<span class="fc" id="L488">        buffer = resultBuffer;</span>
+<span class="fc" id="L489">    }</span>
 
     /**
      * Computes the Kronecker product with provided matrix and stores the
@@ -494,16 +497,16 @@ public class Matrix implements Serializable{
      */
     public void multiplyKronecker(Matrix other, Matrix result) {
         //resize result if needed
-<span class="fc" id="L497">        int resultRows = rows*other.rows;</span>
-<span class="fc" id="L498">        int resultCols = columns*other.columns;</span>
-<span class="pc bpc" id="L499" title="3 of 4 branches missed.">        if (result.rows != resultRows || result.columns != resultCols) {</span>
+<span class="fc" id="L500">        int resultRows = rows*other.rows;</span>
+<span class="fc" id="L501">        int resultCols = columns*other.columns;</span>
+<span class="pc bpc" id="L502" title="3 of 4 branches missed.">        if (result.rows != resultRows || result.columns != resultCols) {</span>
             try {
-<span class="fc" id="L501">                result.resize(resultRows, resultCols);</span>
-<span class="pc" id="L502">            } catch (WrongSizeException ignore) { /* never thrown */ }</span>
+<span class="fc" id="L504">                result.resize(resultRows, resultCols);</span>
+<span class="pc" id="L505">            } catch (WrongSizeException ignore) { /* never thrown */ }</span>
         }
         
-<span class="fc" id="L505">        internalMultiplyKronecker(other, result);</span>
-<span class="fc" id="L506">    }</span>
+<span class="fc" id="L508">        internalMultiplyKronecker(other, result);</span>
+<span class="fc" id="L509">    }</span>
     
     /**
      * Computes the Kronecker product with provided matrix and returns the 
@@ -514,12 +517,12 @@ public class Matrix implements Serializable{
      * @return matrix containing result of Kronecker multiplication.
      */
     public Matrix multiplyKroneckerAndReturnNew(Matrix other) {
-<span class="fc" id="L517">        Matrix out = null;</span>
+<span class="fc" id="L520">        Matrix out = null;</span>
         try {
-<span class="fc" id="L519">            out = new Matrix(rows*other.rows, columns*other.columns);</span>
-<span class="fc" id="L520">            internalMultiplyKronecker(other, out);</span>
-<span class="pc" id="L521">        } catch (WrongSizeException ignore) { /* never thrown */ }</span>
-<span class="fc" id="L522">        return out;</span>
+<span class="fc" id="L522">            out = new Matrix(rows*other.rows, columns*other.columns);</span>
+<span class="fc" id="L523">            internalMultiplyKronecker(other, out);</span>
+<span class="pc" id="L524">        } catch (WrongSizeException ignore) { /* never thrown */ }</span>
+<span class="fc" id="L525">        return out;</span>
     }
     
     /**
@@ -533,23 +536,23 @@ public class Matrix implements Serializable{
     public void multiplyKronecker(Matrix other) {
         
         //instantiate new buffer and column index
-<span class="fc" id="L536">        int resultRows = rows*other.rows;</span>
-<span class="fc" id="L537">        int resultCols = columns*other.columns;        </span>
-<span class="fc" id="L538">        double[] resultBuffer = new double[resultRows*resultCols];</span>
-<span class="fc" id="L539">        int[] resultColumnIndex = new int[resultCols];</span>
-<span class="fc" id="L540">        int counter = 0;</span>
-<span class="fc bfc" id="L541" title="All 2 branches covered.">        for (int i = 0; i &lt; resultCols; i++) {</span>
-<span class="fc" id="L542">            resultColumnIndex[i] = counter;</span>
-<span class="fc" id="L543">            counter += resultRows;</span>
+<span class="fc" id="L539">        int resultRows = rows*other.rows;</span>
+<span class="fc" id="L540">        int resultCols = columns*other.columns;        </span>
+<span class="fc" id="L541">        double[] resultBuffer = new double[resultRows*resultCols];</span>
+<span class="fc" id="L542">        int[] resultColumnIndex = new int[resultCols];</span>
+<span class="fc" id="L543">        int counter = 0;</span>
+<span class="fc bfc" id="L544" title="All 2 branches covered.">        for (int i = 0; i &lt; resultCols; i++) {</span>
+<span class="fc" id="L545">            resultColumnIndex[i] = counter;</span>
+<span class="fc" id="L546">            counter += resultRows;</span>
         }
         
-<span class="fc" id="L546">        internalMultiplyKronecker(other, resultBuffer, resultColumnIndex);</span>
+<span class="fc" id="L549">        internalMultiplyKronecker(other, resultBuffer, resultColumnIndex);</span>
         //update matrix data
-<span class="fc" id="L548">        rows = resultRows;</span>
-<span class="fc" id="L549">        columns = resultCols;</span>
-<span class="fc" id="L550">        columnIndex = resultColumnIndex;</span>
-<span class="fc" id="L551">        buffer = resultBuffer;</span>
-<span class="fc" id="L552">    }</span>
+<span class="fc" id="L551">        rows = resultRows;</span>
+<span class="fc" id="L552">        columns = resultCols;</span>
+<span class="fc" id="L553">        columnIndex = resultColumnIndex;</span>
+<span class="fc" id="L554">        buffer = resultBuffer;</span>
+<span class="fc" id="L555">    }</span>
     
     /**
      * Computes product by scalar of this instance multiplying all its elements
@@ -560,11 +563,11 @@ public class Matrix implements Serializable{
      * @param result Matrix where result of operation is stored.
      */
     private void multiplyByScalar(double scalar, Matrix result) {
-<span class="fc" id="L563">        int length = rows * columns;</span>
-<span class="fc bfc" id="L564" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
-<span class="fc" id="L565">            result.buffer[i] = scalar * buffer[i];</span>
+<span class="fc" id="L566">        int length = rows * columns;</span>
+<span class="fc bfc" id="L567" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L568">            result.buffer[i] = scalar * buffer[i];</span>
         }        
-<span class="fc" id="L567">    }</span>
+<span class="fc" id="L570">    }</span>
     
     /**
      * Computes product by scalar of this instance multiplying all its elements
@@ -574,14 +577,14 @@ public class Matrix implements Serializable{
      * scalar.
      */
     public Matrix multiplyByScalarAndReturnNew(double scalar){
-<span class="fc" id="L577">        Matrix out = null;</span>
+<span class="fc" id="L580">        Matrix out = null;</span>
         try {
-<span class="fc" id="L579">            out = new Matrix(rows, columns);</span>
-<span class="fc" id="L580">            multiplyByScalar(scalar, out);</span>
-<span class="nc" id="L581">        } catch (WrongSizeException ignore) {</span>
+<span class="fc" id="L582">            out = new Matrix(rows, columns);</span>
+<span class="fc" id="L583">            multiplyByScalar(scalar, out);</span>
+<span class="nc" id="L584">        } catch (WrongSizeException ignore) {</span>
             //never happens
-<span class="fc" id="L583">        }</span>
-<span class="fc" id="L584">        return out;</span>
+<span class="fc" id="L586">        }</span>
+<span class="fc" id="L587">        return out;</span>
     }
     
     /**
@@ -590,8 +593,8 @@ public class Matrix implements Serializable{
      * @param scalar Scalar amount that current matrix will be multiplied by.
      */
     public void multiplyByScalar(double scalar) {
-<span class="fc" id="L593">        multiplyByScalar(scalar, this);</span>
-<span class="fc" id="L594">    }</span>
+<span class="fc" id="L596">        multiplyByScalar(scalar, this);</span>
+<span class="fc" id="L597">    }</span>
     
     /**
      * Checks if provided object is a Matrix instance having exactly the same
@@ -601,18 +604,18 @@ public class Matrix implements Serializable{
      */
     @Override
     public boolean equals(Object obj) {
-<span class="pc bpc" id="L604" title="1 of 2 branches missed.">        if (obj == null) {</span>
-<span class="nc" id="L605">            return false;</span>
+<span class="pc bpc" id="L607" title="1 of 2 branches missed.">        if (obj == null) {</span>
+<span class="nc" id="L608">            return false;</span>
         }
-<span class="fc bfc" id="L607" title="All 2 branches covered.">        if (obj == this) {</span>
-<span class="fc" id="L608">            return true;</span>
+<span class="fc bfc" id="L610" title="All 2 branches covered.">        if (obj == this) {</span>
+<span class="fc" id="L611">            return true;</span>
         }
-<span class="fc bfc" id="L610" title="All 2 branches covered.">        if (!(obj instanceof Matrix)) {</span>
-<span class="fc" id="L611">            return false;</span>
+<span class="fc bfc" id="L613" title="All 2 branches covered.">        if (!(obj instanceof Matrix)) {</span>
+<span class="fc" id="L614">            return false;</span>
         }
         
-<span class="fc" id="L614">        Matrix other = (Matrix)obj;</span>
-<span class="fc" id="L615">        return equals(other);</span>
+<span class="fc" id="L617">        Matrix other = (Matrix)obj;</span>
+<span class="fc" id="L618">        return equals(other);</span>
     }
 
     /**
@@ -623,8 +626,8 @@ public class Matrix implements Serializable{
      */
     @Override
     public int hashCode() {
-<span class="fc" id="L626">        return Objects.hash(this.rows, this.columns,</span>
-<span class="fc" id="L627">                Arrays.hashCode(this.buffer), Arrays.hashCode(this.columnIndex));</span>
+<span class="fc" id="L629">        return Objects.hash(this.rows, this.columns,</span>
+<span class="fc" id="L630">                Arrays.hashCode(this.buffer), Arrays.hashCode(this.columnIndex));</span>
     }
     
     /**
@@ -635,7 +638,7 @@ public class Matrix implements Serializable{
      * content and size)
      */
     public boolean equals(Matrix other) {
-<span class="fc" id="L638">        return equals(other, 0.0);</span>
+<span class="fc" id="L641">        return equals(other, 0.0);</span>
     }
     
     /**
@@ -649,24 +652,24 @@ public class Matrix implements Serializable{
      * and same size)
      */
     public boolean equals(Matrix other, double threshold) {
-<span class="fc bfc" id="L652" title="All 2 branches covered.">        if (other == null) {</span>
-<span class="fc" id="L653">            return false;</span>
-        }
-<span class="fc bfc" id="L655" title="All 2 branches covered.">        if (other.getRows() != rows) {</span>
+<span class="fc bfc" id="L655" title="All 2 branches covered.">        if (other == null) {</span>
 <span class="fc" id="L656">            return false;</span>
         }
-<span class="pc bpc" id="L658" title="1 of 2 branches missed.">        if (other.getColumns() != columns) {</span>
-<span class="nc" id="L659">            return false;</span>
+<span class="fc bfc" id="L658" title="All 2 branches covered.">        if (other.getRows() != rows) {</span>
+<span class="fc" id="L659">            return false;</span>
+        }
+<span class="pc bpc" id="L661" title="1 of 2 branches missed.">        if (other.getColumns() != columns) {</span>
+<span class="nc" id="L662">            return false;</span>
         }
         
         //check contents
-<span class="fc" id="L663">        int length = rows * columns;</span>
-<span class="fc bfc" id="L664" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
-<span class="fc bfc" id="L665" title="All 2 branches covered.">            if (Math.abs(buffer[i] - other.buffer[i]) &gt; threshold) {</span>
-<span class="fc" id="L666">                return false;</span>
+<span class="fc" id="L666">        int length = rows * columns;</span>
+<span class="fc bfc" id="L667" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc bfc" id="L668" title="All 2 branches covered.">            if (Math.abs(buffer[i] - other.buffer[i]) &gt; threshold) {</span>
+<span class="fc" id="L669">                return false;</span>
             }
         }
-<span class="fc" id="L669">        return true;</span>
+<span class="fc" id="L672">        return true;</span>
     }
 
     /**
@@ -682,17 +685,17 @@ public class Matrix implements Serializable{
      */
     public void elementByElementProduct(Matrix other, Matrix result) 
             throws WrongSizeException {
-<span class="nc bnc" id="L685" title="All 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
-<span class="nc" id="L686">            throw new WrongSizeException();</span>
+<span class="nc bnc" id="L688" title="All 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="nc" id="L689">            throw new WrongSizeException();</span>
         }
 
         //resize result if needed
-<span class="nc bnc" id="L690" title="All 4 branches missed.">        if (result.getRows() != rows || result.getColumns() != columns) {</span>
-<span class="nc" id="L691">            result.resize(rows, columns);</span>
+<span class="nc bnc" id="L693" title="All 4 branches missed.">        if (result.getRows() != rows || result.getColumns() != columns) {</span>
+<span class="nc" id="L694">            result.resize(rows, columns);</span>
         }
         
-<span class="nc" id="L694">        internalElementByElementProduct(other, result);</span>
-<span class="nc" id="L695">    }</span>
+<span class="nc" id="L697">        internalElementByElementProduct(other, result);</span>
+<span class="nc" id="L698">    }</span>
     
     /**
      * Computes element by element product (i.e. Hadamard product) between
@@ -718,13 +721,13 @@ public class Matrix implements Serializable{
      */
     public Matrix elementByElementProductAndReturnNew(Matrix other) 
             throws WrongSizeException {
-<span class="pc bpc" id="L721" title="1 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
-<span class="fc" id="L722">            throw new WrongSizeException();</span>
+<span class="pc bpc" id="L724" title="1 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="fc" id="L725">            throw new WrongSizeException();</span>
         }
         
-<span class="fc" id="L725">        Matrix out = new Matrix(rows, columns);</span>
-<span class="fc" id="L726">        internalElementByElementProduct(other, out);</span>
-<span class="fc" id="L727">        return out;</span>
+<span class="fc" id="L728">        Matrix out = new Matrix(rows, columns);</span>
+<span class="fc" id="L729">        internalElementByElementProduct(other, out);</span>
+<span class="fc" id="L730">        return out;</span>
     }
     
     /**
@@ -750,12 +753,12 @@ public class Matrix implements Serializable{
      */    
     public void elementByElementProduct(Matrix other) 
             throws WrongSizeException {
-<span class="pc bpc" id="L753" title="1 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
-<span class="fc" id="L754">            throw new WrongSizeException();</span>
+<span class="pc bpc" id="L756" title="1 of 4 branches missed.">        if (other.getRows() != rows || other.getColumns() != columns) {</span>
+<span class="fc" id="L757">            throw new WrongSizeException();</span>
         }
         
-<span class="fc" id="L757">        internalElementByElementProduct(other, this);</span>
-<span class="fc" id="L758">    }</span>
+<span class="fc" id="L760">        internalElementByElementProduct(other, this);</span>
+<span class="fc" id="L761">    }</span>
 
     /**
      * Transposes current matrix and stores result in provided matrix. If 
@@ -764,15 +767,15 @@ public class Matrix implements Serializable{
      */
     public void transpose(Matrix result) {
         //resize result if needed
-<span class="nc bnc" id="L767" title="All 4 branches missed.">        if (result.getRows() != columns || result.getColumns() != rows) {</span>
+<span class="nc bnc" id="L770" title="All 4 branches missed.">        if (result.getRows() != columns || result.getColumns() != rows) {</span>
             try {
-<span class="nc" id="L769">                result.resize(columns, rows);</span>
-<span class="nc" id="L770">            } catch (WrongSizeException ignore) {</span>
+<span class="nc" id="L772">                result.resize(columns, rows);</span>
+<span class="nc" id="L773">            } catch (WrongSizeException ignore) {</span>
                 //never happens
-<span class="nc" id="L772">            }</span>
+<span class="nc" id="L775">            }</span>
         }
-<span class="nc" id="L774">        internalTranspose(result);</span>
-<span class="nc" id="L775">    }</span>
+<span class="nc" id="L777">        internalTranspose(result);</span>
+<span class="nc" id="L778">    }</span>
     
     /**
      * Transposes current matrix and returns result as a new instance. 
@@ -783,14 +786,14 @@ public class Matrix implements Serializable{
      * @return A new Matrix instance containing transposed matrix.
      */
     public Matrix transposeAndReturnNew() {
-<span class="fc" id="L786">        Matrix out = null;</span>
+<span class="fc" id="L789">        Matrix out = null;</span>
         try {
-<span class="fc" id="L788">            out = new Matrix(columns, rows);</span>
-<span class="fc" id="L789">            internalTranspose(out);</span>
-<span class="nc" id="L790">        } catch (WrongSizeException ignore) {</span>
+<span class="fc" id="L791">            out = new Matrix(columns, rows);</span>
+<span class="fc" id="L792">            internalTranspose(out);</span>
+<span class="nc" id="L793">        } catch (WrongSizeException ignore) {</span>
             //never happens
-<span class="fc" id="L792">        }</span>
-<span class="fc" id="L793">        return out;</span>
+<span class="fc" id="L795">        }</span>
+<span class="fc" id="L796">        return out;</span>
     }
     
     /**
@@ -803,25 +806,25 @@ public class Matrix implements Serializable{
     @SuppressWarnings(&quot;Duplicates&quot;)
     public void transpose() {
         
-<span class="fc" id="L806">        double[] newBuffer = new double[rows * columns];</span>
-<span class="fc" id="L807">        int[] newColumnIndex = new int[rows];</span>
-<span class="fc" id="L808">        int counter = 0;</span>
-<span class="fc bfc" id="L809" title="All 2 branches covered.">        for (int i = 0; i &lt; rows; i++) {</span>
-<span class="fc" id="L810">            newColumnIndex[i] = counter;</span>
-<span class="fc" id="L811">            counter += columns;</span>
+<span class="fc" id="L809">        double[] newBuffer = new double[rows * columns];</span>
+<span class="fc" id="L810">        int[] newColumnIndex = new int[rows];</span>
+<span class="fc" id="L811">        int counter = 0;</span>
+<span class="fc bfc" id="L812" title="All 2 branches covered.">        for (int i = 0; i &lt; rows; i++) {</span>
+<span class="fc" id="L813">            newColumnIndex[i] = counter;</span>
+<span class="fc" id="L814">            counter += columns;</span>
         }
-<span class="fc" id="L813">        internalTranspose(newBuffer, newColumnIndex);</span>
+<span class="fc" id="L816">        internalTranspose(newBuffer, newColumnIndex);</span>
         
         //update matrix data
         
         //swap rows and columns
-<span class="fc" id="L818">        int tmp = rows;</span>
-<span class="fc" id="L819">        rows = columns;</span>
-<span class="fc" id="L820">        columns = tmp;</span>
+<span class="fc" id="L821">        int tmp = rows;</span>
+<span class="fc" id="L822">        rows = columns;</span>
+<span class="fc" id="L823">        columns = tmp;</span>
         
-<span class="fc" id="L822">        columnIndex = newColumnIndex;</span>
-<span class="fc" id="L823">        buffer = newBuffer;</span>
-<span class="fc" id="L824">    }</span>
+<span class="fc" id="L825">        columnIndex = newColumnIndex;</span>
+<span class="fc" id="L826">        buffer = newBuffer;</span>
+<span class="fc" id="L827">    }</span>
     
     /**
      * Sets the contents of this matrix to provided value in all of its elements
@@ -829,8 +832,8 @@ public class Matrix implements Serializable{
      */
     public void initialize(double initValue) {
         //initialize buffer array to provided value
-<span class="fc" id="L832">        Arrays.fill(buffer, initValue);</span>
-<span class="fc" id="L833">    }</span>
+<span class="fc" id="L835">        Arrays.fill(buffer, initValue);</span>
+<span class="fc" id="L836">    }</span>
     
     /**
      * Resizes current instance by removing its contents and resizing it to
@@ -841,8 +844,8 @@ public class Matrix implements Serializable{
      * columns is zero.
      */
     public void resize(int rows, int columns) throws WrongSizeException {
-<span class="fc" id="L844">        internalResize(rows, columns);</span>
-<span class="fc" id="L845">    }</span>
+<span class="fc" id="L847">        internalResize(rows, columns);</span>
+<span class="fc" id="L848">    }</span>
 
     /**
      * Resets current instance by removing its contents, resizing it to provided
@@ -855,9 +858,9 @@ public class Matrix implements Serializable{
      */
     public void reset(int rows, int columns, double initValue) 
             throws WrongSizeException {
-<span class="fc" id="L858">        internalResize(rows, columns);</span>
-<span class="fc" id="L859">        initialize(initValue);</span>
-<span class="fc" id="L860">    }</span>
+<span class="fc" id="L861">        internalResize(rows, columns);</span>
+<span class="fc" id="L862">        initialize(initValue);</span>
+<span class="fc" id="L863">    }</span>
     
     /**
      * Returns the contents of the matrix as an array of values using
@@ -865,7 +868,7 @@ public class Matrix implements Serializable{
      * @return Contents of matrix as an array
      */
     public double[] toArray() {
-<span class="fc" id="L868">        return toArray(DEFAULT_USE_COLUMN_ORDER);</span>
+<span class="fc" id="L871">        return toArray(DEFAULT_USE_COLUMN_ORDER);</span>
     }
     
     /**
@@ -877,24 +880,24 @@ public class Matrix implements Serializable{
      */
     @SuppressWarnings(&quot;Duplicates&quot;)
     public double[] toArray(boolean isColumnOrder) {
-<span class="fc" id="L880">        int length = rows * columns;               </span>
+<span class="fc" id="L883">        int length = rows * columns;               </span>
         
-<span class="fc bfc" id="L882" title="All 2 branches covered.">        if (isColumnOrder) {</span>
-<span class="fc" id="L883">            return Arrays.copyOf(buffer, length);</span>
+<span class="fc bfc" id="L885" title="All 2 branches covered.">        if (isColumnOrder) {</span>
+<span class="fc" id="L886">            return Arrays.copyOf(buffer, length);</span>
         } else {
-<span class="fc" id="L885">            double[] out = new double[length];</span>
+<span class="fc" id="L888">            double[] out = new double[length];</span>
             double value;
-<span class="fc" id="L887">            int counter = 0;</span>
+<span class="fc" id="L890">            int counter = 0;</span>
             
-<span class="fc bfc" id="L889" title="All 2 branches covered.">            for (int j = 0; j &lt; rows; j++) {</span>
-<span class="fc bfc" id="L890" title="All 2 branches covered.">                for (int i = 0; i &lt; columns; i++) {</span>
-<span class="fc" id="L891">                    value = buffer[columnIndex[i] + j];</span>
-<span class="fc" id="L892">                    out[counter] = value;</span>
-<span class="fc" id="L893">                    counter++;</span>
+<span class="fc bfc" id="L892" title="All 2 branches covered.">            for (int j = 0; j &lt; rows; j++) {</span>
+<span class="fc bfc" id="L893" title="All 2 branches covered.">                for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc" id="L894">                    value = buffer[columnIndex[i] + j];</span>
+<span class="fc" id="L895">                    out[counter] = value;</span>
+<span class="fc" id="L896">                    counter++;</span>
                 }
             }
             
-<span class="fc" id="L897">            return out;</span>
+<span class="fc" id="L900">            return out;</span>
         }
     }
     
@@ -906,8 +909,8 @@ public class Matrix implements Serializable{
      * same number of elements as the matrix (i.e. rows x columns).
      */
     public void toArray(double[] result) throws WrongSizeException {
-<span class="fc" id="L909">        toArray(result, DEFAULT_USE_COLUMN_ORDER);</span>
-<span class="fc" id="L910">    }</span>
+<span class="fc" id="L912">        toArray(result, DEFAULT_USE_COLUMN_ORDER);</span>
+<span class="fc" id="L913">    }</span>
     
     /**
      * Copies the contents of the matrix to an array of values using provided
@@ -921,33 +924,33 @@ public class Matrix implements Serializable{
     @SuppressWarnings(&quot;Duplicates&quot;)
     public void toArray(double[] result, boolean isColumnOrder) 
             throws WrongSizeException {
-<span class="pc bpc" id="L924" title="1 of 2 branches missed.">        if (result.length != buffer.length) {</span>
-<span class="nc" id="L925">            throw new WrongSizeException(</span>
+<span class="pc bpc" id="L927" title="1 of 2 branches missed.">        if (result.length != buffer.length) {</span>
+<span class="nc" id="L928">            throw new WrongSizeException(</span>
                     &quot;result array must be equal to rows x columns&quot;);
         }
         
-<span class="fc bfc" id="L929" title="All 2 branches covered.">        if (isColumnOrder) {</span>
-<span class="fc" id="L930">            System.arraycopy(buffer, 0, result, 0, buffer.length);</span>
+<span class="fc bfc" id="L932" title="All 2 branches covered.">        if (isColumnOrder) {</span>
+<span class="fc" id="L933">            System.arraycopy(buffer, 0, result, 0, buffer.length);</span>
         } else {
             double value;
-<span class="fc" id="L933">            int counter = 0;</span>
+<span class="fc" id="L936">            int counter = 0;</span>
             
-<span class="fc bfc" id="L935" title="All 2 branches covered.">            for (int j = 0; j &lt; rows; j++) {</span>
-<span class="fc bfc" id="L936" title="All 2 branches covered.">                for (int i = 0; i &lt; columns; i++) {</span>
-<span class="fc" id="L937">                    value = buffer[columnIndex[i] + j];</span>
-<span class="fc" id="L938">                    result[counter] = value;</span>
-<span class="fc" id="L939">                    counter++;</span>
+<span class="fc bfc" id="L938" title="All 2 branches covered.">            for (int j = 0; j &lt; rows; j++) {</span>
+<span class="fc bfc" id="L939" title="All 2 branches covered.">                for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc" id="L940">                    value = buffer[columnIndex[i] + j];</span>
+<span class="fc" id="L941">                    result[counter] = value;</span>
+<span class="fc" id="L942">                    counter++;</span>
                 }
             }            
         }
-<span class="fc" id="L943">    }</span>
+<span class="fc" id="L946">    }</span>
     
     /**
      * Returns current matrix internal buffer of data.
      * @return Internal buffer of data.
      */
     public double[] getBuffer() {
-<span class="fc" id="L950">        return buffer;</span>
+<span class="fc" id="L953">        return buffer;</span>
     }
 
     /**
@@ -967,28 +970,28 @@ public class Matrix implements Serializable{
     @SuppressWarnings(&quot;Duplicates&quot;)
     public void getSubmatrix(int topLeftRow, int topLeftColumn, 
             int bottomRightRow, int bottomRightColumn, Matrix result) {
-<span class="pc bpc" id="L970" title="10 of 20 branches missed.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+<span class="pc bpc" id="L973" title="10 of 20 branches missed.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
                 topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
                 bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
                 bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
                 topLeftRow &gt; bottomRightRow || 
                 topLeftColumn &gt; bottomRightColumn) {
-<span class="nc" id="L976">            throw new IllegalArgumentException();</span>
+<span class="nc" id="L979">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L979">        int subRows = bottomRightRow - topLeftRow + 1;</span>
-<span class="fc" id="L980">        int subCols = bottomRightColumn - topLeftColumn + 1;</span>
-<span class="pc bpc" id="L981" title="1 of 4 branches missed.">        if (result.getRows() != subRows || result.getColumns() != subCols) {</span>
+<span class="fc" id="L982">        int subRows = bottomRightRow - topLeftRow + 1;</span>
+<span class="fc" id="L983">        int subCols = bottomRightColumn - topLeftColumn + 1;</span>
+<span class="pc bpc" id="L984" title="1 of 4 branches missed.">        if (result.getRows() != subRows || result.getColumns() != subCols) {</span>
             //resize result
             try {
-<span class="fc" id="L984">                result.resize(subRows, subCols);</span>
-<span class="nc" id="L985">            } catch (WrongSizeException ignore) {</span>
+<span class="fc" id="L987">                result.resize(subRows, subCols);</span>
+<span class="nc" id="L988">            } catch (WrongSizeException ignore) {</span>
                 //never happens
-<span class="fc" id="L987">            }</span>
+<span class="fc" id="L990">            }</span>
         }
-<span class="fc" id="L989">        internalGetSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,</span>
+<span class="fc" id="L992">        internalGetSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,</span>
                 bottomRightColumn, result);
-<span class="fc" id="L991">    }</span>
+<span class="fc" id="L994">    }</span>
     
     /**
      * Obtains a submatrix of current matrix instance. Submatrix is obtained by
@@ -1006,25 +1009,25 @@ public class Matrix implements Serializable{
     @SuppressWarnings(&quot;Duplicates&quot;)
     public Matrix getSubmatrix(int topLeftRow, int topLeftColumn, 
             int bottomRightRow, int bottomRightColumn) {
-<span class="pc bpc" id="L1009" title="4 of 20 branches missed.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+<span class="pc bpc" id="L1012" title="4 of 20 branches missed.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
                 topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
                 bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
                 bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
                 topLeftRow &gt; bottomRightRow || 
                 topLeftColumn &gt; bottomRightColumn) {
-<span class="fc" id="L1015">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L1018">            throw new IllegalArgumentException();</span>
         }
         
         Matrix out;
         try {
-<span class="fc" id="L1020">            out = new Matrix(bottomRightRow - topLeftRow + 1,</span>
+<span class="fc" id="L1023">            out = new Matrix(bottomRightRow - topLeftRow + 1,</span>
                 bottomRightColumn - topLeftColumn + 1);
-<span class="nc" id="L1022">        } catch (WrongSizeException e) {</span>
-<span class="nc" id="L1023">            throw new IllegalArgumentException(e);</span>
-<span class="fc" id="L1024">        }</span>
-<span class="fc" id="L1025">        internalGetSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,</span>
+<span class="nc" id="L1025">        } catch (WrongSizeException e) {</span>
+<span class="nc" id="L1026">            throw new IllegalArgumentException(e);</span>
+<span class="fc" id="L1027">        }</span>
+<span class="fc" id="L1028">        internalGetSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,</span>
                 bottomRightColumn, out);
-<span class="fc" id="L1027">        return out;</span>
+<span class="fc" id="L1030">        return out;</span>
     }
 
     /**
@@ -1048,24 +1051,24 @@ public class Matrix implements Serializable{
     public void getSubmatrixAsArray(int topLeftRow, int topLeftColumn,
             int bottomRightRow, int bottomRightColumn, double[] array)
             throws WrongSizeException {
-<span class="pc bpc" id="L1051" title="10 of 20 branches missed.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+<span class="pc bpc" id="L1054" title="10 of 20 branches missed.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
                 topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
                 bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
                 bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
                 topLeftRow &gt; bottomRightRow || 
                 topLeftColumn &gt; bottomRightColumn) {
-<span class="nc" id="L1057">            throw new IllegalArgumentException();</span>
+<span class="nc" id="L1060">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L1060">        int length = (bottomRightRow - topLeftRow + 1) *</span>
+<span class="fc" id="L1063">        int length = (bottomRightRow - topLeftRow + 1) *</span>
                 (bottomRightColumn - topLeftColumn + 1);        
-<span class="pc bpc" id="L1062" title="1 of 2 branches missed.">        if (array.length != length) {</span>
-<span class="nc" id="L1063">            throw new WrongSizeException();</span>
+<span class="pc bpc" id="L1065" title="1 of 2 branches missed.">        if (array.length != length) {</span>
+<span class="nc" id="L1066">            throw new WrongSizeException();</span>
         }
         
-<span class="fc" id="L1066">        getSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow,</span>
+<span class="fc" id="L1069">        getSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow,</span>
                 bottomRightColumn, DEFAULT_USE_COLUMN_ORDER, array);
-<span class="fc" id="L1068">    }</span>
+<span class="fc" id="L1071">    }</span>
     
     /**
      * Retrieves a submatrix of current matrix instance as an array of values
@@ -1090,24 +1093,24 @@ public class Matrix implements Serializable{
     public void getSubmatrixAsArray(int topLeftRow, int topLeftColumn,
             int bottomRightRow, int bottomRightColumn, boolean isColumnOrder,
             double[] array) throws WrongSizeException {
-<span class="pc bpc" id="L1093" title="10 of 20 branches missed.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+<span class="pc bpc" id="L1096" title="10 of 20 branches missed.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
                 topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
                 bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
                 bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
                 topLeftRow &gt; bottomRightRow || 
                 topLeftColumn &gt; bottomRightColumn) {
-<span class="nc" id="L1099">            throw new IllegalArgumentException();</span>
+<span class="nc" id="L1102">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L1102">        int length = (bottomRightRow - topLeftRow + 1) *</span>
+<span class="fc" id="L1105">        int length = (bottomRightRow - topLeftRow + 1) *</span>
                 (bottomRightColumn - topLeftColumn + 1);
-<span class="pc bpc" id="L1104" title="1 of 2 branches missed.">        if (array.length != length) {</span>
-<span class="nc" id="L1105">            throw new WrongSizeException();</span>
+<span class="pc bpc" id="L1107" title="1 of 2 branches missed.">        if (array.length != length) {</span>
+<span class="nc" id="L1108">            throw new WrongSizeException();</span>
         }
         
-<span class="fc" id="L1108">        internalGetSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow, </span>
+<span class="fc" id="L1111">        internalGetSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow, </span>
                 bottomRightColumn, isColumnOrder, array);        
-<span class="fc" id="L1110">    }</span>
+<span class="fc" id="L1113">    }</span>
     
     /**
      * Obtains submatrix of current matrix instance as an array of values using
@@ -1125,7 +1128,7 @@ public class Matrix implements Serializable{
      */    
     public double[] getSubmatrixAsArray(int topLeftRow, int topLeftColumn,
             int bottomRightRow, int bottomRightColumn) {
-<span class="fc" id="L1128">        return getSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow,</span>
+<span class="fc" id="L1131">        return getSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow,</span>
                 bottomRightColumn, DEFAULT_USE_COLUMN_ORDER);
     }
 
@@ -1148,22 +1151,22 @@ public class Matrix implements Serializable{
     @SuppressWarnings(&quot;Duplicates&quot;)
     public double[] getSubmatrixAsArray(int topLeftRow, int topLeftColumn,
             int bottomRightRow, int bottomRightColumn, boolean isColumnOrder) {
-<span class="pc bpc" id="L1151" title="4 of 20 branches missed.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+<span class="pc bpc" id="L1154" title="4 of 20 branches missed.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
                 topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
                 bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
                 bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
                 topLeftRow &gt; bottomRightRow || 
                 topLeftColumn &gt; bottomRightColumn) {
-<span class="fc" id="L1157">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L1160">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L1160">        int length = (bottomRightRow - topLeftRow + 1) *</span>
+<span class="fc" id="L1163">        int length = (bottomRightRow - topLeftRow + 1) *</span>
                 (bottomRightColumn - topLeftColumn + 1);
         
-<span class="fc" id="L1163">        double[] out = new double[length];</span>
-<span class="fc" id="L1164">        internalGetSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow,</span>
+<span class="fc" id="L1166">        double[] out = new double[length];</span>
+<span class="fc" id="L1167">        internalGetSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow,</span>
                 bottomRightColumn, isColumnOrder, out);
-<span class="fc" id="L1166">        return out;</span>
+<span class="fc" id="L1169">        return out;</span>
     }
     
     /**
@@ -1181,11 +1184,11 @@ public class Matrix implements Serializable{
      */
     public void setSubmatrix(int topLeftRow, int topLeftColumn, 
             int bottomRightRow, int bottomRightColumn, Matrix submatrix) {
-<span class="fc" id="L1184">        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, </span>
+<span class="fc" id="L1187">        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, </span>
                 bottomRightColumn, submatrix, 0, 0,
-<span class="fc" id="L1186">                submatrix.getRows() - 1,</span>
-<span class="fc" id="L1187">                submatrix.getColumns() - 1);</span>
-<span class="fc" id="L1188">    }</span>
+<span class="fc" id="L1189">                submatrix.getRows() - 1,</span>
+<span class="fc" id="L1190">                submatrix.getColumns() - 1);</span>
+<span class="fc" id="L1191">    }</span>
     
     /**
      * Copies elements from provided submatrix into this matrix at provided
@@ -1209,21 +1212,21 @@ public class Matrix implements Serializable{
      * top-left corners are indeed located below or at right side of 
      * bottom-right corners.
      */
-    @SuppressWarnings(&quot;Duplicates&quot;)
+    @SuppressWarnings(&quot;all&quot;)
     public void setSubmatrix(int topLeftRow, int topLeftColumn, 
             int bottomRightRow, int bottomRightColumn, Matrix submatrix,
             int submatrixTopLeftRow, int submatrixTopLeftColumn,
             int submatrixBottomRightRow, int submatrixBottomRightColumn) {
-<span class="fc bfc" id="L1217" title="All 20 branches covered.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+<span class="fc bfc" id="L1220" title="All 20 branches covered.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
                 topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
                 bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
                 bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
                 topLeftRow &gt; bottomRightRow || 
                 topLeftColumn &gt; bottomRightColumn) {
-<span class="fc" id="L1223">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L1226">            throw new IllegalArgumentException();</span>
         }
         
-<span class="pc bpc" id="L1226" title="2 of 20 branches missed.">        if (submatrixTopLeftRow &lt; 0 || submatrixTopLeftRow &gt;= submatrix.rows ||</span>
+<span class="pc bpc" id="L1229" title="2 of 20 branches missed.">        if (submatrixTopLeftRow &lt; 0 || submatrixTopLeftRow &gt;= submatrix.rows ||</span>
                 submatrixTopLeftColumn &lt; 0 || 
                 submatrixTopLeftColumn &gt;= submatrix.columns ||
                 submatrixBottomRightRow &lt; 0 || 
@@ -1232,33 +1235,33 @@ public class Matrix implements Serializable{
                 submatrixBottomRightColumn &gt;= submatrix.columns ||
                 submatrixTopLeftRow &gt; submatrixBottomRightRow ||
                 submatrixTopLeftColumn &gt; submatrixBottomRightColumn) {
-<span class="fc" id="L1235">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L1238">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L1238">        int matrixRows = bottomRightRow - topLeftRow + 1;</span>
-<span class="fc" id="L1239">        int matrixColumns = bottomRightColumn - topLeftColumn + 1;</span>
-<span class="fc" id="L1240">        int submatrixRows = submatrixBottomRightRow - submatrixTopLeftRow + 1;</span>
-<span class="fc" id="L1241">        int submatrixColumns = submatrixBottomRightColumn -                 </span>
+<span class="fc" id="L1241">        int matrixRows = bottomRightRow - topLeftRow + 1;</span>
+<span class="fc" id="L1242">        int matrixColumns = bottomRightColumn - topLeftColumn + 1;</span>
+<span class="fc" id="L1243">        int submatrixRows = submatrixBottomRightRow - submatrixTopLeftRow + 1;</span>
+<span class="fc" id="L1244">        int submatrixColumns = submatrixBottomRightColumn -                 </span>
                 submatrixTopLeftColumn + 1;
-<span class="fc bfc" id="L1243" title="All 4 branches covered.">        if (matrixRows != submatrixRows || matrixColumns != submatrixColumns) {</span>
-<span class="fc" id="L1244">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L1246" title="All 4 branches covered.">        if (matrixRows != submatrixRows || matrixColumns != submatrixColumns) {</span>
+<span class="fc" id="L1247">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L1247">        int j2 = submatrixTopLeftColumn;</span>
+<span class="fc" id="L1250">        int j2 = submatrixTopLeftColumn;</span>
         int destPos;
         int sourcePos;
-<span class="fc bfc" id="L1250" title="All 2 branches covered.">        for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
-<span class="fc" id="L1251">            destPos = columnIndex[j] + topLeftRow;</span>
-<span class="fc" id="L1252">            sourcePos = submatrix.columnIndex[j2] + submatrixTopLeftRow;</span>
-<span class="fc bfc" id="L1253" title="All 2 branches covered.">            for(int i = topLeftRow; i &lt;= bottomRightRow; i++){</span>
+<span class="fc bfc" id="L1253" title="All 2 branches covered.">        for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
+<span class="fc" id="L1254">            destPos = columnIndex[j] + topLeftRow;</span>
+<span class="fc" id="L1255">            sourcePos = submatrix.columnIndex[j2] + submatrixTopLeftRow;</span>
+<span class="fc bfc" id="L1256" title="All 2 branches covered.">            for(int i = topLeftRow; i &lt;= bottomRightRow; i++){</span>
                 //Lines below are equivalent to commented code
-<span class="fc" id="L1255">                buffer[destPos] = submatrix.buffer[sourcePos];</span>
-<span class="fc" id="L1256">                destPos++;</span>
-<span class="fc" id="L1257">                sourcePos++;</span>
+<span class="fc" id="L1258">                buffer[destPos] = submatrix.buffer[sourcePos];</span>
+<span class="fc" id="L1259">                destPos++;</span>
+<span class="fc" id="L1260">                sourcePos++;</span>
             }
-<span class="fc" id="L1259">            j2++;</span>
+<span class="fc" id="L1262">            j2++;</span>
         }
-<span class="fc" id="L1261">    }</span>
+<span class="fc" id="L1264">    }</span>
     
     /**
      * Sets elements in provided region to provided value.
@@ -1274,21 +1277,21 @@ public class Matrix implements Serializable{
     @SuppressWarnings(&quot;Duplicates&quot;)
     public void setSubmatrix(int topLeftRow, int topLeftColumn, 
             int bottomRightRow, int bottomRightColumn, double value) {
-<span class="fc bfc" id="L1277" title="All 20 branches covered.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+<span class="fc bfc" id="L1280" title="All 20 branches covered.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
                 topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
                 bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
                 bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
                 topLeftRow &gt; bottomRightRow || 
                 topLeftColumn &gt; bottomRightColumn) {
-<span class="fc" id="L1283">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L1286">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc bfc" id="L1286" title="All 2 branches covered.">        for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
-<span class="fc bfc" id="L1287" title="All 2 branches covered.">            for(int i = topLeftRow; i &lt;= bottomRightRow; i++){</span>
-<span class="fc" id="L1288">                buffer[columnIndex[j] + i] = value;</span>
+<span class="fc bfc" id="L1289" title="All 2 branches covered.">        for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
+<span class="fc bfc" id="L1290" title="All 2 branches covered.">            for(int i = topLeftRow; i &lt;= bottomRightRow; i++){</span>
+<span class="fc" id="L1291">                buffer[columnIndex[j] + i] = value;</span>
             }
         }
-<span class="fc" id="L1291">    }</span>
+<span class="fc" id="L1294">    }</span>
     
     /**
      * Copies elements from provided array into this matrix at provided
@@ -1306,9 +1309,9 @@ public class Matrix implements Serializable{
      */    
     public void setSubmatrix(int topLeftRow, int topLeftColumn,
             int bottomRightRow, int bottomRightColumn, double[] values) {
-<span class="fc" id="L1309">        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, </span>
+<span class="fc" id="L1312">        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, </span>
                 bottomRightColumn, values, DEFAULT_USE_COLUMN_ORDER);
-<span class="fc" id="L1311">    }</span>
+<span class="fc" id="L1314">    }</span>
     
     /**
      * Copies elements from provided array into this matrix at provided 
@@ -1329,9 +1332,9 @@ public class Matrix implements Serializable{
     public void setSubmatrix(int topLeftRow, int topLeftColumn,
             int bottomRightRow, int bottomRightColumn, double[] values,
             boolean isColumnOrder) {
-<span class="fc" id="L1332">        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, </span>
+<span class="fc" id="L1335">        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, </span>
                 bottomRightColumn, values, 0, values.length - 1, isColumnOrder);
-<span class="fc" id="L1334">    }</span>
+<span class="fc" id="L1337">    }</span>
     
     /**
      * Copies elements from provided array into this matrix at provided
@@ -1355,10 +1358,10 @@ public class Matrix implements Serializable{
     public void setSubmatrix(int topLeftRow, int topLeftColumn,
             int bottomRightRow, int bottomRightColumn, double[] values,
             int valuesStart, int valuesEnd) {
-<span class="fc" id="L1358">        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, </span>
+<span class="fc" id="L1361">        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, </span>
                 bottomRightColumn, values, valuesStart, valuesEnd, 
                 DEFAULT_USE_COLUMN_ORDER);
-<span class="fc" id="L1361">    }</span>
+<span class="fc" id="L1364">    }</span>
 
     /**
      * Copies elements from provided array into this matrix at provided
@@ -1382,58 +1385,58 @@ public class Matrix implements Serializable{
      * or if valuesStart and valuesEnd lie outside of valid array positions or
      * start is greater than end position.
      */
-    @SuppressWarnings(&quot;Duplicates&quot;)
+    @SuppressWarnings(&quot;all&quot;)
     public void setSubmatrix(int topLeftRow, int topLeftColumn,
             int bottomRightRow, int bottomRightColumn, double[] values,
             int valuesStart, int valuesEnd, boolean isColumnOrder) {
         
-<span class="fc bfc" id="L1390" title="All 20 branches covered.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
+<span class="fc bfc" id="L1393" title="All 20 branches covered.">        if (topLeftRow &lt; 0 || topLeftRow &gt;= rows ||</span>
                 topLeftColumn &lt; 0 || topLeftColumn &gt;= columns ||
                 bottomRightRow &lt; 0 || bottomRightRow &gt;= rows || 
                 bottomRightColumn &lt; 0 || bottomRightColumn &gt;= columns ||
                 topLeftRow &gt; bottomRightRow || 
                 topLeftColumn &gt; bottomRightColumn) {
-<span class="fc" id="L1396">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L1399">            throw new IllegalArgumentException();</span>
         }
         
-<span class="pc bpc" id="L1399" title="4 of 10 branches missed.">        if (valuesStart &lt; 0 || valuesStart &gt;= values.length ||</span>
+<span class="pc bpc" id="L1402" title="4 of 10 branches missed.">        if (valuesStart &lt; 0 || valuesStart &gt;= values.length ||</span>
                 valuesEnd &lt; 0 || valuesEnd &gt;= values.length ||
                 valuesStart &gt; valuesEnd) {
-<span class="fc" id="L1402">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L1405">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L1405">        int matrixRows = bottomRightRow - topLeftRow + 1;</span>
-<span class="fc" id="L1406">        int matrixColumns = bottomRightColumn - topLeftColumn + 1;        </span>
-<span class="fc" id="L1407">        int matrixLength = matrixRows * matrixColumns;</span>
-<span class="fc" id="L1408">        int valuesLength = valuesEnd - valuesStart + 1;</span>
+<span class="fc" id="L1408">        int matrixRows = bottomRightRow - topLeftRow + 1;</span>
+<span class="fc" id="L1409">        int matrixColumns = bottomRightColumn - topLeftColumn + 1;        </span>
+<span class="fc" id="L1410">        int matrixLength = matrixRows * matrixColumns;</span>
+<span class="fc" id="L1411">        int valuesLength = valuesEnd - valuesStart + 1;</span>
         
-<span class="fc bfc" id="L1410" title="All 2 branches covered.">        if (matrixLength != valuesLength) {</span>
-<span class="fc" id="L1411">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L1413" title="All 2 branches covered.">        if (matrixLength != valuesLength) {</span>
+<span class="fc" id="L1414">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L1414">        int counter = valuesStart;</span>
-<span class="fc bfc" id="L1415" title="All 2 branches covered.">        if (isColumnOrder) {</span>
+<span class="fc" id="L1417">        int counter = valuesStart;</span>
+<span class="fc bfc" id="L1418" title="All 2 branches covered.">        if (isColumnOrder) {</span>
             int destPos;
-<span class="fc bfc" id="L1417" title="All 2 branches covered.">            for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
-<span class="fc" id="L1418">                destPos = columnIndex[j] + topLeftRow;</span>
-<span class="fc bfc" id="L1419" title="All 2 branches covered.">                for(int i = topLeftRow; i &lt;= bottomRightRow; i++){</span>
+<span class="fc bfc" id="L1420" title="All 2 branches covered.">            for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
+<span class="fc" id="L1421">                destPos = columnIndex[j] + topLeftRow;</span>
+<span class="fc bfc" id="L1422" title="All 2 branches covered.">                for(int i = topLeftRow; i &lt;= bottomRightRow; i++){</span>
                     //Two Lines below are equivalent to:
                     //buffer[columnIndex[j] + i] = values[counter]
-<span class="fc" id="L1422">                    buffer[destPos] = values[counter];</span>
-<span class="fc" id="L1423">                    destPos++;</span>
-<span class="fc" id="L1424">                    counter++;</span>
+<span class="fc" id="L1425">                    buffer[destPos] = values[counter];</span>
+<span class="fc" id="L1426">                    destPos++;</span>
+<span class="fc" id="L1427">                    counter++;</span>
                 }
             }        
             
         } else {
-<span class="fc bfc" id="L1429" title="All 2 branches covered.">            for (int i = topLeftRow; i &lt;= bottomRightRow; i++) {</span>
-<span class="fc bfc" id="L1430" title="All 2 branches covered.">                for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
-<span class="fc" id="L1431">                    buffer[columnIndex[j] + i] = values[counter];</span>
-<span class="fc" id="L1432">                    counter++;</span>
+<span class="fc bfc" id="L1432" title="All 2 branches covered.">            for (int i = topLeftRow; i &lt;= bottomRightRow; i++) {</span>
+<span class="fc bfc" id="L1433" title="All 2 branches covered.">                for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
+<span class="fc" id="L1434">                    buffer[columnIndex[j] + i] = values[counter];</span>
+<span class="fc" id="L1435">                    counter++;</span>
                 }
             }
         }
-<span class="fc" id="L1436">    }</span>
+<span class="fc" id="L1439">    }</span>
     
     /**
      * Sets values into provided matrix to make it an identity matrix (all 
@@ -1441,13 +1444,13 @@ public class Matrix implements Serializable{
      * @param m Matrix where identity values are set.
      */
     public static void identity(Matrix m) {
-<span class="fc" id="L1444">        m.initialize(0.0);</span>
+<span class="fc" id="L1447">        m.initialize(0.0);</span>
         
-<span class="fc bfc" id="L1446" title="All 2 branches covered.">        int minSize = (m.rows &lt; m.columns) ? m.rows : m.columns;</span>
-<span class="fc bfc" id="L1447" title="All 2 branches covered.">        for (int i = 0; i &lt; minSize; i++) {</span>
-<span class="fc" id="L1448">            m.buffer[m.columnIndex[i] + i] = 1.0;</span>
+<span class="fc bfc" id="L1449" title="All 2 branches covered.">        int minSize = (m.rows &lt; m.columns) ? m.rows : m.columns;</span>
+<span class="fc bfc" id="L1450" title="All 2 branches covered.">        for (int i = 0; i &lt; minSize; i++) {</span>
+<span class="fc" id="L1451">            m.buffer[m.columnIndex[i] + i] = 1.0;</span>
         }        
-<span class="fc" id="L1450">    }</span>
+<span class="fc" id="L1453">    }</span>
     
     /**
      * Creates and returns a new matrix instance having all the elements on
@@ -1461,9 +1464,9 @@ public class Matrix implements Serializable{
     public static Matrix identity(int rows, int columns) 
             throws WrongSizeException {
         
-<span class="fc" id="L1464">        Matrix out = new Matrix(rows, columns);</span>
-<span class="fc" id="L1465">        identity(out);</span>
-<span class="fc" id="L1466">        return out;</span>
+<span class="fc" id="L1467">        Matrix out = new Matrix(rows, columns);</span>
+<span class="fc" id="L1468">        identity(out);</span>
+<span class="fc" id="L1469">        return out;</span>
     }    
     
     /**
@@ -1479,14 +1482,14 @@ public class Matrix implements Serializable{
      */
     public static void fillWithUniformRandomValues(double minValue, 
             double maxValue, Random random, Matrix result) {
-<span class="fc" id="L1482">        UniformRandomizer randomizer = new UniformRandomizer(random);</span>
+<span class="fc" id="L1485">        UniformRandomizer randomizer = new UniformRandomizer(random);</span>
         
-<span class="fc" id="L1484">        int length = result.rows * result.columns;</span>
+<span class="fc" id="L1487">        int length = result.rows * result.columns;</span>
         
-<span class="fc bfc" id="L1486" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
-<span class="fc" id="L1487">            result.buffer[i] = randomizer.nextDouble(minValue, maxValue);</span>
+<span class="fc bfc" id="L1489" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L1490">            result.buffer[i] = randomizer.nextDouble(minValue, maxValue);</span>
         }
-<span class="fc" id="L1489">    }</span>
+<span class="fc" id="L1492">    }</span>
     
     /**
      * Fills provided matrix with random uniform values ranging from minValue to
@@ -1499,8 +1502,8 @@ public class Matrix implements Serializable{
      */
     public static void fillWithUniformRandomValues(double minValue, 
             double maxValue, Matrix result) {
-<span class="nc" id="L1502">        fillWithUniformRandomValues(minValue, maxValue, new Random(), result);</span>
-<span class="nc" id="L1503">    }</span>
+<span class="nc" id="L1505">        fillWithUniformRandomValues(minValue, maxValue, new Random(), result);</span>
+<span class="nc" id="L1506">    }</span>
     
     /**
      * Creates new matrix instance using provided size and containing uniformly
@@ -1517,7 +1520,7 @@ public class Matrix implements Serializable{
      */
     public static Matrix createWithUniformRandomValues(int rows, int columns,
             double minValue, double maxValue) throws WrongSizeException {
-<span class="fc" id="L1520">        return createWithUniformRandomValues(rows, columns, minValue, maxValue,</span>
+<span class="fc" id="L1523">        return createWithUniformRandomValues(rows, columns, minValue, maxValue,</span>
                 new Random());
     }
     
@@ -1540,9 +1543,9 @@ public class Matrix implements Serializable{
             double minValue, double maxValue, Random random) 
             throws WrongSizeException {
         
-<span class="fc" id="L1543">        Matrix out = new Matrix(rows, columns);</span>
-<span class="fc" id="L1544">        fillWithUniformRandomValues(minValue, maxValue, random, out);</span>
-<span class="fc" id="L1545">        return out;</span>
+<span class="fc" id="L1546">        Matrix out = new Matrix(rows, columns);</span>
+<span class="fc" id="L1547">        fillWithUniformRandomValues(minValue, maxValue, random, out);</span>
+<span class="fc" id="L1548">        return out;</span>
     }
     
     /**
@@ -1559,15 +1562,15 @@ public class Matrix implements Serializable{
     public static void fillWithGaussianRandomValues(double mean, 
             double standardDeviation, Random random, Matrix result) {
         
-<span class="fc" id="L1562">        GaussianRandomizer randomizer = new GaussianRandomizer(random, mean, </span>
+<span class="fc" id="L1565">        GaussianRandomizer randomizer = new GaussianRandomizer(random, mean, </span>
                 standardDeviation);
         
-<span class="fc" id="L1565">        int length = result.rows * result.columns;</span>
+<span class="fc" id="L1568">        int length = result.rows * result.columns;</span>
         
-<span class="fc bfc" id="L1567" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
-<span class="fc" id="L1568">            result.buffer[i] = randomizer.nextDouble();</span>
+<span class="fc bfc" id="L1570" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L1571">            result.buffer[i] = randomizer.nextDouble();</span>
         }        
-<span class="fc" id="L1570">    }</span>
+<span class="fc" id="L1573">    }</span>
     
     /**
      * Fills provided matrix with random Gaussian values with provided mean and
@@ -1581,9 +1584,9 @@ public class Matrix implements Serializable{
      */
     public static void fillWithGaussianRandomValues(double mean, 
             double standardDeviation, Matrix result) {
-<span class="nc" id="L1584">        fillWithGaussianRandomValues(mean, standardDeviation, new Random(), </span>
+<span class="nc" id="L1587">        fillWithGaussianRandomValues(mean, standardDeviation, new Random(), </span>
                 result);
-<span class="nc" id="L1586">    }</span>
+<span class="nc" id="L1589">    }</span>
     
     /**
      * Creates new matrix instance using provided size and containing 
@@ -1603,7 +1606,7 @@ public class Matrix implements Serializable{
     public static Matrix createWithGaussianRandomValues(int rows, int columns,
             double mean, double standardDeviation) 
             throws WrongSizeException {
-<span class="fc" id="L1606">        return createWithGaussianRandomValues(rows, columns, mean, </span>
+<span class="fc" id="L1609">        return createWithGaussianRandomValues(rows, columns, mean, </span>
                 standardDeviation, new Random());
     }
 
@@ -1627,9 +1630,9 @@ public class Matrix implements Serializable{
             double mean, double standardDeviation, Random random) 
             throws WrongSizeException {
         
-<span class="fc" id="L1630">        Matrix out = new Matrix(rows, columns);</span>
-<span class="fc" id="L1631">        fillWithGaussianRandomValues(mean, standardDeviation, random, out);</span>
-<span class="fc" id="L1632">        return out;</span>
+<span class="fc" id="L1633">        Matrix out = new Matrix(rows, columns);</span>
+<span class="fc" id="L1634">        fillWithGaussianRandomValues(mean, standardDeviation, random, out);</span>
+<span class="fc" id="L1635">        return out;</span>
     }
     
     /**
@@ -1643,13 +1646,13 @@ public class Matrix implements Serializable{
      */
     public static void diagonal(double[] diagonal, Matrix result) {
         
-<span class="fc" id="L1646">        result.initialize(0.0);</span>
+<span class="fc" id="L1649">        result.initialize(0.0);</span>
         //set diagonal elements
         //noinspection all
-<span class="fc bfc" id="L1649" title="All 2 branches covered.">        for(int i = 0; i &lt; diagonal.length; i++){</span>
-<span class="fc" id="L1650">            result.buffer[result.columnIndex[i] + i] = diagonal[i];</span>
+<span class="fc bfc" id="L1652" title="All 2 branches covered.">        for(int i = 0; i &lt; diagonal.length; i++){</span>
+<span class="fc" id="L1653">            result.buffer[result.columnIndex[i] + i] = diagonal[i];</span>
         }
-<span class="fc" id="L1652">    }</span>
+<span class="fc" id="L1655">    }</span>
     
     /**
      * Creates a diagonal matrix having all the elements in provided array in
@@ -1661,15 +1664,15 @@ public class Matrix implements Serializable{
      */
     public static Matrix diagonal(double[] diagonal) {
         
-<span class="fc" id="L1664">        Matrix out = null;</span>
+<span class="fc" id="L1667">        Matrix out = null;</span>
         try {
-<span class="fc" id="L1666">            out = new Matrix(diagonal.length, diagonal.length);</span>
-<span class="fc" id="L1667">            diagonal(diagonal, out);</span>
-<span class="nc" id="L1668">        } catch (WrongSizeException ignore) {</span>
+<span class="fc" id="L1669">            out = new Matrix(diagonal.length, diagonal.length);</span>
+<span class="fc" id="L1670">            diagonal(diagonal, out);</span>
+<span class="nc" id="L1671">        } catch (WrongSizeException ignore) {</span>
             //never happens
-<span class="fc" id="L1670">        }</span>
+<span class="fc" id="L1673">        }</span>
 
-<span class="fc" id="L1672">        return out;</span>
+<span class="fc" id="L1675">        return out;</span>
     }
     
     /**
@@ -1678,7 +1681,7 @@ public class Matrix implements Serializable{
      * @return Returns matrix created from array
      */
     public static Matrix newFromArray(double[] array) {
-<span class="fc" id="L1681">        return newFromArray(array, DEFAULT_USE_COLUMN_ORDER);</span>
+<span class="fc" id="L1684">        return newFromArray(array, DEFAULT_USE_COLUMN_ORDER);</span>
     }
     
     /**
@@ -1688,19 +1691,19 @@ public class Matrix implements Serializable{
      * @return Returns matrix created from array
      */
     public static Matrix newFromArray(double[] array, boolean isColumnOrder) {
-<span class="fc" id="L1691">        Matrix m = null;</span>
+<span class="fc" id="L1694">        Matrix m = null;</span>
         try {
-<span class="fc bfc" id="L1693" title="All 2 branches covered.">            if (isColumnOrder) {</span>
-<span class="fc" id="L1694">                m = new Matrix(array.length, 1);</span>
-<span class="fc" id="L1695">                m.setSubmatrix(0, 0, array.length - 1, 0, array);</span>
+<span class="fc bfc" id="L1696" title="All 2 branches covered.">            if (isColumnOrder) {</span>
+<span class="fc" id="L1697">                m = new Matrix(array.length, 1);</span>
+<span class="fc" id="L1698">                m.setSubmatrix(0, 0, array.length - 1, 0, array);</span>
             } else {
-<span class="fc" id="L1697">                m = new Matrix(1, array.length);</span>
-<span class="fc" id="L1698">                m.setSubmatrix(0, 0, 0, array.length - 1, array);</span>
+<span class="fc" id="L1700">                m = new Matrix(1, array.length);</span>
+<span class="fc" id="L1701">                m.setSubmatrix(0, 0, 0, array.length - 1, array);</span>
             }
-<span class="nc" id="L1700">        } catch (WrongSizeException ignore) {</span>
+<span class="nc" id="L1703">        } catch (WrongSizeException ignore) {</span>
             //never happens
-<span class="fc" id="L1702">        }</span>
-<span class="fc" id="L1703">        return m;        </span>
+<span class="fc" id="L1705">        }</span>
+<span class="fc" id="L1706">        return m;        </span>
     }
     
     /**
@@ -1710,8 +1713,8 @@ public class Matrix implements Serializable{
      * number of rows multiplied per the number of columns of this instance.
      */
     public void fromArray(double[] array) throws WrongSizeException {
-<span class="fc" id="L1713">        fromArray(array, DEFAULT_USE_COLUMN_ORDER);</span>
-<span class="fc" id="L1714">    }</span>
+<span class="fc" id="L1716">        fromArray(array, DEFAULT_USE_COLUMN_ORDER);</span>
+<span class="fc" id="L1717">    }</span>
     
     /**
      * Copies elements of array into this instance using provided order.
@@ -1722,24 +1725,24 @@ public class Matrix implements Serializable{
      */
     public void fromArray(double[] array, boolean isColumnOrder) 
             throws WrongSizeException {
-<span class="fc bfc" id="L1725" title="All 2 branches covered.">        if (array.length != buffer.length) {</span>
-<span class="fc" id="L1726">            throw new WrongSizeException(</span>
+<span class="fc bfc" id="L1728" title="All 2 branches covered.">        if (array.length != buffer.length) {</span>
+<span class="fc" id="L1729">            throw new WrongSizeException(</span>
                     &quot;array length must be equal to rows x columns&quot;);
         }   
         
-<span class="fc bfc" id="L1730" title="All 2 branches covered.">        if (isColumnOrder) {</span>
-<span class="fc" id="L1731">            System.arraycopy(array, 0, buffer, 0, array.length);</span>
+<span class="fc bfc" id="L1733" title="All 2 branches covered.">        if (isColumnOrder) {</span>
+<span class="fc" id="L1734">            System.arraycopy(array, 0, buffer, 0, array.length);</span>
         } else {
-<span class="fc" id="L1733">            int counter = 0;</span>
+<span class="fc" id="L1736">            int counter = 0;</span>
             
-<span class="fc bfc" id="L1735" title="All 2 branches covered.">            for (int j = 0; j &lt; rows; j++) {</span>
-<span class="fc bfc" id="L1736" title="All 2 branches covered.">                for (int i = 0; i &lt; columns; i++) {</span>
-<span class="fc" id="L1737">                    buffer[columnIndex[i] + j] = array[counter];</span>
-<span class="fc" id="L1738">                    counter++;</span>
+<span class="fc bfc" id="L1738" title="All 2 branches covered.">            for (int j = 0; j &lt; rows; j++) {</span>
+<span class="fc bfc" id="L1739" title="All 2 branches covered.">                for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc" id="L1740">                    buffer[columnIndex[i] + j] = array[counter];</span>
+<span class="fc" id="L1741">                    counter++;</span>
                 }
             }                        
         }
-<span class="fc" id="L1742">    }</span>
+<span class="fc" id="L1745">    }</span>
     
     /**
      * Symmetrizes this instance and stores the result into provided instance.
@@ -1751,11 +1754,11 @@ public class Matrix implements Serializable{
      * result instance doesn't have the same size as this instance.
      */
     public void symmetrize(Matrix result) throws WrongSizeException {
-<span class="fc bfc" id="L1754" title="All 2 branches covered.">        if (rows != columns) {</span>
-<span class="fc" id="L1755">            throw new WrongSizeException(&quot;matrix must be square&quot;);</span>
+<span class="fc bfc" id="L1757" title="All 2 branches covered.">        if (rows != columns) {</span>
+<span class="fc" id="L1758">            throw new WrongSizeException(&quot;matrix must be square&quot;);</span>
         }
-<span class="pc bpc" id="L1757" title="1 of 4 branches missed.">        if (result.getRows() != rows || result.getColumns() != columns) {</span>
-<span class="fc" id="L1758">            throw new WrongSizeException(</span>
+<span class="pc bpc" id="L1760" title="1 of 4 branches missed.">        if (result.getRows() != rows || result.getColumns() != columns) {</span>
+<span class="fc" id="L1761">            throw new WrongSizeException(</span>
                     &quot;result matrix must have the size of this instance&quot;);
         }
         
@@ -1765,21 +1768,21 @@ public class Matrix implements Serializable{
         double avg;
         int pos1;
         int pos2;
-<span class="fc bfc" id="L1768" title="All 2 branches covered.">        for (int i = 0; i &lt; columns; i++) {</span>
-<span class="fc bfc" id="L1769" title="All 2 branches covered.">            for (int j = i; j &lt; rows; j++) {</span>
+<span class="fc bfc" id="L1771" title="All 2 branches covered.">        for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc bfc" id="L1772" title="All 2 branches covered.">            for (int j = i; j &lt; rows; j++) {</span>
                 //value at (i, j)
-<span class="fc" id="L1771">                pos1 = columnIndex[i] + j;</span>
-<span class="fc" id="L1772">                value1 = buffer[pos1];</span>
+<span class="fc" id="L1774">                pos1 = columnIndex[i] + j;</span>
+<span class="fc" id="L1775">                value1 = buffer[pos1];</span>
                 //transposed value (i.e. value at (j,i))
-<span class="fc" id="L1774">                pos2 = columnIndex[j] + i;</span>
-<span class="fc" id="L1775">                value2 = buffer[pos2];</span>
+<span class="fc" id="L1777">                pos2 = columnIndex[j] + i;</span>
+<span class="fc" id="L1778">                value2 = buffer[pos2];</span>
                 
-<span class="fc" id="L1777">                avg = 0.5*(value1 + value2);</span>
-<span class="fc" id="L1778">                result.buffer[pos1] = avg;</span>
-<span class="fc" id="L1779">                result.buffer[pos2] = avg;</span>
+<span class="fc" id="L1780">                avg = 0.5*(value1 + value2);</span>
+<span class="fc" id="L1781">                result.buffer[pos1] = avg;</span>
+<span class="fc" id="L1782">                result.buffer[pos2] = avg;</span>
             }
         }
-<span class="fc" id="L1782">    }</span>
+<span class="fc" id="L1785">    }</span>
     
     /**
      * Symmetrizes this instance and returns the result as a new matrix 
@@ -1790,9 +1793,9 @@ public class Matrix implements Serializable{
      * @throws WrongSizeException if this instance is not square.
      */
     public Matrix symmetrizeAndReturnNew() throws WrongSizeException {
-<span class="fc" id="L1793">        Matrix m = new Matrix(rows, columns);</span>
-<span class="fc" id="L1794">        symmetrize(m);</span>
-<span class="fc" id="L1795">        return m;</span>
+<span class="fc" id="L1796">        Matrix m = new Matrix(rows, columns);</span>
+<span class="fc" id="L1797">        symmetrize(m);</span>
+<span class="fc" id="L1798">        return m;</span>
     }
     
     /**
@@ -1802,8 +1805,8 @@ public class Matrix implements Serializable{
      * @throws WrongSizeException if this instance is not square.
      */
     public void symmetrize() throws WrongSizeException {
-<span class="fc" id="L1805">        symmetrize(this);</span>
-<span class="fc" id="L1806">    }</span>
+<span class="fc" id="L1808">        symmetrize(this);</span>
+<span class="fc" id="L1809">    }</span>
 
     /**
      * Method to internally add two matrices.
@@ -1811,11 +1814,11 @@ public class Matrix implements Serializable{
      * @param result Matrix where result will be stored.
      */
     private void internalAdd(Matrix other, Matrix result) {
-<span class="fc" id="L1814">        int length = rows * columns;</span>
-<span class="fc bfc" id="L1815" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
-<span class="fc" id="L1816">            result.buffer[i] = buffer[i] + other.buffer[i];</span>
+<span class="fc" id="L1817">        int length = rows * columns;</span>
+<span class="fc bfc" id="L1818" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L1819">            result.buffer[i] = buffer[i] + other.buffer[i];</span>
         }
-<span class="fc" id="L1818">    }</span>
+<span class="fc" id="L1821">    }</span>
 
     /**
      * Method to internally subtract two matrices.
@@ -1823,11 +1826,11 @@ public class Matrix implements Serializable{
      * @param result Matrix where result will be stored.
      */
     private void internalSubtract(Matrix other, Matrix result) {
-<span class="fc" id="L1826">        int length = rows * columns;</span>
-<span class="fc bfc" id="L1827" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
-<span class="fc" id="L1828">            result.buffer[i] = buffer[i] - other.buffer[i];</span>
+<span class="fc" id="L1829">        int length = rows * columns;</span>
+<span class="fc bfc" id="L1830" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L1831">            result.buffer[i] = buffer[i] - other.buffer[i];</span>
         }
-<span class="fc" id="L1830">    }</span>
+<span class="fc" id="L1833">    }</span>
 
     /**
      * Method to internally multiply two matrices.
@@ -1838,19 +1841,19 @@ public class Matrix implements Serializable{
      */
     private void internalMultiply(Matrix other, double[] resultBuffer,
                                   int[] resultColumnIndex) {
-<span class="fc" id="L1841">        int columns2 = other.columns;</span>
+<span class="fc" id="L1844">        int columns2 = other.columns;</span>
         double value;
-<span class="fc bfc" id="L1843" title="All 2 branches covered.">        for (int k = 0; k &lt; columns2; k++) {</span>
-<span class="fc bfc" id="L1844" title="All 2 branches covered.">            for (int j = 0; j &lt; rows; j++) {</span>
-<span class="fc" id="L1845">                value = 0.0;</span>
-<span class="fc bfc" id="L1846" title="All 2 branches covered.">                for (int i = 0; i &lt; columns; i++) {</span>
-<span class="fc" id="L1847">                    value += buffer[columnIndex[i] + j] *</span>
+<span class="fc bfc" id="L1846" title="All 2 branches covered.">        for (int k = 0; k &lt; columns2; k++) {</span>
+<span class="fc bfc" id="L1847" title="All 2 branches covered.">            for (int j = 0; j &lt; rows; j++) {</span>
+<span class="fc" id="L1848">                value = 0.0;</span>
+<span class="fc bfc" id="L1849" title="All 2 branches covered.">                for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc" id="L1850">                    value += buffer[columnIndex[i] + j] *</span>
                             other.buffer[other.columnIndex[k] + i];
                 }
-<span class="fc" id="L1850">                resultBuffer[resultColumnIndex[k] + j] = value;</span>
+<span class="fc" id="L1853">                resultBuffer[resultColumnIndex[k] + j] = value;</span>
             }
         }
-<span class="fc" id="L1853">    }</span>
+<span class="fc" id="L1856">    }</span>
 
     /**
      * Method to internally multiply two matrices.
@@ -1858,8 +1861,8 @@ public class Matrix implements Serializable{
      * @param result Matrix where result will be stored.
      */
     private void internalMultiply(Matrix other, Matrix result) {
-<span class="fc" id="L1861">        internalMultiply(other, result.buffer, result.columnIndex);</span>
-<span class="fc" id="L1862">    }</span>
+<span class="fc" id="L1864">        internalMultiply(other, result.buffer, result.columnIndex);</span>
+<span class="fc" id="L1865">    }</span>
 
     /**
      * Method to internally compute the Kronecker product between two matrices.
@@ -1870,29 +1873,29 @@ public class Matrix implements Serializable{
      */
     private void internalMultiplyKronecker(Matrix other, double[] resultBuffer,
                                            int[] resultColumnIndex) {
-<span class="fc" id="L1873">        int rows2 = other.rows;</span>
-<span class="fc" id="L1874">        int columns2 = other.columns;</span>
+<span class="fc" id="L1876">        int rows2 = other.rows;</span>
+<span class="fc" id="L1877">        int columns2 = other.columns;</span>
 
-<span class="fc bfc" id="L1876" title="All 2 branches covered.">        for (int j1 = 0; j1 &lt; rows; j1++) {</span>
-<span class="fc" id="L1877">            int startJ3 = j1*other.rows;</span>
-<span class="fc bfc" id="L1878" title="All 2 branches covered.">            for (int i1 = 0; i1 &lt; columns; i1++) {</span>
-<span class="fc" id="L1879">                int startI3 = i1*other.columns;</span>
-<span class="fc" id="L1880">                double value1 = buffer[columnIndex[i1] + j1];</span>
+<span class="fc bfc" id="L1879" title="All 2 branches covered.">        for (int j1 = 0; j1 &lt; rows; j1++) {</span>
+<span class="fc" id="L1880">            int startJ3 = j1*other.rows;</span>
+<span class="fc bfc" id="L1881" title="All 2 branches covered.">            for (int i1 = 0; i1 &lt; columns; i1++) {</span>
+<span class="fc" id="L1882">                int startI3 = i1*other.columns;</span>
+<span class="fc" id="L1883">                double value1 = buffer[columnIndex[i1] + j1];</span>
 
-<span class="fc bfc" id="L1882" title="All 2 branches covered.">                for (int j2 = 0; j2 &lt; rows2; j2++) {</span>
-<span class="fc" id="L1883">                    int j3 = startJ3 + j2;</span>
-<span class="fc bfc" id="L1884" title="All 2 branches covered.">                    for (int i2 = 0; i2 &lt; columns2; i2++) {</span>
-<span class="fc" id="L1885">                        int i3 = startI3 + i2;</span>
-<span class="fc" id="L1886">                        double value2 =</span>
+<span class="fc bfc" id="L1885" title="All 2 branches covered.">                for (int j2 = 0; j2 &lt; rows2; j2++) {</span>
+<span class="fc" id="L1886">                    int j3 = startJ3 + j2;</span>
+<span class="fc bfc" id="L1887" title="All 2 branches covered.">                    for (int i2 = 0; i2 &lt; columns2; i2++) {</span>
+<span class="fc" id="L1888">                        int i3 = startI3 + i2;</span>
+<span class="fc" id="L1889">                        double value2 =</span>
                                 other.buffer[other.columnIndex[i2] + j2];
 
-<span class="fc" id="L1889">                        double value3 = value1*value2;</span>
-<span class="fc" id="L1890">                        resultBuffer[resultColumnIndex[i3] + j3] = value3;</span>
+<span class="fc" id="L1892">                        double value3 = value1*value2;</span>
+<span class="fc" id="L1893">                        resultBuffer[resultColumnIndex[i3] + j3] = value3;</span>
                     }
                 }
             }
         }
-<span class="fc" id="L1895">    }</span>
+<span class="fc" id="L1898">    }</span>
 
     /**
      * Method to internally compute the Kronecker product between two matrices.
@@ -1900,8 +1903,8 @@ public class Matrix implements Serializable{
      * @param result matrix where result will be stored.
      */
     private void internalMultiplyKronecker(Matrix other, Matrix result) {
-<span class="fc" id="L1903">        internalMultiplyKronecker(other, result.buffer, result.columnIndex);</span>
-<span class="fc" id="L1904">    }</span>
+<span class="fc" id="L1906">        internalMultiplyKronecker(other, result.buffer, result.columnIndex);</span>
+<span class="fc" id="L1907">    }</span>
 
     /**
      * Method to internally compute element by element product of two matrices.
@@ -1909,11 +1912,11 @@ public class Matrix implements Serializable{
      * @param result Matrix where result will be stored.
      */
     private void internalElementByElementProduct(Matrix other, Matrix result) {
-<span class="fc" id="L1912">        int length = rows * columns;</span>
-<span class="fc bfc" id="L1913" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
-<span class="fc" id="L1914">            result.buffer[i] = buffer[i] * other.buffer[i];</span>
+<span class="fc" id="L1915">        int length = rows * columns;</span>
+<span class="fc bfc" id="L1916" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="fc" id="L1917">            result.buffer[i] = buffer[i] * other.buffer[i];</span>
         }
-<span class="fc" id="L1916">    }</span>
+<span class="fc" id="L1919">    }</span>
 
     /**
      * Method to internally compute matrix transposition.
@@ -1923,21 +1926,21 @@ public class Matrix implements Serializable{
      */
     private void internalTranspose(double[] resultBuffer,
                                    int[] resultColumnIndex) {
-<span class="fc bfc" id="L1926" title="All 2 branches covered.">        for (int j = 0; j &lt; rows; j++) {</span>
-<span class="fc bfc" id="L1927" title="All 2 branches covered.">            for (int i = 0; i &lt; columns; i++) {</span>
-<span class="fc" id="L1928">                resultBuffer[resultColumnIndex[j] + i] =</span>
+<span class="fc bfc" id="L1929" title="All 2 branches covered.">        for (int j = 0; j &lt; rows; j++) {</span>
+<span class="fc bfc" id="L1930" title="All 2 branches covered.">            for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc" id="L1931">                resultBuffer[resultColumnIndex[j] + i] =</span>
                         buffer[columnIndex[i] + j];
             }
         }
-<span class="fc" id="L1932">    }</span>
+<span class="fc" id="L1935">    }</span>
 
     /**
      * Method to internally compute matrix transposition.
      * @param result Matrix where transposed data is stored.
      */
     private void internalTranspose(Matrix result) {
-<span class="fc" id="L1939">        internalTranspose(result.buffer, result.columnIndex);</span>
-<span class="fc" id="L1940">    }</span>
+<span class="fc" id="L1942">        internalTranspose(result.buffer, result.columnIndex);</span>
+<span class="fc" id="L1943">    }</span>
 
     /**
      * Method used internally to remove matrix contents and resizing it.
@@ -1949,24 +1952,24 @@ public class Matrix implements Serializable{
     @SuppressWarnings(&quot;Duplicates&quot;)
     private void internalResize(int rows, int columns)
             throws WrongSizeException {
-<span class="fc bfc" id="L1952" title="All 4 branches covered.">        if (rows == 0 || columns == 0) {</span>
-<span class="fc" id="L1953">            throw new WrongSizeException();</span>
+<span class="fc bfc" id="L1955" title="All 4 branches covered.">        if (rows == 0 || columns == 0) {</span>
+<span class="fc" id="L1956">            throw new WrongSizeException();</span>
         }
 
-<span class="fc" id="L1956">        this.rows = rows;</span>
-<span class="fc" id="L1957">        this.columns = columns;</span>
+<span class="fc" id="L1959">        this.rows = rows;</span>
+<span class="fc" id="L1960">        this.columns = columns;</span>
 
         //instantiate buffers of data
-<span class="fc" id="L1960">        buffer = new double[rows * columns];</span>
-<span class="fc" id="L1961">        columnIndex = new int[columns];</span>
+<span class="fc" id="L1963">        buffer = new double[rows * columns];</span>
+<span class="fc" id="L1964">        columnIndex = new int[columns];</span>
 
         //initialize column index
-<span class="fc" id="L1964">        int counter = 0;</span>
-<span class="fc bfc" id="L1965" title="All 2 branches covered.">        for (int i = 0; i &lt; columns; i++) {</span>
-<span class="fc" id="L1966">            columnIndex[i] = counter;</span>
-<span class="fc" id="L1967">            counter += rows;</span>
+<span class="fc" id="L1967">        int counter = 0;</span>
+<span class="fc bfc" id="L1968" title="All 2 branches covered.">        for (int i = 0; i &lt; columns; i++) {</span>
+<span class="fc" id="L1969">            columnIndex[i] = counter;</span>
+<span class="fc" id="L1970">            counter += rows;</span>
         }
-<span class="fc" id="L1969">    }</span>
+<span class="fc" id="L1972">    }</span>
 
     /**
      * Internal method to retrieve a submatrix of current matrix instance.
@@ -1981,18 +1984,18 @@ public class Matrix implements Serializable{
      */
     private void internalGetSubmatrix(int topLeftRow, int topLeftColumn,
                                       int bottomRightRow, int bottomRightColumn, Matrix result) {
-<span class="fc" id="L1984">        int i2 = 0;</span>
-<span class="fc" id="L1985">        int j2 = 0;</span>
-<span class="fc bfc" id="L1986" title="All 2 branches covered.">        for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
-<span class="fc bfc" id="L1987" title="All 2 branches covered.">            for (int i = topLeftRow; i &lt;= bottomRightRow; i++) {</span>
-<span class="fc" id="L1988">                result.buffer[result.columnIndex[j2] + i2] =</span>
+<span class="fc" id="L1987">        int i2 = 0;</span>
+<span class="fc" id="L1988">        int j2 = 0;</span>
+<span class="fc bfc" id="L1989" title="All 2 branches covered.">        for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
+<span class="fc bfc" id="L1990" title="All 2 branches covered.">            for (int i = topLeftRow; i &lt;= bottomRightRow; i++) {</span>
+<span class="fc" id="L1991">                result.buffer[result.columnIndex[j2] + i2] =</span>
                         buffer[columnIndex[j] + i];
-<span class="fc" id="L1990">                i2++;</span>
+<span class="fc" id="L1993">                i2++;</span>
             }
-<span class="fc" id="L1992">            i2 = 0;</span>
-<span class="fc" id="L1993">            j2++;</span>
+<span class="fc" id="L1995">            i2 = 0;</span>
+<span class="fc" id="L1996">            j2++;</span>
         }
-<span class="fc" id="L1995">    }</span>
+<span class="fc" id="L1998">    }</span>
 
     /**
      * Internal method to retrieve a submatrix of current matrix instance as an
@@ -2013,22 +2016,22 @@ public class Matrix implements Serializable{
     private void internalGetSubmatrixAsArray(int topLeftRow, int topLeftColumn,
                                              int bottomRightRow, int bottomRightColumn, boolean isColumnOrder,
                                              double[] result) {
-<span class="fc" id="L2016">        int counter = 0;</span>
-<span class="fc bfc" id="L2017" title="All 2 branches covered.">        if (isColumnOrder) {</span>
-<span class="fc bfc" id="L2018" title="All 2 branches covered.">            for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
-<span class="fc bfc" id="L2019" title="All 2 branches covered.">                for (int i = topLeftRow; i &lt;= bottomRightRow; i++) {</span>
-<span class="fc" id="L2020">                    result[counter] = buffer[columnIndex[j] + i];</span>
-<span class="fc" id="L2021">                    counter++;</span>
+<span class="fc" id="L2019">        int counter = 0;</span>
+<span class="fc bfc" id="L2020" title="All 2 branches covered.">        if (isColumnOrder) {</span>
+<span class="fc bfc" id="L2021" title="All 2 branches covered.">            for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
+<span class="fc bfc" id="L2022" title="All 2 branches covered.">                for (int i = topLeftRow; i &lt;= bottomRightRow; i++) {</span>
+<span class="fc" id="L2023">                    result[counter] = buffer[columnIndex[j] + i];</span>
+<span class="fc" id="L2024">                    counter++;</span>
                 }
             }
         } else {
-<span class="fc bfc" id="L2025" title="All 2 branches covered.">            for (int i = topLeftRow; i &lt;= bottomRightRow; i++) {</span>
-<span class="fc bfc" id="L2026" title="All 2 branches covered.">                for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
-<span class="fc" id="L2027">                    result[counter] = buffer[columnIndex[j] + i];</span>
-<span class="fc" id="L2028">                    counter++;</span>
+<span class="fc bfc" id="L2028" title="All 2 branches covered.">            for (int i = topLeftRow; i &lt;= bottomRightRow; i++) {</span>
+<span class="fc bfc" id="L2029" title="All 2 branches covered.">                for (int j = topLeftColumn; j &lt;= bottomRightColumn; j++) {</span>
+<span class="fc" id="L2030">                    result[counter] = buffer[columnIndex[j] + i];</span>
+<span class="fc" id="L2031">                    counter++;</span>
                 }
             }
         }
-<span class="fc" id="L2032">    }</span>
+<span class="fc" id="L2035">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

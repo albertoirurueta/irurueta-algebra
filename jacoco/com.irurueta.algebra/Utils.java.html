@@ -1100,27 +1100,26 @@ public class Utils {
      * @return Boolean relation whether the matrix is symmetric or not.
      * @throws IllegalArgumentException Raised if provided threshold is negative
      */
-    public static boolean isSymmetric(Matrix m, double threshold)
-            throws IllegalArgumentException {
+    public static boolean isSymmetric(Matrix m, double threshold) {
         
-<span class="pc bpc" id="L1106" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="nc" id="L1107">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L1105" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="nc" id="L1106">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L1110">        int length = m.getRows();</span>
-<span class="pc bpc" id="L1111" title="1 of 2 branches missed.">        if (length != m.getColumns()) {</span>
-<span class="nc" id="L1112">            return false;</span>
+<span class="fc" id="L1109">        int length = m.getRows();</span>
+<span class="pc bpc" id="L1110" title="1 of 2 branches missed.">        if (length != m.getColumns()) {</span>
+<span class="nc" id="L1111">            return false;</span>
         }
         
-<span class="fc bfc" id="L1115" title="All 2 branches covered.">        for (int j = 0; j &lt; length; j++) {</span>
-<span class="fc bfc" id="L1116" title="All 2 branches covered.">            for (int i = j + 1; i &lt; length; i++) {</span>
-<span class="fc bfc" id="L1117" title="All 2 branches covered.">                if (Math.abs(m.getElementAt(j, i) -</span>
-<span class="fc" id="L1118">                        m.getElementAt(i, j)) &gt; threshold) {</span>
-<span class="fc" id="L1119">                    return false;</span>
+<span class="fc bfc" id="L1114" title="All 2 branches covered.">        for (int j = 0; j &lt; length; j++) {</span>
+<span class="fc bfc" id="L1115" title="All 2 branches covered.">            for (int i = j + 1; i &lt; length; i++) {</span>
+<span class="fc bfc" id="L1116" title="All 2 branches covered.">                if (Math.abs(m.getElementAt(j, i) -</span>
+<span class="fc" id="L1117">                        m.getElementAt(i, j)) &gt; threshold) {</span>
+<span class="fc" id="L1118">                    return false;</span>
                 }
             }
         }
-<span class="fc" id="L1123">        return true;</span>
+<span class="fc" id="L1122">        return true;</span>
     }
 
     /**
@@ -1130,7 +1129,7 @@ public class Utils {
      * @return Boolean relation whether the matrix is symmetric or not.
      */    
     public static boolean isSymmetric(Matrix m) {
-<span class="fc" id="L1133">        return isSymmetric(m, DEFAULT_SYMMETRIC_THRESHOLD);</span>
+<span class="fc" id="L1132">        return isSymmetric(m, DEFAULT_SYMMETRIC_THRESHOLD);</span>
     }
     
     /**
@@ -1142,40 +1141,39 @@ public class Utils {
      * @return True if matrix is orthogonal, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative
      */
-    public static boolean isOrthogonal(Matrix m, double threshold)
-        throws IllegalArgumentException {
+    public static boolean isOrthogonal(Matrix m, double threshold) {
         
-<span class="fc bfc" id="L1148" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L1149">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L1146" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L1147">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L1152">        int length = m.getRows();</span>
-<span class="fc bfc" id="L1153" title="All 2 branches covered.">        if (length != m.getColumns()) {</span>
-<span class="fc" id="L1154">            return false;</span>
+<span class="fc" id="L1150">        int length = m.getRows();</span>
+<span class="fc bfc" id="L1151" title="All 2 branches covered.">        if (length != m.getColumns()) {</span>
+<span class="fc" id="L1152">            return false;</span>
         }
 
         try {
             //to get faster computation it is better to try m' * m
-<span class="fc" id="L1159">            Matrix tmp = m.transposeAndReturnNew();</span>
-<span class="fc" id="L1160">            tmp.multiply(m);</span>
+<span class="fc" id="L1157">            Matrix tmp = m.transposeAndReturnNew();</span>
+<span class="fc" id="L1158">            tmp.multiply(m);</span>
 
-<span class="fc bfc" id="L1162" title="All 2 branches covered.">            for (int j = 0; j &lt; length; j++) {</span>
-<span class="fc bfc" id="L1163" title="All 2 branches covered.">                for (int i = j + 1; i &lt; length; i++) {</span>
-<span class="pc bpc" id="L1164" title="1 of 2 branches missed.">                    if (i == j) {</span>
-<span class="nc bnc" id="L1165" title="All 2 branches missed.">                        if (Math.abs(tmp.getElementAt(i, j) - 1.0) &gt; threshold) {</span>
-<span class="nc" id="L1166">                            return false;</span>
+<span class="fc bfc" id="L1160" title="All 2 branches covered.">            for (int j = 0; j &lt; length; j++) {</span>
+<span class="fc bfc" id="L1161" title="All 2 branches covered.">                for (int i = j + 1; i &lt; length; i++) {</span>
+<span class="pc bpc" id="L1162" title="1 of 2 branches missed.">                    if (i == j) {</span>
+<span class="nc bnc" id="L1163" title="All 2 branches missed.">                        if (Math.abs(tmp.getElementAt(i, j) - 1.0) &gt; threshold) {</span>
+<span class="nc" id="L1164">                            return false;</span>
                         }
                     } else {
-<span class="fc bfc" id="L1169" title="All 2 branches covered.">                        if(Math.abs(tmp.getElementAt(i, j)) &gt; threshold) {</span>
-<span class="fc" id="L1170">                            return false;</span>
+<span class="fc bfc" id="L1167" title="All 2 branches covered.">                        if(Math.abs(tmp.getElementAt(i, j)) &gt; threshold) {</span>
+<span class="fc" id="L1168">                            return false;</span>
                         }
                     }
                 }
             }
-<span class="fc" id="L1175">            return true;</span>
+<span class="fc" id="L1173">            return true;</span>
 
-<span class="nc" id="L1177">        } catch (WrongSizeException e) {</span>
-<span class="nc" id="L1178">            return false;</span>
+<span class="nc" id="L1175">        } catch (WrongSizeException e) {</span>
+<span class="nc" id="L1176">            return false;</span>
         }
     }
     
@@ -1187,7 +1185,7 @@ public class Utils {
      * @return True if matrix is orthogonal, false otherwise.
      */
     public static boolean isOrthogonal(Matrix m) {
-<span class="fc" id="L1190">        return isOrthogonal(m, DEFAULT_ORTHOGONAL_THRESHOLD);</span>
+<span class="fc" id="L1188">        return isOrthogonal(m, DEFAULT_ORTHOGONAL_THRESHOLD);</span>
     }
     
     /**
@@ -1199,10 +1197,9 @@ public class Utils {
      * @return True if matrix is orthonormal, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative
      */
-    public static boolean isOrthonormal(Matrix m, double threshold)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L1204" title="All 2 branches covered.">        return isOrthogonal(m, threshold) &amp;&amp; </span>
-<span class="fc bfc" id="L1205" title="All 2 branches covered.">                (Math.abs(Utils.normF(m) - 1.0) &lt; threshold);</span>
+    public static boolean isOrthonormal(Matrix m, double threshold) {
+<span class="fc bfc" id="L1201" title="All 2 branches covered.">        return isOrthogonal(m, threshold) &amp;&amp; </span>
+<span class="fc bfc" id="L1202" title="All 2 branches covered.">                (Math.abs(Utils.normF(m) - 1.0) &lt; threshold);</span>
     }
     
     /**
@@ -1212,7 +1209,7 @@ public class Utils {
      * @return True if matrix is orthonormal, false otherwise.
      */
     public static boolean isOrthonormal(Matrix m) {
-<span class="fc" id="L1215">        return isOrthonormal(m, DEFAULT_ORTHOGONAL_THRESHOLD);</span>
+<span class="fc" id="L1212">        return isOrthonormal(m, DEFAULT_ORTHOGONAL_THRESHOLD);</span>
     }
     
     /**
@@ -1225,8 +1222,8 @@ public class Utils {
      * don't have the same length.
      */
     public static double dotProduct(double[] firstOperand, 
-            double[] secondOperand) throws IllegalArgumentException {
-<span class="fc" id="L1229">        return ArrayUtils.dotProduct(firstOperand, secondOperand);</span>
+            double[] secondOperand) {
+<span class="fc" id="L1226">        return ArrayUtils.dotProduct(firstOperand, secondOperand);</span>
     }
     
     /**
@@ -1246,9 +1243,8 @@ public class Utils {
      * same length as their respective operands.
      */
     public static double dotProduct(double[] firstOperand, 
-            double[] secondOperand, Matrix jacobianFirst, Matrix jacobianSecond)
-            throws IllegalArgumentException {
-<span class="fc" id="L1251">        return ArrayUtils.dotProduct(firstOperand, secondOperand, jacobianFirst,</span>
+            double[] secondOperand, Matrix jacobianFirst, Matrix jacobianSecond) {
+<span class="fc" id="L1247">        return ArrayUtils.dotProduct(firstOperand, secondOperand, jacobianFirst,</span>
                 jacobianSecond);
     }
     
@@ -1265,13 +1261,13 @@ public class Utils {
      */
     public static double dotProduct(Matrix firstOperand, Matrix secondOperand)
             throws WrongSizeException {
-<span class="fc bfc" id="L1268" title="All 2 branches covered.">        if (firstOperand.getColumns() != secondOperand.getRows() ||</span>
-<span class="pc bpc" id="L1269" title="2 of 4 branches missed.">                firstOperand.getRows() != 1 || secondOperand.getColumns() != 1) {</span>
-<span class="fc" id="L1270">                throw new WrongSizeException(&quot;first operand must be 1xN, and &quot;</span>
+<span class="fc bfc" id="L1264" title="All 2 branches covered.">        if (firstOperand.getColumns() != secondOperand.getRows() ||</span>
+<span class="pc bpc" id="L1265" title="2 of 4 branches missed.">                firstOperand.getRows() != 1 || secondOperand.getColumns() != 1) {</span>
+<span class="fc" id="L1266">                throw new WrongSizeException(&quot;first operand must be 1xN, and &quot;</span>
                         + &quot;second operand must be Nx1&quot;);
         }
         
-<span class="fc" id="L1274">        return dotProduct(firstOperand.getBuffer(), secondOperand.getBuffer());</span>
+<span class="fc" id="L1270">        return dotProduct(firstOperand.getBuffer(), secondOperand.getBuffer());</span>
     }
     
     /**
@@ -1295,14 +1291,14 @@ public class Utils {
      */
     public static double dotProduct(Matrix firstOperand, Matrix secondOperand,
             Matrix jacobianFirst, Matrix jacobianSecond) 
-            throws WrongSizeException, IllegalArgumentException {
-<span class="fc bfc" id="L1299" title="All 2 branches covered.">        if (firstOperand.getColumns() != secondOperand.getRows() ||</span>
-<span class="pc bpc" id="L1300" title="2 of 4 branches missed.">                firstOperand.getRows() != 1 || secondOperand.getColumns() != 1) {</span>
-<span class="fc" id="L1301">                throw new WrongSizeException(&quot;first operand must be 1xN, and &quot;</span>
+            throws WrongSizeException {
+<span class="fc bfc" id="L1295" title="All 2 branches covered.">        if (firstOperand.getColumns() != secondOperand.getRows() ||</span>
+<span class="pc bpc" id="L1296" title="2 of 4 branches missed.">                firstOperand.getRows() != 1 || secondOperand.getColumns() != 1) {</span>
+<span class="fc" id="L1297">                throw new WrongSizeException(&quot;first operand must be 1xN, and &quot;</span>
                         + &quot;second operand must be Nx1&quot;);
         }
 
-<span class="fc" id="L1305">        return dotProduct(firstOperand.getBuffer(), secondOperand.getBuffer(), </span>
+<span class="fc" id="L1301">        return dotProduct(firstOperand.getBuffer(), secondOperand.getBuffer(), </span>
                 jacobianFirst, jacobianSecond);
     }
     
@@ -1356,86 +1352,85 @@ public class Utils {
      */
     public static void schurc(Matrix m, int pos, boolean fromStart, 
             boolean sqrt, Matrix result, Matrix iA) 
-            throws IllegalArgumentException, DecomposerException, 
-            RankDeficientMatrixException {
-<span class="fc" id="L1361">        int rows = m.getRows();</span>
-<span class="fc" id="L1362">        int cols = m.getColumns();</span>
-<span class="fc bfc" id="L1363" title="All 2 branches covered.">        if (rows != cols) {</span>
-<span class="fc" id="L1364">            throw new IllegalArgumentException(&quot;matrix must be square&quot;);</span>
+            throws DecomposerException, RankDeficientMatrixException {
+<span class="fc" id="L1356">        int rows = m.getRows();</span>
+<span class="fc" id="L1357">        int cols = m.getColumns();</span>
+<span class="fc bfc" id="L1358" title="All 2 branches covered.">        if (rows != cols) {</span>
+<span class="fc" id="L1359">            throw new IllegalArgumentException(&quot;matrix must be square&quot;);</span>
         }
-<span class="fc bfc" id="L1366" title="All 2 branches covered.">        if (pos &gt;= rows) {</span>
-<span class="fc" id="L1367">            throw new IllegalArgumentException(&quot;pos must be lower than rows&quot;);</span>
+<span class="fc bfc" id="L1361" title="All 2 branches covered.">        if (pos &gt;= rows) {</span>
+<span class="fc" id="L1362">            throw new IllegalArgumentException(&quot;pos must be lower than rows&quot;);</span>
         }
-<span class="fc bfc" id="L1369" title="All 2 branches covered.">        if (pos == 0) {</span>
-<span class="fc" id="L1370">            throw new IllegalArgumentException(&quot;pos must be greater than 0&quot;);</span>
+<span class="fc bfc" id="L1364" title="All 2 branches covered.">        if (pos == 0) {</span>
+<span class="fc" id="L1365">            throw new IllegalArgumentException(&quot;pos must be greater than 0&quot;);</span>
         }
         
         try {
             Matrix m2;
-<span class="fc bfc" id="L1375" title="All 2 branches covered.">            if (fromStart) {</span>
+<span class="fc bfc" id="L1370" title="All 2 branches covered.">            if (fromStart) {</span>
                 //if position is taken from origin, no reordering is needed
-<span class="fc" id="L1377">                m2 = m;</span>
+<span class="fc" id="L1372">                m2 = m;</span>
             } else {
                 //if position is taken from pos to end, then reordering is needed
 
                 //create index positions to reorder matrix to decompose using 
                 //Cholesky
-<span class="fc" id="L1383">                int[] index = new int[rows];</span>
-<span class="fc" id="L1384">                int complSize = rows - pos;</span>
-<span class="fc bfc" id="L1385" title="All 2 branches covered.">                for (int i = 0, value = pos; i &lt; complSize; i++, value++) {</span>
-<span class="fc" id="L1386">                    index[i] = value;</span>
+<span class="fc" id="L1378">                int[] index = new int[rows];</span>
+<span class="fc" id="L1379">                int complSize = rows - pos;</span>
+<span class="fc bfc" id="L1380" title="All 2 branches covered.">                for (int i = 0, value = pos; i &lt; complSize; i++, value++) {</span>
+<span class="fc" id="L1381">                    index[i] = value;</span>
                 }
-<span class="fc bfc" id="L1388" title="All 2 branches covered.">                for (int i = complSize, j = 0; i &lt; rows; i++, j++) {</span>
-<span class="fc" id="L1389">                    index[i] = j;</span>
+<span class="fc bfc" id="L1383" title="All 2 branches covered.">                for (int i = complSize, j = 0; i &lt; rows; i++, j++) {</span>
+<span class="fc" id="L1384">                    index[i] = j;</span>
                 }
             
-<span class="fc" id="L1392">                m2 = new Matrix(rows, rows);</span>
-<span class="fc bfc" id="L1393" title="All 2 branches covered.">                for (int j = 0; j &lt; rows; j++) {</span>
-<span class="fc bfc" id="L1394" title="All 2 branches covered.">                    for (int i = 0; i &lt; rows; i++) {</span>
-<span class="fc" id="L1395">                        m2.setElementAt(i, j, m.getElementAt(index[i], </span>
+<span class="fc" id="L1387">                m2 = new Matrix(rows, rows);</span>
+<span class="fc bfc" id="L1388" title="All 2 branches covered.">                for (int j = 0; j &lt; rows; j++) {</span>
+<span class="fc bfc" id="L1389" title="All 2 branches covered.">                    for (int i = 0; i &lt; rows; i++) {</span>
+<span class="fc" id="L1390">                        m2.setElementAt(i, j, m.getElementAt(index[i], </span>
                                 index[j]));
                     }
                 }  
                 
-<span class="fc" id="L1400">                pos = rows - pos;</span>
+<span class="fc" id="L1395">                pos = rows - pos;</span>
             }
         
-<span class="fc" id="L1403">            CholeskyDecomposer decomposer = new CholeskyDecomposer(m2);        </span>
-<span class="fc" id="L1404">            decomposer.decompose();</span>
+<span class="fc" id="L1398">            CholeskyDecomposer decomposer = new CholeskyDecomposer(m2);        </span>
+<span class="fc" id="L1399">            decomposer.decompose();</span>
             
             //pick the upper right matrix of cholesky
-<span class="fc" id="L1407">            Matrix r = decomposer.getR();</span>
+<span class="fc" id="L1402">            Matrix r = decomposer.getR();</span>
             
             //s, which is the square root of Schur complement and is the result,
             //is an upper right matrix because it is a submatrix of r
-<span class="fc" id="L1411">            int sizeMinus1 = rows - 1;</span>
-<span class="fc" id="L1412">            r.getSubmatrix(pos, pos, sizeMinus1, sizeMinus1, result);</span>
+<span class="fc" id="L1406">            int sizeMinus1 = rows - 1;</span>
+<span class="fc" id="L1407">            r.getSubmatrix(pos, pos, sizeMinus1, sizeMinus1, result);</span>
             
-<span class="fc bfc" id="L1414" title="All 2 branches covered.">            if (!sqrt) {</span>
+<span class="fc bfc" id="L1409" title="All 2 branches covered.">            if (!sqrt) {</span>
                 //if the full version of the Schur complement is required
                 //we multiply by its transpose S = S'*S
-<span class="fc" id="L1417">                Matrix transS = result.transposeAndReturnNew();</span>
-<span class="fc" id="L1418">                transS.multiply(result); //transS is now S'*S</span>
-<span class="fc" id="L1419">                result.copyFrom(transS);</span>
+<span class="fc" id="L1412">                Matrix transS = result.transposeAndReturnNew();</span>
+<span class="fc" id="L1413">                transS.multiply(result); //transS is now S'*S</span>
+<span class="fc" id="L1414">                result.copyFrom(transS);</span>
             }            
               
-<span class="fc bfc" id="L1422" title="All 2 branches covered.">            if (iA != null) {</span>
+<span class="fc bfc" id="L1417" title="All 2 branches covered.">            if (iA != null) {</span>
                 //minor of r is the square root of inverse block
-<span class="fc" id="L1424">                int posMinus1 = pos - 1;</span>
-<span class="fc" id="L1425">                r.getSubmatrix(0, 0, posMinus1, posMinus1, iA);</span>
-<span class="fc" id="L1426">                Utils.inverse(iA, iA);</span>
+<span class="fc" id="L1419">                int posMinus1 = pos - 1;</span>
+<span class="fc" id="L1420">                r.getSubmatrix(0, 0, posMinus1, posMinus1, iA);</span>
+<span class="fc" id="L1421">                Utils.inverse(iA, iA);</span>
                 //to obtain full inverse block iA we need to multiply it by its 
                 //transpose iA = iA * iA'
-<span class="fc" id="L1429">                Matrix transiA = iA.transposeAndReturnNew();</span>
-<span class="fc" id="L1430">                iA.multiply(transiA);</span>
+<span class="fc" id="L1424">                Matrix transiA = iA.transposeAndReturnNew();</span>
+<span class="fc" id="L1425">                iA.multiply(transiA);</span>
             }                        
-<span class="fc" id="L1432">        } catch (DecomposerException | RankDeficientMatrixException e) {</span>
+<span class="fc" id="L1427">        } catch (DecomposerException | RankDeficientMatrixException e) {</span>
             //if matrix is numerically unstable or singular
-<span class="fc" id="L1434">            throw e;</span>
-<span class="nc" id="L1435">        } catch (AlgebraException ignore) {</span>
+<span class="fc" id="L1429">            throw e;</span>
+<span class="nc" id="L1430">        } catch (AlgebraException ignore) {</span>
             //Cholesky will not raise any other exception
-<span class="fc" id="L1437">        }</span>
-<span class="fc" id="L1438">    }</span>
+<span class="fc" id="L1432">        }</span>
+<span class="fc" id="L1433">    }</span>
     
     /**
      * Computes the Schur complement of a symmetric matrix, returning always the
@@ -1456,10 +1451,9 @@ public class Utils {
      * @see &lt;a href=&quot;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&quot;&gt;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&lt;/a&gt;
      */
     public static void schurc(Matrix m, int pos, boolean fromStart, 
-            Matrix result, Matrix iA) throws IllegalArgumentException, 
-            DecomposerException, RankDeficientMatrixException {
-<span class="fc" id="L1461">        schurc(m, pos, fromStart, false, result, iA);</span>
-<span class="fc" id="L1462">    }</span>
+            Matrix result, Matrix iA) throws DecomposerException, RankDeficientMatrixException {
+<span class="fc" id="L1455">        schurc(m, pos, fromStart, false, result, iA);</span>
+<span class="fc" id="L1456">    }</span>
     
     /**
      * Computes the Schur complement of the submatrix A within a symmetric 
@@ -1478,10 +1472,9 @@ public class Utils {
      * @see &lt;a href=&quot;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&quot;&gt;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&lt;/a&gt;
      */
     public static void schurc(Matrix m, int pos, Matrix result, Matrix iA) 
-            throws IllegalArgumentException, DecomposerException, 
-            RankDeficientMatrixException {
-<span class="fc" id="L1483">        schurc(m, pos, true, result, iA);</span>
-<span class="fc" id="L1484">    }</span>
+            throws DecomposerException, RankDeficientMatrixException {
+<span class="fc" id="L1476">        schurc(m, pos, true, result, iA);</span>
+<span class="fc" id="L1477">    }</span>
     
     /**
      * Computes the Schur complement of a symmetric matrix.
@@ -1504,28 +1497,29 @@ public class Utils {
      */
     public static Matrix schurcAndReturnNew(Matrix m, int pos, 
             boolean fromStart, boolean sqrt, Matrix iA) 
-            throws IllegalArgumentException, DecomposerException, 
-            RankDeficientMatrixException {
-<span class="fc" id="L1509">        int rows = m.getRows();</span>
-<span class="fc" id="L1510">        int cols = m.getColumns();</span>
-<span class="fc bfc" id="L1511" title="All 2 branches covered.">        if (rows != cols) {</span>
-<span class="fc" id="L1512">            throw new IllegalArgumentException(&quot;matrix must be square&quot;);</span>
+            throws DecomposerException, RankDeficientMatrixException {
+<span class="fc" id="L1501">        int rows = m.getRows();</span>
+<span class="fc" id="L1502">        int cols = m.getColumns();</span>
+<span class="fc bfc" id="L1503" title="All 2 branches covered.">        if (rows != cols) {</span>
+<span class="fc" id="L1504">            throw new IllegalArgumentException(&quot;matrix must be square&quot;);</span>
         }
-<span class="fc bfc" id="L1514" title="All 2 branches covered.">        if (pos &gt;= rows) {</span>
-<span class="fc" id="L1515">            throw new IllegalArgumentException(&quot;pos must be lower than rows&quot;);</span>
+<span class="fc bfc" id="L1506" title="All 2 branches covered.">        if (pos &gt;= rows) {</span>
+<span class="fc" id="L1507">            throw new IllegalArgumentException(&quot;pos must be lower than rows&quot;);</span>
         }
-<span class="fc bfc" id="L1517" title="All 2 branches covered.">        if (pos == 0) {</span>
-<span class="fc" id="L1518">            throw new IllegalArgumentException(&quot;pos must be greater than 0&quot;);</span>
+<span class="fc bfc" id="L1509" title="All 2 branches covered.">        if (pos == 0) {</span>
+<span class="fc" id="L1510">            throw new IllegalArgumentException(&quot;pos must be greater than 0&quot;);</span>
         }        
         
-<span class="fc bfc" id="L1521" title="All 2 branches covered.">        int size = fromStart ? pos : rows - pos;</span>
-<span class="fc" id="L1522">        Matrix result = null;</span>
+<span class="fc bfc" id="L1513" title="All 2 branches covered.">        int size = fromStart ? pos : rows - pos;</span>
+<span class="fc" id="L1514">        Matrix result = null;</span>
         try {
-<span class="fc" id="L1524">            result = new Matrix(size,size);</span>
-<span class="pc" id="L1525">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L1516">            result = new Matrix(size,size);</span>
+<span class="nc" id="L1517">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L1519">        }</span>
         
-<span class="fc" id="L1527">        schurc(m, pos, fromStart, sqrt, result, iA);</span>
-<span class="fc" id="L1528">        return result;</span>
+<span class="fc" id="L1521">        schurc(m, pos, fromStart, sqrt, result, iA);</span>
+<span class="fc" id="L1522">        return result;</span>
     }
     
     /**
@@ -1546,9 +1540,8 @@ public class Utils {
      * @see &lt;a href=&quot;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrice&quot;&gt;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&lt;/a&gt;
      */
     public static Matrix schurcAndReturnNew(Matrix m, int pos, 
-            boolean fromStart, Matrix iA) throws IllegalArgumentException, 
-            DecomposerException, RankDeficientMatrixException {
-<span class="fc" id="L1551">        return schurcAndReturnNew(m, pos, fromStart, false, iA);</span>
+            boolean fromStart, Matrix iA) throws DecomposerException, RankDeficientMatrixException {
+<span class="fc" id="L1544">        return schurcAndReturnNew(m, pos, fromStart, false, iA);</span>
     }
     
     /**
@@ -1567,9 +1560,8 @@ public class Utils {
      * @see &lt;a href=&quot;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&quot;&gt;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&lt;/a&gt;
      */
     public static Matrix schurcAndReturnNew(Matrix m, int pos, Matrix iA) 
-            throws IllegalArgumentException, DecomposerException, 
-            RankDeficientMatrixException {
-<span class="fc" id="L1572">        return schurcAndReturnNew(m, pos, true, iA);</span>
+            throws DecomposerException, RankDeficientMatrixException {
+<span class="fc" id="L1564">        return schurcAndReturnNew(m, pos, true, iA);</span>
     }
     
     /**
@@ -1590,14 +1582,13 @@ public class Utils {
      * @see &lt;a href=&quot;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&quot;&gt;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&lt;/a&gt;
      */
     public static void schurc(Matrix m, int pos, boolean fromStart, 
-            boolean sqrt, Matrix result) throws IllegalArgumentException, 
-            DecomposerException {
+            boolean sqrt, Matrix result) throws DecomposerException {
         try {
-<span class="fc" id="L1596">            schurc(m, pos, fromStart, sqrt, result, null);</span>
-<span class="nc" id="L1597">        } catch (RankDeficientMatrixException ignore) {</span>
+<span class="fc" id="L1587">            schurc(m, pos, fromStart, sqrt, result, null);</span>
+<span class="nc" id="L1588">        } catch (RankDeficientMatrixException ignore) {</span>
             //if no iA is provided, this exception is never raised.
-<span class="fc" id="L1599">        }</span>
-<span class="fc" id="L1600">    }</span>
+<span class="fc" id="L1590">        }</span>
+<span class="fc" id="L1591">    }</span>
     
     /**
      * Computes the Schur complement of a symmetric matrix, returning always the
@@ -1615,14 +1606,13 @@ public class Utils {
      * @see &lt;a href=&quot;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&quot;&gt;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&lt;/a&gt;
      */
     public static void schurc(Matrix m, int pos, boolean fromStart, 
-            Matrix result) throws IllegalArgumentException, 
-            DecomposerException {
+            Matrix result) throws DecomposerException {
         try {
-<span class="fc" id="L1621">            schurc(m, pos, fromStart, result, null);</span>
-<span class="nc" id="L1622">        } catch (RankDeficientMatrixException ignore) {</span>
+<span class="fc" id="L1611">            schurc(m, pos, fromStart, result, null);</span>
+<span class="nc" id="L1612">        } catch (RankDeficientMatrixException ignore) {</span>
             //if no iA is provided, this exception is never raised.
-<span class="fc" id="L1624">        }                </span>
-<span class="fc" id="L1625">    }</span>
+<span class="fc" id="L1614">        }                </span>
+<span class="fc" id="L1615">    }</span>
     
     /**
      * Computes the Schur complement of the submatrix A within a symmetric 
@@ -1638,13 +1628,13 @@ public class Utils {
      * @see &lt;a href=&quot;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&quot;&gt;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&lt;/a&gt;
      */
     public static void schurc(Matrix m, int pos, Matrix result) 
-            throws IllegalArgumentException, DecomposerException {
+            throws DecomposerException {
         try {
-<span class="fc" id="L1643">            schurc(m, pos, result, null);</span>
-<span class="nc" id="L1644">        } catch (RankDeficientMatrixException ignore) {</span>
+<span class="fc" id="L1633">            schurc(m, pos, result, null);</span>
+<span class="nc" id="L1634">        } catch (RankDeficientMatrixException ignore) {</span>
             //if no iA is provided, this exception is never raised.
-<span class="fc" id="L1646">        }                                </span>
-<span class="fc" id="L1647">    }</span>
+<span class="fc" id="L1636">        }                                </span>
+<span class="fc" id="L1637">    }</span>
     
     /**
      * Computes the Schur complement of a symmetric matrix.
@@ -1663,16 +1653,15 @@ public class Utils {
      * @see &lt;a href=&quot;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&quot;&gt;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&lt;/a&gt;
      */
     public static Matrix schurcAndReturnNew(Matrix m, int pos, 
-            boolean fromStart, boolean sqrt) throws IllegalArgumentException, 
-            DecomposerException {
-<span class="fc" id="L1668">        Matrix result = null;</span>
+            boolean fromStart, boolean sqrt) throws DecomposerException {
+<span class="fc" id="L1657">        Matrix result = null;</span>
         try {
-<span class="fc" id="L1670">            result = schurcAndReturnNew(m, pos, fromStart, sqrt, null);</span>
-<span class="nc" id="L1671">        } catch (RankDeficientMatrixException ignore) {</span>
+<span class="fc" id="L1659">            result = schurcAndReturnNew(m, pos, fromStart, sqrt, null);</span>
+<span class="nc" id="L1660">        } catch (RankDeficientMatrixException ignore) {</span>
             //if no iA is provided, this exception is never raised.
-<span class="fc" id="L1673">        }                                </span>
+<span class="fc" id="L1662">        }                                </span>
         
-<span class="fc" id="L1675">        return result;</span>
+<span class="fc" id="L1664">        return result;</span>
     }
     
     /**
@@ -1690,16 +1679,15 @@ public class Utils {
      * @see &lt;a href=&quot;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&quot;&gt;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&lt;/a&gt;
      */
     public static Matrix schurcAndReturnNew(Matrix m, int pos, 
-            boolean fromStart) throws IllegalArgumentException, 
-            DecomposerException {
-<span class="fc" id="L1695">        Matrix result = null;</span>
+            boolean fromStart) throws DecomposerException {
+<span class="fc" id="L1683">        Matrix result = null;</span>
         try {
-<span class="fc" id="L1697">            result = schurcAndReturnNew(m, pos, fromStart, null);</span>
-<span class="nc" id="L1698">        } catch (RankDeficientMatrixException ignore) {</span>
+<span class="fc" id="L1685">            result = schurcAndReturnNew(m, pos, fromStart, null);</span>
+<span class="nc" id="L1686">        } catch (RankDeficientMatrixException ignore) {</span>
             //if no iA is provided, this exception is never raised.
-<span class="fc" id="L1700">        }                                </span>
+<span class="fc" id="L1688">        }                                </span>
         
-<span class="fc" id="L1702">        return result;            </span>
+<span class="fc" id="L1690">        return result;            </span>
     }
     
     /**
@@ -1715,15 +1703,15 @@ public class Utils {
      * @see &lt;a href=&quot;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&quot;&gt;http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices&lt;/a&gt;
      */
     public static Matrix schurcAndReturnNew(Matrix m, int pos) 
-            throws IllegalArgumentException, DecomposerException {
-<span class="fc" id="L1719">        Matrix result = null;</span>
+            throws DecomposerException {
+<span class="fc" id="L1707">        Matrix result = null;</span>
         try {
-<span class="fc" id="L1721">            result = schurcAndReturnNew(m, pos, null);</span>
-<span class="nc" id="L1722">        } catch (RankDeficientMatrixException ignore) {</span>
+<span class="fc" id="L1709">            result = schurcAndReturnNew(m, pos, null);</span>
+<span class="nc" id="L1710">        } catch (RankDeficientMatrixException ignore) {</span>
             //if no iA is provided, this exception is never raised.
-<span class="fc" id="L1724">        }                                </span>
+<span class="fc" id="L1712">        }                                </span>
         
-<span class="fc" id="L1726">        return result;            </span>
+<span class="fc" id="L1714">        return result;            </span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
