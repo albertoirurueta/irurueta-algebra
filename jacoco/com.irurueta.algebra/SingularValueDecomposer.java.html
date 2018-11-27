@@ -477,8 +477,8 @@ public class SingularValueDecomposer extends Decomposer {
         }
         
 <span class="fc" id="L479">        int columns = inputMatrix.getColumns();</span>
-<span class="pc bpc" id="L480" title="2 of 4 branches missed.">        return (w[0] &lt;= 0.0 || w[columns - 1] &lt;= 0.0) ? 0.0 : </span>
-<span class="nc" id="L481">                w[columns - 1] / w[0];</span>
+<span class="pc bpc" id="L480" title="1 of 4 branches missed.">        return (w[0] &lt;= 0.0 || w[columns - 1] &lt;= 0.0) ? 0.0 : </span>
+<span class="fc" id="L481">                w[columns - 1] / w[0];</span>
     }
     
     /**
