@@ -23,10 +23,10 @@ under the License.
     <link>https://github.com/albertoirurueta/irurueta-algebra</link>
     <description>com.irurueta:irurueta-algebra - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2017 - 2018</copyright>
+    <copyright>&#169;2017 - 2020</copyright>
     <item>
       <title>File: 35,
-             Errors: 426,
+             Errors: 424,
              Warnings: 0,
              Infos: 0
       </title>
@@ -60,20 +60,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.Complex.java">com/irurueta/algebra/Complex.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  30
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.NonSymmetricPositiveDefiniteMatrixException.java">com/irurueta/algebra/NonSymmetricPositiveDefiniteMatrixException.java</a>
                 </td>
                 <td>
@@ -88,7 +74,21 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.RankDeficientMatrixException.java">com/irurueta/algebra/RankDeficientMatrixException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.Complex.java">com/irurueta/algebra/Complex.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  30
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.SingularMatrixException.java">com/irurueta/algebra/SingularMatrixException.java</a>
                 </td>
                 <td>
                   0
@@ -102,7 +102,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.SingularMatrixException.java">com/irurueta/algebra/SingularMatrixException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.RankDeficientMatrixException.java">com/irurueta/algebra/RankDeficientMatrixException.java</a>
                 </td>
                 <td>
                   0
@@ -144,20 +144,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.LUDecomposer.java">com/irurueta/algebra/LUDecomposer.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  10
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.OneNormComputer.java">com/irurueta/algebra/OneNormComputer.java</a>
                 </td>
                 <td>
@@ -168,6 +154,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.LUDecomposer.java">com/irurueta/algebra/LUDecomposer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
                 </td>
               </tr>
                           <tr>
@@ -228,20 +228,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.BuildInfo.java">com/irurueta/algebra/BuildInfo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.statistics.MultivariateNormalDist.java">com/irurueta/statistics/MultivariateNormalDist.java</a>
                 </td>
                 <td>
@@ -252,6 +238,20 @@ under the License.
                 </td>
                 <td>
                   15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.BuildInfo.java">com/irurueta/algebra/BuildInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>
@@ -284,20 +284,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.GaussJordanElimination.java">com/irurueta/algebra/GaussJordanElimination.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  25
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.NoConvergenceException.java">com/irurueta/algebra/NoConvergenceException.java</a>
                 </td>
                 <td>
@@ -308,6 +294,20 @@ under the License.
                 </td>
                 <td>
                   1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.GaussJordanElimination.java">com/irurueta/algebra/GaussJordanElimination.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  25
                 </td>
               </tr>
                           <tr>
@@ -363,7 +363,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  10
+                  8
                 </td>
               </tr>
                           <tr>
@@ -382,7 +382,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.AlgebraException.java">com/irurueta/algebra/AlgebraException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.statistics.InvalidCovarianceMatrixException.java">com/irurueta/statistics/InvalidCovarianceMatrixException.java</a>
                 </td>
                 <td>
                   0
@@ -391,7 +391,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  8
+                  0
                 </td>
               </tr>
                           <tr>
@@ -410,7 +410,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.statistics.InvalidCovarianceMatrixException.java">com/irurueta/statistics/InvalidCovarianceMatrixException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-algebra/checkstyle.html#com.irurueta.algebra.AlgebraException.java">com/irurueta/algebra/AlgebraException.java</a>
                 </td>
                 <td>
                   0
@@ -419,7 +419,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  8
                 </td>
               </tr>
                           <tr>
