@@ -1244,7 +1244,7 @@ public class SingularValueDecomposer extends Decomposer {
 <span class="fc bfc" id="L1244" title="All 2 branches covered.">		        for (k = i; k &lt; m; k++) {</span>
 <span class="fc" id="L1245">                    scale += Math.abs(u.getElementAt(k, i));</span>
                 }
-<span class="pc bpc" id="L1247" title="1 of 2 branches missed.">                if (scale != 0.0) {</span>
+<span class="fc bfc" id="L1247" title="All 2 branches covered.">                if (scale != 0.0) {</span>
 <span class="fc bfc" id="L1248" title="All 2 branches covered.">                    for (k = i; k &lt; m; k++) {</span>
 <span class="fc" id="L1249">                        u.setElementAt(k, i, u.getElementAt(k,i) / scale);</span>
 <span class="fc" id="L1250">                        s += Math.pow(u.getElementAt(k,i), 2.0);</span>
@@ -1339,7 +1339,7 @@ public class SingularValueDecomposer extends Decomposer {
 <span class="fc bfc" id="L1339" title="All 2 branches covered.">            for (j = l; j &lt; n; j++) {</span>
 <span class="fc" id="L1340">                u.setElementAt(i,j, 0.0);</span>
             }
-<span class="pc bpc" id="L1342" title="1 of 2 branches missed.">            if (g != 0.0) {</span>
+<span class="fc bfc" id="L1342" title="All 2 branches covered.">            if (g != 0.0) {</span>
 <span class="fc" id="L1343">                g = 1.0 / g;</span>
 <span class="fc bfc" id="L1344" title="All 2 branches covered.">                for (j = l; j &lt; n; j++) {</span>
 <span class="fc bfc" id="L1345" title="All 2 branches covered.">                    for (s = 0.0, k = l; k &lt; m; k++) {</span>
@@ -1355,8 +1355,8 @@ public class SingularValueDecomposer extends Decomposer {
 <span class="fc" id="L1355">                    u.setElementAt(j, i, u.getElementAt(j, i) * g);</span>
                 }
             } else {
-<span class="nc bnc" id="L1358" title="All 2 branches missed.">                for (j = i; j &lt; m; j++) {</span>
-<span class="nc" id="L1359">                    u.setElementAt(j,i, 0.0);</span>
+<span class="fc bfc" id="L1358" title="All 2 branches covered.">                for (j = i; j &lt; m; j++) {</span>
+<span class="fc" id="L1359">                    u.setElementAt(j,i, 0.0);</span>
                 }
             }
 <span class="fc" id="L1362">            u.setElementAt(i,i, u.getElementAt(i,i) + 1.0);</span>
