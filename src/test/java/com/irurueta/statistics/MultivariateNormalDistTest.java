@@ -49,7 +49,7 @@ public class MultivariateNormalDistTest {
 
         // check correctness
         assertArrayEquals(dist.getMean(), new double[1], 0.0);
-        assertEquals(dist.getCovariance(), Matrix.identity(1, 1));
+        assertEquals(Matrix.identity(1, 1), dist.getCovariance());
         assertTrue(dist.isReady());
         assertNull(dist.getCovarianceBasis());
         assertNull(dist.getVariances());
@@ -59,7 +59,7 @@ public class MultivariateNormalDistTest {
 
         // check correctness
         assertArrayEquals(dist.getMean(), new double[2], 0.0);
-        assertEquals(dist.getCovariance(), Matrix.identity(2, 2));
+        assertEquals(Matrix.identity(2, 2), dist.getCovariance());
         assertTrue(dist.isReady());
         assertNull(dist.getCovarianceBasis());
         assertNull(dist.getVariances());
@@ -85,8 +85,8 @@ public class MultivariateNormalDistTest {
         dist = new MultivariateNormalDist(mean, cov);
 
         // check correctness
-        assertArrayEquals(dist.getMean(), mean, 0.0);
-        assertEquals(dist.getCovariance(), cov);
+        assertArrayEquals(mean, dist.getMean(), 0.0);
+        assertEquals(cov, dist.getCovariance());
         assertTrue(dist.isReady());
         assertNull(dist.getCovarianceBasis());
         assertNull(dist.getVariances());
@@ -128,8 +128,8 @@ public class MultivariateNormalDistTest {
         dist = new MultivariateNormalDist(mean, cov, false);
 
         // check correctness
-        assertArrayEquals(dist.getMean(), mean, 0.0);
-        assertEquals(dist.getCovariance(), cov);
+        assertArrayEquals(mean, dist.getMean(), 0.0);
+        assertEquals(cov, dist.getCovariance());
         assertTrue(dist.isReady());
         assertNull(dist.getCovarianceBasis());
         assertNull(dist.getVariances());
@@ -150,7 +150,7 @@ public class MultivariateNormalDistTest {
         dist.setMean(mean);
 
         // check correctness
-        assertArrayEquals(dist.getMean(), mean, 0.0);
+        assertArrayEquals(mean, dist.getMean(), 0.0);
 
 
         // Force IllegalArgumentException
@@ -177,7 +177,7 @@ public class MultivariateNormalDistTest {
         dist.setCovariance(cov);
 
         // check correctness
-        assertEquals(dist.getCovariance(), cov);
+        assertEquals(cov, dist.getCovariance());
 
         final Matrix cov2 = new Matrix(2, 2);
         dist.getCovariance(cov2);
@@ -186,7 +186,7 @@ public class MultivariateNormalDistTest {
         dist.setCovariance(cov, false);
 
         // check correctness
-        assertEquals(dist.getCovariance(), cov);
+        assertEquals(cov, dist.getCovariance());
 
         // Force InvalidCovarianceMatrixException
         final Matrix wrong = DecomposerHelper.getLeftLowerTriangulatorFactor(2);
@@ -229,14 +229,14 @@ public class MultivariateNormalDistTest {
         dist.setMeanAndCovariance(mean, cov);
 
         // check correctness
-        assertArrayEquals(dist.getMean(), mean, 0.0);
-        assertEquals(dist.getCovariance(), cov);
+        assertArrayEquals(mean, dist.getMean(), 0.0);
+        assertEquals(cov, dist.getCovariance());
 
         dist.setMeanAndCovariance(mean, cov, false);
 
         // check correctness
-        assertArrayEquals(dist.getMean(), mean, 0.0);
-        assertEquals(dist.getCovariance(), cov);
+        assertArrayEquals(mean, dist.getMean(), 0.0);
+        assertEquals(cov, dist.getCovariance());
 
         // Force IllegalArgumentException
         try {
@@ -312,14 +312,14 @@ public class MultivariateNormalDistTest {
 
         final MultivariateNormalDist dist = new MultivariateNormalDist(mean, cov);
 
-        assertEquals(dist.p(x), 1.0 / (Math.sqrt(Math.pow(2.0 * Math.PI, 2.0) *
+        assertEquals( 1.0 / (Math.sqrt(Math.pow(2.0 * Math.PI, 2.0) *
                         Utils.det(cov))) * Math.exp(-0.5 * ((Matrix.newFromArray(x).
                         subtractAndReturnNew(Matrix.newFromArray(mean))).
                         transposeAndReturnNew().multiplyAndReturnNew(
-                Utils.inverse(cov)).multiplyAndReturnNew(
-                Matrix.newFromArray(x).subtractAndReturnNew(
-                        Matrix.newFromArray(mean)))).getElementAtIndex(0)),
-                ABSOLUTE_ERROR);
+                                Utils.inverse(cov)).multiplyAndReturnNew(
+                                Matrix.newFromArray(x).subtractAndReturnNew(
+                                        Matrix.newFromArray(mean)))).getElementAtIndex(0)),
+                dist.p(x), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         try {
@@ -350,7 +350,7 @@ public class MultivariateNormalDistTest {
         final MultivariateNormalDist dist = new MultivariateNormalDist(mean, cov);
 
         // check that for 2 dimensions
-        assertEquals(dist.cdf(mean), 0.25, ABSOLUTE_ERROR);
+        assertEquals(0.25, dist.cdf(mean), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         try {
@@ -360,8 +360,8 @@ public class MultivariateNormalDistTest {
         }
 
         final Matrix basis = new Matrix(2, 2);
-        assertEquals(dist.cdf(mean, basis), 0.25, ABSOLUTE_ERROR);
-        assertEquals(dist.getCovarianceBasis(), basis);
+        assertEquals(0.25, dist.cdf(mean, basis), ABSOLUTE_ERROR);
+        assertEquals(basis, dist.getCovarianceBasis());
 
         // Force IllegalArgumentException
         try {
@@ -382,41 +382,41 @@ public class MultivariateNormalDistTest {
         double[] x = ArrayUtils.sumAndReturnNew(mean,
                 ArrayUtils.multiplyByScalarAndReturnNew(v1,
                         -3.0 * Math.sqrt(variances[0])));
-        assertEquals(dist.cdf(x), 0.00135 * 0.5, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.00135 * 0.5, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // -2 std away from mean on basis v1
         x = ArrayUtils.sumAndReturnNew(mean,
                 ArrayUtils.multiplyByScalarAndReturnNew(v1,
                         -2.0 * Math.sqrt(variances[0])));
-        assertEquals(dist.cdf(x), 0.02275 * 0.5, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.02275 * 0.5, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // -1 std away from mean on basis v1
         x = ArrayUtils.sumAndReturnNew(mean,
                 ArrayUtils.multiplyByScalarAndReturnNew(v1,
                         -Math.sqrt(variances[0])));
-        assertEquals(dist.cdf(x), 0.15866 * 0.5, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.15866 * 0.5, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // on mean value
         x = mean;
-        assertEquals(dist.cdf(x), 0.5 * 0.5, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.5 * 0.5, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // +1 std away from mean on basis v1
         x = ArrayUtils.sumAndReturnNew(mean,
                 ArrayUtils.multiplyByScalarAndReturnNew(v1,
                         Math.sqrt(variances[0])));
-        assertEquals(dist.cdf(x), 0.84134 * 0.5, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.84134 * 0.5, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // +2 std away from mean on basis v1
         x = ArrayUtils.sumAndReturnNew(mean,
                 ArrayUtils.multiplyByScalarAndReturnNew(v1,
                         +2.0 * Math.sqrt(variances[0])));
-        assertEquals(dist.cdf(x), 0.97725 * 0.5, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.97725 * 0.5, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // +3 std away from mean on basis v1
         x = ArrayUtils.sumAndReturnNew(mean,
                 ArrayUtils.multiplyByScalarAndReturnNew(v1,
                         +3.0 * Math.sqrt(variances[0])));
-        assertEquals(dist.cdf(x), 0.99865 * 0.5, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.99865 * 0.5, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
 
         // check in basis v2
@@ -425,96 +425,96 @@ public class MultivariateNormalDistTest {
         x = ArrayUtils.sumAndReturnNew(mean,
                 ArrayUtils.multiplyByScalarAndReturnNew(v2,
                         -3.0 * Math.sqrt(variances[1])));
-        assertEquals(dist.cdf(x), 0.5 * 0.00135, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.5 * 0.00135, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // -2 std away from mean on basis v2
         x = ArrayUtils.sumAndReturnNew(mean,
                 ArrayUtils.multiplyByScalarAndReturnNew(v2,
                         -2.0 * Math.sqrt(variances[1])));
-        assertEquals(dist.cdf(x), 0.5 * 0.02275, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.5 * 0.02275, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // -1 std away from mean on basis v2
         x = ArrayUtils.sumAndReturnNew(mean,
                 ArrayUtils.multiplyByScalarAndReturnNew(v2,
                         -Math.sqrt(variances[1])));
-        assertEquals(dist.cdf(x), 0.5 * 0.15866, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.5 * 0.15866, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // on mean value
         x = mean;
-        assertEquals(dist.cdf(x), 0.5 * 0.5, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.5 * 0.5, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // +1 std away from mean on basis v2
         x = ArrayUtils.sumAndReturnNew(mean,
                 ArrayUtils.multiplyByScalarAndReturnNew(v2,
                         Math.sqrt(variances[1])));
-        assertEquals(dist.cdf(x), 0.5 * 0.84134, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.5 * 0.84134, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // +2 std away from mean on basis v2
         x = ArrayUtils.sumAndReturnNew(mean,
                 ArrayUtils.multiplyByScalarAndReturnNew(v2,
                         +2.0 * Math.sqrt(variances[1])));
-        assertEquals(dist.cdf(x), 0.5 * 0.97725, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.5 * 0.97725, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // +3 std away from mean on basis v2
         x = ArrayUtils.sumAndReturnNew(mean,
                 ArrayUtils.multiplyByScalarAndReturnNew(v2,
                         +3.0 * Math.sqrt(variances[1])));
-        assertEquals(dist.cdf(x), 0.5 * 0.99865, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.5 * 0.99865, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
 
         // check in both basis
 
         // -3 std away from mean on basis v1 and v2
         x = ArrayUtils.sumAndReturnNew(ArrayUtils.sumAndReturnNew(mean,
-                ArrayUtils.multiplyByScalarAndReturnNew(v1,
-                        -3.0 * Math.sqrt(variances[0]))),
+                        ArrayUtils.multiplyByScalarAndReturnNew(v1,
+                                -3.0 * Math.sqrt(variances[0]))),
                 ArrayUtils.multiplyByScalarAndReturnNew(v2,
                         -3.0 * Math.sqrt(variances[1])));
-        assertEquals(dist.cdf(x), 0.00135 * 0.00135, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.00135 * 0.00135, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // -2 std away from mean on basis v1 and v2
         x = ArrayUtils.sumAndReturnNew(ArrayUtils.sumAndReturnNew(mean,
-                ArrayUtils.multiplyByScalarAndReturnNew(v1,
-                        -2.0 * Math.sqrt(variances[0]))),
+                        ArrayUtils.multiplyByScalarAndReturnNew(v1,
+                                -2.0 * Math.sqrt(variances[0]))),
                 ArrayUtils.multiplyByScalarAndReturnNew(v2,
                         -2.0 * Math.sqrt(variances[1])));
-        assertEquals(dist.cdf(x), 0.02275 * 0.02275, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.02275 * 0.02275, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // -1 std away from mean on basis v1 and v2
         x = ArrayUtils.sumAndReturnNew(ArrayUtils.sumAndReturnNew(mean,
-                ArrayUtils.multiplyByScalarAndReturnNew(v1,
-                        -Math.sqrt(variances[0]))),
+                        ArrayUtils.multiplyByScalarAndReturnNew(v1,
+                                -Math.sqrt(variances[0]))),
                 ArrayUtils.multiplyByScalarAndReturnNew(v2,
                         -Math.sqrt(variances[1])));
-        assertEquals(dist.cdf(x), 0.15866 * 0.15866, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.15866 * 0.15866, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // on mean value
         x = mean;
-        assertEquals(dist.cdf(x), 0.5 * 0.5, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.5 * 0.5, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // +1 std away from mean on basis v1 and v2
         x = ArrayUtils.sumAndReturnNew(ArrayUtils.sumAndReturnNew(mean,
-                ArrayUtils.multiplyByScalarAndReturnNew(v1,
-                        Math.sqrt(variances[0]))),
+                        ArrayUtils.multiplyByScalarAndReturnNew(v1,
+                                Math.sqrt(variances[0]))),
                 ArrayUtils.multiplyByScalarAndReturnNew(v2,
                         Math.sqrt(variances[1])));
-        assertEquals(dist.cdf(x), 0.84134 * 0.84134, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.84134 * 0.84134, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // +2 std away from mean on basis v1 and v2
         x = ArrayUtils.sumAndReturnNew(ArrayUtils.sumAndReturnNew(mean,
-                ArrayUtils.multiplyByScalarAndReturnNew(v1,
-                        +2.0 * Math.sqrt(variances[0]))),
+                        ArrayUtils.multiplyByScalarAndReturnNew(v1,
+                                +2.0 * Math.sqrt(variances[0]))),
                 ArrayUtils.multiplyByScalarAndReturnNew(v2,
                         +2.0 * Math.sqrt(variances[1])));
-        assertEquals(dist.cdf(x), 0.97725 * 0.97725, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.97725 * 0.97725, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
         // +3 std away from mean on basis v1 and v2
         x = ArrayUtils.sumAndReturnNew(ArrayUtils.sumAndReturnNew(mean,
-                ArrayUtils.multiplyByScalarAndReturnNew(v1,
-                        +3.0 * Math.sqrt(variances[0]))),
+                        ArrayUtils.multiplyByScalarAndReturnNew(v1,
+                                +3.0 * Math.sqrt(variances[0]))),
                 ArrayUtils.multiplyByScalarAndReturnNew(v2,
                         +3.0 * Math.sqrt(variances[1])));
-        assertEquals(dist.cdf(x), 0.99865 * 0.99865, LARGE_ABSOLUTE_ERROR);
+        assertEquals(0.99865 * 0.99865, dist.cdf(x), LARGE_ABSOLUTE_ERROR);
 
 
         // Force NotReadyException
@@ -540,7 +540,7 @@ public class MultivariateNormalDistTest {
         final double jointProbability = MultivariateNormalDist.jointProbability(p);
 
         assertTrue(jointProbability >= 0.0 && jointProbability <= 1.0);
-        assertEquals(jointProbability, p[0] * p[1], 0.0);
+        assertEquals(p[0] * p[1], jointProbability, 0.0);
     }
 
     @Test
@@ -571,7 +571,7 @@ public class MultivariateNormalDistTest {
         final Matrix basis = new Matrix(2, 2);
         assertEquals(dist.cdf(dist.invcdf(p, basis)),
                 MultivariateNormalDist.jointProbability(p), ABSOLUTE_ERROR);
-        assertEquals(basis, dist.getCovarianceBasis());
+        assertEquals(dist.getCovarianceBasis(), basis);
 
         // Force IllegalArgumentException
         try {
@@ -584,7 +584,7 @@ public class MultivariateNormalDistTest {
         dist.invcdf(p, result);
         assertEquals(dist.cdf(result),
                 MultivariateNormalDist.jointProbability(p), ABSOLUTE_ERROR);
-        assertEquals(basis, dist.getCovarianceBasis());
+        assertEquals(dist.getCovarianceBasis(), basis);
 
         // Force IllegalArgumentException
         try {
@@ -601,7 +601,7 @@ public class MultivariateNormalDistTest {
         dist.invcdf(p, result, basis);
         assertEquals(dist.cdf(result),
                 MultivariateNormalDist.jointProbability(p), ABSOLUTE_ERROR);
-        assertEquals(basis, dist.getCovarianceBasis());
+        assertEquals(dist.getCovarianceBasis(), basis);
 
         // Force IllegalArgumentException
         try {
@@ -658,7 +658,7 @@ public class MultivariateNormalDistTest {
 
         final double[] x = dist.invcdf(p);
 
-        assertArrayEquals(dist.invcdf(dist.cdf(x)), x, ABSOLUTE_ERROR);
+        assertArrayEquals(x, dist.invcdf(dist.cdf(x)), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         try {
@@ -674,8 +674,8 @@ public class MultivariateNormalDistTest {
 
 
         final Matrix basis = new Matrix(2, 2);
-        assertArrayEquals(dist.invcdf(dist.cdf(x), basis), x, ABSOLUTE_ERROR);
-        assertEquals(basis, dist.getCovarianceBasis());
+        assertArrayEquals(x, dist.invcdf(dist.cdf(x), basis), ABSOLUTE_ERROR);
+        assertEquals(dist.getCovarianceBasis(), basis);
 
         // Force IllegalArgumentException
         try {
@@ -691,8 +691,8 @@ public class MultivariateNormalDistTest {
 
         final double[] result = new double[2];
         dist.invcdf(dist.cdf(x), result);
-        assertArrayEquals(result, x, ABSOLUTE_ERROR);
-        assertEquals(basis, dist.getCovarianceBasis());
+        assertArrayEquals(x, result, ABSOLUTE_ERROR);
+        assertEquals(dist.getCovarianceBasis(), basis);
 
         // Force IllegalArgumentException
         try {
@@ -702,8 +702,8 @@ public class MultivariateNormalDistTest {
         }
 
         dist.invcdf(dist.cdf(x), result, basis);
-        assertArrayEquals(result, x, ABSOLUTE_ERROR);
-        assertEquals(basis, dist.getCovarianceBasis());
+        assertArrayEquals(x, result, ABSOLUTE_ERROR);
+        assertEquals(dist.getCovarianceBasis(), basis);
 
         // Force IllegalArgumentException
         try {
@@ -760,13 +760,13 @@ public class MultivariateNormalDistTest {
 
         final Matrix value = transDiffMatrix.multiplyAndReturnNew(invCov).
                 multiplyAndReturnNew(diffMatrix);
-        assertEquals(value.getRows(), 1);
-        assertEquals(value.getColumns(), 1);
+        assertEquals(1, value.getRows());
+        assertEquals(1, value.getColumns());
 
-        assertEquals(dist.squaredMahalanobisDistance(x),
-                value.getElementAtIndex(0), ABSOLUTE_ERROR);
-        assertEquals(dist.mahalanobisDistance(x),
-                Math.sqrt(value.getElementAt(0, 0)), ABSOLUTE_ERROR);
+        assertEquals(value.getElementAtIndex(0), dist.squaredMahalanobisDistance(x),
+                ABSOLUTE_ERROR);
+        assertEquals(Math.sqrt(value.getElementAt(0, 0)),
+                dist.mahalanobisDistance(x), ABSOLUTE_ERROR);
 
         // check for 1 dimension
         mean = new double[1];
@@ -866,7 +866,7 @@ public class MultivariateNormalDistTest {
         final double[] evaluation = new double[2];
         Matrix jacobian = new Matrix(2, 2);
         evaluator.evaluate(mean, evaluation, jacobian);
-        assertArrayEquals(result.getMean(), evaluation, ABSOLUTE_ERROR);
+        assertArrayEquals(evaluation, result.getMean(), ABSOLUTE_ERROR);
         assertTrue(result.getCovariance().equals(
                 jacobian.multiplyAndReturnNew(cov).multiplyAndReturnNew(
                         jacobian.transposeAndReturnNew()), ABSOLUTE_ERROR));
@@ -875,7 +875,7 @@ public class MultivariateNormalDistTest {
         result = MultivariateNormalDist.propagate(evaluator, mean, cov);
 
         // check correctness
-        assertArrayEquals(result.getMean(), evaluation, ABSOLUTE_ERROR);
+        assertArrayEquals(evaluation, result.getMean(), ABSOLUTE_ERROR);
         assertTrue(result.getCovariance().equals(
                 jacobian.multiplyAndReturnNew(cov).multiplyAndReturnNew(
                         jacobian.transposeAndReturnNew()), ABSOLUTE_ERROR));
@@ -885,7 +885,7 @@ public class MultivariateNormalDistTest {
         MultivariateNormalDist.propagate(evaluator, dist, result);
 
         // check correctness
-        assertArrayEquals(result.getMean(), evaluation, ABSOLUTE_ERROR);
+        assertArrayEquals(evaluation, result.getMean(), ABSOLUTE_ERROR);
         assertTrue(result.getCovariance().equals(
                 jacobian.multiplyAndReturnNew(cov).multiplyAndReturnNew(
                         jacobian.transposeAndReturnNew()), ABSOLUTE_ERROR));
@@ -894,7 +894,7 @@ public class MultivariateNormalDistTest {
         result = MultivariateNormalDist.propagate(evaluator, dist);
 
         // check correctness
-        assertArrayEquals(result.getMean(), evaluation, ABSOLUTE_ERROR);
+        assertArrayEquals(evaluation, result.getMean(), ABSOLUTE_ERROR);
         assertTrue(result.getCovariance().equals(
                 jacobian.multiplyAndReturnNew(cov).multiplyAndReturnNew(
                         jacobian.transposeAndReturnNew()), ABSOLUTE_ERROR));
@@ -904,7 +904,7 @@ public class MultivariateNormalDistTest {
         dist.propagateThisDistribution(evaluator, result);
 
         // check correctness
-        assertArrayEquals(result.getMean(), evaluation, ABSOLUTE_ERROR);
+        assertArrayEquals(evaluation, result.getMean(), ABSOLUTE_ERROR);
         assertTrue(result.getCovariance().equals(
                 jacobian.multiplyAndReturnNew(cov).multiplyAndReturnNew(
                         jacobian.transposeAndReturnNew()), ABSOLUTE_ERROR));
@@ -913,7 +913,7 @@ public class MultivariateNormalDistTest {
         result = dist.propagateThisDistribution(evaluator);
 
         // check correctness
-        assertArrayEquals(result.getMean(), evaluation, ABSOLUTE_ERROR);
+        assertArrayEquals(evaluation, result.getMean(), ABSOLUTE_ERROR);
         assertTrue(result.getCovariance().equals(
                 jacobian.multiplyAndReturnNew(cov).multiplyAndReturnNew(
                         jacobian.transposeAndReturnNew()), ABSOLUTE_ERROR));
@@ -957,8 +957,7 @@ public class MultivariateNormalDistTest {
 
         final double maxMean = Math.max(ArrayUtils.max(mean),
                 Math.abs(ArrayUtils.min(mean)));
-        assertArrayEquals(result.getMean(), resultMean,
-                RELATIVE_ERROR * maxMean);
+        assertArrayEquals(resultMean, result.getMean(), RELATIVE_ERROR * maxMean);
 
         final double maxCov = Math.max(
                 ArrayUtils.max(result.getCovariance().getBuffer()),

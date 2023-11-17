@@ -59,25 +59,25 @@ public class SingularValueDecomposerTest {
         assertFalse(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.SINGULAR_VALUE_DECOMPOSITION);
+        assertEquals(DecomposerType.SINGULAR_VALUE_DECOMPOSITION,
+                decomposer.getDecomposerType());
         assertEquals(SingularValueDecomposer.DEFAULT_MAX_ITERS, decomposer.getMaxIterations());
 
         decomposer.setInputMatrix(m);
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.SINGULAR_VALUE_DECOMPOSITION);
+        assertEquals(m, decomposer.getInputMatrix());
+        assertEquals(DecomposerType.SINGULAR_VALUE_DECOMPOSITION,
+                decomposer.getDecomposerType());
 
         decomposer = new SingularValueDecomposer(SingularValueDecomposer.DEFAULT_MAX_ITERS + 1);
 
         assertFalse(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.SINGULAR_VALUE_DECOMPOSITION);
+        assertEquals(DecomposerType.SINGULAR_VALUE_DECOMPOSITION,
+                decomposer.getDecomposerType());
         assertEquals(SingularValueDecomposer.DEFAULT_MAX_ITERS + 1,
                 decomposer.getMaxIterations());
 
@@ -85,15 +85,15 @@ public class SingularValueDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.SINGULAR_VALUE_DECOMPOSITION);
+        assertEquals(m, decomposer.getInputMatrix());
+        assertEquals(DecomposerType.SINGULAR_VALUE_DECOMPOSITION,
+                decomposer.getDecomposerType());
 
         decomposer = new SingularValueDecomposer(m);
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
         assertEquals(SingularValueDecomposer.DEFAULT_MAX_ITERS, decomposer.getMaxIterations());
 
         decomposer.decompose();
@@ -101,7 +101,7 @@ public class SingularValueDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // when setting a new input matrix, decomposition becomes unavailable
         // must be recomputed
@@ -110,7 +110,7 @@ public class SingularValueDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
     }
 
     @Test
@@ -125,8 +125,8 @@ public class SingularValueDecomposerTest {
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         final SingularValueDecomposer decomposer = new SingularValueDecomposer();
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.SINGULAR_VALUE_DECOMPOSITION);
+        assertEquals(DecomposerType.SINGULAR_VALUE_DECOMPOSITION,
+                decomposer.getDecomposerType());
         assertFalse(decomposer.isReady());
 
         decomposer.setInputMatrix(m);
@@ -134,14 +134,14 @@ public class SingularValueDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         decomposer.decompose();
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // when setting a new input matrix, decomposition becomes unavailable
         // and must be recomputed
@@ -150,7 +150,7 @@ public class SingularValueDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
     }
 
     @Test
@@ -189,8 +189,8 @@ public class SingularValueDecomposerTest {
         vTrans = v.transposeAndReturnNew();
 
         // check that w is diagonal with descending singular values
-        assertEquals(w.getRows(), columns);
-        assertEquals(w.getColumns(), columns);
+        assertEquals(columns, w.getRows());
+        assertEquals(columns, w.getColumns());
         double prevSingularValue = Double.MAX_VALUE;
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < columns; i++) {
@@ -198,7 +198,7 @@ public class SingularValueDecomposerTest {
                     assertTrue(w.getElementAt(i, j) <= prevSingularValue);
                     prevSingularValue = w.getElementAt(i, j);
                 } else {
-                    assertEquals(w.getElementAt(i, j), 0.0, 0.0);
+                    assertEquals(0.0, w.getElementAt(i, j), 0.0);
                 }
             }
         }
@@ -207,8 +207,8 @@ public class SingularValueDecomposerTest {
         m2 = u.multiplyAndReturnNew(w.multiplyAndReturnNew(vTrans));
 
         // check that m2 is equal (except for rounding errors to m
-        assertEquals(m2.getRows(), rows);
-        assertEquals(m2.getColumns(), columns);
+        assertEquals(rows, m2.getRows());
+        assertEquals(columns, m2.getColumns());
         assertTrue(m.equals(m2, ABSOLUTE_ERROR));
     }
 
@@ -227,12 +227,12 @@ public class SingularValueDecomposerTest {
         SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
 
         // Check default value
-        assertEquals(decomposer.getMaxIterations(),
-                SingularValueDecomposer.DEFAULT_MAX_ITERS);
+        assertEquals(SingularValueDecomposer.DEFAULT_MAX_ITERS,
+                decomposer.getMaxIterations());
 
         // Try before decomposing
         decomposer.setMaxIterations(maxIters);
-        assertEquals(decomposer.getMaxIterations(), maxIters);
+        assertEquals(maxIters, decomposer.getMaxIterations());
         try {
             decomposer.decompose();
         } catch (final DecomposerException ignore) {
@@ -241,11 +241,11 @@ public class SingularValueDecomposerTest {
         // Try after decomposing
         maxIters = randomizer.nextInt(MIN_ITERS, MAX_ITERS);
         decomposer.setMaxIterations(maxIters);
-        assertEquals(decomposer.getMaxIterations(), maxIters);
+        assertEquals(maxIters, decomposer.getMaxIterations());
 
         // Try on constructor
         decomposer = new SingularValueDecomposer(m, maxIters);
-        assertEquals(decomposer.getMaxIterations(), maxIters);
+        assertEquals(maxIters, decomposer.getMaxIterations());
 
         // Force IllegalArgumentException
         try {
@@ -278,14 +278,14 @@ public class SingularValueDecomposerTest {
 
         // Check that U is orthogonal: U' * U = I
         final Matrix ident = uTrans.multiplyAndReturnNew(u);
-        assertEquals(u.getRows(), rows);
-        assertEquals(u.getColumns(), columns);
+        assertEquals(rows, u.getRows());
+        assertEquals(columns, u.getColumns());
         for (int j = 0; j < ident.getColumns(); j++) {
             for (int i = 0; i < ident.getRows(); i++) {
                 if (i == j) {
-                    assertEquals(ident.getElementAt(i, j), 1.0, RELATIVE_ERROR);
+                    assertEquals(1.0, ident.getElementAt(i, j), RELATIVE_ERROR);
                 } else {
-                    assertEquals(ident.getElementAt(i, j), 0.0, ROUND_ERROR);
+                    assertEquals(0.0, ident.getElementAt(i, j), ROUND_ERROR);
                 }
             }
         }
@@ -315,14 +315,14 @@ public class SingularValueDecomposerTest {
 
         // Check that V is orthogonal: V' * V = I
         final Matrix ident = vTrans.multiplyAndReturnNew(v);
-        assertEquals(v.getRows(), columns);
-        assertEquals(v.getColumns(), columns);
+        assertEquals(columns, v.getRows());
+        assertEquals(columns, v.getColumns());
         for (int j = 0; j < ident.getColumns(); j++) {
             for (int i = 0; i < ident.getRows(); i++) {
                 if (i == j) {
-                    assertEquals(ident.getElementAt(i, j), 1.0, RELATIVE_ERROR);
+                    assertEquals(1.0, ident.getElementAt(i, j), RELATIVE_ERROR);
                 } else {
-                    assertEquals(ident.getElementAt(i, j), 0.0, ROUND_ERROR);
+                    assertEquals(0.0, ident.getElementAt(i, j), ROUND_ERROR);
                 }
             }
         }
@@ -394,7 +394,7 @@ public class SingularValueDecomposerTest {
                         assertTrue(w.getElementAt(i - 1, j - 1) >= 0.0);
                     }
                 } else {
-                    assertEquals(w.getElementAt(i, j), 0.0, ROUND_ERROR);
+                    assertEquals(0.0, w.getElementAt(i, j), ROUND_ERROR);
                 }
             }
         }
@@ -440,7 +440,7 @@ public class SingularValueDecomposerTest {
 
         decomposer.decompose();
         norm2 = decomposer.getNorm2();
-        assertEquals(normFro, norm2, norm2 * RELATIVE_ERROR_OVERDETERMINED);
+        assertEquals(norm2, normFro, norm2 * RELATIVE_ERROR_OVERDETERMINED);
     }
 
     @Test
@@ -466,12 +466,12 @@ public class SingularValueDecomposerTest {
         w = decomposer.getSingularValues();
 
         if (recCondNumber > EPS) {
-            assertEquals(1.0 / recCondNumber, condNumber,
+            assertEquals(condNumber, 1.0 / recCondNumber,
                     condNumber * RELATIVE_ERROR);
         }
 
         if (w[0] >= EPS && w[columns - 1] >= EPS) {
-            assertEquals(recCondNumber, w[columns - 1] / w[0], ABSOLUTE_ERROR);
+            assertEquals(w[columns - 1] / w[0], recCondNumber, ABSOLUTE_ERROR);
         }
     }
 
@@ -512,7 +512,7 @@ public class SingularValueDecomposerTest {
         decomposer = new SingularValueDecomposer(m2);
         decomposer.decompose();
 
-        assertEquals(rank, decomposer.getRank());
+        assertEquals(decomposer.getRank(), rank);
     }
 
     @Test
@@ -552,7 +552,7 @@ public class SingularValueDecomposerTest {
         decomposer = new SingularValueDecomposer(m2);
         decomposer.decompose();
 
-        assertEquals(nullity, decomposer.getNullity());
+        assertEquals(decomposer.getNullity(), nullity);
     }
 
     @Test
@@ -612,17 +612,17 @@ public class SingularValueDecomposerTest {
             decomposer.getRange(r2);
             rTrans = r.transposeAndReturnNew();
             ident = rTrans.multiplyAndReturnNew(r);
-            assertEquals(r.getColumns(), rank);
-            assertEquals(r.getRows(), rows);
-            assertEquals(r, r2);
+            assertEquals(rank, r.getColumns());
+            assertEquals(rows, r.getRows());
+            assertEquals(r2, r);
 
             for (int j = 0; j < ident.getColumns(); j++) {
                 for (int i = 0; i < ident.getRows(); i++) {
                     if (i == j) {
-                        assertEquals(ident.getElementAt(i, j), 1.0,
+                        assertEquals(1.0, ident.getElementAt(i, j),
                                 RELATIVE_ERROR);
                     } else {
-                        assertEquals(ident.getElementAt(i, j), 0.0,
+                        assertEquals(0.0, ident.getElementAt(i, j),
                                 ROUND_ERROR);
                     }
                 }
@@ -688,17 +688,17 @@ public class SingularValueDecomposerTest {
             decomposer.getNullspace(ns2);
             nsTrans = ns.transposeAndReturnNew();
             ident = nsTrans.multiplyAndReturnNew(ns);
-            assertEquals(ns.getColumns(), nullity);
-            assertEquals(ns.getRows(), columns);
-            assertEquals(ns, ns2);
+            assertEquals(nullity, ns.getColumns());
+            assertEquals(columns, ns.getRows());
+            assertEquals(ns2, ns);
 
             for (int j = 0; j < ident.getColumns(); j++) {
                 for (int i = 0; i < ident.getRows(); i++) {
                     if (i == j) {
-                        assertEquals(ident.getElementAt(i, j), 1.0,
+                        assertEquals(1.0, ident.getElementAt(i, j),
                                 RELATIVE_ERROR);
                     } else {
-                        assertEquals(ident.getElementAt(i, j), 0.0,
+                        assertEquals(0.0, ident.getElementAt(i, j),
                                 ROUND_ERROR);
                     }
                 }
@@ -761,10 +761,10 @@ public class SingularValueDecomposerTest {
         // m * s = b
         b2 = m.multiplyAndReturnNew(s);
 
-        assertEquals(b2.getRows(), b.getRows());
-        assertEquals(b2.getColumns(), b.getColumns());
+        assertEquals(b.getRows(), b2.getRows());
+        assertEquals(b.getColumns(), b2.getColumns());
         assertTrue(b2.equals(b, ROUND_ERROR));
-        assertEquals(s, s2);
+        assertEquals(s2, s);
 
         // Try for overdetermined system (rows > columns)
         m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
@@ -790,9 +790,10 @@ public class SingularValueDecomposerTest {
         // m * s = b
         b2 = m.multiplyAndReturnNew(s);
 
-        assertEquals(b2.getRows(), b.getRows());
-        assertEquals(b2.getColumns(), b.getColumns());
-        int valid = 0, total = b2.getColumns() * b2.getRows();
+        assertEquals(b.getRows(), b2.getRows());
+        assertEquals(b.getColumns(), b2.getColumns());
+        int valid = 0;
+        int total = b2.getColumns() * b2.getRows();
         for (int j = 0; j < b2.getColumns(); j++) {
             for (int i = 0; i < b2.getRows(); i++) {
                 relError = Math.abs(RELATIVE_ERROR_OVERDETERMINED *
@@ -882,7 +883,7 @@ public class SingularValueDecomposerTest {
         // m * s = b
         b2 = m.multiplyAndReturnNew(Matrix.newFromArray(s));
 
-        assertEquals(b.length, b2.getRows());
+        assertEquals(b2.getRows(), b.length);
         assertEquals(1, b2.getColumns());
         assertTrue(b2.equals(Matrix.newFromArray(b), ROUND_ERROR));
         assertArrayEquals(s, s2, 0.0);

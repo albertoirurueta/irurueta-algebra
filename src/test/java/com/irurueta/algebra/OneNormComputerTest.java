@@ -39,7 +39,7 @@ public class OneNormComputerTest {
     public void testGetNormType() {
         final OneNormComputer normComputer = new OneNormComputer();
         assertNotNull(normComputer);
-        assertEquals(normComputer.getNormType(), NormType.ONE_NORM);
+        assertEquals(NormType.ONE_NORM, normComputer.getNormType());
     }
 
     @Test
@@ -66,21 +66,21 @@ public class OneNormComputerTest {
             maxColSum = Math.max(colSum, maxColSum);
         }
 
-        assertEquals(normComputer.getNorm(m), maxColSum, ABSOLUTE_ERROR);
-        assertEquals(OneNormComputer.norm(m), maxColSum, ABSOLUTE_ERROR);
+        assertEquals(maxColSum, normComputer.getNorm(m), ABSOLUTE_ERROR);
+        assertEquals(maxColSum, OneNormComputer.norm(m), ABSOLUTE_ERROR);
 
         // For initialized matrix
         final double initValue = randomizer.nextDouble(MIN_LIMIT, MAX_LIMIT);
         m.initialize(initValue);
 
         norm = initValue * rows;
-        assertEquals(normComputer.getNorm(m), norm, ABSOLUTE_ERROR);
-        assertEquals(OneNormComputer.norm(m), norm, ABSOLUTE_ERROR);
+        assertEquals(norm, normComputer.getNorm(m), ABSOLUTE_ERROR);
+        assertEquals(norm, OneNormComputer.norm(m), ABSOLUTE_ERROR);
 
         // For identity matrix
         m = Matrix.identity(rows, columns);
-        assertEquals(normComputer.getNorm(m), 1.0, ABSOLUTE_ERROR);
-        assertEquals(OneNormComputer.norm(m), 1.0, ABSOLUTE_ERROR);
+        assertEquals(1.0, normComputer.getNorm(m), ABSOLUTE_ERROR);
+        assertEquals(1.0, OneNormComputer.norm(m), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -101,15 +101,15 @@ public class OneNormComputerTest {
         }
 
         norm = sum;
-        assertEquals(normComputer.getNorm(v), norm, ABSOLUTE_ERROR);
-        assertEquals(OneNormComputer.norm(v), norm, ABSOLUTE_ERROR);
+        assertEquals(norm, normComputer.getNorm(v), ABSOLUTE_ERROR);
+        assertEquals(norm, OneNormComputer.norm(v), ABSOLUTE_ERROR);
 
         Arrays.fill(v, initValue);
 
         norm = initValue * length;
 
-        assertEquals(normComputer.getNorm(v), norm, ABSOLUTE_ERROR);
-        assertEquals(OneNormComputer.norm(v), norm, ABSOLUTE_ERROR);
+        assertEquals(norm, normComputer.getNorm(v), ABSOLUTE_ERROR);
+        assertEquals(norm, OneNormComputer.norm(v), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -131,8 +131,7 @@ public class OneNormComputerTest {
         norm = sum;
 
         Matrix jacobian = new Matrix(1, length);
-        assertEquals(OneNormComputer.norm(v, jacobian), norm,
-                ABSOLUTE_ERROR);
+        assertEquals(norm, OneNormComputer.norm(v, jacobian), ABSOLUTE_ERROR);
         assertEquals(jacobian, Matrix.newFromArray(v).
                 multiplyByScalarAndReturnNew(1.0 / norm).
                 transposeAndReturnNew());
@@ -145,7 +144,7 @@ public class OneNormComputerTest {
         }
 
         jacobian = new Matrix(1, length);
-        assertEquals(normComputer.getNorm(v, jacobian), norm, ABSOLUTE_ERROR);
+        assertEquals(norm, normComputer.getNorm(v, jacobian), ABSOLUTE_ERROR);
         assertEquals(jacobian, Matrix.newFromArray(v).
                 multiplyByScalarAndReturnNew(1.0 / norm).
                 transposeAndReturnNew());
@@ -159,12 +158,12 @@ public class OneNormComputerTest {
 
         // test zero norm
         v = new double[length];
-        assertEquals(OneNormComputer.norm(v, jacobian),
-                0.0, 0.0);
+        assertEquals(0.0,
+                OneNormComputer.norm(v, jacobian), 0.0);
         for (int i = 0; i < 1; i++) {
             for (int j = 0; j < length; j++) {
-                assertEquals(jacobian.getElementAt(i, j),
-                        Double.MAX_VALUE, 0.0);
+                assertEquals(Double.MAX_VALUE,
+                        jacobian.getElementAt(i, j), 0.0);
             }
         }
 

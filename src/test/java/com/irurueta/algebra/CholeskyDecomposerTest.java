@@ -49,16 +49,16 @@ public class CholeskyDecomposerTest {
         assertFalse(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.CHOLESKY_DECOMPOSITION);
+        assertEquals(DecomposerType.CHOLESKY_DECOMPOSITION,
+                decomposer.getDecomposerType());
 
         decomposer.setInputMatrix(m);
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
         assertEquals(decomposer.getInputMatrix(), m);
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.CHOLESKY_DECOMPOSITION);
+        assertEquals(DecomposerType.CHOLESKY_DECOMPOSITION,
+                decomposer.getDecomposerType());
 
         // Test 2nd constructor
         decomposer = new CholeskyDecomposer(m);
@@ -66,8 +66,8 @@ public class CholeskyDecomposerTest {
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
         assertEquals(decomposer.getInputMatrix(), m);
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.CHOLESKY_DECOMPOSITION);
+        assertEquals(DecomposerType.CHOLESKY_DECOMPOSITION,
+                decomposer.getDecomposerType());
     }
 
     @Test
@@ -82,8 +82,8 @@ public class CholeskyDecomposerTest {
 
         final CholeskyDecomposer decomposer = new CholeskyDecomposer();
 
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.CHOLESKY_DECOMPOSITION);
+        assertEquals(DecomposerType.CHOLESKY_DECOMPOSITION,
+                decomposer.getDecomposerType());
         assertFalse(decomposer.isReady());
 
         decomposer.setInputMatrix(m);
@@ -355,7 +355,7 @@ public class CholeskyDecomposerTest {
 
         assertTrue(decomposer.isSPD());
 
-        // we build a non symmetric positive definite matrix using m
+        // we build a non-symmetric positive definite matrix using m
         for (int v = 0; v < rows; v++) {
             for (int u = 0; u < v; u++) {
                 m.setElementAt(u, v, m.getElementAt(v, u) + 1.0);
@@ -419,7 +419,7 @@ public class CholeskyDecomposerTest {
         // Force NonSymmetricPositiveDefiniteMatrixException
 
         // Test for non-symmetric positive definite matrices
-        // we build a non symmetric positive definite matrix using m
+        // we build a non-symmetric positive definite matrix using m
         for (int v = 0; v < rows; v++) {
             for (int u = 0; u < v; u++) {
                 m.setElementAt(u, v, m.getElementAt(v, u) + 1.0);

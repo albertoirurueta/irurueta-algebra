@@ -50,24 +50,24 @@ public class RQDecomposerTest {
         assertFalse(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.RQ_DECOMPOSITION);
+        assertEquals(DecomposerType.RQ_DECOMPOSITION,
+                decomposer.getDecomposerType());
 
         decomposer.setInputMatrix(m);
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.RQ_DECOMPOSITION);
+        assertEquals(m, decomposer.getInputMatrix());
+        assertEquals(DecomposerType.RQ_DECOMPOSITION,
+                decomposer.getDecomposerType());
 
         decomposer = new RQDecomposer(m);
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.RQ_DECOMPOSITION);
+        assertEquals(m, decomposer.getInputMatrix());
+        assertEquals(DecomposerType.RQ_DECOMPOSITION,
+                decomposer.getDecomposerType());
     }
 
     @Test
@@ -83,8 +83,8 @@ public class RQDecomposerTest {
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         final RQDecomposer decomposer = new RQDecomposer();
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.RQ_DECOMPOSITION);
+        assertEquals(DecomposerType.RQ_DECOMPOSITION,
+                decomposer.getDecomposerType());
         assertFalse(decomposer.isReady());
 
         decomposer.setInputMatrix(m);
@@ -92,14 +92,14 @@ public class RQDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         decomposer.decompose();
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // When setting a new input matrix, decomposition becomes unavailable
         // and must be recomputed
@@ -108,7 +108,7 @@ public class RQDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
     }
 
     @Test
@@ -142,14 +142,14 @@ public class RQDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         decomposer.decompose();
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // Check decomposition
         r = decomposer.getR();
@@ -157,8 +157,8 @@ public class RQDecomposerTest {
 
         m2 = r.multiplyAndReturnNew(q);
 
-        assertEquals(m.getRows(), m2.getRows());
-        assertEquals(m.getColumns(), m2.getColumns());
+        assertEquals(m2.getRows(), m.getRows());
+        assertEquals(m2.getColumns(), m.getColumns());
         assertTrue(m.equals(m2, ROUND_ERROR));
 
         // Force DecomposerException
@@ -200,13 +200,13 @@ public class RQDecomposerTest {
         decomposer.decompose();
         r = decomposer.getR();
 
-        assertEquals(r.getRows(), rows);
-        assertEquals(r.getColumns(), columns);
+        assertEquals(rows, r.getRows());
+        assertEquals(columns, r.getColumns());
 
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
                 if (i > j) {
-                    assertEquals(r.getElementAt(i, j), 0.0, ROUND_ERROR);
+                    assertEquals(0.0, r.getElementAt(i, j), ROUND_ERROR);
                 }
             }
         }
@@ -242,25 +242,25 @@ public class RQDecomposerTest {
         decomposer.decompose();
         q = decomposer.getQ();
 
-        assertEquals(q.getRows(), columns);
-        assertEquals(q.getColumns(), columns);
+        assertEquals(columns, q.getRows());
+        assertEquals(columns, q.getColumns());
 
         // Q is an orthogonal matrix, which mean that Q * Q' = I
         qTransposed = q.transposeAndReturnNew();
 
         test = qTransposed.multiplyAndReturnNew(q);
 
-        assertEquals(test.getRows(), columns);
-        assertEquals(test.getColumns(), columns);
+        assertEquals(columns, test.getRows());
+        assertEquals(columns, test.getColumns());
 
         // Check that test is similar to identity
         for (int j = 0; j < rows; j++) {
             for (int i = 0; i < rows; i++) {
                 if (i == j) {
-                    assertEquals(Math.abs(test.getElementAt(i, j)), 1.0,
+                    assertEquals(1.0, Math.abs(test.getElementAt(i, j)),
                             RELATIVE_ERROR);
                 } else {
-                    assertEquals(test.getElementAt(i, j), 0.0, ROUND_ERROR);
+                    assertEquals(0.0, test.getElementAt(i, j), ROUND_ERROR);
                 }
             }
         }
@@ -281,25 +281,25 @@ public class RQDecomposerTest {
 
         q = decomposer.getQ();
 
-        assertEquals(q.getRows(), rows);
-        assertEquals(q.getColumns(), rows);
+        assertEquals(rows, q.getRows());
+        assertEquals(rows, q.getColumns());
 
         // Q is an orthogonal matrix, which means that Q * Q' = I
         qTransposed = q.transposeAndReturnNew();
 
         test = qTransposed.multiplyAndReturnNew(q);
 
-        assertEquals(test.getRows(), rows);
-        assertEquals(test.getColumns(), rows);
+        assertEquals(rows, test.getRows());
+        assertEquals(rows, test.getColumns());
 
         // Check that test is similar to identity
         for (int j = 0; j < rows; j++) {
             for (int i = 0; i < rows; i++) {
                 if (i == j) {
-                    assertEquals(Math.abs(test.getElementAt(i, j)), 1.0,
+                    assertEquals(1.0, Math.abs(test.getElementAt(i, j)),
                             RELATIVE_ERROR);
                 } else {
-                    assertEquals(test.getElementAt(i, j), 0.0, ROUND_ERROR);
+                    assertEquals(0.0, test.getElementAt(i, j), ROUND_ERROR);
                 }
             }
         }

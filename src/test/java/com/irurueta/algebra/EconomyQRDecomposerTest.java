@@ -51,25 +51,25 @@ public class EconomyQRDecomposerTest {
         assertFalse(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.QR_ECONOMY_DECOMPOSITION);
+        assertEquals(DecomposerType.QR_ECONOMY_DECOMPOSITION,
+                decomposer.getDecomposerType());
 
         decomposer.setInputMatrix(m);
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.QR_ECONOMY_DECOMPOSITION);
+        assertEquals(m, decomposer.getInputMatrix());
+        assertEquals(DecomposerType.QR_ECONOMY_DECOMPOSITION,
+                decomposer.getDecomposerType());
 
         // Test 2nd constructor
         decomposer = new EconomyQRDecomposer(m);
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.QR_ECONOMY_DECOMPOSITION);
+        assertEquals(m, decomposer.getInputMatrix());
+        assertEquals(DecomposerType.QR_ECONOMY_DECOMPOSITION,
+                decomposer.getDecomposerType());
     }
 
     @Test
@@ -85,8 +85,8 @@ public class EconomyQRDecomposerTest {
 
         final EconomyQRDecomposer decomposer = new EconomyQRDecomposer();
 
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.QR_ECONOMY_DECOMPOSITION);
+        assertEquals(DecomposerType.QR_ECONOMY_DECOMPOSITION,
+                decomposer.getDecomposerType());
         assertFalse(decomposer.isReady());
 
         decomposer.setInputMatrix(m);
@@ -94,14 +94,14 @@ public class EconomyQRDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         decomposer.decompose();
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // When setting a new input matrix, decomposition becomes unavailable and
         // must be recomputed
@@ -110,7 +110,7 @@ public class EconomyQRDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
     }
 
     @Test
@@ -134,14 +134,14 @@ public class EconomyQRDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         decomposer.decompose();
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // Check decomposition
         q = decomposer.getQ();
@@ -252,7 +252,7 @@ public class EconomyQRDecomposerTest {
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
                 if (i < j) {
-                    assertEquals(h.getElementAt(i, j), 0.0, 0.0);
+                    assertEquals(0.0, h.getElementAt(i, j), 0.0);
                 }
             }
         }
@@ -290,7 +290,7 @@ public class EconomyQRDecomposerTest {
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < columns; i++) {
                 if (i > j) {
-                    assertEquals(r.getElementAt(i, j), 0.0, ROUND_ERROR);
+                    assertEquals(0.0, r.getElementAt(i, j), ROUND_ERROR);
                 }
             }
         }
@@ -340,9 +340,9 @@ public class EconomyQRDecomposerTest {
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < columns; i++) {
                 if (i == j) {
-                    assertEquals(test.getElementAt(i, j), 1.0, ROUND_ERROR);
+                    assertEquals(1.0, test.getElementAt(i, j), ROUND_ERROR);
                 } else {
-                    assertEquals(test.getElementAt(i, j), 0.0, ROUND_ERROR);
+                    assertEquals(0.0, test.getElementAt(i, j), ROUND_ERROR);
                 }
             }
         }
@@ -376,9 +376,9 @@ public class EconomyQRDecomposerTest {
         for (int j = 0; j < rows; j++) {
             for (int i = 0; i < rows; i++) {
                 if (i == j) {
-                    assertEquals(test.getElementAt(i, j), 1.0, ROUND_ERROR);
+                    assertEquals(1.0, test.getElementAt(i, j), ROUND_ERROR);
                 } else {
-                    assertEquals(test.getElementAt(i, j), 0.0, ROUND_ERROR);
+                    assertEquals(0.0, test.getElementAt(i, j), ROUND_ERROR);
                 }
             }
         }

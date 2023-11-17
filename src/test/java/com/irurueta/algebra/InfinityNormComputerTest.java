@@ -41,7 +41,7 @@ public class InfinityNormComputerTest {
     @Test
     public void testGetNormType() {
         final InfinityNormComputer normComputer = new InfinityNormComputer();
-        assertEquals(normComputer.getNormType(), NormType.INFINITY_NORM);
+        assertEquals(NormType.INFINITY_NORM, normComputer.getNormType());
     }
 
     @Test
@@ -70,8 +70,8 @@ public class InfinityNormComputerTest {
             maxRowSum = Math.max(rowSum, maxRowSum);
         }
 
-        assertEquals(normComputer.getNorm(m), maxRowSum, ABSOLUTE_ERROR);
-        assertEquals(InfinityNormComputer.norm(m), maxRowSum, ABSOLUTE_ERROR);
+        assertEquals(maxRowSum, normComputer.getNorm(m), ABSOLUTE_ERROR);
+        assertEquals(maxRowSum, InfinityNormComputer.norm(m), ABSOLUTE_ERROR);
 
         // For initialized matrix
         m = new Matrix(rows, columns);
@@ -79,13 +79,13 @@ public class InfinityNormComputerTest {
 
         norm = initValue * columns;
 
-        assertEquals(normComputer.getNorm(m), norm, ABSOLUTE_ERROR);
-        assertEquals(InfinityNormComputer.norm(m), norm, ABSOLUTE_ERROR);
+        assertEquals(norm, normComputer.getNorm(m), ABSOLUTE_ERROR);
+        assertEquals(norm, InfinityNormComputer.norm(m), ABSOLUTE_ERROR);
 
         // For identity matrix
         m = Matrix.identity(rows, columns);
-        assertEquals(normComputer.getNorm(m), 1.0, ABSOLUTE_ERROR);
-        assertEquals(InfinityNormComputer.norm(m), 1.0, ABSOLUTE_ERROR);
+        assertEquals(1.0, normComputer.getNorm(m), ABSOLUTE_ERROR);
+        assertEquals(1.0, InfinityNormComputer.norm(m), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -105,15 +105,15 @@ public class InfinityNormComputerTest {
 
         norm = Math.abs(v[0]);
 
-        assertEquals(normComputer.getNorm(v), norm, ABSOLUTE_ERROR);
-        assertEquals(InfinityNormComputer.norm(v), norm, ABSOLUTE_ERROR);
+        assertEquals(norm, normComputer.getNorm(v), ABSOLUTE_ERROR);
+        assertEquals(norm, InfinityNormComputer.norm(v), ABSOLUTE_ERROR);
 
         Arrays.fill(v, initValue);
 
         norm = initValue;
 
-        assertEquals(normComputer.getNorm(v), norm, ABSOLUTE_ERROR);
-        assertEquals(InfinityNormComputer.norm(v), norm, ABSOLUTE_ERROR);
+        assertEquals(norm, normComputer.getNorm(v), ABSOLUTE_ERROR);
+        assertEquals(norm, InfinityNormComputer.norm(v), ABSOLUTE_ERROR);
     }
 
     @Test

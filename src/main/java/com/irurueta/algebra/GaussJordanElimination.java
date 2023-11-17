@@ -33,7 +33,7 @@ public class GaussJordanElimination {
 
     /**
      * Computes Gauss-Jordan elimination by attempting to solve linear system
-     * of equations a * x = b. This method computes inverse of matrix a, and
+     * of equations a * x = b. This method computes inverse of matrix "a", and
      * modifies provided matrix so that its inverse is stored in it after
      * execution of this method. Likewise, this method modifies b so that
      * solution x is stored on it after execution of this method.
@@ -46,9 +46,9 @@ public class GaussJordanElimination {
      *          stored but matrix inverse is computed anyway. Each column of b is
      *          considered a new linear system of equations and its solution x is
      *          computed on the corresponding column of b.
-     * @throws SingularMatrixException if provided matrix a is found to be
+     * @throws SingularMatrixException if provided matrix "a" is found to be
      *                                 singular.
-     * @throws WrongSizeException      if provided matrix a is not square.
+     * @throws WrongSizeException      if provided matrix "a" is not square.
      */
     public static void process(final Matrix a, final Matrix b)
             throws SingularMatrixException, WrongSizeException {
@@ -150,7 +150,7 @@ public class GaussJordanElimination {
 
     /**
      * Computes Gauss-Jordan elimination by attempting to solve linear system
-     * of equations a * x = b. This method computes inverse of matrix a, and
+     * of equations a * x = b. This method computes inverse of matrix "a", and
      * modifies provided matrix so that its inverse is stored in it after
      * execution of this method. Likewise, this method modifies b so that
      * solution x is stored on it after execution of this method.
@@ -161,9 +161,9 @@ public class GaussJordanElimination {
      * @param b linear system of equations parameters. Will contain the solution
      *          after execution of this method. If null is provided, solution is not
      *          stored but matrix inverse is computed anyway.
-     * @throws SingularMatrixException if provided matrix a is found to be
+     * @throws SingularMatrixException if provided matrix "a" is found to be
      *                                 singular.
-     * @throws WrongSizeException      if provided matrix a is not square.
+     * @throws WrongSizeException      if provided matrix "a" is not square.
      */
     public static void process(final Matrix a, final double[] b)
             throws SingularMatrixException, WrongSizeException {
@@ -176,7 +176,7 @@ public class GaussJordanElimination {
     }
 
     /**
-     * Computes inverse of matrix a. No solution of a linear system of equations
+     * Computes inverse of matrix "a". No solution of a linear system of equations
      * is computed. This method modifies provided matrix storing the inverse
      * on it after execution of this method
      *

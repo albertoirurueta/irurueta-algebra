@@ -44,16 +44,16 @@ public class MultivariateGaussianRandomizerTest {
                 new MultivariateGaussianRandomizer();
 
         // check correctness
-        assertArrayEquals(randomizer.getMean(), new double[]{0.0}, 0.0);
-        assertEquals(randomizer.getCovariance(), Matrix.identity(1, 1));
+        assertArrayEquals(new double[]{0.0}, randomizer.getMean(), 0.0);
+        assertEquals(Matrix.identity(1, 1), randomizer.getCovariance());
 
 
         // test constructor with random
         randomizer = new MultivariateGaussianRandomizer(new Random());
 
         // check correctness
-        assertArrayEquals(randomizer.getMean(), new double[]{0.0}, 0.0);
-        assertEquals(randomizer.getCovariance(), Matrix.identity(1, 1));
+        assertArrayEquals(new double[]{0.0}, randomizer.getMean(), 0.0);
+        assertEquals(Matrix.identity(1, 1), randomizer.getCovariance());
 
         // Force NullPointerException
         randomizer = null;
@@ -77,8 +77,8 @@ public class MultivariateGaussianRandomizerTest {
         randomizer = new MultivariateGaussianRandomizer(mean, cov);
 
         // check correctness
-        assertArrayEquals(randomizer.getMean(), mean, 0.0);
-        assertEquals(randomizer.getCovariance(), cov);
+        assertArrayEquals(mean, randomizer.getMean(), 0.0);
+        assertEquals(cov, randomizer.getCovariance());
 
         // Force WrongSizeException
         randomizer = null;
@@ -102,8 +102,8 @@ public class MultivariateGaussianRandomizerTest {
                 cov);
 
         // check correctness
-        assertArrayEquals(randomizer.getMean(), mean, 0.0);
-        assertEquals(randomizer.getCovariance(), cov);
+        assertArrayEquals(mean, randomizer.getMean(), 0.0);
+        assertEquals(cov, randomizer.getCovariance());
 
         // Force WrongSizeException
         randomizer = null;
@@ -131,8 +131,8 @@ public class MultivariateGaussianRandomizerTest {
                 new MultivariateGaussianRandomizer();
 
         // check initial values
-        assertArrayEquals(randomizer.getMean(), new double[]{0.0}, 0.0);
-        assertEquals(randomizer.getCovariance(), Matrix.identity(1, 1));
+        assertArrayEquals(new double[]{0.0}, randomizer.getMean(), 0.0);
+        assertEquals(Matrix.identity(1, 1), randomizer.getCovariance());
 
         // set new values
         final UniformRandomizer uniRandomizer = new UniformRandomizer(new Random());
@@ -145,8 +145,8 @@ public class MultivariateGaussianRandomizerTest {
         randomizer.setMeanAndCovariance(mean, cov);
 
         // check correctness
-        assertArrayEquals(randomizer.getMean(), mean, 0.0);
-        assertEquals(randomizer.getCovariance(), cov);
+        assertArrayEquals(mean, randomizer.getMean(), 0.0);
+        assertEquals(cov, randomizer.getCovariance());
 
         // Force WrongSizeException
         try {

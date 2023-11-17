@@ -25,7 +25,7 @@ import java.util.Random;
 
 /**
  * Generates pseudo-random values following a multivariate Gaussian distribution
- * having the specified mean and covariance. By default mean is equal to zero
+ * having the specified mean and covariance. By default, mean is equal to zero
  * and the covariance is equal to the identity (unitary standard deviation).
  */
 public class MultivariateGaussianRandomizer {
@@ -61,7 +61,7 @@ public class MultivariateGaussianRandomizer {
 
     /**
      * Constructor.
-     * Because neither mean or covariance are provided, default values will be
+     * Because neither mean nor covariance are provided, default values will be
      * used instead.
      *
      * @param internalRandom internal random instance in charge of generating

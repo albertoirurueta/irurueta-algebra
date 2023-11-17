@@ -39,7 +39,7 @@ public class FrobeniusNormComputerTest {
     @Test
     public void testGetNormType() {
         final FrobeniusNormComputer normComputer = new FrobeniusNormComputer();
-        assertEquals(normComputer.getNormType(), NormType.FROBENIUS_NORM);
+        assertEquals(NormType.FROBENIUS_NORM, normComputer.getNormType());
     }
 
     @Test
@@ -67,8 +67,8 @@ public class FrobeniusNormComputerTest {
 
         norm = Math.sqrt(sum);
 
-        assertEquals(normComputer.getNorm(m), norm, ABSOLUTE_ERROR);
-        assertEquals(FrobeniusNormComputer.norm(m), norm, ABSOLUTE_ERROR);
+        assertEquals(norm, normComputer.getNorm(m), ABSOLUTE_ERROR);
+        assertEquals(norm, FrobeniusNormComputer.norm(m), ABSOLUTE_ERROR);
 
         // For initialized matrix
         m = new Matrix(rows, columns);
@@ -76,15 +76,13 @@ public class FrobeniusNormComputerTest {
 
         norm = initValue * Math.sqrt(rows * columns);
 
-        assertEquals(normComputer.getNorm(m), norm, ABSOLUTE_ERROR);
-        assertEquals(FrobeniusNormComputer.norm(m), norm, ABSOLUTE_ERROR);
+        assertEquals(norm, normComputer.getNorm(m), ABSOLUTE_ERROR);
+        assertEquals(norm, FrobeniusNormComputer.norm(m), ABSOLUTE_ERROR);
 
         // For identity matrix
         m = Matrix.identity(rows, columns);
-        assertEquals(normComputer.getNorm(m), Math.sqrt(minSize),
-                ABSOLUTE_ERROR);
-        assertEquals(FrobeniusNormComputer.norm(m), Math.sqrt(minSize),
-                ABSOLUTE_ERROR);
+        assertEquals(Math.sqrt(minSize), normComputer.getNorm(m), ABSOLUTE_ERROR);
+        assertEquals(Math.sqrt(minSize), FrobeniusNormComputer.norm(m), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -107,15 +105,15 @@ public class FrobeniusNormComputerTest {
 
         norm = Math.sqrt(sum);
 
-        assertEquals(normComputer.getNorm(v), norm, ABSOLUTE_ERROR);
-        assertEquals(FrobeniusNormComputer.norm(v), norm, ABSOLUTE_ERROR);
+        assertEquals(norm, normComputer.getNorm(v), ABSOLUTE_ERROR);
+        assertEquals(norm, FrobeniusNormComputer.norm(v), ABSOLUTE_ERROR);
 
         Arrays.fill(v, initValue);
 
         norm = initValue * Math.sqrt(length);
 
-        assertEquals(normComputer.getNorm(v), norm, ABSOLUTE_ERROR);
-        assertEquals(FrobeniusNormComputer.norm(v), norm, ABSOLUTE_ERROR);
+        assertEquals(norm, normComputer.getNorm(v), ABSOLUTE_ERROR);
+        assertEquals(norm, FrobeniusNormComputer.norm(v), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -138,11 +136,9 @@ public class FrobeniusNormComputerTest {
         norm = Math.sqrt(sum);
 
         Matrix jacobian = new Matrix(1, length);
-        assertEquals(FrobeniusNormComputer.norm(v, jacobian), norm,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian, Matrix.newFromArray(v).
-                multiplyByScalarAndReturnNew(1.0 / norm).
-                transposeAndReturnNew());
+        assertEquals(norm, FrobeniusNormComputer.norm(v, jacobian), ABSOLUTE_ERROR);
+        assertEquals(Matrix.newFromArray(v).multiplyByScalarAndReturnNew(1.0 / norm)
+                .transposeAndReturnNew(), jacobian);
 
         // Force WrongSizeException
         try {
@@ -153,10 +149,9 @@ public class FrobeniusNormComputerTest {
 
 
         jacobian = new Matrix(1, length);
-        assertEquals(normComputer.getNorm(v, jacobian), norm, ABSOLUTE_ERROR);
-        assertEquals(jacobian, Matrix.newFromArray(v).
-                multiplyByScalarAndReturnNew(1.0 / norm).
-                transposeAndReturnNew());
+        assertEquals(norm, normComputer.getNorm(v, jacobian), ABSOLUTE_ERROR);
+        assertEquals(Matrix.newFromArray(v).multiplyByScalarAndReturnNew(1.0 / norm)
+                .transposeAndReturnNew(), jacobian);
 
         // Force WrongSizeException
         try {
