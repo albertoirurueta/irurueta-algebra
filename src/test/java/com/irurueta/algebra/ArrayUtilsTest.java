@@ -60,8 +60,8 @@ public class ArrayUtilsTest {
         // check correctness
         assertEquals(result1.length, length);
         for (int i = 0; i < length; i++) {
-            assertEquals(result1[i], expectedResult[i], 0.0);
-            assertEquals(result2[i], expectedResult[i], 0.0);
+            assertEquals(expectedResult[i], result1[i], 0.0);
+            assertEquals(expectedResult[i], result2[i], 0.0);
         }
 
         // Force IllegalArgumentException
@@ -96,8 +96,8 @@ public class ArrayUtilsTest {
         // check correctness
         assertEquals(result1.length, length);
         for (int i = 0; i < length; i++) {
-            assertEquals(result1[i], expectedResult[i], 0.0);
-            assertEquals(result2[i], expectedResult[i], 0.0);
+            assertEquals(expectedResult[i], result1[i], 0.0);
+            assertEquals(expectedResult[i], result2[i], 0.0);
         }
 
         // Force IllegalArgumentException
@@ -137,8 +137,8 @@ public class ArrayUtilsTest {
         // check correctness
         assertEquals(result1.length, length);
         for (int i = 0; i < length; i++) {
-            assertEquals(result1[i], expectedResult[i], 0.0);
-            assertEquals(result2[i], expectedResult[i], 0.0);
+            assertEquals(expectedResult[i], result1[i], 0.0);
+            assertEquals(expectedResult[i], result2[i], 0.0);
         }
 
         // Force IllegalArgumentException
@@ -173,7 +173,7 @@ public class ArrayUtilsTest {
         double result = ArrayUtils.dotProduct(input1, input2);
 
         // check correctness
-        assertEquals(result, expectedResult, 0.0);
+        assertEquals(expectedResult, result, 0.0);
 
         // Force IllegalArgumentException
         final double[] wrongArray = new double[length + 1];
@@ -196,10 +196,10 @@ public class ArrayUtilsTest {
         result = ArrayUtils.dotProduct(input1, input2, jacobian1, jacobian2);
 
         // check correctness
-        assertEquals(result, expectedResult, 0.0);
+        assertEquals(expectedResult, result, 0.0);
 
-        assertArrayEquals(jacobian1.getBuffer(), input1, 0.0);
-        assertArrayEquals(jacobian2.getBuffer(), input2, 0.0);
+        assertArrayEquals(input1, jacobian1.getBuffer(), 0.0);
+        assertArrayEquals(input2, jacobian2.getBuffer(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -253,10 +253,10 @@ public class ArrayUtilsTest {
             final double result = ArrayUtils.angle(input1, input2);
 
             // check correctness
-            assertEquals(result, expectedResult, ABSOLUTE_ERROR);
-            assertEquals(ArrayUtils.angle(input2, input1), expectedResult, ABSOLUTE_ERROR);
-            assertEquals(ArrayUtils.angle(input1, input1), 0.0, ABSOLUTE_ERROR);
-            assertEquals(ArrayUtils.angle(input2, input2), 0.0, ABSOLUTE_ERROR);
+            assertEquals(expectedResult, result, ABSOLUTE_ERROR);
+            assertEquals(expectedResult, ArrayUtils.angle(input2, input1), ABSOLUTE_ERROR);
+            assertEquals(0.0, ArrayUtils.angle(input1, input1), ABSOLUTE_ERROR);
+            assertEquals(0.0, ArrayUtils.angle(input2, input2), ABSOLUTE_ERROR);
 
             numValid++;
             break;
@@ -307,8 +307,8 @@ public class ArrayUtilsTest {
         // check correctness
         assertEquals(result1.length, length);
         for (int i = 0; i < length; i++) {
-            assertEquals(result1[i], expectedResult[i]);
-            assertEquals(result2[i], expectedResult[i]);
+            assertEquals(expectedResult[i], result1[i]);
+            assertEquals(expectedResult[i], result2[i]);
         }
 
         // Force IllegalArgumentException
@@ -427,8 +427,8 @@ public class ArrayUtilsTest {
         // check correctness
         assertEquals(result1.length, length);
         for (int i = 0; i < length; i++) {
-            assertEquals(result1[i], expectedResult[i]);
-            assertEquals(result2[i], expectedResult[i]);
+            assertEquals(expectedResult[i], result1[i]);
+            assertEquals(expectedResult[i], result2[i]);
         }
 
         // Force IllegalArgumentException
@@ -470,7 +470,7 @@ public class ArrayUtilsTest {
         final Complex result = ArrayUtils.dotProduct(input1, input2);
 
         // check correctness
-        assertEquals(result, expectedResult);
+        assertEquals(expectedResult, result);
 
         // Force IllegalArgumentException
         final Complex[] wrongArray = new Complex[length + 1];
@@ -580,14 +580,14 @@ public class ArrayUtilsTest {
         result = ArrayUtils.normalizeAndReturnNew(v);
 
         // check correctness
-        assertArrayEquals(result, result2, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
 
         // test normalize and update
         v2 = Arrays.copyOf(v, length);
         ArrayUtils.normalize(v2);
 
         // check correctness
-        assertArrayEquals(result, v2, ABSOLUTE_ERROR);
+        assertArrayEquals(v2, result, ABSOLUTE_ERROR);
 
 
         // test for zero norm
@@ -599,12 +599,11 @@ public class ArrayUtilsTest {
 
         // check
         Arrays.fill(result2, Double.MAX_VALUE);
-        assertArrayEquals(result, result2, 0.0);
+        assertArrayEquals(result2, result, 0.0);
 
         for (int i = 0; i < length; i++) {
             for (int j = 0; j < length; j++) {
-                assertEquals(jacobian.getElementAt(i, j),
-                        Double.MAX_VALUE, 0.0);
+                assertEquals(Double.MAX_VALUE, jacobian.getElementAt(i, j), 0.0);
             }
         }
     }
@@ -626,12 +625,12 @@ public class ArrayUtilsTest {
             result2[length - 1 - i] = v[i];
         }
 
-        assertArrayEquals(result, result2, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
 
         ArrayUtils.reverse(v);
 
         // check correctness
-        assertArrayEquals(v, result2, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, v, ABSOLUTE_ERROR);
 
 
         // test for odd/even case
@@ -649,12 +648,12 @@ public class ArrayUtilsTest {
             result2[length - 1 - i] = v[i];
         }
 
-        assertArrayEquals(result, result2, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
 
         ArrayUtils.reverse(v);
 
         // check correctness
-        assertArrayEquals(v, result2, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, v, ABSOLUTE_ERROR);
     }
 
     @Test
@@ -673,7 +672,7 @@ public class ArrayUtilsTest {
             result2[length - 1 - i] = v[i];
         }
 
-        assertArrayEquals(result, result2, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
 
 
         // test for odd/even case
@@ -690,7 +689,7 @@ public class ArrayUtilsTest {
             result2[length - 1 - i] = v[i];
         }
 
-        assertArrayEquals(result, result2, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
     }
 
     @Test
@@ -712,7 +711,7 @@ public class ArrayUtilsTest {
         // check correctness
         assertEquals(result.length, length);
         for (int i = 0; i < length; i++) {
-            assertEquals(result[length - 1 - i], v[i]);
+            assertEquals(v[i], result[length - 1 - i]);
         }
 
         // copy and reverse
@@ -725,7 +724,7 @@ public class ArrayUtilsTest {
         // check correctness
         assertEquals(v.length, result2.length);
         for (int i = 0; i < length; i++) {
-            assertEquals(v[i], result2[i]);
+            assertEquals(result2[i], v[i]);
         }
 
         // test for odd/even case
@@ -745,7 +744,7 @@ public class ArrayUtilsTest {
         // check correctness
         assertEquals(result.length, length);
         for (int i = 0; i < length; i++) {
-            assertEquals(result[length - 1 - i], v[i]);
+            assertEquals(v[i], result[length - 1 - i]);
         }
 
         // copy and reverse
@@ -758,7 +757,7 @@ public class ArrayUtilsTest {
         // check correctness
         assertEquals(v.length, result2.length);
         for (int i = 0; i < length; i++) {
-            assertEquals(v[i], result2[i]);
+            assertEquals(result2[i], v[i]);
         }
     }
 
@@ -778,9 +777,9 @@ public class ArrayUtilsTest {
         Complex[] result = ArrayUtils.reverseAndReturnNew(v);
 
         // check correctness
-        assertEquals(result.length, length);
+        assertEquals(length, result.length);
         for (int i = 0; i < length; i++) {
-            assertEquals(result[length - 1 - i], v[i]);
+            assertEquals(v[i], result[length - 1 - i]);
         }
 
 
@@ -798,9 +797,9 @@ public class ArrayUtilsTest {
         result = ArrayUtils.reverseAndReturnNew(v);
 
         // check correctness
-        assertEquals(result.length, length);
+        assertEquals(length, result.length);
         for (int i = 0; i < length; i++) {
-            assertEquals(result[length - 1 - i], v[i]);
+            assertEquals(v[i], result[length - 1 - i]);
         }
     }
 
@@ -820,13 +819,13 @@ public class ArrayUtilsTest {
         double[] sqrt2 = new double[length];
         ArrayUtils.sqrt(v, sqrt2);
 
-        assertArrayEquals(sqrt, sqrt2, ABSOLUTE_ERROR);
+        assertArrayEquals(sqrt2, sqrt, ABSOLUTE_ERROR);
 
         sqrt2 = ArrayUtils.sqrtAndReturnNew(v);
-        assertArrayEquals(sqrt, sqrt2, ABSOLUTE_ERROR);
+        assertArrayEquals(sqrt2, sqrt, ABSOLUTE_ERROR);
 
         ArrayUtils.sqrt(v);
-        assertArrayEquals(v, sqrt2, ABSOLUTE_ERROR);
+        assertArrayEquals(sqrt2, v, ABSOLUTE_ERROR);
     }
 
     @Test
@@ -852,22 +851,22 @@ public class ArrayUtilsTest {
         }
 
         int[] pos = new int[1];
-        assertEquals(ArrayUtils.min(v, pos), minValue, 0.0);
+        assertEquals(minValue, ArrayUtils.min(v, pos), 0.0);
         assertEquals(pos[0], minPos);
 
-        assertEquals(ArrayUtils.min(v), minValue, 0.0);
+        assertEquals(minValue, ArrayUtils.min(v), 0.0);
 
-        assertEquals(ArrayUtils.max(v, pos), maxValue, 0.0);
+        assertEquals(maxValue, ArrayUtils.max(v, pos), 0.0);
         assertEquals(pos[0], maxPos);
 
-        assertEquals(ArrayUtils.max(v), maxValue, 0.0);
+        assertEquals(maxValue, ArrayUtils.max(v), 0.0);
 
         final double[] result = new double[2];
         pos = new int[2];
         ArrayUtils.minMax(v, result, pos);
-        assertEquals(result[0], minValue, 0.0);
-        assertEquals(result[1], maxValue, 0.0);
-        assertEquals(pos[0], minPos);
-        assertEquals(pos[1], maxPos);
+        assertEquals(minValue, result[0], 0.0);
+        assertEquals(maxValue, result[1], 0.0);
+        assertEquals(minPos, pos[0]);
+        assertEquals(maxPos, pos[1]);
     }
 }

@@ -52,8 +52,8 @@ public class MatrixTest {
 
         Matrix m = new Matrix(rows, columns);
         assertNotNull(m);
-        assertEquals(m.getRows(), rows);
-        assertEquals(m.getColumns(), columns);
+        assertEquals(rows, m.getRows());
+        assertEquals(columns, m.getColumns());
 
         // Force WrongSizeException
         m = null;
@@ -73,16 +73,16 @@ public class MatrixTest {
 
         final Matrix m1 = new Matrix(rows, columns);
         assertNotNull(m1);
-        assertEquals(m1.getRows(), rows);
-        assertEquals(m1.getColumns(), columns);
+        assertEquals(rows, m1.getRows());
+        assertEquals(columns, m1.getColumns());
 
         randomizer.fill(m1.getBuffer(), MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         final Matrix m2 = new Matrix(m1);
 
         // check
-        assertEquals(m2.getRows(), rows);
-        assertEquals(m2.getColumns(), columns);
+        assertEquals(rows, m2.getRows());
+        assertEquals(columns, m2.getColumns());
         assertArrayEquals(m1.getBuffer(), m2.getBuffer(), 0.0);
     }
 
@@ -110,7 +110,7 @@ public class MatrixTest {
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
                 value = tmp[i][j];
-                assertEquals(m.getElementAt(i, j), value, 0.0);
+                assertEquals(value, m.getElementAt(i, j), 0.0);
             }
         }
     }
@@ -141,10 +141,10 @@ public class MatrixTest {
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
                 index = j * rows + i;
-                assertEquals(m.getIndex(i, j), index);
+                assertEquals(index, m.getIndex(i, j));
                 value = tmp[i][j];
-                assertEquals(m.getElementAt(i, j), value, 0.0);
-                assertEquals(m.getElementAtIndex(index), value, 0.0);
+                assertEquals(value, m.getElementAt(i, j), 0.0);
+                assertEquals(value, m.getElementAtIndex(index), 0.0);
             }
         }
     }
@@ -177,13 +177,13 @@ public class MatrixTest {
             for (int i = 0; i < rows; i++) {
                 index = j * rows + i;
                 value = tmp[index];
-                assertEquals(m1.getElementAt(i, j), value, 0.0);
-                assertEquals(m1.getElementAtIndex(index), value, 0.0);
-                assertEquals(m1.getElementAtIndex(index, true), value, 0.0);
+                assertEquals(value, m1.getElementAt(i, j), 0.0);
+                assertEquals(value, m1.getElementAtIndex(index), 0.0);
+                assertEquals(value, m1.getElementAtIndex(index, true), 0.0);
 
-                assertEquals(m2.getElementAt(i, j), value, 0.0);
-                assertEquals(m2.getElementAtIndex(index), value, 0.0);
-                assertEquals(m2.getElementAtIndex(index, true), value, 0.0);
+                assertEquals(value, m2.getElementAt(i, j), 0.0);
+                assertEquals(value, m2.getElementAtIndex(index), 0.0);
+                assertEquals(value, m2.getElementAtIndex(index, true), 0.0);
             }
         }
 
@@ -199,8 +199,8 @@ public class MatrixTest {
             for (int i = 0; i < rows; i++) {
                 index = i * columns + j;
                 value = tmp[index];
-                assertEquals(m1.getElementAt(i, j), value, 0.0);
-                assertEquals(m1.getElementAtIndex(index, false), value, 0.0);
+                assertEquals(value, m1.getElementAt(i, j), 0.0);
+                assertEquals(value, m1.getElementAtIndex(index, false), 0.0);
             }
         }
     }
@@ -224,8 +224,8 @@ public class MatrixTest {
         final Matrix m2 = m1.clone();
 
         // check correctness
-        assertEquals(m2.getRows(), rows);
-        assertEquals(m2.getColumns(), columns);
+        assertEquals(rows, m2.getRows());
+        assertEquals(columns, m2.getColumns());
 
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
@@ -251,20 +251,19 @@ public class MatrixTest {
 
         // instantiate destination matrix
         final Matrix destination = new Matrix(1, 1);
-        assertEquals(destination.getRows(), 1);
-        assertEquals(destination.getColumns(), 1);
+        assertEquals(1, destination.getRows());
+        assertEquals(1, destination.getColumns());
 
         // copy to destination
         m.copyTo(destination);
 
         // check correctness
-        assertEquals(destination.getRows(), rows);
-        assertEquals(destination.getColumns(), columns);
+        assertEquals(rows, destination.getRows());
+        assertEquals(columns, destination.getColumns());
 
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
-                assertEquals(m.getElementAt(i, j),
-                        destination.getElementAt(i, j), 0.0);
+                assertEquals(destination.getElementAt(i, j), m.getElementAt(i, j), 0.0);
             }
         }
 
@@ -293,8 +292,8 @@ public class MatrixTest {
 
         // instantiate destination matrix
         final Matrix destination = new Matrix(1, 1);
-        assertEquals(destination.getRows(), 1);
-        assertEquals(destination.getColumns(), 1);
+        assertEquals(1, destination.getRows());
+        assertEquals(1, destination.getColumns());
 
         // copy from source
         destination.copyFrom(source);
@@ -338,12 +337,12 @@ public class MatrixTest {
         Matrix m3 = m1.addAndReturnNew(m2);
 
         // check correctness
-        assertEquals(m3.getRows(), rows);
-        assertEquals(m3.getColumns(), columns);
+        assertEquals(rows, m3.getRows());
+        assertEquals(columns, m3.getColumns());
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
-                assertEquals(m3.getElementAt(i, j), m1.getElementAt(i, j) +
-                        m2.getElementAt(i, j), ABSOLUTE_ERROR);
+                assertEquals( m1.getElementAt(i, j) + m2.getElementAt(i, j),
+                        m3.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
 
@@ -393,12 +392,12 @@ public class MatrixTest {
         m1.add(m2);
 
         // check correctness
-        assertEquals(m1.getRows(), rows);
-        assertEquals(m1.getColumns(), columns);
+        assertEquals(rows, m1.getRows());
+        assertEquals(columns, m1.getColumns());
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
-                assertEquals(m1.getElementAt(i, j), tmp[i][j] +
-                        m2.getElementAt(i, j), ABSOLUTE_ERROR);
+                assertEquals( tmp[i][j] + m2.getElementAt(i, j),
+                        m1.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
 
@@ -441,12 +440,12 @@ public class MatrixTest {
         Matrix m3 = m1.subtractAndReturnNew(m2);
 
         // check correctness
-        assertEquals(m3.getRows(), rows);
-        assertEquals(m3.getColumns(), columns);
+        assertEquals(rows, m3.getRows());
+        assertEquals(columns, m3.getColumns());
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
-                assertEquals(m3.getElementAt(i, j), m1.getElementAt(i, j) -
-                        m2.getElementAt(i, j), ABSOLUTE_ERROR);
+                assertEquals( m1.getElementAt(i, j) - m2.getElementAt(i, j),
+                        m3.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
 
@@ -496,12 +495,11 @@ public class MatrixTest {
         m1.subtract(m2);
 
         // check correctness
-        assertEquals(m1.getRows(), rows);
-        assertEquals(m1.getColumns(), columns);
+        assertEquals(rows, m1.getRows());
+        assertEquals(columns, m1.getColumns());
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
-                assertEquals(m1.getElementAt(i, j), tmp[i][j] -
-                        m2.getElementAt(i, j), ABSOLUTE_ERROR);
+                assertEquals( tmp[i][j] - m2.getElementAt(i, j), m1.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
         assertEquals(m1, m3);
@@ -563,14 +561,14 @@ public class MatrixTest {
         assertEquals(result.getRows(), rows1);
         assertEquals(result.getColumns(), columns2);
 
-        assertEquals(result.getElementAt(0, 0), 22.0, ABSOLUTE_ERROR);
-        assertEquals(result.getElementAt(0, 1), 28.0, ABSOLUTE_ERROR);
-        assertEquals(result.getElementAt(1, 0), 49.0, ABSOLUTE_ERROR);
-        assertEquals(result.getElementAt(1, 1), 64.0, ABSOLUTE_ERROR);
-        assertEquals(result.getElementAt(2, 0), 41.0, ABSOLUTE_ERROR);
-        assertEquals(result.getElementAt(2, 1), 56.0, ABSOLUTE_ERROR);
-        assertEquals(result.getElementAt(3, 0), 14.0, ABSOLUTE_ERROR);
-        assertEquals(result.getElementAt(3, 1), 20.0, ABSOLUTE_ERROR);
+        assertEquals(22.0, result.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(28.0, result.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(49.0, result.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(64.0, result.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(41.0, result.getElementAt(2, 0), ABSOLUTE_ERROR);
+        assertEquals(56.0, result.getElementAt(2, 1), ABSOLUTE_ERROR);
+        assertEquals(14.0, result.getElementAt(3, 0), ABSOLUTE_ERROR);
+        assertEquals(20.0, result.getElementAt(3, 1), ABSOLUTE_ERROR);
 
 
         // Force IllegalArgumentException
@@ -630,17 +628,17 @@ public class MatrixTest {
 
         // we know result for provided set of matrices m1 and m2, check it is
         // correct
-        assertEquals(m1.getRows(), rows1);
-        assertEquals(m1.getColumns(), columns2);
+        assertEquals(rows1, m1.getRows());
+        assertEquals(columns2, m1.getColumns());
 
-        assertEquals(m1.getElementAt(0, 0), 22.0, ABSOLUTE_ERROR);
-        assertEquals(m1.getElementAt(0, 1), 28.0, ABSOLUTE_ERROR);
-        assertEquals(m1.getElementAt(1, 0), 49.0, ABSOLUTE_ERROR);
-        assertEquals(m1.getElementAt(1, 1), 64.0, ABSOLUTE_ERROR);
-        assertEquals(m1.getElementAt(2, 0), 41.0, ABSOLUTE_ERROR);
-        assertEquals(m1.getElementAt(2, 1), 56.0, ABSOLUTE_ERROR);
-        assertEquals(m1.getElementAt(3, 0), 14.0, ABSOLUTE_ERROR);
-        assertEquals(m1.getElementAt(3, 1), 20.0, ABSOLUTE_ERROR);
+        assertEquals(22.0, m1.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(28.0, m1.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(49.0, m1.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(64.0, m1.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(41.0, m1.getElementAt(2, 0), ABSOLUTE_ERROR);
+        assertEquals(56.0, m1.getElementAt(2, 1), ABSOLUTE_ERROR);
+        assertEquals(14.0, m1.getElementAt(3, 0), ABSOLUTE_ERROR);
+        assertEquals(20.0, m1.getElementAt(3, 1), ABSOLUTE_ERROR);
 
 
         // Force IllegalArgumentException
@@ -673,8 +671,8 @@ public class MatrixTest {
         final Matrix m3 = m1.multiplyKroneckerAndReturnNew(m2);
 
         // check correctness
-        assertEquals(m3.getRows(), 4);
-        assertEquals(m3.getColumns(), 4);
+        assertEquals(4, m3.getRows());
+        assertEquals(4, m3.getColumns());
 
         final Matrix m3b = new Matrix(4, 4);
         //noinspection all
@@ -685,7 +683,7 @@ public class MatrixTest {
                 2 * 3, 2 * 1, 1 * 3, 1 * 1
         });
 
-        assertEquals(m3, m3b);
+        assertEquals(m3b, m3);
     }
 
     @Test
@@ -701,11 +699,11 @@ public class MatrixTest {
         m1.multiplyKronecker(m2);
 
         // check correctness
-        assertEquals(m3.getRows(), 4);
-        assertEquals(m3.getColumns(), 4);
+        assertEquals(4, m3.getRows());
+        assertEquals(4, m3.getColumns());
 
-        assertEquals(m1.getRows(), 4);
-        assertEquals(m1.getColumns(), 4);
+        assertEquals(4, m1.getRows());
+        assertEquals(4, m1.getColumns());
 
         final Matrix m3b = new Matrix(4, 4);
         //noinspection all
@@ -716,8 +714,8 @@ public class MatrixTest {
                 2 * 3, 2 * 1, 1 * 3, 1 * 1
         });
 
-        assertEquals(m1, m3b);
-        assertEquals(m3, m3b);
+        assertEquals(m3b, m1);
+        assertEquals(m3b, m3);
     }
 
     @Test
@@ -745,8 +743,7 @@ public class MatrixTest {
         assertEquals(result.getColumns(), columns);
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
-                assertEquals(result.getElementAt(i, j),
-                        m.getElementAt(i, j) * scalar, ABSOLUTE_ERROR);
+                assertEquals(m.getElementAt(i, j) * scalar, result.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
     }
@@ -780,8 +777,7 @@ public class MatrixTest {
         assertEquals(m.getColumns(), columns);
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
-                assertEquals(m.getElementAt(i, j),
-                        tmp[i][j] * scalar, ABSOLUTE_ERROR);
+                assertEquals(tmp[i][j] * scalar, m.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
     }
@@ -816,10 +812,10 @@ public class MatrixTest {
         assertTrue(m.equals(equal));
         assertFalse(m.equals(different1));
         assertFalse(m.equals(different2));
-        assertNotEquals(m, different3);
+        assertNotEquals(different3, m);
         assertFalse(m.equals(null));
 
-        assertEquals(m.hashCode(), equal.hashCode());
+        assertEquals(equal.hashCode(), m.hashCode());
 
         // check with threshold
         assertTrue(m.equals(m, ABSOLUTE_ERROR));
@@ -852,13 +848,12 @@ public class MatrixTest {
         Matrix m3 = m1.elementByElementProductAndReturnNew(m2);
 
         // check correctness
-        assertEquals(m3.getRows(), rows);
-        assertEquals(m3.getColumns(), columns);
+        assertEquals(rows, m3.getRows());
+        assertEquals(columns, m3.getColumns());
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
-                assertEquals(m3.getElementAt(i, j),
-                        m1.getElementAt(i, j) * m2.getElementAt(i, j),
-                        ABSOLUTE_ERROR);
+                assertEquals(m1.getElementAt(i, j) * m2.getElementAt(i, j),
+                        m3.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
 
@@ -910,15 +905,14 @@ public class MatrixTest {
         m1.elementByElementProduct(m2);
 
         // check correctness
-        assertEquals(m1.getRows(), rows);
-        assertEquals(m1.getColumns(), columns);
+        assertEquals(rows, m1.getRows());
+        assertEquals(columns, m1.getColumns());
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
-                assertEquals(m1.getElementAt(i, j),
-                        tmp[i][j] * m2.getElementAt(i, j), ABSOLUTE_ERROR);
+                assertEquals(tmp[i][j] * m2.getElementAt(i, j), m1.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
-        assertEquals(m1, m3);
+        assertEquals(m3, m1);
 
         // Force WrongSizeException
         final Matrix wrong = new Matrix(rows + 1, columns + 1);
@@ -955,12 +949,12 @@ public class MatrixTest {
         final Matrix m2 = m1.transposeAndReturnNew();
 
         // check correctness
-        assertEquals(m2.getRows(), columns);
-        assertEquals(m2.getColumns(), rows);
+        assertEquals(columns, m2.getRows());
+        assertEquals(rows, m2.getColumns());
 
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
-                assertEquals(m1.getElementAt(i, j), m2.getElementAt(j, i), 0.0);
+                assertEquals(m2.getElementAt(j, i), m1.getElementAt(i, j), 0.0);
             }
         }
     }
@@ -990,16 +984,16 @@ public class MatrixTest {
         m.transpose();
 
         // check correctness
-        assertEquals(m.getRows(), columns);
-        assertEquals(m.getColumns(), rows);
+        assertEquals(columns, m.getRows());
+        assertEquals(rows, m.getColumns());
 
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
-                assertEquals(tmp[i][j], m.getElementAt(j, i), 0.0);
+                assertEquals(m.getElementAt(j, i), tmp[i][j], 0.0);
             }
         }
 
-        assertEquals(m2, m);
+        assertEquals(m, m2);
     }
 
     @Test
@@ -1024,12 +1018,12 @@ public class MatrixTest {
         m.initialize(value);
 
         // check correctness
-        assertEquals(m.getRows(), rows);
-        assertEquals(m.getColumns(), columns);
+        assertEquals(rows, m.getRows());
+        assertEquals(columns, m.getColumns());
 
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
-                assertEquals(m.getElementAt(i, j), value, 0.0);
+                assertEquals(value, m.getElementAt(i, j), 0.0);
             }
         }
     }
@@ -1043,15 +1037,15 @@ public class MatrixTest {
         final int columns2 = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         final Matrix m = new Matrix(rows1, columns1);
-        assertEquals(m.getRows(), rows1);
-        assertEquals(m.getColumns(), columns1);
+        assertEquals(rows1, m.getRows());
+        assertEquals(columns1, m.getColumns());
 
         // reset to new size
         m.resize(rows2, columns2);
 
         // check correctness
-        assertEquals(m.getRows(), rows2);
-        assertEquals(m.getColumns(), columns2);
+        assertEquals(rows2, m.getRows());
+        assertEquals(columns2, m.getColumns());
 
         // Force WrongSizeException
         try {
@@ -1079,12 +1073,12 @@ public class MatrixTest {
         m.reset(rows1, columns1, initValue);
 
         // check correctness
-        assertEquals(m.getRows(), rows1);
-        assertEquals(m.getColumns(), columns1);
+        assertEquals(rows1, m.getRows());
+        assertEquals(columns1, m.getColumns());
 
         for (int j = 0; j < columns1; j++) {
             for (int i = 0; i < rows1; i++) {
-                assertEquals(m.getElementAt(i, j), initValue, 0.0);
+                assertEquals(initValue, m.getElementAt(i, j), 0.0);
             }
         }
 
@@ -1137,8 +1131,8 @@ public class MatrixTest {
 
         // check correctness
         for (int i = 0; i < rows * columns; i++) {
-            assertEquals(array[i], array2[i], 0.0);
-            assertEquals(array[i], array3[i], 0.0);
+            assertEquals(array2[i], array[i], 0.0);
+            assertEquals(array3[i], array[i], 0.0);
         }
     }
 
@@ -1170,8 +1164,8 @@ public class MatrixTest {
 
         // check correctness
         for (int i = 0; i < rows * columns; i++) {
-            assertEquals(array[i], array2[i], 0.0);
-            assertEquals(array[i], array3[i], 0.0);
+            assertEquals(array2[i], array[i], 0.0);
+            assertEquals(array3[i], array[i], 0.0);
         }
     }
 
@@ -1203,8 +1197,8 @@ public class MatrixTest {
 
         // check correctness
         for (int i = 0; i < rows * columns; i++) {
-            assertEquals(array[i], array2[i], 0.0);
-            assertEquals(array[i], array3[i], 0.0);
+            assertEquals(array2[i], array[i], 0.0);
+            assertEquals(array3[i], array[i], 0.0);
         }
     }
 
@@ -1234,14 +1228,13 @@ public class MatrixTest {
                 bottomRightRow, bottomRightColumn);
 
         // check correctness
-        assertEquals(submatrix.getRows(), bottomRightRow - topLeftRow + 1);
-        assertEquals(submatrix.getColumns(),
-                bottomRightColumn - topLeftColumn + 1);
+        assertEquals(bottomRightRow - topLeftRow + 1, submatrix.getRows());
+        assertEquals(bottomRightColumn - topLeftColumn + 1, submatrix.getColumns());
 
         for (int j = 0; j < submatrix.getColumns(); j++) {
             for (int i = 0; i < submatrix.getRows(); i++) {
-                assertEquals(submatrix.getElementAt(i, j),
-                        m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
+                assertEquals(m.getElementAt(i + topLeftRow, j + topLeftColumn),
+                        submatrix.getElementAt(i, j), 0.0);
             }
         }
 
@@ -1323,16 +1316,14 @@ public class MatrixTest {
 
         double[] array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn,
                 bottomRightRow, bottomRightColumn);
-        assertEquals(array.length, (bottomRightRow - topLeftRow + 1) *
-                (bottomRightColumn - topLeftColumn + 1));
+        assertEquals((bottomRightRow - topLeftRow + 1) * (bottomRightColumn - topLeftColumn + 1), array.length);
         int counter = 0;
 
         if (Matrix.DEFAULT_USE_COLUMN_ORDER) {
             // column order
             for (int j = 0; j < (bottomRightColumn - topLeftColumn + 1); j++) {
                 for (int i = 0; i < (bottomRightRow - topLeftRow + 1); i++) {
-                    assertEquals(array[counter],
-                            m.getElementAt(i + topLeftRow, j + topLeftColumn),
+                    assertEquals(m.getElementAt(i + topLeftRow, j + topLeftColumn), array[counter],
                             0.0);
                     counter++;
                 }
@@ -1417,15 +1408,15 @@ public class MatrixTest {
 
         double[] array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn,
                 bottomRightRow, bottomRightColumn, true);
-        assertEquals(array.length, (bottomRightRow - topLeftRow + 1) *
-                (bottomRightColumn - topLeftColumn + 1));
+        assertEquals((bottomRightRow - topLeftRow + 1) * (bottomRightColumn - topLeftColumn + 1),
+                array.length);
         int counter = 0;
 
         // column order
         for (int j = 0; j < (bottomRightColumn - topLeftColumn + 1); j++) {
             for (int i = 0; i < (bottomRightRow - topLeftRow + 1); i++) {
-                assertEquals(array[counter],
-                        m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
+                assertEquals(m.getElementAt(i + topLeftRow, j + topLeftColumn), array[counter],
+                        0.0);
                 counter++;
             }
         }
@@ -1508,15 +1499,15 @@ public class MatrixTest {
 
         double[] array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn,
                 bottomRightRow, bottomRightColumn, false);
-        assertEquals(array.length, (bottomRightRow - topLeftRow + 1) *
-                (bottomRightColumn - topLeftColumn + 1));
+        assertEquals( (bottomRightRow - topLeftRow + 1) * (bottomRightColumn - topLeftColumn + 1),
+                array.length);
         int counter = 0;
 
         // row order
         for (int i = 0; i < (bottomRightRow - topLeftRow + 1); i++) {
             for (int j = 0; j < (bottomRightColumn - topLeftColumn + 1); j++) {
-                assertEquals(array[counter],
-                        m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
+                assertEquals(m.getElementAt(i + topLeftRow, j + topLeftColumn), array[counter],
+                        0.0);
                 counter++;
             }
         }
@@ -1607,8 +1598,8 @@ public class MatrixTest {
         // check correctness
         for (int j = 0; j < submatrixColumns; j++) {
             for (int i = 0; i < submatrixRows; i++) {
-                assertEquals(m.getElementAt(i + topLeftRow, j + topLeftColumn),
-                        submatrix.getElementAt(i, j), 0.0);
+                assertEquals(submatrix.getElementAt(i, j),
+                        m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
             }
         }
 
@@ -1731,8 +1722,7 @@ public class MatrixTest {
         // check correctness
         for (int j = topLeftColumn; j <= bottomRightColumn; j++) {
             for (int i = topLeftRow; i < bottomRightRow; i++) {
-                assertEquals(m.getElementAt(i, j),
-                        submatrix.getElementAt(i, j), 0.0);
+                assertEquals(submatrix.getElementAt(i, j), m.getElementAt(i, j), 0.0);
             }
         }
 
@@ -1935,9 +1925,9 @@ public class MatrixTest {
             for (int i = 0; i < rows; i++) {
                 if (i >= topLeftRow && i <= bottomRightRow &&
                         j >= topLeftColumn && j <= bottomRightColumn) {
-                    assertEquals(m.getElementAt(i, j), value, 0.0);
+                    assertEquals(value, m.getElementAt(i, j), 0.0);
                 } else {
-                    assertEquals(m.getElementAt(i, j), value + 1.0, 0.0);
+                    assertEquals(value + 1.0, m.getElementAt(i, j), 0.0);
                 }
             }
         }
@@ -2040,8 +2030,8 @@ public class MatrixTest {
             // column order
             for (int j = 0; j < submatrixColumns; j++) {
                 for (int i = 0; i < submatrixRows; i++) {
-                    assertEquals(m.getElementAt(i + topLeftRow,
-                            j + topLeftColumn), array[counter], 0.0);
+                    assertEquals(array[counter],
+                            m.getElementAt(i + topLeftRow, j + topLeftColumn),  0.0);
                     counter++;
                 }
             }
@@ -2152,8 +2142,8 @@ public class MatrixTest {
         // check correctness with column order
         for (int j = 0; j < submatrixColumns; j++) {
             for (int i = 0; i < submatrixRows; i++) {
-                assertEquals(m.getElementAt(i + topLeftRow,
-                        j + topLeftColumn), array[counter], 0.0);
+                assertEquals(array[counter],
+                        m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
                 counter++;
             }
         }
@@ -2262,8 +2252,8 @@ public class MatrixTest {
         // check correctness with row order
         for (int i = 0; i < submatrixRows; i++) {
             for (int j = 0; j < submatrixColumns; j++) {
-                assertEquals(m.getElementAt(i + topLeftRow,
-                        j + topLeftColumn), array[counter], 0.0);
+                assertEquals(array[counter],
+                        m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
                 counter++;
             }
         }
@@ -2376,8 +2366,8 @@ public class MatrixTest {
             // column order
             for (int j = 0; j < submatrixColumns; j++) {
                 for (int i = 0; i < submatrixRows; i++) {
-                    assertEquals(m.getElementAt(i + topLeftRow,
-                            j + topLeftColumn), array[counter], 0.0);
+                    assertEquals(array[counter],
+                            m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
                     counter++;
                 }
             }
@@ -2489,8 +2479,7 @@ public class MatrixTest {
         // check correctness with column order
         for (int j = 0; j < submatrixColumns; j++) {
             for (int i = 0; i < submatrixRows; i++) {
-                assertEquals(m.getElementAt(i + topLeftRow,
-                        j + topLeftColumn), array[counter], 0.0);
+                assertEquals(array[counter], m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
                 counter++;
             }
         }
@@ -2606,8 +2595,7 @@ public class MatrixTest {
         // check correctness with row order
         for (int i = 0; i < submatrixRows; i++) {
             for (int j = 0; j < submatrixColumns; j++) {
-                assertEquals(m.getElementAt(i + topLeftRow,
-                        j + topLeftColumn), array[counter], 0.0);
+                assertEquals(array[counter], m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
                 counter++;
             }
         }
@@ -2703,9 +2691,9 @@ public class MatrixTest {
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
                 if (i == j) {
-                    assertEquals(m.getElementAt(i, j), 1.0, 0.0);
+                    assertEquals(1.0, m.getElementAt(i, j), 0.0);
                 } else {
-                    assertEquals(m.getElementAt(i, j), 0.0, 0.0);
+                    assertEquals(0.0, m.getElementAt(i, j), 0.0);
                 }
             }
         }
@@ -2772,9 +2760,9 @@ public class MatrixTest {
                 (MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) / 12.0;
 
         // check correctness of results
-        assertEquals(meanValue, estimatedMeanValue,
+        assertEquals(estimatedMeanValue, meanValue,
                 estimatedMeanValue * RELATIVE_ERROR);
-        assertEquals(variance, estimatedVariance,
+        assertEquals(estimatedVariance, variance,
                 estimatedVariance * RELATIVE_ERROR);
 
         // Force WrongSizeException
@@ -2814,8 +2802,8 @@ public class MatrixTest {
             m = Matrix.createWithUniformRandomValues(rows, columns,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             // check correctness
-            assertEquals(m.getRows(), rows);
-            assertEquals(m.getColumns(), columns);
+            assertEquals(rows, m.getRows());
+            assertEquals(columns, m.getColumns());
 
             for (int j = 0; j < columns; j++) {
                 for (int i = 0; i < rows; i++) {
@@ -2842,9 +2830,9 @@ public class MatrixTest {
                 (MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) / 12.0;
 
         // check correctness of results
-        assertEquals(meanValue, estimatedMeanValue,
+        assertEquals(estimatedMeanValue, meanValue,
                 estimatedMeanValue * RELATIVE_ERROR);
-        assertEquals(variance, estimatedVariance,
+        assertEquals(estimatedVariance, variance,
                 estimatedVariance * RELATIVE_ERROR);
 
         // Force WrongSizeException
@@ -2884,8 +2872,8 @@ public class MatrixTest {
             m = Matrix.createWithUniformRandomValues(rows, columns,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE, new SecureRandom());
             // check correctness
-            assertEquals(m.getRows(), rows);
-            assertEquals(m.getColumns(), columns);
+            assertEquals(rows, m.getRows());
+            assertEquals(columns, m.getColumns());
 
             for (int j = 0; j < columns; j++) {
                 for (int i = 0; i < rows; i++) {
@@ -2912,9 +2900,9 @@ public class MatrixTest {
                 (MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) / 12.0;
 
         // check correctness of results
-        assertEquals(meanValue, estimatedMeanValue,
+        assertEquals(estimatedMeanValue, meanValue,
                 estimatedMeanValue * RELATIVE_ERROR);
-        assertEquals(variance, estimatedVariance,
+        assertEquals(estimatedVariance, variance,
                 estimatedVariance * RELATIVE_ERROR);
 
         // Force WrongSizeException
@@ -2955,8 +2943,8 @@ public class MatrixTest {
             Matrix.fillWithGaussianRandomValues(MEAN, STANDARD_DEVIATION, m);
 
             // check correctness
-            assertEquals(m.getRows(), rows);
-            assertEquals(m.getColumns(), columns);
+            assertEquals(rows, m.getRows());
+            assertEquals(columns, m.getColumns());
 
             for (int j = 0; j < columns; j++) {
                 for (int i = 0; i < rows; i++) {
@@ -2972,8 +2960,8 @@ public class MatrixTest {
 
 
         // check correctness of results
-        assertEquals(mean, MEAN, mean * RELATIVE_ERROR);
-        assertEquals(standardDeviation, STANDARD_DEVIATION,
+        assertEquals(MEAN, mean, mean * RELATIVE_ERROR);
+        assertEquals(STANDARD_DEVIATION, standardDeviation,
                 standardDeviation * RELATIVE_ERROR);
 
         // Force WrongSizeException
@@ -3012,8 +3000,8 @@ public class MatrixTest {
             m = Matrix.createWithGaussianRandomValues(rows, columns,
                     MEAN, STANDARD_DEVIATION);
             // check correctness
-            assertEquals(m.getRows(), rows);
-            assertEquals(m.getColumns(), columns);
+            assertEquals(rows, m.getRows());
+            assertEquals(columns, m.getColumns());
 
             for (int j = 0; j < columns; j++) {
                 for (int i = 0; i < rows; i++) {
@@ -3029,8 +3017,8 @@ public class MatrixTest {
 
 
         // check correctness of results
-        assertEquals(mean, MEAN, mean * RELATIVE_ERROR);
-        assertEquals(standardDeviation, STANDARD_DEVIATION,
+        assertEquals(MEAN, mean, mean * RELATIVE_ERROR);
+        assertEquals(STANDARD_DEVIATION, standardDeviation,
                 standardDeviation * RELATIVE_ERROR);
 
         // Force WrongSizeException
@@ -3070,15 +3058,15 @@ public class MatrixTest {
         final Matrix m = Matrix.diagonal(diagonal);
 
         // check correctness
-        assertEquals(m.getRows(), length);
-        assertEquals(m.getColumns(), length);
+        assertEquals(length, m.getRows());
+        assertEquals(length, m.getColumns());
 
         for (int j = 0; j < length; j++) {
             for (int i = 0; i < length; i++) {
                 if (i == j) {
-                    assertEquals(m.getElementAt(i, j), diagonal[i], 0.0);
+                    assertEquals(diagonal[i], m.getElementAt(i, j), 0.0);
                 } else {
-                    assertEquals(m.getElementAt(i, j), 0.0, 0.0);
+                    assertEquals(0.0, m.getElementAt(i, j), 0.0);
                 }
             }
         }
@@ -3099,27 +3087,27 @@ public class MatrixTest {
         double[] array2 = m.toArray();
 
         // check correctness
-        assertEquals(m.getRows(), length);
-        assertEquals(m.getColumns(), 1);
-        assertArrayEquals(array, array2, 0.0);
+        assertEquals(length, m.getRows());
+        assertEquals(1, m.getColumns());
+        assertArrayEquals(array2, array, 0.0);
 
         // use column order
         m = Matrix.newFromArray(array, true);
         array2 = m.toArray(true);
 
         // check correctness
-        assertEquals(m.getRows(), length);
-        assertEquals(m.getColumns(), 1);
-        assertArrayEquals(array, array2, 0.0);
+        assertEquals(length, m.getRows());
+        assertEquals(1, m.getColumns());
+        assertArrayEquals(array2, array, 0.0);
 
         // use row order
         m = Matrix.newFromArray(array, false);
         array2 = m.toArray(false);
 
         // check correctness
-        assertEquals(m.getRows(), 1);
-        assertEquals(m.getColumns(), length);
-        assertArrayEquals(array, array2, 0.0);
+        assertEquals(1, m.getRows());
+        assertEquals(length, m.getColumns());
+        assertArrayEquals(array2, array, 0.0);
     }
 
     @Test
@@ -3139,9 +3127,9 @@ public class MatrixTest {
         double[] array2 = m.toArray();
 
         // check correctness
-        assertEquals(m.getRows(), rows);
-        assertEquals(m.getColumns(), cols);
-        assertArrayEquals(array, array2, 0.0);
+        assertEquals(rows, m.getRows());
+        assertEquals(cols, m.getColumns());
+        assertArrayEquals(array2, array, 0.0);
 
         // Force WrongSizeException
         try {
@@ -3156,9 +3144,9 @@ public class MatrixTest {
         array2 = m.toArray(true);
 
         // check correctness
-        assertEquals(m.getRows(), rows);
-        assertEquals(m.getColumns(), cols);
-        assertArrayEquals(array, array2, 0.0);
+        assertEquals(rows, m.getRows());
+        assertEquals(cols, m.getColumns());
+        assertArrayEquals(array2, array, 0.0);
 
         // Force WrongSizeException
         try {
@@ -3173,9 +3161,9 @@ public class MatrixTest {
         array2 = m.toArray(false);
 
         // check correctness
-        assertEquals(m.getRows(), rows);
-        assertEquals(m.getColumns(), cols);
-        assertArrayEquals(array, array2, 0.0);
+        assertEquals(rows, m.getRows());
+        assertEquals(cols, m.getColumns());
+        assertArrayEquals(array2, array, 0.0);
 
         // Force WrongSizeException
         try {
@@ -3234,9 +3222,8 @@ public class MatrixTest {
                         failed = true;
                         break;
                     }
-                    assertEquals(symmetric2.getElementAt(i, j),
-                            0.5 * (symmetric.getElementAt(i, j) +
-                                    symmetric.getElementAt(j, i)), ABSOLUTE_ERROR);
+                    assertEquals(0.5 * (symmetric.getElementAt(i, j) + symmetric.getElementAt(j, i)),
+                            symmetric2.getElementAt(i, j), ABSOLUTE_ERROR);
                 }
             }
 
@@ -3251,9 +3238,8 @@ public class MatrixTest {
                         failed = true;
                         break;
                     }
-                    assertEquals(nonSymmetric2.getElementAt(i, j),
-                            0.5 * (nonSymmetric.getElementAt(i, j) +
-                                    nonSymmetric.getElementAt(j, i)), ABSOLUTE_ERROR);
+                    assertEquals(0.5 * (nonSymmetric.getElementAt(i, j) + nonSymmetric.getElementAt(j, i)),
+                            nonSymmetric2.getElementAt(i, j), ABSOLUTE_ERROR);
                 }
             }
 
@@ -3354,7 +3340,7 @@ public class MatrixTest {
         final byte[] bytes = SerializationHelper.serialize(m1);
         final Matrix m2 = SerializationHelper.deserialize(bytes);
 
-        assertEquals(m1, m2);
-        assertNotSame(m1, m2);
+        assertEquals(m2, m1);
+        assertNotSame(m2, m1);
     }
 }

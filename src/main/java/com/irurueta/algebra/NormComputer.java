@@ -20,7 +20,7 @@ package com.irurueta.algebra;
  * Norms can be computed in different ways depending on the desired norm
  * measure. For that purpose subclass implementations of this class attempt to
  * work on different norm types.
- * By default Frobenius norm is used for arrays and matrices, which consists
+ * By default, Frobenius norm is used for arrays and matrices, which consists
  * on computing the square root of summation of all the squared elements within
  * a given matrix or array.
  */

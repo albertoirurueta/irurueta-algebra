@@ -419,10 +419,10 @@ public class UtilsTest {
         for (int j = 0; j < rows; j++) {
             for (int i = 0; i < rows; i++) {
                 if (i == j) {
-                    assertEquals(identity.getElementAt(i, j), 1.0,
+                    assertEquals(1.0, identity.getElementAt(i, j),
                             BIG_ROUND_ERROR);
                 } else {
-                    assertEquals(identity.getElementAt(i, j), 0.0,
+                    assertEquals(0.0, identity.getElementAt(i, j),
                             BIG_ROUND_ERROR);
                 }
             }
@@ -470,10 +470,10 @@ public class UtilsTest {
         for (int j = 0; j < rows; j++) {
             for (int i = 0; i < rows; i++) {
                 if (i == j) {
-                    assertEquals(identity.getElementAt(i, j), 1.0,
+                    assertEquals(1.0, identity.getElementAt(i, j),
                             BIG_ROUND_ERROR);
                 } else {
-                    assertEquals(identity.getElementAt(i, j), 0.0,
+                    assertEquals(0.0, identity.getElementAt(i, j),
                             BIG_ROUND_ERROR);
                 }
             }
@@ -547,12 +547,12 @@ public class UtilsTest {
 
         final Matrix m = Utils.skewMatrix(array);
 
-        assertEquals(m.getElementAt(0, 1), -array[2], ABSOLUTE_ERROR);
-        assertEquals(m.getElementAt(0, 2), array[1], ABSOLUTE_ERROR);
-        assertEquals(m.getElementAt(1, 0), array[2], ABSOLUTE_ERROR);
-        assertEquals(m.getElementAt(1, 2), -array[0], ABSOLUTE_ERROR);
-        assertEquals(m.getElementAt(2, 0), -array[1], ABSOLUTE_ERROR);
-        assertEquals(m.getElementAt(2, 1), array[0], ABSOLUTE_ERROR);
+        assertEquals(-array[2], m.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(array[1], m.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(array[2], m.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(-array[0], m.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(-array[1], m.getElementAt(2, 0), ABSOLUTE_ERROR);
+        assertEquals(array[0], m.getElementAt(2, 1), ABSOLUTE_ERROR);
 
         final Matrix m2 = new Matrix(3, 3);
         Utils.skewMatrix(array, m2);
@@ -565,35 +565,35 @@ public class UtilsTest {
 
         assertEquals(m, m3);
 
-        assertEquals(jacobian.getElementAt(0, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(1, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(2, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(3, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(4, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(5, 0), 1.0, 0.0);
-        assertEquals(jacobian.getElementAt(6, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(7, 0), -1.0, 0.0);
-        assertEquals(jacobian.getElementAt(8, 0), 0.0, 0.0);
+        assertEquals(0.0, jacobian.getElementAt(0, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(1, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(2, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(3, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(4, 0), 0.0);
+        assertEquals(1.0, jacobian.getElementAt(5, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(6, 0), 0.0);
+        assertEquals(-1.0, jacobian.getElementAt(7, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(8, 0), 0.0);
 
-        assertEquals(jacobian.getElementAt(0, 1), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(1, 1), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(2, 1), -1.0, 0.0);
-        assertEquals(jacobian.getElementAt(3, 1), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(4, 1), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(5, 1), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(6, 1), 1.0, 0.0);
-        assertEquals(jacobian.getElementAt(7, 1), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(8, 1), 0.0, 0.0);
+        assertEquals(0.0, jacobian.getElementAt(0, 1), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(1, 1), 0.0);
+        assertEquals(-1.0, jacobian.getElementAt(2, 1), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(3, 1), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(4, 1), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(5, 1), 0.0);
+        assertEquals(1.0, jacobian.getElementAt(6, 1), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(7, 1), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(8, 1), 0.0);
 
-        assertEquals(jacobian.getElementAt(0, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(1, 2), 1.0, 0.0);
-        assertEquals(jacobian.getElementAt(2, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(3, 2), -1.0, 0.0);
-        assertEquals(jacobian.getElementAt(4, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(5, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(6, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(7, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(8, 2), 0.0, 0.0);
+        assertEquals(0.0, jacobian.getElementAt(0, 2), 0.0);
+        assertEquals(1.0, jacobian.getElementAt(1, 2), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(2, 2), 0.0);
+        assertEquals(-1.0, jacobian.getElementAt(3, 2), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(4, 2), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(5, 2), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(6, 2), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(7, 2), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(8, 2), 0.0);
 
         // Force WrongSizeException
         try {
@@ -612,12 +612,12 @@ public class UtilsTest {
 
         final Matrix mSkew = Utils.skewMatrix(m);
 
-        assertEquals(mSkew.getElementAt(0, 1), -m.getElementAt(2, 0), ABSOLUTE_ERROR);
-        assertEquals(mSkew.getElementAt(0, 2), m.getElementAt(1, 0), ABSOLUTE_ERROR);
-        assertEquals(mSkew.getElementAt(1, 0), m.getElementAt(2, 0), ABSOLUTE_ERROR);
-        assertEquals(mSkew.getElementAt(1, 2), -m.getElementAt(0, 0), ABSOLUTE_ERROR);
-        assertEquals(mSkew.getElementAt(2, 0), -m.getElementAt(1, 0), ABSOLUTE_ERROR);
-        assertEquals(mSkew.getElementAt(2, 1), m.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(-m.getElementAt(2, 0), mSkew.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(m.getElementAt(1, 0), mSkew.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(m.getElementAt(2, 0), mSkew.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(-m.getElementAt(0, 0), mSkew.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(-m.getElementAt(1, 0), mSkew.getElementAt(2, 0), ABSOLUTE_ERROR);
+        assertEquals(m.getElementAt(0, 0), mSkew.getElementAt(2, 1), ABSOLUTE_ERROR);
 
 
         final Matrix m2 = new Matrix(3, 3);
@@ -631,35 +631,35 @@ public class UtilsTest {
 
         assertEquals(mSkew, m3);
 
-        assertEquals(jacobian.getElementAt(0, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(1, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(2, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(3, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(4, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(5, 0), 1.0, 0.0);
-        assertEquals(jacobian.getElementAt(6, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(7, 0), -1.0, 0.0);
-        assertEquals(jacobian.getElementAt(8, 0), 0.0, 0.0);
+        assertEquals(0.0, jacobian.getElementAt(0, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(1, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(2, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(3, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(4, 0), 0.0);
+        assertEquals(1.0, jacobian.getElementAt(5, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(6, 0), 0.0);
+        assertEquals(-1.0, jacobian.getElementAt(7, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(8, 0), 0.0);
 
-        assertEquals(jacobian.getElementAt(0, 1), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(1, 1), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(2, 1), -1.0, 0.0);
-        assertEquals(jacobian.getElementAt(3, 1), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(4, 1), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(5, 1), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(6, 1), 1.0, 0.0);
-        assertEquals(jacobian.getElementAt(7, 1), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(8, 1), 0.0, 0.0);
+        assertEquals(0.0, jacobian.getElementAt(0, 1), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(1, 1), 0.0);
+        assertEquals(-1.0, jacobian.getElementAt(2, 1), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(3, 1), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(4, 1), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(5, 1), 0.0);
+        assertEquals(1.0, jacobian.getElementAt(6, 1), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(7, 1), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(8, 1), 0.0);
 
-        assertEquals(jacobian.getElementAt(0, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(1, 2), 1.0, 0.0);
-        assertEquals(jacobian.getElementAt(2, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(3, 2), -1.0, 0.0);
-        assertEquals(jacobian.getElementAt(4, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(5, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(6, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(7, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(8, 2), 0.0, 0.0);
+        assertEquals(0.0, jacobian.getElementAt(0, 2), 0.0);
+        assertEquals(1.0, jacobian.getElementAt(1, 2), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(2, 2), 0.0);
+        assertEquals(-1.0, jacobian.getElementAt(3, 2), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(4, 2), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(5, 2), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(6, 2), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(7, 2), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(8, 2), 0.0);
 
         // Force WrongSizeException
         try {
@@ -687,9 +687,9 @@ public class UtilsTest {
         final double[] output2 = new double[3];
         Utils.crossProduct(array1, array2, output2);
 
-        assertEquals(output[0], 8.0, ABSOLUTE_ERROR);
-        assertEquals(output[1], 5.0, ABSOLUTE_ERROR);
-        assertEquals(output[2], -14.0, ABSOLUTE_ERROR);
+        assertEquals(8.0, output[0], ABSOLUTE_ERROR);
+        assertEquals(5.0, output[1], ABSOLUTE_ERROR);
+        assertEquals(-14.0, output[2], ABSOLUTE_ERROR);
 
         assertArrayEquals(output, output2, 0.0);
 
@@ -698,9 +698,8 @@ public class UtilsTest {
 
         Utils.crossProduct(array1, array2, output2, jacobian1, jacobian2);
 
-        assertEquals(jacobian1, Utils.skewMatrix(array1).
-                multiplyByScalarAndReturnNew(-1.0));
-        assertEquals(jacobian2, Utils.skewMatrix(array2));
+        assertEquals(Utils.skewMatrix(array1).multiplyByScalarAndReturnNew(-1.0), jacobian1);
+        assertEquals(Utils.skewMatrix(array2), jacobian2);
 
         // Force WrongSizeException
         try {
@@ -762,17 +761,17 @@ public class UtilsTest {
 
         final Matrix output = Utils.crossProduct(array, m);
 
-        assertEquals(output.getElementAt(0, 0), 8.0, ABSOLUTE_ERROR);
-        assertEquals(output.getElementAt(1, 0), 5.0, ABSOLUTE_ERROR);
-        assertEquals(output.getElementAt(2, 0), -14.0, ABSOLUTE_ERROR);
+        assertEquals(8.0, output.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(5.0, output.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(-14.0, output.getElementAt(2, 0), ABSOLUTE_ERROR);
 
-        assertEquals(output.getElementAt(0, 1), 26.0, ABSOLUTE_ERROR);
-        assertEquals(output.getElementAt(1, 1), -1.0, ABSOLUTE_ERROR);
-        assertEquals(output.getElementAt(2, 1), -11.0, ABSOLUTE_ERROR);
+        assertEquals(26.0, output.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(-1.0, output.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(-11.0, output.getElementAt(2, 1), ABSOLUTE_ERROR);
 
-        assertEquals(output.getElementAt(0, 2), 10.0, ABSOLUTE_ERROR);
-        assertEquals(output.getElementAt(1, 2), 13.0, ABSOLUTE_ERROR);
-        assertEquals(output.getElementAt(2, 2), -31.0, ABSOLUTE_ERROR);
+        assertEquals(10.0, output.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(13.0, output.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(-31.0, output.getElementAt(2, 2), ABSOLUTE_ERROR);
 
         // Force WrongSizeException
         try {
@@ -813,17 +812,17 @@ public class UtilsTest {
         final Matrix output = new Matrix(3, 1);
         Utils.crossProduct(array, m, output);
 
-        assertEquals(output.getElementAt(0, 0), 8.0, ABSOLUTE_ERROR);
-        assertEquals(output.getElementAt(1, 0), 5.0, ABSOLUTE_ERROR);
-        assertEquals(output.getElementAt(2, 0), -14.0, ABSOLUTE_ERROR);
+        assertEquals(8.0, output.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(5.0, output.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(-14.0, output.getElementAt(2, 0), ABSOLUTE_ERROR);
 
-        assertEquals(output.getElementAt(0, 1), 26.0, ABSOLUTE_ERROR);
-        assertEquals(output.getElementAt(1, 1), -1.0, ABSOLUTE_ERROR);
-        assertEquals(output.getElementAt(2, 1), -11.0, ABSOLUTE_ERROR);
+        assertEquals(26.0, output.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(-1.0, output.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(-11.0, output.getElementAt(2, 1), ABSOLUTE_ERROR);
 
-        assertEquals(output.getElementAt(0, 2), 10.0, ABSOLUTE_ERROR);
-        assertEquals(output.getElementAt(1, 2), 13.0, ABSOLUTE_ERROR);
-        assertEquals(output.getElementAt(2, 2), -31.0, ABSOLUTE_ERROR);
+        assertEquals(10.0, output.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(13.0, output.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(-31.0, output.getElementAt(2, 2), ABSOLUTE_ERROR);
 
         // Force WrongSizeException
         try {
@@ -852,7 +851,7 @@ public class UtilsTest {
             assertTrue(Utils.isSymmetric(m));
             assertTrue(Utils.isSymmetric(m, ABSOLUTE_ERROR));
 
-            // now make matrix non symmetric
+            // now make matrix non-symmetric
             m.setElementAt(0, rows - 1, m.getElementAt(0, rows - 1) + 1.0);
 
             if (Utils.isSymmetric(m)) {
@@ -942,7 +941,7 @@ public class UtilsTest {
         double result = Utils.dotProduct(input1, input2);
 
         // check correctness
-        assertEquals(result, expectedResult, 0.0);
+        assertEquals(expectedResult, result, 0.0);
 
         // Force IllegalArgumentException
         final double[] wrongArray = new double[length + 1];
@@ -965,10 +964,10 @@ public class UtilsTest {
         result = Utils.dotProduct(input1, input2, jacobian1, jacobian2);
 
         // check correctness
-        assertEquals(result, expectedResult, 0.0);
+        assertEquals(expectedResult, result, 0.0);
 
-        assertArrayEquals(jacobian1.getBuffer(), input1, 0.0);
-        assertArrayEquals(jacobian2.getBuffer(), input2, 0.0);
+        assertArrayEquals(input1, jacobian1.getBuffer(), 0.0);
+        assertArrayEquals(input2, jacobian2.getBuffer(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -1000,7 +999,7 @@ public class UtilsTest {
         result = Utils.dotProduct(m1, m2);
 
         // check correctness
-        assertEquals(result, expectedResult, 0.0);
+        assertEquals(expectedResult, result, 0.0);
 
         // Force WrongSizeException
         final Matrix wrongMatrix = new Matrix(length + 1, 1);
@@ -1019,10 +1018,10 @@ public class UtilsTest {
         result = Utils.dotProduct(m1, m2, jacobian1, jacobian2);
 
         // check correctness
-        assertEquals(result, expectedResult, 0.0);
+        assertEquals(expectedResult, result, 0.0);
 
-        assertArrayEquals(jacobian1.getBuffer(), m1.getBuffer(), 0.0);
-        assertArrayEquals(jacobian2.getBuffer(), m2.getBuffer(), 0.0);
+        assertArrayEquals(m1.getBuffer(), jacobian1.getBuffer(), 0.0);
+        assertArrayEquals(m2.getBuffer(), jacobian2.getBuffer(), 0.0);
 
         // Force WrongSizeException
         try {
@@ -1078,8 +1077,8 @@ public class UtilsTest {
 
         // check correctness
         // (result is the sqr root of the Schur complement of A)
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B,
         // but result is the sqr root of that (an upper triangle matrix)
@@ -1090,8 +1089,8 @@ public class UtilsTest {
         assertTrue(schurc.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of A
-        assertEquals(iA.getRows(), pos);
-        assertEquals(iA.getColumns(), pos);
+        assertEquals(pos, iA.getRows());
+        assertEquals(pos, iA.getColumns());
         assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
                 ABSOLUTE_ERROR));
 
@@ -1101,13 +1100,13 @@ public class UtilsTest {
         Utils.schurc(m, pos, true, false, result, iA);
 
         // check correctness
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of A
-        assertEquals(iA.getRows(), pos);
-        assertEquals(iA.getColumns(), pos);
+        assertEquals(pos, iA.getRows());
+        assertEquals(pos, iA.getColumns());
         assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
                 ABSOLUTE_ERROR));
 
@@ -1118,8 +1117,8 @@ public class UtilsTest {
         Utils.schurc(m, pos, false, true, result, iA);
 
         // check correctness
-        assertEquals(result.getRows(), pos);
-        assertEquals(result.getColumns(), pos);
+        assertEquals(pos, result.getRows());
+        assertEquals(pos, result.getColumns());
 
         // Schur complement of D is: M/D = A - B*D^-1*C
         // but result is the sqrt root of that (an upper triangle matrix)
@@ -1129,8 +1128,8 @@ public class UtilsTest {
         assertTrue(schurc.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of D
-        assertEquals(iA.getRows(), size - pos);
-        assertEquals(iA.getColumns(), size - pos);
+        assertEquals(size - pos, iA.getRows());
+        assertEquals(size - pos, iA.getColumns());
         assertTrue(d.multiplyAndReturnNew(iA).equals(
                 Matrix.identity(size - pos, size - pos), ABSOLUTE_ERROR));
 
@@ -1141,13 +1140,13 @@ public class UtilsTest {
         Utils.schurc(m, pos, false, false, result, iA);
 
         // check correctness
-        assertEquals(result.getRows(), pos);
-        assertEquals(result.getColumns(), pos);
+        assertEquals(pos, result.getRows());
+        assertEquals(pos, result.getColumns());
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of D
-        assertEquals(iA.getRows(), size - pos);
-        assertEquals(iA.getColumns(), size - pos);
+        assertEquals(size - pos, iA.getRows());
+        assertEquals(size - pos, iA.getColumns());
         assertTrue(d.multiplyAndReturnNew(iA).equals(
                 Matrix.identity(size - pos, size - pos), ABSOLUTE_ERROR));
 
@@ -1186,8 +1185,8 @@ public class UtilsTest {
         Utils.schurc(m, pos, true, result, iA);
 
         // check correctness
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B,
         result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
@@ -1195,8 +1194,8 @@ public class UtilsTest {
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of A
-        assertEquals(iA.getRows(), pos);
-        assertEquals(iA.getColumns(), pos);
+        assertEquals(pos, iA.getRows());
+        assertEquals(pos, iA.getColumns());
         assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
                 ABSOLUTE_ERROR));
 
@@ -1207,8 +1206,8 @@ public class UtilsTest {
         Utils.schurc(m, pos, false, result, iA);
 
         // check correctness
-        assertEquals(result.getRows(), pos);
-        assertEquals(result.getColumns(), pos);
+        assertEquals(pos, result.getRows());
+        assertEquals(pos, result.getColumns());
 
         // Schur complement of D is: M/D = A - B*D^-1*C
         result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(
@@ -1216,8 +1215,8 @@ public class UtilsTest {
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of D
-        assertEquals(iA.getRows(), size - pos);
-        assertEquals(iA.getColumns(), size - pos);
+        assertEquals(size - pos, iA.getRows());
+        assertEquals(size - pos, iA.getColumns());
         assertTrue(d.multiplyAndReturnNew(iA).equals(
                 Matrix.identity(size - pos, size - pos), ABSOLUTE_ERROR));
 
@@ -1254,8 +1253,8 @@ public class UtilsTest {
         Utils.schurc(m, pos, result, iA);
 
         // check correctness
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B,
         result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
@@ -1264,8 +1263,8 @@ public class UtilsTest {
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of A
-        assertEquals(iA.getRows(), pos);
-        assertEquals(iA.getColumns(), pos);
+        assertEquals(pos, iA.getRows());
+        assertEquals(pos, iA.getColumns());
         assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
                 ABSOLUTE_ERROR));
 
@@ -1303,8 +1302,8 @@ public class UtilsTest {
 
         // check correctness
         // (result is the sqrt root of the Schur complement of A)
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B,
         // but result is the sqrt root of that (an upper triangle matrix)
@@ -1314,8 +1313,8 @@ public class UtilsTest {
         assertTrue(schurc.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of A
-        assertEquals(iA.getRows(), pos);
-        assertEquals(iA.getColumns(), pos);
+        assertEquals(pos, iA.getRows());
+        assertEquals(pos, iA.getColumns());
         assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
                 ABSOLUTE_ERROR));
 
@@ -1324,13 +1323,13 @@ public class UtilsTest {
         result = Utils.schurcAndReturnNew(m, pos, true, false, iA);
 
         // check correctness
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of A
-        assertEquals(iA.getRows(), pos);
-        assertEquals(iA.getColumns(), pos);
+        assertEquals(pos, iA.getRows());
+        assertEquals(pos, iA.getColumns());
         assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
                 ABSOLUTE_ERROR));
 
@@ -1340,8 +1339,8 @@ public class UtilsTest {
         result = Utils.schurcAndReturnNew(m, pos, false, true, iA);
 
         // check correctness
-        assertEquals(result.getRows(), pos);
-        assertEquals(result.getColumns(), pos);
+        assertEquals(pos, result.getRows());
+        assertEquals(pos, result.getColumns());
 
         // Schur complement of D is: M/D = A - B*D^-1*C
         // but result is the sqrt root of that (an upper triangle matrix)
@@ -1351,8 +1350,8 @@ public class UtilsTest {
         assertTrue(schurc.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of D
-        assertEquals(iA.getRows(), size - pos);
-        assertEquals(iA.getColumns(), size - pos);
+        assertEquals(size - pos, iA.getRows());
+        assertEquals(size - pos, iA.getColumns());
         assertTrue(d.multiplyAndReturnNew(iA).equals(
                 Matrix.identity(size - pos, size - pos), ABSOLUTE_ERROR));
 
@@ -1362,13 +1361,13 @@ public class UtilsTest {
         result = Utils.schurcAndReturnNew(m, pos, false, false, iA);
 
         // check correctness
-        assertEquals(result.getRows(), pos);
-        assertEquals(result.getColumns(), pos);
+        assertEquals(pos, result.getRows());
+        assertEquals(pos, result.getColumns());
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of D
-        assertEquals(iA.getRows(), size - pos);
-        assertEquals(iA.getColumns(), size - pos);
+        assertEquals(size - pos, iA.getRows());
+        assertEquals(size - pos, iA.getColumns());
         assertTrue(d.multiplyAndReturnNew(iA).equals(
                 Matrix.identity(size - pos, size - pos), ABSOLUTE_ERROR));
 
@@ -1407,8 +1406,8 @@ public class UtilsTest {
         result = Utils.schurcAndReturnNew(m, pos, true, iA);
 
         // check correctness
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B
         result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
@@ -1416,8 +1415,8 @@ public class UtilsTest {
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of A
-        assertEquals(iA.getRows(), pos);
-        assertEquals(iA.getColumns(), pos);
+        assertEquals(pos, iA.getRows());
+        assertEquals(pos, iA.getColumns());
         assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
                 ABSOLUTE_ERROR));
 
@@ -1427,8 +1426,8 @@ public class UtilsTest {
         result = Utils.schurcAndReturnNew(m, pos, false, iA);
 
         // check correctness
-        assertEquals(result.getRows(), pos);
-        assertEquals(result.getColumns(), pos);
+        assertEquals(pos, result.getRows());
+        assertEquals(pos, result.getColumns());
 
         // Schur complement of D is: M/D = A - B*D^-1*C
         result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(
@@ -1436,8 +1435,8 @@ public class UtilsTest {
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of D
-        assertEquals(iA.getRows(), size - pos);
-        assertEquals(iA.getColumns(), size - pos);
+        assertEquals(size - pos, iA.getRows());
+        assertEquals(size - pos, iA.getColumns());
         assertTrue(d.multiplyAndReturnNew(iA).equals(
                 Matrix.identity(size - pos, size - pos), ABSOLUTE_ERROR));
 
@@ -1476,8 +1475,8 @@ public class UtilsTest {
         result = Utils.schurcAndReturnNew(m, pos, iA);
 
         // check correctness
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B
         result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
@@ -1486,8 +1485,8 @@ public class UtilsTest {
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of A
-        assertEquals(iA.getRows(), pos);
-        assertEquals(iA.getColumns(), pos);
+        assertEquals(pos, iA.getRows());
+        assertEquals(pos, iA.getColumns());
         assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
                 ABSOLUTE_ERROR));
 
@@ -1526,8 +1525,8 @@ public class UtilsTest {
 
         // check correctness
         // (result is the sqrt root of the Schur complement of A)
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B
         // but result is the sqrt root of that (an upper triangle matrix)
@@ -1542,8 +1541,8 @@ public class UtilsTest {
         Utils.schurc(m, pos, true, false, result);
 
         // check correctness
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
 
@@ -1552,8 +1551,8 @@ public class UtilsTest {
         Utils.schurc(m, pos, false, true, result);
 
         // check correctness
-        assertEquals(result.getRows(), pos);
-        assertEquals(result.getColumns(), pos);
+        assertEquals(pos, result.getRows());
+        assertEquals(pos, result.getColumns());
 
         // Schur complement of D is: M/D = A - B*D^-1*C
         // but result is the sqrt root of that (an upper triangle matrix)
@@ -1568,8 +1567,8 @@ public class UtilsTest {
         Utils.schurc(m, pos, false, false, result);
 
         // check correctness
-        assertEquals(result.getRows(), pos);
-        assertEquals(result.getColumns(), pos);
+        assertEquals(pos, result.getRows());
+        assertEquals(pos, result.getColumns());
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
@@ -1597,8 +1596,8 @@ public class UtilsTest {
         Utils.schurc(m, pos, true, result);
 
         // check correctness
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B
         result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
@@ -1611,8 +1610,8 @@ public class UtilsTest {
         Utils.schurc(m, pos, false, result);
 
         // check correctness
-        assertEquals(result.getRows(), pos);
-        assertEquals(result.getColumns(), pos);
+        assertEquals(pos, result.getRows());
+        assertEquals(pos, result.getColumns());
 
         // Schur complement of D is: M/D = A - B*D^-1*C
         result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(
@@ -1644,8 +1643,8 @@ public class UtilsTest {
         Utils.schurc(m, pos, result);
 
         // check correctness
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B
         result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
@@ -1679,8 +1678,8 @@ public class UtilsTest {
 
         // check correctness
         // (result is the sqrt root of the Schur complement of A)
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B
         // but result is the sqrt root of that (an upper triangle matrix)
@@ -1694,8 +1693,8 @@ public class UtilsTest {
         result = Utils.schurcAndReturnNew(m, pos, true, false);
 
         // check correctness
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
 
@@ -1703,8 +1702,8 @@ public class UtilsTest {
         result = Utils.schurcAndReturnNew(m, pos, false, true);
 
         // check correctness
-        assertEquals(result.getRows(), pos);
-        assertEquals(result.getColumns(), pos);
+        assertEquals(pos, result.getRows());
+        assertEquals(pos, result.getColumns());
 
         // Schur complement of D is: M/D = A - B*D^-1*C
         // but result is the sqrt root of that (an upper triangle matrix)
@@ -1718,8 +1717,8 @@ public class UtilsTest {
         result = Utils.schurcAndReturnNew(m, pos, false, false);
 
         // check correctness
-        assertEquals(result.getRows(), pos);
-        assertEquals(result.getColumns(), pos);
+        assertEquals(pos, result.getRows());
+        assertEquals(pos, result.getColumns());
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
@@ -1749,8 +1748,8 @@ public class UtilsTest {
         result = Utils.schurcAndReturnNew(m, pos, true);
 
         // check correctness
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B
         result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
@@ -1762,8 +1761,8 @@ public class UtilsTest {
         result = Utils.schurcAndReturnNew(m, pos, false);
 
         // check correctness
-        assertEquals(result.getRows(), pos);
-        assertEquals(result.getColumns(), pos);
+        assertEquals(pos, result.getRows());
+        assertEquals(pos, result.getColumns());
 
         // Schur complement of D is: M/D = A - B*D^-1*C
         result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(
@@ -1797,8 +1796,8 @@ public class UtilsTest {
         result = Utils.schurcAndReturnNew(m, pos);
 
         // check correctness
-        assertEquals(result.getRows(), size - pos);
-        assertEquals(result.getColumns(), size - pos);
+        assertEquals(size - pos, result.getRows());
+        assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B
         result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(

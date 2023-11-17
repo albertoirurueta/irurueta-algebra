@@ -467,10 +467,10 @@ public class EconomyQRDecomposer extends Decomposer {
      * having to recompute QR decomposition on the same input matrix.
      * Note: Provided b matrix must have the same number of rows as provided
      * input matrix A, otherwise a WrongSizeException will be raised.
-     * Note: Provided input matrix A must have at least as many rows as columns,
+     * Note: Provided input matrix "A" must have at least as many rows as columns,
      * otherwise a WrongSizeException will be raised as well. For input matrices
      * having a higher number of rows than columns, the system of equations will
-     * be overdetermined and a least squares solution will be found.
+     * be overdetermined and the least squares solution will be found.
      * Note: If provided input matrix A is rank deficient, a
      * RankDeficientMatrixException will be thrown.
      * Note: In order to execute this method, a QR decomposition must be
@@ -510,10 +510,10 @@ public class EconomyQRDecomposer extends Decomposer {
      * having to recompute QR decomposition on the same input matrix.
      * Note: Provided b matrix must have the same number of rows as provided
      * input matrix A, otherwise a WrongSizeException will be raised.
-     * Note: Provided input matrix A must have at least as many rows as columns,
+     * Note: Provided input matrix "A" must have at least as many rows as columns,
      * otherwise a WrongSizeException will be raised as well. For input matrices
      * having a higher number of rows than columns, the system of equations will
-     * be overdetermined and a least squares solution will be found.
+     * be overdetermined and the least squares solution will be found.
      * Note: If provided input matrix A is rank deficient, a
      * RankDeficientMatrixException will be thrown.
      * Note: In order to execute this method, a QR decomposition must be
@@ -526,7 +526,7 @@ public class EconomyQRDecomposer extends Decomposer {
      *                      will represent a new system of equations, whose solution will be returned
      *                      on appropriate column as an output of this method.
      * @param roundingError threshold to determine whether matrix b has full rank or not.
-     *                      By default this is typically a tiny value close to zero.
+     *                      By default, this is typically a tiny value close to zero.
      * @param result        Matrix containing solution of linear system of equations on
      *                      each column for each column of provided matrix of parameters b. Provided
      *                      matrix will be resized if needed
@@ -621,10 +621,10 @@ public class EconomyQRDecomposer extends Decomposer {
      * having to recompute QR decomposition on the same input matrix.
      * Note: Provided b matrix must have the same number of rows as provided
      * input matrix A, otherwise a WrongSizeException will be raised.
-     * Note: Provided input matrix A must have at least as many rows as columns,
+     * Note: Provided input matrix "A" must have at least as many rows as columns,
      * otherwise a WrongSizeException will be raised as well. For input matrices
      * having a higher number of rows than columns, the system of equations will
-     * be overdetermined and a least squares solution will be found.
+     * be overdetermined and the least squares solution will be found.
      * Note: If provided input matrix A is rank deficient, a
      * RankDeficientMatrixException will be thrown.
      * Note: In order to execute this method, a QR decomposition must be
@@ -663,10 +663,10 @@ public class EconomyQRDecomposer extends Decomposer {
      * having to recompute QR decomposition on the same input matrix.
      * Note: Provided b matrix must have the same number of rows as provided
      * input matrix A, otherwise a WrongSizeException will be raised.
-     * Note: Provided input matrix A must have at least as many rows as columns,
+     * Note: Provided input matrix "A" must have at least as many rows as columns,
      * otherwise a WrongSizeException will be raised as well. For input matrices
      * having a higher number of rows than columns, the system of equations will
-     * be overdetermined and a least squares solution will be found.
+     * be overdetermined and the least squares solution will be found.
      * Note: If provided input matrix A is rank deficient, a
      * RankDeficientMatrixException will be thrown.
      * Note: In order to execute this method, a QR decomposition must be

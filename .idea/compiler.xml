@@ -19,8 +19,5 @@
         <module name="irurueta-algebra" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="irurueta-algebra" target="1.7" />
-    </bytecodeTargetLevel>
   </component>
 </project>

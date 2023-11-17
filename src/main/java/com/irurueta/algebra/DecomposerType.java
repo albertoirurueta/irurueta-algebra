@@ -42,7 +42,7 @@ public enum DecomposerType {
     /**
      * Defines RQ decomposition, which decomposes a matrix into an upper
      * diagonal matrix (R) and an orthogonal matrix (Q). RQ decomposition is
-     * very similar to QR and it is related to it through transposition by
+     * very similar to QR, and it is related to it through transposition by
      * reversing order of factors R and Q respect to QR decomposition.
      */
     RQ_DECOMPOSITION,

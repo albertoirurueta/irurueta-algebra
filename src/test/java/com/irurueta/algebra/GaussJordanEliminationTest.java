@@ -125,7 +125,7 @@ public class GaussJordanEliminationTest {
         x = Utils.solve(a, b);
 
         assertTrue(a2.equals(invA, ABSOLUTE_ERROR));
-        assertArrayEquals(b2, x, ABSOLUTE_ERROR);
+        assertArrayEquals(x, b2, ABSOLUTE_ERROR);
 
         // Force WrongSizeException
 
@@ -197,6 +197,5 @@ public class GaussJordanEliminationTest {
             fail("SingularMatrixException expected but not thrown");
         } catch (final SingularMatrixException ignore) {
         }
-
     }
 }

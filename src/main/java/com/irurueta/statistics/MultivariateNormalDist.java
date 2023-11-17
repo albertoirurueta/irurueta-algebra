@@ -86,7 +86,7 @@ public class MultivariateNormalDist {
      * @param mean       array containing mean. Must have the same number of rows as
      *                   provided covariance matrix
      * @param covariance matrix containing covariance. Must be square, symmetric
-     *                   and positive definite (i.e. non singular) and must have the same number
+     *                   and positive definite (i.e. non-singular) and must have the same number
      *                   of rows as provided mean.
      * @throws IllegalArgumentException         if provided mean array has length
      *                                          smaller than 1 or if length of mean array is not the same as the number
@@ -107,7 +107,7 @@ public class MultivariateNormalDist {
      * @param mean                              array containing mean. Must have the same number of rows as
      *                                          provided covariance matrix.
      * @param covariance                        matrix containing covariance. Must be square, symmetric
-     *                                          and positive definite (i.e. non singular) and must have the same number
+     *                                          and positive definite (i.e. non-singular) and must have the same number
      *                                          of rows as provided mean.
      * @param validateSymmetricPositiveDefinite true if covariance matrix must
      *                                          be validated to be positive definite, false to skip validation.
@@ -228,7 +228,7 @@ public class MultivariateNormalDist {
      * @param mu  array containing mean. Must have the same number of rows as
      *            provided covariance matrix
      * @param cov matrix containing covariance. Must be square, symmetric
-     *            and positive definite (i.e. non singular) and must have the same number
+     *            and positive definite (i.e. non-singular) and must have the same number
      *            of rows as provided mean.
      * @throws IllegalArgumentException         if provided mean array has length
      *                                          smaller than 1 or if length of mean array is not the same as the number
@@ -247,7 +247,7 @@ public class MultivariateNormalDist {
      * @param mu                                array containing mean. Must have the same number of rows as
      *                                          provided covariance matrix
      * @param cov                               matrix containing covariance. Must be square, symmetric
-     *                                          and positive definite (i.e. non singular) and must have the same number
+     *                                          and positive definite (i.e. non-singular) and must have the same number
      *                                          of rows as provided mean.
      * @param validateSymmetricPositiveDefinite true if matrix must be
      *                                          validated to be positive definite, false to skip validation.
@@ -792,7 +792,7 @@ public class MultivariateNormalDist {
      *                               unstable (i.e. contains NaNs or very large numbers).
      * @throws NotReadyException     never thrown because decomposer will always be
      *                               ready.
-     * @throws LockedException       never thrown because decomposer never will be
+     * @throws LockedException       never thrown because decomposer will never  be
      *                               locked.
      * @throws NotAvailableException never thrown because first a
      *                               DecomposerException will be thrown before attempting to get V or

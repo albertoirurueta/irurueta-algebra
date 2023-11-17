@@ -71,7 +71,7 @@ public class Utils {
 
     /**
      * Computes condition number of provided matrix.
-     * Condition number determines how well behaved a matrix is for solving
+     * Condition number determines how well-behaved a matrix is for solving
      * a linear system of equations
      *
      * @param m Input matrix.
@@ -155,7 +155,7 @@ public class Utils {
      *               will be stored. Provided matrix will be resized if needed
      * @throws WrongSizeException           Exception thrown if provided matrix m has less
      *                                      rows than columns, or if provided matrix b has a number of rows different
-     *                                      than the number of rows of m.
+     *                                      from the number of rows of m.
      * @throws RankDeficientMatrixException Exception thrown if provided matrix
      *                                      m is rank deficient.
      * @throws DecomposerException          Exception thrown if decomposition fails for
@@ -199,7 +199,7 @@ public class Utils {
      * @return Solution of the linear system of equations.
      * @throws WrongSizeException           Exception thrown if provided matrix m has less
      *                                      rows than columns, or if provided matrix b has a number of rows different
-     *                                      than the number of rows of m.
+     *                                      from the number of rows of m.
      * @throws RankDeficientMatrixException Exception thrown if provided matrix
      *                                      m is rank deficient.
      * @throws DecomposerException          Exception thrown if decomposition fails for
@@ -514,7 +514,7 @@ public class Utils {
      * to the inverse.
      * Also notice that pseudo-inverse can be used to solve overdetermined
      * systems of linear equations with least minimum square error (LMSE).
-     * Finally notice that Utils.inverse(Matrix) also can return a
+     * Finally, notice that Utils.inverse(Matrix) also can return a
      * pseudo-inverse, however, this method since it uses SVD decomposition is
      * numerically more stable at the expense of being computationally more
      * expensive.
@@ -618,8 +618,8 @@ public class Utils {
      * multiplication in the form:
      * C = skewMatrix(a) * B;
      *
-     * @param array  Array of length 3 that will be used to compute the skew-
-     *               symmetric matrix.
+     * @param array  Array of length 3 that will be used to compute the skew-symmetric
+     *               matrix.
      * @param result Matrix where skew matrix is stored. Provided matrix will be
      *               resized if needed
      * @throws WrongSizeException Exception thrown if provided array doesn't
@@ -663,8 +663,8 @@ public class Utils {
      * multiplication in the form:
      * C = skewMatrix(a) * B;
      *
-     * @param array    Array of length 3 that will be used to compute the skew-
-     *                 symmetric matrix.
+     * @param array    Array of length 3 that will be used to compute the skew-symmetric
+     *                 matrix.
      * @param result   Matrix where skew matrix is stored. Provided matrix will be
      *                 resized if needed
      * @param jacobian matrix where jacobian will be stored. Must be 9x3.
@@ -710,8 +710,8 @@ public class Utils {
      * multiplication in the form:
      * C = skewMatrix(a) * B;
      *
-     * @param array Array of length 3 that will be used to compute the skew-
-     *              symmetric matrix.
+     * @param array Array of length 3 that will be used to compute the skew-symmetric
+     *              matrix.
      * @return Skew matrix.
      * @throws WrongSizeException Exception thrown if provided array doesn't
      *                            have length equal to 3.
@@ -1359,7 +1359,7 @@ public class Utils {
      * these sub-matrices in the diagonal.
      * If fromStart is true, then Schur complement of A is computed and result
      * will have size (s-pos)x(s-pos).
-     * If fromStart if false, then Schur complement of C is computed and result
+     * If fromStart is false, then Schur complement of C is computed and result
      * will have size posxpos.
      * <p>
      * Definitions and rationale:

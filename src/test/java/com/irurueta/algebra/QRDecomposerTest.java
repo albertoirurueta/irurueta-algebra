@@ -51,25 +51,25 @@ public class QRDecomposerTest {
         assertFalse(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.QR_DECOMPOSITION);
+        assertEquals(DecomposerType.QR_DECOMPOSITION,
+                decomposer.getDecomposerType());
 
         decomposer.setInputMatrix(m);
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.QR_DECOMPOSITION);
+        assertEquals(m, decomposer.getInputMatrix());
+        assertEquals(DecomposerType.QR_DECOMPOSITION,
+                decomposer.getDecomposerType());
 
         // Test 2nd constructor
         decomposer = new QRDecomposer(m);
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.QR_DECOMPOSITION);
+        assertEquals(m, decomposer.getInputMatrix());
+        assertEquals(DecomposerType.QR_DECOMPOSITION,
+                decomposer.getDecomposerType());
     }
 
     @Test
@@ -84,8 +84,8 @@ public class QRDecomposerTest {
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         final QRDecomposer decomposer = new QRDecomposer();
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.QR_DECOMPOSITION);
+        assertEquals(DecomposerType.QR_DECOMPOSITION,
+                decomposer.getDecomposerType());
         assertFalse(decomposer.isReady());
 
         decomposer.setInputMatrix(m);
@@ -93,14 +93,14 @@ public class QRDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         decomposer.decompose();
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // when setting a new input matrix, decomposition becomes unavailable and
         // must be recomputed
@@ -109,7 +109,7 @@ public class QRDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
     }
 
     @Test
@@ -133,14 +133,14 @@ public class QRDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         decomposer.decompose();
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // Check decomposition
         q = decomposer.getQ();
@@ -152,8 +152,7 @@ public class QRDecomposerTest {
         assertEquals(m.getColumns(), m2.getColumns());
         for (int j = 0; j < m2.getColumns(); j++) {
             for (int i = 0; i < m2.getRows(); i++) {
-                assertEquals(m.getElementAt(i, j), m2.getElementAt(i, j),
-                        ABSOLUTE_ERROR);
+                assertEquals(m2.getElementAt(i, j), m.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
 
@@ -246,13 +245,13 @@ public class QRDecomposerTest {
         decomposer.decompose();
         r = decomposer.getR();
 
-        assertEquals(r.getRows(), rows);
-        assertEquals(r.getColumns(), columns);
+        assertEquals(rows, r.getRows());
+        assertEquals(columns, r.getColumns());
 
         for (int j = 0; j < columns; j++) {
             for (int i = 0; i < rows; i++) {
                 if (i > j) {
-                    assertEquals(r.getElementAt(i, j), 0.0,
+                    assertEquals(0.0, r.getElementAt(i, j),
                             ABSOLUTE_ERROR);
                 }
             }
@@ -289,16 +288,16 @@ public class QRDecomposerTest {
 
         q = decomposer.getQ();
 
-        assertEquals(q.getRows(), rows);
-        assertEquals(q.getColumns(), rows);
+        assertEquals(rows, q.getRows());
+        assertEquals(rows, q.getColumns());
 
         // Q is an orthogonal matrix, which means that Q * Q' = I
         qTransposed = q.transposeAndReturnNew();
 
         test = qTransposed.multiplyAndReturnNew(q);
 
-        assertEquals(test.getRows(), rows);
-        assertEquals(test.getColumns(), rows);
+        assertEquals(rows, test.getRows());
+        assertEquals(rows, test.getColumns());
 
         // Check that test is similar to identity
         assertTrue(test.equals(Matrix.identity(rows, rows), ABSOLUTE_ERROR));
@@ -318,16 +317,16 @@ public class QRDecomposerTest {
 
         q = decomposer.getQ();
 
-        assertEquals(q.getRows(), rows);
-        assertEquals(q.getColumns(), rows);
+        assertEquals(rows, q.getRows());
+        assertEquals(rows, q.getColumns());
 
         // Q is an orthogonal matrix, which means that Q * Q' = I
         qTransposed = q.transposeAndReturnNew();
 
         test = qTransposed.multiplyAndReturnNew(q);
 
-        assertEquals(test.getRows(), rows);
-        assertEquals(test.getColumns(), rows);
+        assertEquals(rows, test.getRows());
+        assertEquals(rows, test.getColumns());
 
         // Check that test is similar to identity
         assertTrue(test.equals(Matrix.identity(rows, rows), ABSOLUTE_ERROR));
@@ -377,8 +376,8 @@ public class QRDecomposerTest {
         // m * s = b
         b2 = m.multiplyAndReturnNew(s);
 
-        assertEquals(b2.getRows(), b.getRows());
-        assertEquals(b2.getColumns(), b.getColumns());
+        assertEquals(b.getRows(), b2.getRows());
+        assertEquals(b.getColumns(), b2.getColumns());
 
         assertTrue(b.equals(b, ABSOLUTE_ERROR));
 
@@ -404,8 +403,8 @@ public class QRDecomposerTest {
         // m * s = b
         b2 = m.multiplyAndReturnNew(s);
 
-        assertEquals(b2.getRows(), b.getRows());
-        assertEquals(b2.getColumns(), b.getColumns());
+        assertEquals(b.getRows(), b2.getRows());
+        assertEquals(b.getColumns(), b2.getColumns());
 
         int valid = 0;
         final int total = b2.getColumns() * b2.getRows();
@@ -495,8 +494,8 @@ public class QRDecomposerTest {
         // m * s = b
         b2 = m.multiplyAndReturnNew(s);
 
-        assertEquals(b2.getRows(), b.getRows());
-        assertEquals(b2.getColumns(), b.getColumns());
+        assertEquals(b.getRows(), b2.getRows());
+        assertEquals(b.getColumns(), b2.getColumns());
 
         assertTrue(b.equals(b, ABSOLUTE_ERROR));
 
@@ -523,8 +522,8 @@ public class QRDecomposerTest {
         // m * s = b
         b2 = m.multiplyAndReturnNew(s);
 
-        assertEquals(b2.getRows(), b.getRows());
-        assertEquals(b2.getColumns(), b.getColumns());
+        assertEquals(b.getRows(), b2.getRows());
+        assertEquals(b.getColumns(), b2.getColumns());
 
         int valid = 0;
         final int total = b2.getColumns() * b2.getRows();

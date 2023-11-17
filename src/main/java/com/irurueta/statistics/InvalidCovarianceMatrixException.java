@@ -17,7 +17,7 @@ package com.irurueta.statistics;
 
 /**
  * Exception thrown when providing an invalid covariance matrix.
- * Covariance matrices need to be symmetric and non singular (i.e. symmetric
+ * Covariance matrices need to be symmetric and non-singular (i.e. symmetric
  * and positive definite).
  */
 public class InvalidCovarianceMatrixException extends StatisticsException {

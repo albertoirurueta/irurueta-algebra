@@ -16,7 +16,7 @@
 package com.irurueta.algebra;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.Random;
 
@@ -52,25 +52,25 @@ public class LUDecomposerTest {
         assertFalse(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.LU_DECOMPOSITION);
+        assertEquals(DecomposerType.LU_DECOMPOSITION,
+                decomposer.getDecomposerType());
 
         decomposer.setInputMatrix(m);
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.LU_DECOMPOSITION);
+        assertEquals(m, decomposer.getInputMatrix());
+        assertEquals(DecomposerType.LU_DECOMPOSITION,
+                decomposer.getDecomposerType());
 
         // Test 2nd constructor
         decomposer = new LUDecomposer(m);
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.LU_DECOMPOSITION);
+        assertEquals(m, decomposer.getInputMatrix());
+        assertEquals(DecomposerType.LU_DECOMPOSITION,
+                decomposer.getDecomposerType());
     }
 
     @Test
@@ -85,8 +85,8 @@ public class LUDecomposerTest {
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         final LUDecomposer decomposer = new LUDecomposer();
-        assertEquals(decomposer.getDecomposerType(),
-                DecomposerType.LU_DECOMPOSITION);
+        assertEquals(DecomposerType.LU_DECOMPOSITION,
+                decomposer.getDecomposerType());
         assertFalse(decomposer.isReady());
 
         decomposer.setInputMatrix(m);
@@ -94,14 +94,14 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         decomposer.decompose();
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // when setting a new input matrix, decomposition becomes unavailable and
         // must be recomputed
@@ -110,7 +110,7 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
     }
 
     @Test
@@ -136,14 +136,14 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         decomposer.decompose();
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // Check using pivoted L
         l = decomposer.getPivottedL();
@@ -159,8 +159,7 @@ public class LUDecomposerTest {
             for (int i = 0; i < m2.getRows(); i++) {
                 pivotIndex = pivot[i];
                 if (!Double.isNaN(m2.getElementAt(i, j))) {
-                    assertEquals(m.getElementAt(pivotIndex, j),
-                            m2.getElementAt(i, j), ROUND_ERROR);
+                    assertEquals(m2.getElementAt(i, j), m.getElementAt(pivotIndex, j), ROUND_ERROR);
                 }
             }
         }
@@ -176,8 +175,7 @@ public class LUDecomposerTest {
         for (int j = 0; j < m2.getColumns(); j++) {
             for (int i = 0; i < m2.getRows(); i++) {
                 if (!Double.isNaN(m2.getElementAt(i, j))) {
-                    assertEquals(m.getElementAt(i, j), m2.getElementAt(i, j),
-                            ROUND_ERROR);
+                    assertEquals(m2.getElementAt(i, j), m.getElementAt(i, j), ROUND_ERROR);
                 }
             }
         }
@@ -263,7 +261,7 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // Force NotAvailableException
         try {
@@ -277,7 +275,7 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         l = decomposer.getPivottedL();
 
@@ -288,9 +286,9 @@ public class LUDecomposerTest {
         for (int j = 0; j < l.getColumns(); j++) {
             for (int i = 0; i < l.getRows(); i++) {
                 if (j > i) {
-                    assertEquals(l.getElementAt(i, j), 0.0, ROUND_ERROR);
+                    assertEquals(0.0, l.getElementAt(i, j), ROUND_ERROR);
                 } else {
-                    assertEquals(Math.abs(l.getElementAt(i, j)), 1.0, RELATIVE_ERROR);
+                    assertEquals(1.0, Math.abs(l.getElementAt(i, j)), RELATIVE_ERROR);
                 }
             }
         }
@@ -317,7 +315,7 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // Force NotAvailableException
         try {
@@ -331,21 +329,20 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         pivottedL = decomposer.getPivottedL();
         l = decomposer.getL();
         pivot = decomposer.getPivot();
 
-        assertEquals(pivottedL.getRows(), l.getRows());
-        assertEquals(pivottedL.getColumns(), l.getColumns());
+        assertEquals(l.getRows(), pivottedL.getRows());
+        assertEquals(l.getColumns(), pivottedL.getColumns());
 
         int pivotIndex;
         for (int j = 0; j < l.getColumns(); j++) {
             for (int i = 0; i < l.getRows(); i++) {
                 pivotIndex = pivot[i];
-                assertEquals(pivottedL.getElementAt(i, j),
-                        l.getElementAt(pivotIndex, j), 0.0);
+                assertEquals(l.getElementAt(pivotIndex, j), pivottedL.getElementAt(i, j), 0.0);
             }
         }
     }
@@ -369,7 +366,7 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // Force NotAvailableException
         try {
@@ -383,7 +380,7 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         u = decomposer.getU();
 
@@ -394,7 +391,7 @@ public class LUDecomposerTest {
         for (int j = 0; j < u.getColumns(); j++) {
             for (int i = 0; i < u.getRows(); i++) {
                 if (i > j) {
-                    assertEquals(u.getElementAt(i, j), 0.0, ROUND_ERROR);
+                    assertEquals(0.0, u.getElementAt(i, j), ROUND_ERROR);
                 }
             }
         }
@@ -420,7 +417,7 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // Force NotAvailableException
         try {
@@ -434,12 +431,12 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         pivot = decomposer.getPivot();
 
         length = pivot.length;
-        assertEquals(length, m.getRows());
+        assertEquals(m.getRows(), length);
 
         for (int i = 0; i < length; i++) {
             assertTrue(pivot[i] < length);
@@ -468,7 +465,7 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // Force NotAvailableException
         try {
@@ -482,12 +479,12 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         determinant = decomposer.determinant();
 
         // Check determinant is equal to element located at (0, 0)
-        assertEquals(determinant, m.getElementAt(0, 0), ROUND_ERROR);
+        assertEquals(m.getElementAt(0, 0), determinant, ROUND_ERROR);
 
         // Square matrix
         // TEST FOR NON LD MATRIX (NON_ZERO DETERMINANT)
@@ -498,14 +495,14 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         decomposer.decompose();
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         determinant = decomposer.determinant();
 
@@ -522,20 +519,20 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         decomposer.decompose();
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         determinant = decomposer.determinant();
 
         // Check that determinant is equal to zero (we give a margin of epsilon
         // to take into account possible rounding error
-        assertEquals(determinant, 0.0, ROUND_ERROR);
+        assertEquals(0.0, determinant, ROUND_ERROR);
 
         // Test for non square matrix (Force WrongSizeException)
         m = Matrix.createWithUniformRandomValues(rows, columns,
@@ -545,14 +542,14 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         decomposer.decompose();
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertTrue(decomposer.isDecompositionAvailable());
-        assertEquals(decomposer.getInputMatrix(), m);
+        assertEquals(m, decomposer.getInputMatrix());
 
         // Force WrongSizeException
         try {
@@ -599,12 +596,11 @@ public class LUDecomposerTest {
         // m * s = b
         b2 = m.multiplyAndReturnNew(s);
 
-        assertEquals(b2.getRows(), b.getRows());
-        assertEquals(b2.getColumns(), b.getColumns());
+        assertEquals(b.getRows(), b2.getRows());
+        assertEquals(b.getColumns(), b2.getColumns());
         for (int j = 0; j < b2.getColumns(); j++) {
             for (int i = 0; i < b2.getRows(); i++) {
-                assertEquals(b2.getElementAt(i, j), b.getElementAt(i, j),
-                        ROUND_ERROR);
+                assertEquals(b.getElementAt(i, j), b2.getElementAt(i, j), ROUND_ERROR);
             }
         }
 

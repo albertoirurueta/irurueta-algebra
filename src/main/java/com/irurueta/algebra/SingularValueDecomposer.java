@@ -426,7 +426,7 @@ public class SingularValueDecomposer extends Decomposer {
      * singular value found after decomposition. This is also called the Ky Fan
      * 1-norm.
      * This norm is also equal to the square root of Frobenius norm of the
-     * squared of provided input matrix. In other words:
+     * squared provided input matrix. In other words:
      * sqrt(norm(A' * A, 'fro')) in Matlab notation.
      * Where A is provided input matrix and A' is its transpose, and hence
      * A' * A can be considered the squared matrix of A, and Frobenius norm
@@ -507,8 +507,8 @@ public class SingularValueDecomposer extends Decomposer {
      * Returns effective numerical matrix rank.
      * By definition rank of a matrix can be found as the number of non-zero
      * singular values of such matrix found after decomposition.
-     * However, rounding error and machine precision may lead to small but non-
-     * zero, singular values in a rank deficient matrix.
+     * However, rounding error and machine precision may lead to small but non-zero
+     * singular values in a rank deficient matrix.
      * This method tries to cope with such rounding errors by taking into
      * account only those non-negligible singular values to determine input
      * matrix rank.
@@ -550,8 +550,8 @@ public class SingularValueDecomposer extends Decomposer {
      * Returns effective numerical matrix rank.
      * By definition rank of a matrix can be found as the number of non-zero
      * singular values of such matrix found after decomposition.
-     * However, rounding error and machine precision may lead to small but non-
-     * zero singular values in a rank deficient matrix.
+     * However, rounding error and machine precision may lead to small but non-zero
+     * singular values in a rank deficient matrix.
      * This method tries to cope with such rounding error by taking into account
      * only those non-negligible singular values to determine input matrix rank.
      * The Rank-nullity theorem states that for a matrix A of size m-by-n then:
@@ -850,7 +850,7 @@ public class SingularValueDecomposer extends Decomposer {
 
     /**
      * Solves a linear system of equations of the following form: A * X = B
-     * using the pseudo-inverse to find a least squares solution.
+     * using the pseudo-inverse to find the least squares solution.
      * Where A is the input matrix provided for Singular Value decomposition,
      * X is the solution to the system of equations, and B is the parameters
      * matrix.
@@ -924,7 +924,7 @@ public class SingularValueDecomposer extends Decomposer {
 
     /**
      * Solves a linear system of equations of the following form: A * X = B
-     * using the pseudo-inverse to find a least squares solution.
+     * using the pseudo-inverse to find the least squares solution.
      * Where A is the input matrix provided for Singular Value decomposition,
      * X is the solution to the system of equations, and B is the parameters
      * matrix.
@@ -966,7 +966,7 @@ public class SingularValueDecomposer extends Decomposer {
 
     /**
      * Solves a linear system of equations of the following form: A * X = B
-     * using the pseudo-inverse to find a least squares solution.
+     * using the pseudo-inverse to find the least squares solution.
      * Where A is the input matrix provided for Singular Value decomposition,
      * X is the solution to the system of equations, and B is the parameters
      * matrix.
@@ -1009,7 +1009,7 @@ public class SingularValueDecomposer extends Decomposer {
 
     /**
      * Solves a linear system of equations of the following form: A * X = B
-     * using the pseudo-inverse to find a least squares solution.
+     * using the pseudo-inverse to find the least squares solution.
      * Where A is the input matrix provided for Singular Value decomposition,
      * X is the solution to the system of equations, and B is the parameters
      * matrix.
@@ -1049,7 +1049,7 @@ public class SingularValueDecomposer extends Decomposer {
 
     /**
      * Solves a linear system of equations of the following form: A * X = B
-     * using the pseudo-inverse to find a least squares solution.
+     * using the pseudo-inverse to find the least squares solution.
      * Where A i s the input matrix provided for Singular Value decomposition,
      * X is the solution to the system of equations, and B is the parameters
      * array.
@@ -1125,7 +1125,7 @@ public class SingularValueDecomposer extends Decomposer {
 
     /**
      * Solves a linear system of equations of the following form: A * X = B
-     * using the pseudo-inverse to find a least squares solution.
+     * using the pseudo-inverse to find the least squares solution.
      * Where A i s the input matrix provided for Singular Value decomposition,
      * X is the solution to the system of equations, and B is the parameters
      * array.
@@ -1167,7 +1167,7 @@ public class SingularValueDecomposer extends Decomposer {
 
     /**
      * Solves a linear system of equations of the following form: A * X = B
-     * using the pseudo-inverse to find a least squares solution.
+     * using the pseudo-inverse to find the least squares solution.
      * Where A i s the input matrix provided for Singular Value decomposition,
      * X is the solution to the system of equations, and B is the parameters
      * array.
@@ -1208,7 +1208,7 @@ public class SingularValueDecomposer extends Decomposer {
 
     /**
      * Solves a linear system of equations of the following form: A * X = B
-     * using the pseudo-inverse to find a least squares solution.
+     * using the pseudo-inverse to find the least squares solution.
      * Where A i s the input matrix provided for Singular Value decomposition,
      * X is the solution to the system of equations, and B is the parameters
      * array.
@@ -1652,7 +1652,7 @@ public class SingularValueDecomposer extends Decomposer {
 
     /**
      * Returns a or -a depending on b sign. If b is positive, this method
-     * returns a, otherwise it returns -a
+     * returns "a", otherwise it returns -a
      *
      * @param a 1st value
      * @param b 2nd value

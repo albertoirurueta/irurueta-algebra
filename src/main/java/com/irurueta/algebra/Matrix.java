@@ -59,7 +59,7 @@ public class Matrix implements Serializable, Cloneable {
 
     /**
      * Constructor of this class.
-     * By default when instantiating a matrix its values are undefined.
+     * By default, when instantiating a matrix its values are undefined.
      *
      * @param rows    Defines number of rows in matrix.
      * @param columns Defines number of columns in matrix.
@@ -147,7 +147,7 @@ public class Matrix implements Serializable, Cloneable {
      * @param index Linear position.
      * @return Value of element contained at provided position.
      * @throws ArrayIndexOutOfBoundsException Exception raised if index lays
-     *                                        outside of valid values, which range from zero (inclusive) to
+     *                                        outside valid values, which range from zero (inclusive) to
      *                                        rows * columns (exclusive)
      */
     public double getElementAtIndex(final int index) {
@@ -163,7 +163,7 @@ public class Matrix implements Serializable, Cloneable {
      *                      assuming that are stored in column order.
      * @return Value of element contained at provided position.
      * @throws ArrayIndexOutOfBoundsException Exception raised if index lays
-     *                                        outside of valid values, which range from zero (inclusive) to
+     *                                        outside valid values, which range from zero (inclusive) to
      *                                        rows * columns (exclusive)
      */
     public double getElementAtIndex(final int index, final boolean isColumnOrder) {
@@ -207,7 +207,7 @@ public class Matrix implements Serializable, Cloneable {
      * @param index Linear position.
      * @param value Value of element contained at provided position.
      * @throws ArrayIndexOutOfBoundsException Exception raised if index lays
-     *                                        outside of valid values, which range from zero (inclusive) to
+     *                                        outside valid values, which range from zero (inclusive) to
      *                                        rows * columns (exclusive)
      */
     public void setElementAtIndex(final int index, final double value) {
@@ -224,7 +224,7 @@ public class Matrix implements Serializable, Cloneable {
      * @param isColumnOrder if true indicates that values are retrieved
      *                      assuming that are stored in column order.
      * @throws ArrayIndexOutOfBoundsException Exception raised if index lays
-     *                                        outside of valid values, which range from zero (inclusive) to
+     *                                        outside valid values, which range from zero (inclusive) to
      *                                        rows * columns (exclusive).
      */
     public void setElementAtIndex(
@@ -1402,7 +1402,7 @@ public class Matrix implements Serializable, Cloneable {
      * @throws IllegalArgumentException Exception raised whenever top-left or
      *                                  bottom-right corners lie outside current matrix instance, or if top-left
      *                                  corner is indeed located below or at right side of bottom-right corner,
-     *                                  or if valuesStart and valuesEnd lie outside of valid array positions or
+     *                                  or if valuesStart and valuesEnd lie outside valid array positions or
      *                                  start is greater than end position.
      */
     public void setSubmatrix(final int topLeftRow, final int topLeftColumn,
@@ -1433,7 +1433,7 @@ public class Matrix implements Serializable, Cloneable {
      * @throws IllegalArgumentException Exception raised whenever top-left or
      *                                  bottom-right corners lie outside current matrix instance, or if top-left
      *                                  corner is indeed located below or at right side of bottom-right corner,
-     *                                  or if valuesStart and valuesEnd lie outside of valid array positions or
+     *                                  or if valuesStart and valuesEnd lie outside valid array positions or
      *                                  start is greater than end position.
      */
     public void setSubmatrix(final int topLeftRow, final int topLeftColumn,
