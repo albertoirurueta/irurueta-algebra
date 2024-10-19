@@ -41,8 +41,8 @@ public class RankDeficientMatrixException extends AlgebraException {
      * @param message Message describing the cause of the exception.
      * @param cause   Instance containing the cause of the exception.
      */
-    public RankDeficientMatrixException(final String message,
-                                        final Throwable cause) {
+    public RankDeficientMatrixException(
+            final String message, final Throwable cause) {
         super(message, cause);
     }
 

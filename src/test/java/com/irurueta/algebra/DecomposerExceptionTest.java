@@ -15,15 +15,15 @@
  */
 package com.irurueta.algebra;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class DecomposerExceptionTest {
+class DecomposerExceptionTest {
 
     @Test
-    public void testConstructor() {
-        DecomposerException ex = new DecomposerException();
+    void testConstructor() {
+        var ex = new DecomposerException();
         assertNotNull(ex);
 
         ex = new DecomposerException("message");

@@ -16,13 +16,11 @@
 package com.irurueta.algebra;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class QRDecomposerTest {
+class QRDecomposerTest {
 
     private static final int MIN_ROWS = 1;
     private static final int MAX_ROWS = 50;
@@ -37,30 +35,27 @@ public class QRDecomposerTest {
     private static final double VALID_RATIO = 0.25;
 
     @Test
-    public void testConstructor() throws WrongSizeException, LockedException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testConstructor() throws WrongSizeException, LockedException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // Test 1st constructor
-        QRDecomposer decomposer = new QRDecomposer();
+        var decomposer = new QRDecomposer();
 
         assertFalse(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(DecomposerType.QR_DECOMPOSITION,
-                decomposer.getDecomposerType());
+        assertEquals(DecomposerType.QR_DECOMPOSITION, decomposer.getDecomposerType());
 
         decomposer.setInputMatrix(m);
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
         assertEquals(m, decomposer.getInputMatrix());
-        assertEquals(DecomposerType.QR_DECOMPOSITION,
-                decomposer.getDecomposerType());
+        assertEquals(DecomposerType.QR_DECOMPOSITION, decomposer.getDecomposerType());
 
         // Test 2nd constructor
         decomposer = new QRDecomposer(m);
@@ -68,24 +63,21 @@ public class QRDecomposerTest {
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
         assertEquals(m, decomposer.getInputMatrix());
-        assertEquals(DecomposerType.QR_DECOMPOSITION,
-                decomposer.getDecomposerType());
+        assertEquals(DecomposerType.QR_DECOMPOSITION, decomposer.getDecomposerType());
     }
 
     @Test
-    public void testGetSetInputMatrixAndIsReady() throws WrongSizeException,
-            LockedException, NotReadyException, DecomposerException {
+    void testGetSetInputMatrixAndIsReady() throws WrongSizeException, LockedException, NotReadyException,
+            DecomposerException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = randomizer.nextInt(columns + 1, MAX_ROWS + 2);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = randomizer.nextInt(columns + 1, MAX_ROWS + 2);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final QRDecomposer decomposer = new QRDecomposer();
-        assertEquals(DecomposerType.QR_DECOMPOSITION,
-                decomposer.getDecomposerType());
+        final var decomposer = new QRDecomposer();
+        assertEquals(DecomposerType.QR_DECOMPOSITION, decomposer.getDecomposerType());
         assertFalse(decomposer.isReady());
 
         decomposer.setInputMatrix(m);
@@ -113,22 +105,21 @@ public class QRDecomposerTest {
     }
 
     @Test
-    public void testDecompose() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testDecompose() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = randomizer.nextInt(columns + 1, MAX_ROWS + 2);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = randomizer.nextInt(columns + 1, MAX_ROWS + 2);
 
         Matrix m;
         final Matrix q;
         final Matrix r;
         final Matrix m2;
 
-        m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        QRDecomposer decomposer = new QRDecomposer(m);
+        final var decomposer = new QRDecomposer(m);
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
@@ -150,63 +141,46 @@ public class QRDecomposerTest {
 
         assertEquals(m.getRows(), m2.getRows());
         assertEquals(m.getColumns(), m2.getColumns());
-        for (int j = 0; j < m2.getColumns(); j++) {
-            for (int i = 0; i < m2.getRows(); i++) {
+        for (var j = 0; j < m2.getColumns(); j++) {
+            for (var i = 0; i < m2.getRows(); i++) {
                 assertEquals(m2.getElementAt(i, j), m.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
 
         // Force DecomposerException
-        m = Matrix.createWithUniformRandomValues(columns, rows,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        m = Matrix.createWithUniformRandomValues(columns, rows, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         decomposer.setInputMatrix(m);
-        try {
-            decomposer.decompose();
-            fail("DecomposerException expected but not thrown");
-        } catch (final DecomposerException ignore) {
-        }
+        assertThrows(DecomposerException.class, decomposer::decompose);
 
         // Force NotReadyException
-        decomposer = new QRDecomposer();
-        try {
-            decomposer.decompose();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        final var decomposer2 = new QRDecomposer();
+        assertThrows(NotReadyException.class, decomposer2::decompose);
     }
 
     @Test
-    public void testIsFullRank() throws WrongSizeException, LockedException,
-            NotReadyException, DecomposerException, NotAvailableException {
+    void testIsFullRank() throws WrongSizeException, LockedException, NotReadyException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS);
-        final int rows = randomizer.nextInt(columns, MAX_ROWS + 3);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS);
+        final var rows = randomizer.nextInt(columns, MAX_ROWS + 3);
 
         Matrix m;
 
-        final QRDecomposer decomposer = new QRDecomposer();
+        final var decomposer = new QRDecomposer();
 
         // Test for any rectangular or square matrix that a matrix has full rank
         m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
         decomposer.setInputMatrix(m);
 
         // Force NotAvailableException
-        try {
-            assertTrue(decomposer.isFullRank());
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, decomposer::isFullRank);
 
         decomposer.decompose();
 
         // Force IllegalArgumentException with a negative round error
-        try {
-            decomposer.isFullRank(-1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> decomposer.isFullRank(-1.0));
 
         assertTrue(decomposer.isFullRank(ABSOLUTE_ERROR));
 
@@ -220,27 +194,23 @@ public class QRDecomposerTest {
     }
 
     @Test
-    public void testGetH() throws WrongSizeException, LockedException,
-            NotReadyException, DecomposerException, NotAvailableException {
+    void testGetH() throws WrongSizeException, LockedException, NotReadyException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
-        final int rows = randomizer.nextInt(columns + 1, MAX_ROWS + 4);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+        final var rows = randomizer.nextInt(columns + 1, MAX_ROWS + 4);
 
         final Matrix m;
         final Matrix r;
 
-        final QRDecomposer decomposer = new QRDecomposer();
+        final var decomposer = new QRDecomposer();
 
         m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
         decomposer.setInputMatrix(m);
 
         // Force NotAvailableException
-        try {
-            decomposer.getR();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, decomposer::getR);
 
         decomposer.decompose();
         r = decomposer.getR();
@@ -248,41 +218,36 @@ public class QRDecomposerTest {
         assertEquals(rows, r.getRows());
         assertEquals(columns, r.getColumns());
 
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 if (i > j) {
-                    assertEquals(0.0, r.getElementAt(i, j),
-                            ABSOLUTE_ERROR);
+                    assertEquals(0.0, r.getElementAt(i, j), ABSOLUTE_ERROR);
                 }
             }
         }
     }
 
     @Test
-    public void testGetR() throws WrongSizeException, LockedException,
-            NotReadyException, DecomposerException, NotAvailableException {
+    void testGetR() throws WrongSizeException, LockedException, NotReadyException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
-        final int rows = randomizer.nextInt(columns + 1, MAX_ROWS + 4);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+        final var rows = randomizer.nextInt(columns + 1, MAX_ROWS + 4);
 
         Matrix m;
         Matrix q;
         Matrix qTransposed;
         Matrix test;
 
-        final QRDecomposer decomposer = new QRDecomposer();
+        final var decomposer = new QRDecomposer();
 
         // Test for non-square matrix having rows > columns
         m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
         decomposer.setInputMatrix(m);
 
         // Force NotAvailableException
-        try {
-            decomposer.getQ();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, decomposer::getQ);
 
         decomposer.decompose();
 
@@ -307,11 +272,7 @@ public class QRDecomposerTest {
         decomposer.setInputMatrix(m);
 
         // Force NotAvailableException
-        try {
-            decomposer.getQ();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, decomposer::getQ);
 
         decomposer.decompose();
 
@@ -333,69 +294,47 @@ public class QRDecomposerTest {
     }
 
     @Test
-    public void testSolve() throws WrongSizeException,
-            RankDeficientMatrixException, NotReadyException, LockedException,
+    void testSolve() throws WrongSizeException, RankDeficientMatrixException, NotReadyException, LockedException,
             DecomposerException, NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 4, MAX_ROWS + 2);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, rows - 1);
-        final int columns2 = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-
-        Matrix m;
-        Matrix b;
-        Matrix s;
-        Matrix b2;
-        double relError;
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 4, MAX_ROWS + 2);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, rows - 1);
+        final var columns2 = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         // Try for square matrix
-        m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
-        b = Matrix.createWithUniformRandomValues(rows, columns2,
-                MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
+        var m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
+        final var b = Matrix.createWithUniformRandomValues(rows, columns2, MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
 
-        final QRDecomposer decomposer = new QRDecomposer(m);
+        final var decomposer = new QRDecomposer(m);
 
         // Force NotAvailableException
-        try {
-            decomposer.solve(b);
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, () -> decomposer.solve(b));
         decomposer.decompose();
 
         // Force IllegalArgumentException
-        try {
-            decomposer.solve(b, -1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> decomposer.solve(b, -1.0));
 
-        s = decomposer.solve(b);
+        var s = decomposer.solve(b);
 
         // Check that solution after calling solve matches following equation:
         // m * s = b
-        b2 = m.multiplyAndReturnNew(s);
+        var b2 = m.multiplyAndReturnNew(s);
 
         assertEquals(b.getRows(), b2.getRows());
         assertEquals(b.getColumns(), b2.getColumns());
 
         assertTrue(b.equals(b, ABSOLUTE_ERROR));
 
-
         // Try for overdetermined system (rows > columns)
         m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
-        b = Matrix.createWithUniformRandomValues(rows, columns2,
-                MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
+        final var b1 = Matrix.createWithUniformRandomValues(rows, columns2, MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
 
         decomposer.setInputMatrix(m);
         decomposer.decompose();
 
         // Force IllegalArgumentException
-        try {
-            decomposer.solve(b, -1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> decomposer.solve(b1, -1.0));
 
         s = decomposer.solve(b);
 
@@ -406,13 +345,13 @@ public class QRDecomposerTest {
         assertEquals(b.getRows(), b2.getRows());
         assertEquals(b.getColumns(), b2.getColumns());
 
-        int valid = 0;
-        final int total = b2.getColumns() * b2.getRows();
-        for (int j = 0; j < b2.getColumns(); j++) {
-            for (int i = 0; i < b2.getRows(); i++) {
+        double relError;
+        var valid = 0;
+        final var total = b2.getColumns() * b2.getRows();
+        for (var j = 0; j < b2.getColumns(); j++) {
+            for (var i = 0; i < b2.getRows(); i++) {
                 relError = Math.abs(RELATIVE_ERROR * b2.getElementAt(i, j));
-                if (Math.abs(b2.getElementAt(i, j) - b.getElementAt(i, j)) <
-                        relError) {
+                if (Math.abs(b2.getElementAt(i, j) - b.getElementAt(i, j)) < relError) {
                     valid++;
                 }
             }
@@ -423,98 +362,66 @@ public class QRDecomposerTest {
         // Try for b matrix having different number of rows than m
         // (Throws WrongSizeException)
         m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
-        b = Matrix.createWithUniformRandomValues(columns, columns2,
-                MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
+        final var b3 = Matrix.createWithUniformRandomValues(columns, columns2, MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
         decomposer.setInputMatrix(m);
         decomposer.decompose();
-        try {
-            decomposer.solve(b);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> decomposer.solve(b3));
 
         // Test for Rank deficient matrix only for squared matrices
         // (for other sizes, rank deficiency might not be detected and solve
         // method would execute)
         m = DecomposerHelper.getSingularMatrixInstance(rows, rows);
-        b = Matrix.createWithUniformRandomValues(rows, columns2,
-                MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
+        final var b4 = Matrix.createWithUniformRandomValues(rows, columns2, MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
         decomposer.setInputMatrix(m);
         decomposer.decompose();
-        try {
-            decomposer.solve(b, ABSOLUTE_ERROR);
-            fail("RankDeficientMatrixException expected but not thrown");
-        } catch (final RankDeficientMatrixException ignore) {
-        }
+        assertThrows(RankDeficientMatrixException.class, () -> decomposer.solve(b4, ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testSolve2() throws WrongSizeException,
-            RankDeficientMatrixException, NotReadyException, LockedException,
+    void testSolve2() throws WrongSizeException, RankDeficientMatrixException, NotReadyException, LockedException,
             DecomposerException, NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 4, MAX_ROWS + 2);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, rows - 1);
-        final int columns2 = randomizer.nextInt(MIN_COLUMNS + 1, MAX_COLUMNS);
-
-        Matrix m;
-        Matrix b;
-        Matrix s;
-        Matrix b2;
-        double relError;
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 4, MAX_ROWS + 2);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, rows - 1);
+        final var columns2 = randomizer.nextInt(MIN_COLUMNS + 1, MAX_COLUMNS);
 
         // Try for square matrix
-        m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
-        b = Matrix.createWithUniformRandomValues(rows, columns2,
-                MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
+        var m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
+        final var b = Matrix.createWithUniformRandomValues(rows, columns2, MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
 
-        final QRDecomposer decomposer = new QRDecomposer(m);
+        final var decomposer = new QRDecomposer(m);
 
-        s = new Matrix(rows, columns2);
+        final var s = new Matrix(rows, columns2);
 
         // Force NotAvailableException
-        try {
-            decomposer.solve(b, s);
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, () -> decomposer.solve(b, s));
         decomposer.decompose();
 
         // Force IllegalArgumentException
-        try {
-            decomposer.solve(b, -1.0, s);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> decomposer.solve(b, -1.0, s));
 
         decomposer.solve(b, s);
 
         // Check that solution after calling solve matches following equation:
         // m * s = b
-        b2 = m.multiplyAndReturnNew(s);
+        var b2 = m.multiplyAndReturnNew(s);
 
         assertEquals(b.getRows(), b2.getRows());
         assertEquals(b.getColumns(), b2.getColumns());
 
         assertTrue(b.equals(b, ABSOLUTE_ERROR));
 
-
         // Try for overdetermined system (rows > columns)
         m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
-        b = Matrix.createWithUniformRandomValues(rows, columns2,
-                MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
-        s = new Matrix(columns, columns2);
+        final var b3 = Matrix.createWithUniformRandomValues(rows, columns2, MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
+        final var s2 = new Matrix(columns, columns2);
 
         decomposer.setInputMatrix(m);
         decomposer.decompose();
 
         // Force IllegalArgumentException
-        try {
-            decomposer.solve(b, -1.0, s);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> decomposer.solve(b3, -1.0, s2));
 
         decomposer.solve(b, s);
 
@@ -525,13 +432,13 @@ public class QRDecomposerTest {
         assertEquals(b.getRows(), b2.getRows());
         assertEquals(b.getColumns(), b2.getColumns());
 
-        int valid = 0;
-        final int total = b2.getColumns() * b2.getRows();
-        for (int j = 0; j < b2.getColumns(); j++) {
-            for (int i = 0; i < b2.getRows(); i++) {
+        var valid = 0;
+        final var total = b2.getColumns() * b2.getRows();
+        double relError;
+        for (var j = 0; j < b2.getColumns(); j++) {
+            for (var i = 0; i < b2.getRows(); i++) {
                 relError = Math.abs(RELATIVE_ERROR * b2.getElementAt(i, j));
-                if (Math.abs(b2.getElementAt(i, j) - b.getElementAt(i, j)) <
-                        relError) {
+                if (Math.abs(b2.getElementAt(i, j) - b.getElementAt(i, j)) < relError) {
                     valid++;
                 }
             }
@@ -542,30 +449,21 @@ public class QRDecomposerTest {
         // Try for b matrix having different number of rows than m
         // (Throws WrongSizeException)
         m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
-        b = Matrix.createWithUniformRandomValues(columns, columns2,
+        final var b4 = Matrix.createWithUniformRandomValues(columns, columns2,
                 MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
-        s = new Matrix(columns, columns2);
+        final var s3 = new Matrix(columns, columns2);
         decomposer.setInputMatrix(m);
         decomposer.decompose();
-        try {
-            decomposer.solve(b, s);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> decomposer.solve(b4, s3));
 
         // Test for Rank deficient matrix only for squared matrices
         // (for other sizes, rank deficiency might not be detected and solve
         // method would execute)
         m = DecomposerHelper.getSingularMatrixInstance(rows, rows);
-        b = Matrix.createWithUniformRandomValues(rows, columns2,
-                MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
-        s = new Matrix(rows, columns2);
+        final var b5 = Matrix.createWithUniformRandomValues(rows, columns2, MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
+        final var s4 = new Matrix(rows, columns2);
         decomposer.setInputMatrix(m);
         decomposer.decompose();
-        try {
-            decomposer.solve(b, ABSOLUTE_ERROR, s);
-            fail("RankDeficientMatrixException expected but not thrown");
-        } catch (final RankDeficientMatrixException ignore) {
-        }
+        assertThrows(RankDeficientMatrixException.class, () -> decomposer.solve(b5, ABSOLUTE_ERROR, s4));
     }
 }

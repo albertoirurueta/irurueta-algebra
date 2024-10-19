@@ -107,11 +107,10 @@ public class RQDecomposer extends Decomposer {
      *                             lock this instance while it is being executed.
      * @throws DecomposerException Exception thrown if for any reason
      *                             decomposition fails while being executed, like when provided input matrix
-     *                             has less rows than columns.
+     *                             has fewer rows than columns.
      */
     @Override
-    public void decompose() throws NotReadyException, LockedException,
-            DecomposerException {
+    public void decompose() throws NotReadyException, LockedException, DecomposerException {
 
         if (!isReady()) {
             throw new NotReadyException();
@@ -124,14 +123,14 @@ public class RQDecomposer extends Decomposer {
 
         locked = true;
 
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
 
         try {
             tmp = new Matrix(columns, rows);
 
-            for (int j = 0; j < columns; j++) {
-                for (int i = 0; i < rows; i++) {
+            for (var j = 0; j < columns; j++) {
+                for (var i = 0; i < rows; i++) {
                     tmp.setElementAt(j, rows - i - 1,
                             inputMatrix.getElementAt(i, j));
                 }
@@ -163,10 +162,10 @@ public class RQDecomposer extends Decomposer {
             throw new NotAvailableException();
         }
 
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
 
-        final Matrix r2 = internalDecomposer.getR();
+        final var r2 = internalDecomposer.getR();
 
         // Left-right flipped identity
         // Instance initialized to zero
@@ -176,15 +175,14 @@ public class RQDecomposer extends Decomposer {
 
             flipI.initialize(0.0);
 
-            for (int j = 0; j < rows; j++) {
-                for (int i = 0; i < rows; i++) {
+            for (var j = 0; j < rows; j++) {
+                for (var i = 0; i < rows; i++) {
                     if (i == rows - j - 1) flipI.setElementAt(i, j, 1.0);
                 }
             }
         } catch (final WrongSizeException ignore) {
             //never happens
         }
-
 
         // Big permutation
         Matrix perm = null;
@@ -193,8 +191,8 @@ public class RQDecomposer extends Decomposer {
                 perm = Matrix.identity(columns, columns);
 
                 // Copy flipped identity into top-left corner
-                perm.setSubmatrix(0, 0,
-                        rows - 1, rows - 1, flipI);
+                perm.setSubmatrix(0, 0, rows - 1, rows - 1,
+                        flipI);
 
                 perm.multiply(r2); //perm * r2
                 perm.multiply(flipI); //perm * r2 * flipI
@@ -223,10 +221,10 @@ public class RQDecomposer extends Decomposer {
             throw new NotAvailableException();
         }
 
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
 
-        final Matrix q2 = internalDecomposer.getQ();
+        final var q2 = internalDecomposer.getQ();
 
         // Left-right flipped identity
         // Instance initialized to zero
@@ -254,8 +252,7 @@ public class RQDecomposer extends Decomposer {
             perm = Matrix.identity(columns, columns);
 
             // Copy flipped identity into top-left corner
-            perm.setSubmatrix(0, 0,
-                    rows - 1, rows - 1, flipI);
+            perm.setSubmatrix(0, 0, rows - 1, rows - 1, flipI);
 
         } catch (final WrongSizeException ignore) {
             // never happens

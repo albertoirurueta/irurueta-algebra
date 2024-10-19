@@ -210,8 +210,7 @@ public class SingularValueDecomposer extends Decomposer {
      *                             results cannot be obtained, etc.
      */
     @Override
-    public void decompose() throws NotReadyException, LockedException,
-            DecomposerException {
+    public void decompose() throws NotReadyException, LockedException, DecomposerException {
 
         if (!isReady()) {
             throw new NotReadyException();
@@ -222,8 +221,8 @@ public class SingularValueDecomposer extends Decomposer {
 
         locked = true;
 
-        final int m = inputMatrix.getRows();
-        final int n = inputMatrix.getColumns();
+        final var m = inputMatrix.getRows();
+        final var n = inputMatrix.getColumns();
 
         // copy input matrix into U
         u = new Matrix(inputMatrix);
@@ -236,8 +235,7 @@ public class SingularValueDecomposer extends Decomposer {
         try {
             internalDecompose();
             reorder();
-            setNegligibleSingularValueThreshold(0.5 * Math.sqrt(m + n + 1.0) *
-                    w[0] * eps);
+            setNegligibleSingularValueThreshold(0.5 * Math.sqrt(m + n + 1.0) * w[0] * eps);
             locked = false;
         } catch (final DecomposerException e) {
             u = v = null;
@@ -303,8 +301,7 @@ public class SingularValueDecomposer extends Decomposer {
      *                               this method before computing Singular Value decomposition.
      *                               To avoid this exception call decompose() method first.
      */
-    public double getNegligibleSingularValueThreshold()
-            throws NotAvailableException {
+    public double getNegligibleSingularValueThreshold() throws NotAvailableException {
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
         }
@@ -498,9 +495,8 @@ public class SingularValueDecomposer extends Decomposer {
             throw new NotAvailableException();
         }
 
-        final int columns = inputMatrix.getColumns();
-        return (w[0] <= 0.0 || w[columns - 1] <= 0.0) ? 0.0 :
-                w[columns - 1] / w[0];
+        final var columns = inputMatrix.getColumns();
+        return (w[0] <= 0.0 || w[columns - 1] <= 0.0) ? 0.0 : w[columns - 1] / w[0];
     }
 
     /**
@@ -528,8 +524,7 @@ public class SingularValueDecomposer extends Decomposer {
      *                                  value close to zero.
      * @see #decompose()
      */
-    public int getRank(final double singularValueThreshold)
-            throws NotAvailableException {
+    public int getRank(final double singularValueThreshold) throws NotAvailableException {
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
         }
@@ -537,8 +532,8 @@ public class SingularValueDecomposer extends Decomposer {
             throw new IllegalArgumentException();
         }
 
-        int r = 0;
-        for (double aW : w) {
+        var r = 0;
+        for (var aW : w) {
             if (aW > singularValueThreshold) {
                 r++;
             }
@@ -596,9 +591,8 @@ public class SingularValueDecomposer extends Decomposer {
      *                                  value close to zero.
      * @see #decompose()
      */
-    public int getNullity(final double singularValueThreshold)
-            throws NotAvailableException {
-        int n = inputMatrix.getColumns();
+    public int getNullity(final double singularValueThreshold) throws NotAvailableException {
+        final var n = inputMatrix.getColumns();
         return n - getRank(singularValueThreshold);
     }
 
@@ -647,12 +641,11 @@ public class SingularValueDecomposer extends Decomposer {
      *                                  are always positive, and hence, provided threshold should be a positive
      *                                  near to zero value.
      */
-    public void getRange(final double singularValueThreshold, final Matrix range)
-            throws NotAvailableException {
+    public void getRange(final double singularValueThreshold, final Matrix range) throws NotAvailableException {
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
         }
-        final int rank = getRank(singularValueThreshold);
+        final var rank = getRank(singularValueThreshold);
         internalGetRange(rank, singularValueThreshold, range);
     }
 
@@ -699,13 +692,12 @@ public class SingularValueDecomposer extends Decomposer {
      *                                  are always positive, and hence, provided threshold should be a positive
      *                                  near to zero value.
      */
-    public Matrix getRange(final double singularValueThreshold)
-            throws NotAvailableException {
+    public Matrix getRange(final double singularValueThreshold) throws NotAvailableException {
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
         }
-        final int rows = inputMatrix.getRows();
-        final int rank = getRank(singularValueThreshold);
+        final var rows = inputMatrix.getRows();
+        final var rank = getRank(singularValueThreshold);
 
         Matrix out;
         try {
@@ -761,7 +753,7 @@ public class SingularValueDecomposer extends Decomposer {
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
         }
-        final int nullity = getNullity(singularValueThreshold);
+        final var nullity = getNullity(singularValueThreshold);
         internalGetNullspace(nullity, singularValueThreshold, nullspace);
     }
 
@@ -808,14 +800,13 @@ public class SingularValueDecomposer extends Decomposer {
      *                                  are always positive, and hence, provided threshold should be a positive
      *                                  near to zero value.
      */
-    public Matrix getNullspace(final double singularValueThreshold)
-            throws NotAvailableException {
+    public Matrix getNullspace(final double singularValueThreshold) throws NotAvailableException {
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
         }
 
-        final int columns = inputMatrix.getColumns();
-        final int nullity = getNullity(singularValueThreshold);
+        final var columns = inputMatrix.getColumns();
+        final var nullity = getNullity(singularValueThreshold);
         Matrix out;
         try {
             out = new Matrix(columns, nullity);
@@ -898,11 +889,11 @@ public class SingularValueDecomposer extends Decomposer {
             throw new IllegalArgumentException();
         }
 
-        final int m = inputMatrix.getRows();
-        final int n = inputMatrix.getColumns();
-        final int p = b.getColumns();
+        final var m = inputMatrix.getRows();
+        final var n = inputMatrix.getColumns();
+        final var p = b.getColumns();
 
-        final double[] bcol = new double[m];
+        final var bcol = new double[m];
         double[] xx;
 
         // resize result matrix if needed
@@ -910,15 +901,14 @@ public class SingularValueDecomposer extends Decomposer {
             result.resize(n, p);
         }
 
-        for (int j = 0; j < p; j++) {
-            for (int i = 0; i < m; i++) {
+        for (var j = 0; j < p; j++) {
+            for (var i = 0; i < m; i++) {
                 bcol[i] = b.getElementAt(i, j);
             }
 
             xx = solve(bcol, singularValueThreshold);
             // set column j of X using values in vector xx
             result.setSubmatrix(0, j, n - 1, j, xx);
-
         }
     }
 
@@ -926,7 +916,7 @@ public class SingularValueDecomposer extends Decomposer {
      * Solves a linear system of equations of the following form: A * X = B
      * using the pseudo-inverse to find the least squares solution.
      * Where A is the input matrix provided for Singular Value decomposition,
-     * X is the solution to the system of equations, and B is the parameters
+     * X is the solution to the system of equations, and B is the parameter
      * matrix.
      * Note: This method can be reused for different b matrices without having
      * to recompute Singular Value decomposition on the same input matrix.
@@ -959,8 +949,7 @@ public class SingularValueDecomposer extends Decomposer {
      *                               Value decomposed.
      * @see #decompose()
      */
-    public void solve(final Matrix b, final Matrix result) throws NotAvailableException,
-            WrongSizeException {
+    public void solve(final Matrix b, final Matrix result) throws NotAvailableException, WrongSizeException {
         solve(b, getNegligibleSingularValueThreshold(), result);
     }
 
@@ -968,7 +957,7 @@ public class SingularValueDecomposer extends Decomposer {
      * Solves a linear system of equations of the following form: A * X = B
      * using the pseudo-inverse to find the least squares solution.
      * Where A is the input matrix provided for Singular Value decomposition,
-     * X is the solution to the system of equations, and B is the parameters
+     * X is the solution to the system of equations, and B is the parameter
      * matrix.
      * Note: This method can be reused for different b matrices without having
      * to recompute Singular Value decomposition on the same input matrix.
@@ -1000,9 +989,9 @@ public class SingularValueDecomposer extends Decomposer {
      */
     public Matrix solve(final Matrix b, final double singularValueThreshold)
             throws NotAvailableException, WrongSizeException {
-        final int n = inputMatrix.getColumns();
-        final int p = b.getColumns();
-        final Matrix x = new Matrix(n, p);
+        final var n = inputMatrix.getColumns();
+        final var p = b.getColumns();
+        final var x = new Matrix(n, p);
         solve(b, singularValueThreshold, x);
         return x;
     }
@@ -1011,7 +1000,7 @@ public class SingularValueDecomposer extends Decomposer {
      * Solves a linear system of equations of the following form: A * X = B
      * using the pseudo-inverse to find the least squares solution.
      * Where A is the input matrix provided for Singular Value decomposition,
-     * X is the solution to the system of equations, and B is the parameters
+     * X is the solution to the system of equations, and B is the parameter
      * matrix.
      * Note: This method can be reused for different b matrices without having
      * to recompute Singular Value decomposition on the same input matrix.
@@ -1094,29 +1083,29 @@ public class SingularValueDecomposer extends Decomposer {
             throw new IllegalArgumentException();
         }
 
-        final int m = inputMatrix.getRows();
-        final int n = inputMatrix.getColumns();
+        final var m = inputMatrix.getRows();
+        final var n = inputMatrix.getColumns();
 
         if (result.length != n) {
             throw new WrongSizeException();
         }
 
         double s;
-        final double[] tmp = new double[n];
+        final var tmp = new double[n];
 
-        for (int j = 0; j < n; j++) {
+        for (var j = 0; j < n; j++) {
             s = 0.0;
             if (w[j] > singularValueThreshold) {
-                for (int i = 0; i < m; i++) {
+                for (var i = 0; i < m; i++) {
                     s += u.getElementAt(i, j) * b[i];
                 }
                 s /= w[j];
             }
             tmp[j] = s;
         }
-        for (int j = 0; j < n; j++) {
+        for (var j = 0; j < n; j++) {
             s = 0.0;
-            for (int jj = 0; jj < n; jj++) {
+            for (var jj = 0; jj < n; jj++) {
                 s += v.getElementAt(j, jj) * tmp[jj];
             }
             result[j] = s;
@@ -1160,8 +1149,7 @@ public class SingularValueDecomposer extends Decomposer {
      *                                  value threshold is lower than minimum allowed value (MIN_THRESH).
      * @see #decompose()
      */
-    public void solve(final double[] b, final double[] result) throws NotAvailableException,
-            WrongSizeException {
+    public void solve(final double[] b, final double[] result) throws NotAvailableException, WrongSizeException {
         solve(b, getNegligibleSingularValueThreshold(), result);
     }
 
@@ -1197,11 +1185,11 @@ public class SingularValueDecomposer extends Decomposer {
      *                                  value threshold is lower than minimum allowed value (MIN_THRESH).
      * @see #decompose()
      */
-    public double[] solve(final double[] b, final double singularValueThreshold)
-            throws NotAvailableException, WrongSizeException {
-        final int n = inputMatrix.getColumns();
+    public double[] solve(final double[] b, final double singularValueThreshold) throws NotAvailableException,
+            WrongSizeException {
+        final var n = inputMatrix.getColumns();
 
-        final double[] x = new double[n];
+        final var x = new double[n];
         solve(b, singularValueThreshold, x);
         return x;
     }
@@ -1240,8 +1228,7 @@ public class SingularValueDecomposer extends Decomposer {
      *                               Singular Value decomposed.
      * @see #decompose()
      */
-    public double[] solve(final double[] b) throws NotAvailableException,
-            WrongSizeException {
+    public double[] solve(final double[] b) throws NotAvailableException, WrongSizeException {
         return solve(b, getNegligibleSingularValueThreshold());
     }
 
@@ -1258,8 +1245,8 @@ public class SingularValueDecomposer extends Decomposer {
      */
     @SuppressWarnings("DuplicatedCode")
     private void internalDecompose() throws NoConvergenceException {
-        final int m = inputMatrix.getRows();
-        final int n = inputMatrix.getColumns();
+        final var m = inputMatrix.getRows();
+        final var n = inputMatrix.getColumns();
 
         boolean flag;
         int i;
@@ -1267,8 +1254,8 @@ public class SingularValueDecomposer extends Decomposer {
         int j;
         int jj;
         int k;
-        int l = 0;
-        int nm = 0;
+        var l = 0;
+        var nm = 0;
         double anorm;
         double c;
         double f;
@@ -1279,7 +1266,7 @@ public class SingularValueDecomposer extends Decomposer {
         double x;
         double y;
         double z;
-        double[] rv1 = new double[n];
+        var rv1 = new double[n];
 
         // Householder reduction to bi-diagonal form
         g = scale = anorm = 0.0;
@@ -1306,8 +1293,7 @@ public class SingularValueDecomposer extends Decomposer {
                         }
                         f = s / h;
                         for (k = i; k < m; k++) {
-                            u.setElementAt(k, j, u.getElementAt(k, j) +
-                                    f * u.getElementAt(k, i));
+                            u.setElementAt(k, j, u.getElementAt(k, j) + f * u.getElementAt(k, i));
                         }
                     }
                     for (k = i; k < m; k++) {
@@ -1338,8 +1324,7 @@ public class SingularValueDecomposer extends Decomposer {
                             s += u.getElementAt(j, k) * u.getElementAt(i, k);
                         }
                         for (k = l - 1; k < n; k++) {
-                            u.setElementAt(j, k,
-                                    u.getElementAt(j, k) + s * rv1[k]);
+                            u.setElementAt(j, k, u.getElementAt(j, k) + s * rv1[k]);
                         }
                     }
                     for (k = l - 1; k < n; k++) {
@@ -1356,16 +1341,14 @@ public class SingularValueDecomposer extends Decomposer {
                 if (g != 0.0) {
                     // Double division to avoid possible underflow.
                     for (j = l; j < n; j++) {
-                        v.setElementAt(j, i, u.getElementAt(i, j) /
-                                u.getElementAt(i, l) / g);
+                        v.setElementAt(j, i, u.getElementAt(i, j) / u.getElementAt(i, l) / g);
                     }
                     for (j = l; j < n; j++) {
                         for (s = 0.0, k = l; k < n; k++) {
                             s += u.getElementAt(i, k) * v.getElementAt(k, j);
                         }
                         for (k = l; k < n; k++) {
-                            v.setElementAt(k, j, v.getElementAt(k, j) +
-                                    s * v.getElementAt(k, i));
+                            v.setElementAt(k, j, v.getElementAt(k, j) + s * v.getElementAt(k, i));
                         }
                     }
                 }
@@ -1394,8 +1377,7 @@ public class SingularValueDecomposer extends Decomposer {
                     }
                     f = (s / u.getElementAt(i, i)) * g;
                     for (k = i; k < m; k++) {
-                        u.setElementAt(k, j, u.getElementAt(k, j) +
-                                f * u.getElementAt(k, i));
+                        u.setElementAt(k, j, u.getElementAt(k, j) + f * u.getElementAt(k, i));
                     }
                 }
                 for (j = i; j < m; j++) {
@@ -1536,17 +1518,17 @@ public class SingularValueDecomposer extends Decomposer {
      * still remains valid.
      */
     private void reorder() {
-        final int m = inputMatrix.getRows();
-        final int n = inputMatrix.getColumns();
+        final var m = inputMatrix.getRows();
+        final var n = inputMatrix.getColumns();
 
         int i;
         int j;
         int k;
         int s;
-        int inc = 1;
+        var inc = 1;
         double sw;
-        final double[] su = new double[m];
-        final double[] sv = new double[n];
+        final var su = new double[m];
+        final var sv = new double[n];
 
         do {
             inc *= 3;
@@ -1639,14 +1621,13 @@ public class SingularValueDecomposer extends Decomposer {
      * @return Norm of (a, b).
      */
     private double pythag(final double a, final double b) {
-        final double absa = Math.abs(a);
-        final double absb = Math.abs(b);
+        final var absa = Math.abs(a);
+        final var absb = Math.abs(b);
 
         if (absa > absb) {
             return absa * Math.sqrt(1.0 + (absb / absa) * (absb / absa));
         } else {
-            return (absb == 0.0 ?
-                    0.0 : absb * Math.sqrt(1.0 + (absa / absb) * (absa / absb)));
+            return (absb == 0.0 ? 0.0 : absb * Math.sqrt(1.0 + (absa / absb) * (absa / absb)));
         }
     }
 
@@ -1675,10 +1656,9 @@ public class SingularValueDecomposer extends Decomposer {
      *                               value is null
      * @param range                  Matrix where range space vector values are stored.
      */
-    private void internalGetRange(final int rank, final double singularValueThreshold,
-                                  final Matrix range) {
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
+    private void internalGetRange(final int rank, final double singularValueThreshold, final Matrix range) {
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
 
         if (range.getRows() != rows || range.getColumns() != rank) {
             try {
@@ -1688,11 +1668,12 @@ public class SingularValueDecomposer extends Decomposer {
             }
         }
 
-        int nr = 0;
-        for (int j = 0; j < columns; j++) {
+        var nr = 0;
+        for (var j = 0; j < columns; j++) {
             if (w[j] > singularValueThreshold) {
                 // copy column j of U matrix into column nr of out matrix
-                range.setSubmatrix(0, nr, rows - 1, nr, u, 0, j, rows - 1, j);
+                range.setSubmatrix(0, nr, rows - 1, nr, u, 0, j,
+                        rows - 1, j);
                 nr++;
             }
         }
@@ -1719,8 +1700,8 @@ public class SingularValueDecomposer extends Decomposer {
             }
         }
 
-        int nn = 0;
-        for (int j = 0; j < columns; j++) {
+        var nn = 0;
+        for (var j = 0; j < columns; j++) {
             if (w[j] <= singularValueThreshold) {
                 // copy column j of U matrix into column nn of out matrix
                 nullspace.setSubmatrix(0, nn, columns - 1, nn, v, 0, j,

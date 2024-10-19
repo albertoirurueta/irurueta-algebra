@@ -138,8 +138,7 @@ public class LUDecomposer extends Decomposer {
      *                             can not be obtained, etc.
      */
     @Override
-    public void decompose() throws NotReadyException, LockedException,
-            DecomposerException {
+    public void decompose() throws NotReadyException, LockedException, DecomposerException {
 
         if (!isReady()) {
             throw new NotReadyException();
@@ -148,8 +147,8 @@ public class LUDecomposer extends Decomposer {
             throw new LockedException();
         }
 
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
 
         if (columns > rows) {
             throw new DecomposerException();
@@ -161,40 +160,38 @@ public class LUDecomposer extends Decomposer {
         lu = new Matrix(inputMatrix);
 
         piv = new int[rows];
-        for (int i = 0; i < rows; i++) {
+        for (var i = 0; i < rows; i++) {
             piv[i] = i;
         }
 
         pivSign = 1;
 
         // Main loop
-        for (int k = 0; k < columns; k++) {
+        for (var k = 0; k < columns; k++) {
             // Find pivot
-            int p = k;
-            for (int i = k + 1; i < rows; i++) {
-                p = Math.abs(lu.getElementAt(i, k)) >
-                        Math.abs(lu.getElementAt(p, k)) ? i : p;
+            var p = k;
+            for (var i = k + 1; i < rows; i++) {
+                p = Math.abs(lu.getElementAt(i, k)) > Math.abs(lu.getElementAt(p, k)) ? i : p;
             }
             // Exchange if necessary
             if (p != k) {
-                for (int j = 0; j < columns; j++) {
-                    final double t = lu.getElementAt(p, j);
+                for (var j = 0; j < columns; j++) {
+                    final var t = lu.getElementAt(p, j);
                     lu.setElementAt(p, j, lu.getElementAt(k, j));
                     lu.setElementAt(k, j, t);
                 }
-                final int t = piv[p];
+                final var t = piv[p];
                 piv[p] = piv[k];
                 piv[k] = t;
                 pivSign = -pivSign;
             }
             // Compute multipliers and eliminate k-th column
             if (lu.getElementAt(k, k) != 0.0) {
-                for (int i = k + 1; i < rows; i++) {
-                    lu.setElementAt(i, k, lu.getElementAt(i, k) /
-                            lu.getElementAt(k, k));
-                    for (int j = k + 1; j < columns; j++) {
-                        lu.setElementAt(i, j, lu.getElementAt(i, j) -
-                                lu.getElementAt(i, k) * lu.getElementAt(k, j));
+                for (var i = k + 1; i < rows; i++) {
+                    lu.setElementAt(i, k, lu.getElementAt(i, k) / lu.getElementAt(k, k));
+                    for (var j = k + 1; j < columns; j++) {
+                        lu.setElementAt(i, j, lu.getElementAt(i, j)
+                                - lu.getElementAt(i, k) * lu.getElementAt(k, j));
                     }
                 }
             }
@@ -228,8 +225,7 @@ public class LUDecomposer extends Decomposer {
      *                                  error is lower than minimum allowed value (MIN_ROUND_ERROR)
      * @see #decompose()
      */
-    public boolean isSingular() throws NotAvailableException,
-            WrongSizeException {
+    public boolean isSingular() throws NotAvailableException, WrongSizeException {
         return isSingular(DEFAULT_ROUND_ERROR);
     }
 
@@ -262,8 +258,7 @@ public class LUDecomposer extends Decomposer {
      *                                  error is lower than minimum allowed value (MIN_ROUND_ERROR)
      * @see #decompose()
      */
-    public boolean isSingular(final double roundingError)
-            throws NotAvailableException, WrongSizeException {
+    public boolean isSingular(final double roundingError) throws NotAvailableException, WrongSizeException {
 
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
@@ -274,8 +269,8 @@ public class LUDecomposer extends Decomposer {
 
         // A matrix is singular when its determinant is zero. Hence, in order to
         // compute singularity matrix must be square
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
         if (rows != columns) {
             throw new WrongSizeException();
         }
@@ -284,7 +279,7 @@ public class LUDecomposer extends Decomposer {
         // determinant of a triangular matrix is the product of its diagonal
         // elements. Hence, if any element in the diagonal is zero, input matrix
         // will be singular.
-        for (int j = 0; j < columns; j++) {
+        for (var j = 0; j < columns; j++) {
             if (lu.getElementAt(j, j) == 0.0) {
                 return true;
             }
@@ -314,8 +309,8 @@ public class LUDecomposer extends Decomposer {
             throw new NotAvailableException();
         }
 
-        final int rows = lu.getRows();
-        final int columns = lu.getColumns();
+        final var rows = lu.getRows();
+        final var columns = lu.getColumns();
 
         if (pivottedL.getRows() != rows || pivottedL.getColumns() != columns) {
             try {
@@ -325,8 +320,8 @@ public class LUDecomposer extends Decomposer {
             }
         }
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
+        for (var i = 0; i < rows; i++) {
+            for (var j = 0; j < columns; j++) {
                 if (i > j) {
                     pivottedL.setElementAt(i, j, lu.getElementAt(i, j));
                 } else if (i == j) {
@@ -360,8 +355,8 @@ public class LUDecomposer extends Decomposer {
             throw new NotAvailableException();
         }
 
-        final int rows = lu.getRows();
-        final int columns = lu.getColumns();
+        final var rows = lu.getRows();
+        final var columns = lu.getColumns();
 
         Matrix out = null;
         try {
@@ -395,8 +390,8 @@ public class LUDecomposer extends Decomposer {
             throw new NotAvailableException();
         }
 
-        final int rows = lu.getRows();
-        final int columns = lu.getColumns();
+        final var rows = lu.getRows();
+        final var columns = lu.getColumns();
 
         if (l.getRows() != rows || l.getColumns() != columns) {
             try {
@@ -406,8 +401,8 @@ public class LUDecomposer extends Decomposer {
             }
         }
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
+        for (var i = 0; i < rows; i++) {
+            for (var j = 0; j < columns; j++) {
                 if (i > j) {
                     l.setElementAt(piv[i], j, lu.getElementAt(i, j));
                 } else if (i == j) {
@@ -441,8 +436,8 @@ public class LUDecomposer extends Decomposer {
             throw new NotAvailableException();
         }
 
-        final int rows = lu.getRows();
-        final int columns = lu.getColumns();
+        final var rows = lu.getRows();
+        final var columns = lu.getColumns();
         Matrix out = null;
         try {
             out = new Matrix(rows, columns);
@@ -472,7 +467,7 @@ public class LUDecomposer extends Decomposer {
             throw new NotAvailableException();
         }
 
-        final int columns = lu.getColumns();
+        final var columns = lu.getColumns();
 
         if (u.getRows() != columns || u.getColumns() != columns) {
             try {
@@ -481,8 +476,8 @@ public class LUDecomposer extends Decomposer {
                 // never happens
             }
         }
-        for (int i = 0; i < columns; i++) {
-            for (int j = 0; j < columns; j++) {
+        for (var i = 0; i < columns; i++) {
+            for (var j = 0; j < columns; j++) {
                 if (i <= j) {
                     u.setElementAt(i, j, lu.getElementAt(i, j));
                 } else {
@@ -511,7 +506,7 @@ public class LUDecomposer extends Decomposer {
             throw new NotAvailableException();
         }
 
-        final int columns = lu.getColumns();
+        final var columns = lu.getColumns();
         Matrix out = null;
         try {
             out = new Matrix(columns, columns);
@@ -563,16 +558,15 @@ public class LUDecomposer extends Decomposer {
      *                               method using a non-square input matrix.
      * @see #decompose()
      */
-    public double determinant() throws NotAvailableException,
-            WrongSizeException {
+    public double determinant() throws NotAvailableException, WrongSizeException {
 
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
         }
 
         // Determinants can only be computed on squared matrices
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
 
         if (rows != columns) {
             throw new WrongSizeException();
@@ -629,8 +623,8 @@ public class LUDecomposer extends Decomposer {
      *                                  error is lower than minimum allowed value (MIN_ROUND_ERROR).
      * @see #decompose()
      */
-    public void solve(final Matrix b, final Matrix result) throws NotAvailableException,
-            WrongSizeException, SingularMatrixException {
+    public void solve(final Matrix b, final Matrix result) throws NotAvailableException, WrongSizeException,
+            SingularMatrixException {
         solve(b, DEFAULT_ROUND_ERROR, result);
     }
 
@@ -680,8 +674,7 @@ public class LUDecomposer extends Decomposer {
      * @see #decompose()
      */
     public void solve(final Matrix b, final double roundingError, final Matrix result)
-            throws NotAvailableException, WrongSizeException,
-            SingularMatrixException {
+            throws NotAvailableException, WrongSizeException, SingularMatrixException {
 
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
@@ -696,9 +689,9 @@ public class LUDecomposer extends Decomposer {
         }
 
         // Copy right hand side with pivoting
-        final int rows = lu.getRows();
-        final int columns = lu.getColumns();
-        final int colsB = b.getColumns();
+        final var rows = lu.getRows();
+        final var columns = lu.getColumns();
+        final var colsB = b.getColumns();
 
         if (rows != columns) {
             throw new WrongSizeException();
@@ -713,32 +706,31 @@ public class LUDecomposer extends Decomposer {
         }
         result.initialize(0.0);
 
-        for (int i = 0; i < columns; i++) {
-            for (int j = 0; j < colsB; j++) {
+        for (var i = 0; i < columns; i++) {
+            for (var j = 0; j < colsB; j++) {
                 result.setElementAt(i, j, b.getElementAt(piv[i], j));
             }
         }
 
         // Solve L * Y = b(piv, :)
-        for (int k = 0; k < columns; k++) {
-            for (int i = k + 1; i < columns; i++) {
-                for (int j = 0; j < colsB; j++) {
-                    result.setElementAt(i, j, result.getElementAt(i, j) -
-                            result.getElementAt(k, j) * lu.getElementAt(i, k));
+        for (var k = 0; k < columns; k++) {
+            for (var i = k + 1; i < columns; i++) {
+                for (var j = 0; j < colsB; j++) {
+                    result.setElementAt(i, j, result.getElementAt(i, j)
+                            - result.getElementAt(k, j) * lu.getElementAt(i, k));
                 }
             }
         }
 
         // Solve U * X = Y
-        for (int k = columns - 1; k >= 0; k--) {
-            for (int j = 0; j < colsB; j++) {
-                result.setElementAt(k, j, result.getElementAt(k, j) /
-                        lu.getElementAt(k, k));
+        for (var k = columns - 1; k >= 0; k--) {
+            for (var j = 0; j < colsB; j++) {
+                result.setElementAt(k, j, result.getElementAt(k, j) / lu.getElementAt(k, k));
             }
-            for (int i = 0; i < k; i++) {
-                for (int j = 0; j < colsB; j++) {
-                    result.setElementAt(i, j, result.getElementAt(i, j) -
-                            result.getElementAt(k, j) * lu.getElementAt(i, k));
+            for (var i = 0; i < k; i++) {
+                for (var j = 0; j < colsB; j++) {
+                    result.setElementAt(i, j, result.getElementAt(i, j)
+                            - result.getElementAt(k, j) * lu.getElementAt(i, k));
                 }
             }
         }
@@ -784,8 +776,7 @@ public class LUDecomposer extends Decomposer {
      *                                  error is lower than minimum allowed value (MIN_ROUND_ERROR).
      * @see #decompose()
      */
-    public Matrix solve(final Matrix b) throws NotAvailableException,
-            WrongSizeException, SingularMatrixException {
+    public Matrix solve(final Matrix b) throws NotAvailableException, WrongSizeException, SingularMatrixException {
         return solve(b, DEFAULT_ROUND_ERROR);
     }
 
@@ -832,17 +823,16 @@ public class LUDecomposer extends Decomposer {
      *                                  error is lower than minimum allowed value (MIN_ROUND_ERROR).
      * @see #decompose()
      */
-    public Matrix solve(final Matrix b, final double roundingError)
-            throws NotAvailableException, WrongSizeException,
+    public Matrix solve(final Matrix b, final double roundingError) throws NotAvailableException, WrongSizeException,
             SingularMatrixException {
 
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
         }
 
-        final int columns = lu.getColumns();
-        final int colsB = b.getColumns();
-        final Matrix out = new Matrix(columns, colsB);
+        final var columns = lu.getColumns();
+        final var colsB = b.getColumns();
+        final var out = new Matrix(columns, colsB);
         solve(b, roundingError, out);
         return out;
     }

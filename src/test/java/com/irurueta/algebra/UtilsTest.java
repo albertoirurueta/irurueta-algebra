@@ -16,13 +16,11 @@
 package com.irurueta.algebra;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class UtilsTest {
+class UtilsTest {
 
     private static final double MIN_RANDOM_VALUE = 0.0;
     private static final double MAX_RANDOM_VALUE = 50.0;
@@ -40,17 +38,16 @@ public class UtilsTest {
     private static final int TIMES = 10;
 
     @Test
-    public void testTrace() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testTrace() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double trace = 0.0;
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var trace = 0.0;
 
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 if (i == j) {
                     trace += m.getElementAt(i, j);
                 }
@@ -61,50 +58,48 @@ public class UtilsTest {
     }
 
     @Test
-    public void testCond() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testCond() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(m);
 
         decomposer.decompose();
 
-        final double condNumber = decomposer.getConditionNumber();
+        final var condNumber = decomposer.getConditionNumber();
 
         assertEquals(condNumber, Utils.cond(m), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testRank() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testRank() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
-        final int rank = decomposer.getRank();
+        final var rank = decomposer.getRank();
 
         assertEquals(rank, Utils.rank(m), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testDet() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testDet() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
         int columns;
-        int t = 0;
+        var t = 0;
         do {
             columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
             t++;
@@ -113,135 +108,96 @@ public class UtilsTest {
         assertNotEquals(rows, columns);
 
         // Test for square matrix
-        Matrix m = Matrix.createWithUniformRandomValues(rows, rows,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final LUDecomposer decomposer = new LUDecomposer(m);
+        var m = Matrix.createWithUniformRandomValues(rows, rows, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new LUDecomposer(m);
         decomposer.decompose();
 
-        final double det = decomposer.determinant();
+        final var det = decomposer.determinant();
 
         assertEquals(det, Utils.det(m), ABSOLUTE_ERROR);
 
         // Test for non-square matrix (Force WrongSizeException)
-        m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        try {
-            Utils.det(m);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var m2 = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        assertThrows(WrongSizeException.class, () -> Utils.det(m2));
     }
 
     @Test
-    public void testSolveMatrix() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException,
-            SingularMatrixException, RankDeficientMatrixException {
+    void testSolveMatrix() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException, SingularMatrixException, RankDeficientMatrixException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_COLUMNS + 5, MAX_COLUMNS + 5);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, rows - 1);
-        final int colsB = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-
-        Matrix m, b, s, s2, s3;
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_COLUMNS + 5, MAX_COLUMNS + 5);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, rows - 1);
+        final var colsB = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         // Test for non-singular square matrix
-        m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
-        b = Matrix.createWithUniformRandomValues(rows, colsB, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        s3 = new Matrix(rows, colsB);
+        final var m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
+        final var b = Matrix.createWithUniformRandomValues(rows, colsB, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var s3 = new Matrix(rows, colsB);
 
-        final LUDecomposer decomposer = new LUDecomposer(m);
+        final var decomposer = new LUDecomposer(m);
         decomposer.decompose();
 
-        s = decomposer.solve(b);
-        s2 = Utils.solve(m, b);
+        var s = decomposer.solve(b);
+        var s2 = Utils.solve(m, b);
         Utils.solve(m, b, s3);
 
         assertTrue(s.equals(s2, ABSOLUTE_ERROR));
         assertEquals(s2, s3);
 
         // Test for singular square matrix (Force RankDeficientMatrixException)
-        m = DecomposerHelper.getSingularMatrixInstance(rows, rows);
-        try {
-            Utils.solve(m, b);
-            fail("RankDeficientMatrixException expected but not thrown");
-        } catch (final RankDeficientMatrixException ignore) {
-        }
-        try {
-            Utils.solve(m, b, s3);
-            fail("RankDeficientMatrixException expected but not thrown");
-        } catch (final RankDeficientMatrixException ignore) {
-        }
+        final var m2 = DecomposerHelper.getSingularMatrixInstance(rows, rows);
+        assertThrows(RankDeficientMatrixException.class, () -> Utils.solve(m2, b));
+        assertThrows(RankDeficientMatrixException.class, () -> Utils.solve(m2, b, s3));
 
         // Test for non-square (rows > columns) non-rank deficient matrix
-        m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
-        b = Matrix.createWithUniformRandomValues(rows, colsB,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        s3 = new Matrix(columns, colsB);
+        final var m3 = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
+        final var b2 = Matrix.createWithUniformRandomValues(rows, colsB, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var s4 = new Matrix(columns, colsB);
 
-        final EconomyQRDecomposer decomposer2 = new EconomyQRDecomposer(m);
+        final var decomposer2 = new EconomyQRDecomposer(m3);
         decomposer2.decompose();
 
-        s = decomposer2.solve(b);
-        s2 = Utils.solve(m, b);
-        Utils.solve(m, b, s3);
+        s = decomposer2.solve(b2);
+        s2 = Utils.solve(m3, b2);
+        Utils.solve(m3, b2, s4);
 
         assertTrue(s.equals(s2, ABSOLUTE_ERROR));
-        assertEquals(s2, s3);
+        assertEquals(s2, s4);
 
         // Test for non-square (rows < columns) matrix (Force WrongSizeException)
-        m = DecomposerHelper.getSingularMatrixInstance(columns, rows);
-        b = Matrix.createWithUniformRandomValues(columns, colsB,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        s3 = new Matrix(rows, colsB);
-        try {
-            Utils.solve(m, b);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Utils.solve(m, b, s3);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var m4 = DecomposerHelper.getSingularMatrixInstance(columns, rows);
+        final var b3 = Matrix.createWithUniformRandomValues(columns, colsB, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var s5 = new Matrix(rows, colsB);
+        assertThrows(WrongSizeException.class, () -> Utils.solve(m4, b3));
+        assertThrows(WrongSizeException.class, () -> Utils.solve(m4, b3, s5));
 
         // Test for b having different number of rows than m
-        m = DecomposerHelper.getSingularMatrixInstance(rows, columns);
-        b = Matrix.createWithUniformRandomValues(columns, colsB,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        s3 = new Matrix(columns, colsB);
-        try {
-            Utils.solve(m, b);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Utils.solve(m, b, s3);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var m5 = DecomposerHelper.getSingularMatrixInstance(rows, columns);
+        final var b4 = Matrix.createWithUniformRandomValues(columns, colsB, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var s6 = new Matrix(columns, colsB);
+        assertThrows(WrongSizeException.class, () -> Utils.solve(m5, b4));
+        assertThrows(WrongSizeException.class, () -> Utils.solve(m5, b4, s6));
     }
 
     @Test
-    public void testSolveArray() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException,
-            SingularMatrixException, RankDeficientMatrixException {
+    void testSolveArray() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException, SingularMatrixException, RankDeficientMatrixException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_COLUMNS + 5, MAX_COLUMNS + 5);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, rows - 1);
-        final int colsB = 1;
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_COLUMNS + 5, MAX_COLUMNS + 5);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, rows - 1);
+        final var colsB = 1;
 
-        Matrix m, s;
-        double[] b, s2, s3;
+        Matrix s;
+        double[] s2;
 
         // Test for non-singular square matrix
-        m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
-        b = Matrix.createWithUniformRandomValues(rows, colsB, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE).toArray();
-        s3 = new double[rows];
+        final var m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
+        final var b = Matrix.createWithUniformRandomValues(rows, colsB, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE).toArray();
+        final var s3 = new double[rows];
 
-        final LUDecomposer decomposer = new LUDecomposer(m);
+        final var decomposer = new LUDecomposer(m);
         decomposer.decompose();
 
         s = decomposer.solve(Matrix.newFromArray(b));
@@ -252,253 +208,201 @@ public class UtilsTest {
         assertArrayEquals(s2, s3, 0.0);
 
         // Test for singular square matrix (Force RankDeficientMatrixException)
-        m = DecomposerHelper.getSingularMatrixInstance(rows, rows);
-        try {
-            Utils.solve(m, b);
-            fail("DecomposerException expected but not thrown");
-        } catch (final DecomposerException ignore) {
-        }
-        try {
-            Utils.solve(m, b, s3);
-            fail("DecomposerException expected but not thrown");
-        } catch (final DecomposerException ignore) {
-        }
+        final var m2 = DecomposerHelper.getSingularMatrixInstance(rows, rows);
+        assertThrows(DecomposerException.class, () -> Utils.solve(m2, b));
+        assertThrows(DecomposerException.class, () -> Utils.solve(m2, b, s3));
 
         // Test for non-square (rows > columns) non-rank deficient matrix
-        m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
-        b = Matrix.createWithUniformRandomValues(rows, colsB,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE).toArray();
-        s3 = new double[columns];
+        final var m3 = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
+        final var b2 = Matrix.createWithUniformRandomValues(rows, colsB, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE).toArray();
+        final var s4 = new double[columns];
 
-        final EconomyQRDecomposer decomposer2 = new EconomyQRDecomposer(m);
+        final var decomposer2 = new EconomyQRDecomposer(m3);
         decomposer2.decompose();
 
-        s = decomposer2.solve(Matrix.newFromArray(b));
-        s2 = Utils.solve(m, b);
-        Utils.solve(m, b, s3);
+        s = decomposer2.solve(Matrix.newFromArray(b2));
+        s2 = Utils.solve(m3, b2);
+        Utils.solve(m3, b2, s4);
 
         assertArrayEquals(s.toArray(), s2, ABSOLUTE_ERROR);
-        assertArrayEquals(s2, s3, 0.0);
+        assertArrayEquals(s2, s4, 0.0);
 
         // Test for non-square (rows < columns) matrix (Force WrongSizeException)
-        m = DecomposerHelper.getSingularMatrixInstance(columns, rows);
-        b = Matrix.createWithUniformRandomValues(columns, colsB,
+        final var m4 = DecomposerHelper.getSingularMatrixInstance(columns, rows);
+        final var b3 = Matrix.createWithUniformRandomValues(columns, colsB,
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE).toArray();
-        s3 = new double[rows];
-        try {
-            Utils.solve(m, b);
-            fail("DecomposerException expected but not thrown");
-        } catch (final DecomposerException ignore) {
-        }
-        try {
-            Utils.solve(m, b, s3);
-            fail("DecomposerException expected but not thrown");
-        } catch (final DecomposerException ignore) {
-        }
+        final var s5 = new double[rows];
+        assertThrows(DecomposerException.class, () -> Utils.solve(m4, b3));
+        assertThrows(DecomposerException.class, () -> Utils.solve(m4, b3, s5));
 
         // Test for b having different number of rows than m
-        m = DecomposerHelper.getSingularMatrixInstance(rows, columns);
-        b = Matrix.createWithUniformRandomValues(columns, colsB,
+        final var m5 = DecomposerHelper.getSingularMatrixInstance(rows, columns);
+        final var b4 = Matrix.createWithUniformRandomValues(columns, colsB,
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE).toArray();
-        s3 = new double[columns];
-        try {
-            Utils.solve(m, b);
-            fail("DecomposerException expected but not thrown");
-        } catch (final DecomposerException ignore) {
-        }
-        try {
-            Utils.solve(m, b, s3);
-            fail("DecomposerException expected but not thrown");
-        } catch (final DecomposerException ignore) {
-        }
+        final var s6 = new double[columns];
+        assertThrows(DecomposerException.class, () -> Utils.solve(m5, b4));
+        assertThrows(DecomposerException.class, () -> Utils.solve(m5, b4, s6));
     }
 
     @Test
-    public void testNormF() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testNormF() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final FrobeniusNormComputer normComputer = new FrobeniusNormComputer();
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var normComputer = new FrobeniusNormComputer();
 
-        final double norm = normComputer.getNorm(m);
+        final var norm = normComputer.getNorm(m);
         assertEquals(norm, Utils.normF(m), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testNormInf() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testNormInf() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InfinityNormComputer normComputer = new InfinityNormComputer();
+        var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var normComputer = new InfinityNormComputer();
 
-        double norm = normComputer.getNorm(m);
+        var norm = normComputer.getNorm(m);
         assertEquals(norm, Utils.normInf(m), ABSOLUTE_ERROR);
 
-        m = Matrix.createWithUniformRandomValues(rows, 1,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        m = Matrix.createWithUniformRandomValues(rows, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         norm = normComputer.getNorm(m.toArray());
         assertEquals(norm, Utils.normInf(m.toArray()), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testNorm2() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testNorm2() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
-        double norm2 = decomposer.getNorm2();
+        var norm2 = decomposer.getNorm2();
         assertEquals(norm2, Utils.norm2(m), ABSOLUTE_ERROR);
 
-        m = Matrix.createWithUniformRandomValues(rows, 1,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        m = Matrix.createWithUniformRandomValues(rows, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         norm2 = Utils.norm2(m);
         assertEquals(norm2, Utils.norm2(m.toArray()), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testNorm1() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testNorm1() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final OneNormComputer normComputer = new OneNormComputer();
+        var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var normComputer = new OneNormComputer();
 
-        double norm = normComputer.getNorm(m);
+        var norm = normComputer.getNorm(m);
         assertEquals(norm, Utils.norm1(m), ABSOLUTE_ERROR);
 
 
-        m = Matrix.createWithUniformRandomValues(rows, 1,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        m = Matrix.createWithUniformRandomValues(rows, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         norm = normComputer.getNorm(m);
         assertEquals(norm, Utils.norm1(m.toArray()), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testInverse() throws WrongSizeException,
-            RankDeficientMatrixException, DecomposerException {
+    void testInverse() throws WrongSizeException, RankDeficientMatrixException, DecomposerException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
-        final int rows = randomizer.nextInt(columns + 1, MAX_ROWS + 3);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+        final var rows = randomizer.nextInt(columns + 1, MAX_ROWS + 3);
 
-        Matrix m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
-        Matrix inverse = Utils.inverse(m);
-        Matrix identity = m.multiplyAndReturnNew(inverse);
+        final var m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
+        var inverse = Utils.inverse(m);
+        var identity = m.multiplyAndReturnNew(inverse);
         // Check identity is correct
         assertTrue(identity.equals(Matrix.identity(rows, rows), ROUND_ERROR));
 
         // Test for singular square matrix (Force RankDeficientMatrixException)
-        m = DecomposerHelper.getSingularMatrixInstance(rows, rows);
-        try {
-            Utils.inverse(m);
-            fail("RankDeficientMatrixException expected but not thrown");
-        } catch (final RankDeficientMatrixException ignore) {
-        }
+        final var m2 = DecomposerHelper.getSingularMatrixInstance(rows, rows);
+        assertThrows(RankDeficientMatrixException.class, () -> Utils.inverse(m2));
 
         // Test for non-square (rows > columns) non-singular matrix to find
         // pseudo-inverse, hence we use BIG_RELATIVE_ERROR to test correctness
-        m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
-        inverse = Utils.inverse(m);
+        final var m3 = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
+        inverse = Utils.inverse(m3);
 
-        identity = m.multiplyAndReturnNew(inverse);
+        identity = m3.multiplyAndReturnNew(inverse);
         // Check identity is correct
-        for (int j = 0; j < rows; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < rows; j++) {
+            for (var i = 0; i < rows; i++) {
                 if (i == j) {
-                    assertEquals(1.0, identity.getElementAt(i, j),
-                            BIG_ROUND_ERROR);
+                    assertEquals(1.0, identity.getElementAt(i, j), BIG_ROUND_ERROR);
                 } else {
-                    assertEquals(0.0, identity.getElementAt(i, j),
-                            BIG_ROUND_ERROR);
+                    assertEquals(0.0, identity.getElementAt(i, j), BIG_ROUND_ERROR);
                 }
             }
         }
 
         // Test for non-square (rows < columns) matrix (Force WrongSizeException)
-        m = DecomposerHelper.getSingularMatrixInstance(columns, rows);
-        try {
-            Utils.inverse(m);
-        } catch (final WrongSizeException ignore) {
-        }
+        final var m4 = DecomposerHelper.getSingularMatrixInstance(columns, rows);
+        assertThrows(WrongSizeException.class, () -> Utils.inverse(m4));
     }
 
     @Test
-    public void testInverse2() throws WrongSizeException,
-            RankDeficientMatrixException, DecomposerException {
+    void testInverse2() throws WrongSizeException, RankDeficientMatrixException, DecomposerException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
-        final int rows = randomizer.nextInt(columns + 1, MAX_ROWS + 3);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+        final var rows = randomizer.nextInt(columns + 1, MAX_ROWS + 3);
 
-        Matrix m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
-        Matrix inverse = new Matrix(m);
+        var m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
+        final var inverse = new Matrix(m);
         Utils.inverse(inverse, inverse);
-        Matrix identity = m.multiplyAndReturnNew(inverse);
+        var identity = m.multiplyAndReturnNew(inverse);
         // Check identity is correct
         assertTrue(identity.equals(Matrix.identity(rows, rows), ROUND_ERROR));
 
         // Test for singular square matrix (Force RankDeficientMatrixException)
-        m = DecomposerHelper.getSingularMatrixInstance(rows, rows);
-        try {
-            Utils.inverse(m, inverse);
-            fail("RankDeficientMatrixException expected but not thrown");
-        } catch (final RankDeficientMatrixException ignore) {
-        }
+        final var m2 = DecomposerHelper.getSingularMatrixInstance(rows, rows);
+        assertThrows(RankDeficientMatrixException.class, () -> Utils.inverse(m2, inverse));
 
         // Test for non-square (rows > columns) non-singular matrix to find
         // pseudo-inverse, hence we use BIG_RELATIVE_ERROR to test correctness
-        m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
-        inverse = new Matrix(rows, columns);
-        Utils.inverse(m, inverse);
+        final var m3 = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
+        final var inverse2 = new Matrix(rows, columns);
+        Utils.inverse(m3, inverse2);
 
-        identity = m.multiplyAndReturnNew(inverse);
+        identity = m3.multiplyAndReturnNew(inverse2);
         // Check identity is correct
-        for (int j = 0; j < rows; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < rows; j++) {
+            for (var i = 0; i < rows; i++) {
                 if (i == j) {
-                    assertEquals(1.0, identity.getElementAt(i, j),
-                            BIG_ROUND_ERROR);
+                    assertEquals(1.0, identity.getElementAt(i, j), BIG_ROUND_ERROR);
                 } else {
-                    assertEquals(0.0, identity.getElementAt(i, j),
-                            BIG_ROUND_ERROR);
+                    assertEquals(0.0, identity.getElementAt(i, j), BIG_ROUND_ERROR);
                 }
             }
         }
 
         // Test for non-square (rows < columns) matrix (Force WrongSizeException)
-        m = DecomposerHelper.getSingularMatrixInstance(columns, rows);
-        try {
-            Utils.inverse(m, inverse);
-        } catch (final WrongSizeException ignore) {
-        }
+        final var m4 = DecomposerHelper.getSingularMatrixInstance(columns, rows);
+        assertThrows(WrongSizeException.class, () -> Utils.inverse(m4, inverse));
     }
 
     @Test
-    public void testInverse3() throws WrongSizeException, DecomposerException, RankDeficientMatrixException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int length = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testInverse3() throws WrongSizeException, DecomposerException, RankDeficientMatrixException {
+        final var randomizer = new UniformRandomizer();
+        final var length = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = DecomposerHelper.getNonSingularMatrixInstance(length, 1);
-        final double[] array = m.toArray();
-        final Matrix inverse1 = Utils.pseudoInverse(m);
-        final Matrix inverse2 = new Matrix(inverse1.getRows(), inverse1.getColumns());
+        final var m = DecomposerHelper.getNonSingularMatrixInstance(length, 1);
+        final var array = m.toArray();
+        final var inverse1 = Utils.pseudoInverse(m);
+        final var inverse2 = new Matrix(inverse1.getRows(), inverse1.getColumns());
         Utils.inverse(array, inverse2);
-        final Matrix inverse3 = Utils.inverse(array);
-        final Matrix inverse4 = Utils.pseudoInverse(array);
+        final var inverse3 = Utils.inverse(array);
+        final var inverse4 = Utils.pseudoInverse(array);
 
         assertTrue(inverse1.equals(inverse2, ABSOLUTE_ERROR));
         assertEquals(inverse2, inverse3);
@@ -506,16 +410,15 @@ public class UtilsTest {
     }
 
     @Test
-    public void testPseudoInverse() throws WrongSizeException,
-            DecomposerException {
+    void testPseudoInverse() throws WrongSizeException, DecomposerException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
-        final int rows = randomizer.nextInt(columns + 1, MAX_ROWS + 3);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+        final var rows = randomizer.nextInt(columns + 1, MAX_ROWS + 3);
 
-        Matrix m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
-        Matrix inverse = Utils.pseudoInverse(m);
-        Matrix identity = m.multiplyAndReturnNew(inverse);
+        var m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
+        var inverse = Utils.pseudoInverse(m);
+        var identity = m.multiplyAndReturnNew(inverse);
         // Check identity is correct and that pseudo-inverse is equal to the
         // inverse
         assertTrue(identity.equals(Matrix.identity(rows, rows), ROUND_ERROR));
@@ -526,26 +429,24 @@ public class UtilsTest {
         identity = m.multiplyAndReturnNew(inverse);
         // Check identity is correct and that pseudo-inverse is equal to the
         // inverse
-        assertTrue(identity.equals(Matrix.identity(rows, rows),
-                BIG_ROUND_ERROR));
+        assertTrue(identity.equals(Matrix.identity(rows, rows), BIG_ROUND_ERROR));
 
         // Test for non-square (rows < columns) non-singular matrix
         m = DecomposerHelper.getNonSingularMatrixInstance(columns, rows);
         inverse = Utils.pseudoInverse(m);
         identity = m.multiplyAndReturnNew(inverse);
-        assertTrue(identity.equals(Matrix.identity(columns, columns),
-                BIG_ROUND_ERROR));
+        assertTrue(identity.equals(Matrix.identity(columns, columns), BIG_ROUND_ERROR));
     }
 
     @Test
-    public void testSkew1() throws WrongSizeException {
+    void testSkew1() throws WrongSizeException {
 
-        final double[] array = new double[3];
+        final var array = new double[3];
         array[0] = 1.0;
         array[1] = 4.0;
         array[2] = 2.0;
 
-        final Matrix m = Utils.skewMatrix(array);
+        final var m = Utils.skewMatrix(array);
 
         assertEquals(-array[2], m.getElementAt(0, 1), ABSOLUTE_ERROR);
         assertEquals(array[1], m.getElementAt(0, 2), ABSOLUTE_ERROR);
@@ -554,13 +455,13 @@ public class UtilsTest {
         assertEquals(-array[1], m.getElementAt(2, 0), ABSOLUTE_ERROR);
         assertEquals(array[0], m.getElementAt(2, 1), ABSOLUTE_ERROR);
 
-        final Matrix m2 = new Matrix(3, 3);
+        final var m2 = new Matrix(3, 3);
         Utils.skewMatrix(array, m2);
 
         assertEquals(m, m2);
 
-        final Matrix jacobian = new Matrix(9, 3);
-        final Matrix m3 = new Matrix(3, 3);
+        final var jacobian = new Matrix(9, 3);
+        final var m3 = new Matrix(3, 3);
         Utils.skewMatrix(array, m3, jacobian);
 
         assertEquals(m, m3);
@@ -596,21 +497,18 @@ public class UtilsTest {
         assertEquals(0.0, jacobian.getElementAt(8, 2), 0.0);
 
         // Force WrongSizeException
-        try {
-            Utils.skewMatrix(array, m3, new Matrix(1, 1));
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var m1 = new Matrix(1, 1);
+        assertThrows(WrongSizeException.class, () -> Utils.skewMatrix(array, m3, m1));
     }
 
     @Test
-    public void testSkew2() throws WrongSizeException {
-        final Matrix m = new Matrix(3, 1);
+    void testSkew2() throws WrongSizeException {
+        final var m = new Matrix(3, 1);
         m.setElementAt(0, 0, 1.0);
         m.setElementAt(1, 0, 4.0);
         m.setElementAt(2, 0, 3.0);
 
-        final Matrix mSkew = Utils.skewMatrix(m);
+        final var mSkew = Utils.skewMatrix(m);
 
         assertEquals(-m.getElementAt(2, 0), mSkew.getElementAt(0, 1), ABSOLUTE_ERROR);
         assertEquals(m.getElementAt(1, 0), mSkew.getElementAt(0, 2), ABSOLUTE_ERROR);
@@ -620,13 +518,13 @@ public class UtilsTest {
         assertEquals(m.getElementAt(0, 0), mSkew.getElementAt(2, 1), ABSOLUTE_ERROR);
 
 
-        final Matrix m2 = new Matrix(3, 3);
+        final var m2 = new Matrix(3, 3);
         Utils.skewMatrix(m, m2);
 
         assertEquals(mSkew, m2);
 
-        final Matrix jacobian = new Matrix(9, 3);
-        final Matrix m3 = new Matrix(3, 3);
+        final var jacobian = new Matrix(9, 3);
+        final var m3 = new Matrix(3, 3);
         Utils.skewMatrix(m, m3, jacobian);
 
         assertEquals(mSkew, m3);
@@ -662,18 +560,15 @@ public class UtilsTest {
         assertEquals(0.0, jacobian.getElementAt(8, 2), 0.0);
 
         // Force WrongSizeException
-        try {
-            Utils.skewMatrix(m, m3, new Matrix(1, 1));
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var m1 = new Matrix(1, 1);
+        assertThrows(WrongSizeException.class, () -> Utils.skewMatrix(m, m3, m1));
     }
 
     @Test
-    public void testCrossProduct1() throws WrongSizeException {
+    void testCrossProduct1() throws WrongSizeException {
 
-        final double[] array1 = new double[3];
-        final double[] array2 = new double[3];
+        final var array1 = new double[3];
+        final var array2 = new double[3];
 
         array1[0] = 1.0;
         array1[1] = 4.0;
@@ -683,8 +578,8 @@ public class UtilsTest {
         array2[1] = 2.0;
         array2[2] = 3.0;
 
-        final double[] output = Utils.crossProduct(array1, array2);
-        final double[] output2 = new double[3];
+        final var output = Utils.crossProduct(array1, array2);
+        final var output2 = new double[3];
         Utils.crossProduct(array1, array2, output2);
 
         assertEquals(8.0, output[0], ABSOLUTE_ERROR);
@@ -693,8 +588,8 @@ public class UtilsTest {
 
         assertArrayEquals(output, output2, 0.0);
 
-        final Matrix jacobian1 = new Matrix(3, 3);
-        final Matrix jacobian2 = new Matrix(3, 3);
+        final var jacobian1 = new Matrix(3, 3);
+        final var jacobian2 = new Matrix(3, 3);
 
         Utils.crossProduct(array1, array2, output2, jacobian1, jacobian2);
 
@@ -702,43 +597,24 @@ public class UtilsTest {
         assertEquals(Utils.skewMatrix(array2), jacobian2);
 
         // Force WrongSizeException
-        try {
-            assertNotNull(Utils.crossProduct(array1, array2, new Matrix(1, 1), jacobian2));
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            assertNotNull(Utils.crossProduct(array1, array2, jacobian1, new Matrix(1, 1)));
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var m1 = new Matrix(1, 1);
+        assertThrows(WrongSizeException.class, () -> Utils.crossProduct(array1, array2, m1, jacobian2));
+        final var m2 = new Matrix(1, 1);
+        assertThrows(WrongSizeException.class, () -> Utils.crossProduct(array1, array2, jacobian1, m2));
 
-        try {
-            Utils.crossProduct(array1, array2, new double[1], jacobian1,
-                    jacobian2);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Utils.crossProduct(array1, array2, output2, new Matrix(1, 1),
-                    jacobian2);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Utils.crossProduct(array1, array2, output2, jacobian1,
-                    new Matrix(1, 1));
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-
+        assertThrows(WrongSizeException.class, () -> Utils.crossProduct(array1, array2, new double[1], jacobian1,
+                jacobian2));
+        final var m3 = new Matrix(1, 1);
+        assertThrows(WrongSizeException.class, () -> Utils.crossProduct(array1, array2, output2, m3, jacobian2));
+        final var m4 = new Matrix(1, 1);
+        assertThrows(WrongSizeException.class, () -> Utils.crossProduct(array1, array2, output2, jacobian1, m4));
     }
 
     @Test
-    public void testCrossProduct2() throws WrongSizeException {
+    void testCrossProduct2() throws WrongSizeException {
 
-        final double[] array = new double[3];
-        final Matrix m = new Matrix(3, 3);
+        final var array = new double[3];
+        final var m = new Matrix(3, 3);
 
         array[0] = 1.0;
         array[1] = 4.0;
@@ -759,7 +635,7 @@ public class UtilsTest {
         m.setElementAt(1, 2, 1.0);
         m.setElementAt(2, 2, 3.0);
 
-        final Matrix output = Utils.crossProduct(array, m);
+        final var output = Utils.crossProduct(array, m);
 
         assertEquals(8.0, output.getElementAt(0, 0), ABSOLUTE_ERROR);
         assertEquals(5.0, output.getElementAt(1, 0), ABSOLUTE_ERROR);
@@ -774,21 +650,16 @@ public class UtilsTest {
         assertEquals(-31.0, output.getElementAt(2, 2), ABSOLUTE_ERROR);
 
         // Force WrongSizeException
-        try {
-            Utils.crossProduct(new double[1], m);
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Utils.crossProduct(array, new Matrix(1, 1));
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> Utils.crossProduct(new double[1], m));
+        final var m1 = new Matrix(1, 1);
+        assertThrows(WrongSizeException.class, () -> Utils.crossProduct(array, m1));
     }
 
     @Test
-    public void testCrossProduct3() throws WrongSizeException {
+    void testCrossProduct3() throws WrongSizeException {
 
-        final double[] array = new double[3];
-        final Matrix m = new Matrix(3, 3);
+        final var array = new double[3];
+        final var m = new Matrix(3, 3);
 
         array[0] = 1.0;
         array[1] = 4.0;
@@ -809,7 +680,7 @@ public class UtilsTest {
         m.setElementAt(1, 2, 1.0);
         m.setElementAt(2, 2, 3.0);
 
-        final Matrix output = new Matrix(3, 1);
+        final var output = new Matrix(3, 1);
         Utils.crossProduct(array, m, output);
 
         assertEquals(8.0, output.getElementAt(0, 0), ABSOLUTE_ERROR);
@@ -825,28 +696,19 @@ public class UtilsTest {
         assertEquals(-31.0, output.getElementAt(2, 2), ABSOLUTE_ERROR);
 
         // Force WrongSizeException
-        try {
-            Utils.crossProduct(new double[1], m, output);
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Utils.crossProduct(array, new Matrix(1, 1), output);
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Utils.crossProduct(array, m, new Matrix(1, 1));
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> Utils.crossProduct(new double[1], m, output));
+        final var m1 = new Matrix(1, 1);
+        assertThrows(WrongSizeException.class, () -> Utils.crossProduct(array, m1, output));
     }
 
     @Test
-    public void testIsSymmetric() throws WrongSizeException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+    void testIsSymmetric() throws WrongSizeException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
+            final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-            final Matrix m = DecomposerHelper.getSymmetricMatrix(rows);
+            final var m = DecomposerHelper.getSymmetricMatrix(rows);
 
             assertTrue(Utils.isSymmetric(m));
             assertTrue(Utils.isSymmetric(m, ABSOLUTE_ERROR));
@@ -872,12 +734,12 @@ public class UtilsTest {
     }
 
     @Test
-    public void testIsOrthonormalAndIsOrthogonal() throws WrongSizeException {
+    void testIsOrthonormalAndIsOrthogonal() throws WrongSizeException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 1, MAX_ROWS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 1, MAX_ROWS);
 
-        Matrix m = DecomposerHelper.getOrthonormalMatrix(rows);
+        var m = DecomposerHelper.getOrthonormalMatrix(rows);
 
         assertTrue(Utils.isOrthonormal(m));
         assertTrue(Utils.isOrthonormal(m, ABSOLUTE_ERROR));
@@ -911,56 +773,39 @@ public class UtilsTest {
         assertFalse(Utils.isOrthonormal(m, ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException (by setting negative threshold)
-        try {
-            Utils.isOrthogonal(m, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.isOrthonormal(m, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var m2 = new Matrix(rows, rows + 1);
+        assertThrows(IllegalArgumentException.class, () -> Utils.isOrthogonal(m2, -ABSOLUTE_ERROR));
+        assertThrows(IllegalArgumentException.class, () -> Utils.isOrthonormal(m2, -ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testDotProduct() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int length = randomizer.nextInt(MIN_LENGTH + 1, MAX_LENGTH);
+    void testDotProduct() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var length = randomizer.nextInt(MIN_LENGTH + 1, MAX_LENGTH);
 
-        final double[] input1 = new double[length];
-        final double[] input2 = new double[length];
+        final var input1 = new double[length];
+        final var input2 = new double[length];
         randomizer.fill(input1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         randomizer.fill(input2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        double expectedResult = 0.0;
-        for (int i = 0; i < length; i++) {
+        var expectedResult = 0.0;
+        for (var i = 0; i < length; i++) {
             expectedResult += input1[i] * input2[i];
         }
 
-        double result = Utils.dotProduct(input1, input2);
+        var result = Utils.dotProduct(input1, input2);
 
         // check correctness
         assertEquals(expectedResult, result, 0.0);
 
         // Force IllegalArgumentException
-        final double[] wrongArray = new double[length + 1];
-        try {
-            //noinspection all
-            Utils.dotProduct(input1, wrongArray);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            //noinspection all
-            Utils.dotProduct(wrongArray, input2);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var wrongArray = new double[length + 1];
+        assertThrows(IllegalArgumentException.class, () -> Utils.dotProduct(input1, wrongArray));
+        assertThrows(IllegalArgumentException.class, () -> Utils.dotProduct(wrongArray, input2));
 
         // test with jacobians
-        final Matrix jacobian1 = new Matrix(1, length);
-        final Matrix jacobian2 = new Matrix(1, length);
+        final var jacobian1 = new Matrix(1, length);
+        final var jacobian2 = new Matrix(1, length);
         result = Utils.dotProduct(input1, input2, jacobian1, jacobian2);
 
         // check correctness
@@ -970,31 +815,16 @@ public class UtilsTest {
         assertArrayEquals(input2, jacobian2.getBuffer(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            Utils.dotProduct(wrongArray, input2, jacobian1, jacobian2);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.dotProduct(input1, wrongArray, jacobian1, jacobian2);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.dotProduct(input1, input2, new Matrix(1, 1), jacobian2);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.dotProduct(input1, input2, jacobian1, new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
+        assertThrows(IllegalArgumentException.class, () -> Utils.dotProduct(wrongArray, input2, jacobian1, jacobian2));
+        assertThrows(IllegalArgumentException.class, () -> Utils.dotProduct(input1, wrongArray, jacobian1, jacobian2));
+        assertThrows(IllegalArgumentException.class, () -> Utils.dotProduct(input1, input2,
+                new Matrix(1, 1), jacobian2));
+        assertThrows(IllegalArgumentException.class, () -> Utils.dotProduct(input1, input2, jacobian1,
+                new Matrix(1, 1)));
 
         // test with matrices
-        final Matrix m1 = Matrix.newFromArray(input1, false);
-        final Matrix m2 = Matrix.newFromArray(input2, true);
+        final var m1 = Matrix.newFromArray(input1, false);
+        final var m2 = Matrix.newFromArray(input2, true);
 
         result = Utils.dotProduct(m1, m2);
 
@@ -1002,17 +832,9 @@ public class UtilsTest {
         assertEquals(expectedResult, result, 0.0);
 
         // Force WrongSizeException
-        final Matrix wrongMatrix = new Matrix(length + 1, 1);
-        try {
-            Utils.dotProduct(m1, wrongMatrix);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Utils.dotProduct(wrongMatrix, m2);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var wrongMatrix = new Matrix(length + 1, 1);
+        assertThrows(WrongSizeException.class, () -> Utils.dotProduct(m1, wrongMatrix));
+        assertThrows(WrongSizeException.class, () -> Utils.dotProduct(wrongMatrix, m2));
 
         // test with jacobians
         result = Utils.dotProduct(m1, m2, jacobian1, jacobian2);
@@ -1024,46 +846,31 @@ public class UtilsTest {
         assertArrayEquals(m2.getBuffer(), jacobian2.getBuffer(), 0.0);
 
         // Force WrongSizeException
-        try {
-            Utils.dotProduct(wrongMatrix, m2, jacobian1, jacobian2);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Utils.dotProduct(m1, wrongMatrix, jacobian1, jacobian2);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> Utils.dotProduct(wrongMatrix, m2, jacobian1, jacobian2));
+        assertThrows(WrongSizeException.class, () -> Utils.dotProduct(m1, wrongMatrix, jacobian1, jacobian2));
 
         // Force IllegalArgumentException
-        try {
-            Utils.dotProduct(m1, m2, new Matrix(1, 1), jacobian2);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.dotProduct(m1, m2, jacobian1, new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> Utils.dotProduct(m1, m2, new Matrix(1, 1),
+                jacobian2));
+        assertThrows(IllegalArgumentException.class, () -> Utils.dotProduct(m1, m2, jacobian1,
+                new Matrix(1, 1)));
     }
 
     @Test
-    public void testSchurc() throws WrongSizeException, DecomposerException,
-            RankDeficientMatrixException {
+    void testSchurc() throws WrongSizeException, DecomposerException, RankDeficientMatrixException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int size = randomizer.nextInt(MIN_ROWS + 1, MAX_ROWS);
-        final int pos = randomizer.nextInt(1, size);
+        final var randomizer = new UniformRandomizer();
+        final var size = randomizer.nextInt(MIN_ROWS + 1, MAX_ROWS);
+        final var pos = randomizer.nextInt(1, size);
 
-        final Matrix m = DecomposerHelper.getSymmetricPositiveDefiniteMatrixInstance(
+        final var m = DecomposerHelper.getSymmetricPositiveDefiniteMatrixInstance(
                 DecomposerHelper.getLeftLowerTriangulatorFactor(size));
 
         // as defined in https://en.wikipedia.org/wiki/Schur_complement
-        final Matrix a = m.getSubmatrix(0, 0, pos - 1, pos - 1);
-        final Matrix b = m.getSubmatrix(0, pos, pos - 1, size - 1);
-        final Matrix c = m.getSubmatrix(pos, 0, size - 1, pos - 1);
-        final Matrix d = m.getSubmatrix(pos, pos, size - 1, size - 1);
+        final var a = m.getSubmatrix(0, 0, pos - 1, pos - 1);
+        final var b = m.getSubmatrix(0, pos, pos - 1, size - 1);
+        final var c = m.getSubmatrix(pos, 0, size - 1, pos - 1);
+        final var d = m.getSubmatrix(pos, pos, size - 1, size - 1);
 
         assertTrue(b.equals(c.transposeAndReturnNew(), ABSOLUTE_ERROR));
 
@@ -1071,8 +878,8 @@ public class UtilsTest {
         // test 1st schurc method
 
         // test with pos from start, and sqrt
-        Matrix result = new Matrix(size - pos, size - pos);
-        Matrix iA = new Matrix(pos, pos);
+        var result = new Matrix(size - pos, size - pos);
+        var iA = new Matrix(pos, pos);
         Utils.schurc(m, pos, true, true, result, iA);
 
         // check correctness
@@ -1082,17 +889,14 @@ public class UtilsTest {
 
         // Schur complement of A is: M/A = D - C*A^-1*B,
         // but result is the sqr root of that (an upper triangle matrix)
-        Matrix result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
-                Utils.inverse(a).multiplyAndReturnNew(b)));
-        Matrix schurc = result.transposeAndReturnNew().
-                multiplyAndReturnNew(result);
+        var result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(Utils.inverse(a).multiplyAndReturnNew(b)));
+        var schurc = result.transposeAndReturnNew().multiplyAndReturnNew(result);
         assertTrue(schurc.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of A
         assertEquals(pos, iA.getRows());
         assertEquals(pos, iA.getColumns());
-        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
-                ABSOLUTE_ERROR));
+        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos), ABSOLUTE_ERROR));
 
         // test with pos from start, and no sqrt
         result = new Matrix(size - pos, size - pos);
@@ -1107,9 +911,7 @@ public class UtilsTest {
         // iA is the inverse of A
         assertEquals(pos, iA.getRows());
         assertEquals(pos, iA.getColumns());
-        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
-                ABSOLUTE_ERROR));
-
+        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos), ABSOLUTE_ERROR));
 
         // test with pos from end, with sqrt
         result = new Matrix(pos, pos);
@@ -1130,9 +932,8 @@ public class UtilsTest {
         // iA is the inverse of D
         assertEquals(size - pos, iA.getRows());
         assertEquals(size - pos, iA.getColumns());
-        assertTrue(d.multiplyAndReturnNew(iA).equals(
-                Matrix.identity(size - pos, size - pos), ABSOLUTE_ERROR));
-
+        assertTrue(d.multiplyAndReturnNew(iA).equals(Matrix.identity(size - pos, size - pos),
+                ABSOLUTE_ERROR));
 
         // test with pos from end, and no sqrt
         result = new Matrix(pos, pos);
@@ -1147,35 +948,24 @@ public class UtilsTest {
         // iA is the inverse of D
         assertEquals(size - pos, iA.getRows());
         assertEquals(size - pos, iA.getColumns());
-        assertTrue(d.multiplyAndReturnNew(iA).equals(
-                Matrix.identity(size - pos, size - pos), ABSOLUTE_ERROR));
+        assertTrue(d.multiplyAndReturnNew(iA).equals(Matrix.identity(size - pos, size - pos),
+                ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        final Matrix wrong = new Matrix(size, size + 1);
-        try {
-            Utils.schurc(wrong, pos, true, true, result, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.schurc(m, size, true, true, result, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.schurc(m, 0, true, true, result, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var wrong = new Matrix(size, size + 1);
+        final var result3 = new Matrix(size - pos, size - pos);
+        final var iA2 = new Matrix(pos, pos);
+        assertThrows(IllegalArgumentException.class,
+                () -> Utils.schurc(wrong, pos, true, true, result3, iA2));
+        assertThrows(IllegalArgumentException.class,
+                () -> Utils.schurc(m, size, true, true, result3, iA2));
+        assertThrows(IllegalArgumentException.class,
+                () -> Utils.schurc(m, 0, true, true, result3, iA2));
 
         // Force RankDeficientMatrixException
-        final Matrix m2 = new Matrix(size, size);
-        try {
-            Utils.schurc(m2, pos, true, true, result, iA);
-            fail("RankDeficientMatrixException expected but not thrown");
-        } catch (final RankDeficientMatrixException ignore) {
-        }
-
+        final var m2 = new Matrix(size, size);
+        assertThrows(RankDeficientMatrixException.class,
+                () -> Utils.schurc(m2, pos, true, true, result3, iA2));
 
         // test 2nd schurc method
 
@@ -1189,16 +979,13 @@ public class UtilsTest {
         assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B,
-        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
-                Utils.inverse(a).multiplyAndReturnNew(b)));
+        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(Utils.inverse(a).multiplyAndReturnNew(b)));
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of A
         assertEquals(pos, iA.getRows());
         assertEquals(pos, iA.getColumns());
-        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
-                ABSOLUTE_ERROR));
-
+        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos), ABSOLUTE_ERROR));
 
         // test with pos from end and no sqrt
         result = new Matrix(pos, pos);
@@ -1210,40 +997,24 @@ public class UtilsTest {
         assertEquals(pos, result.getColumns());
 
         // Schur complement of D is: M/D = A - B*D^-1*C
-        result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(
-                Utils.inverse(d).multiplyAndReturnNew(c)));
+        result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(Utils.inverse(d).multiplyAndReturnNew(c)));
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of D
         assertEquals(size - pos, iA.getRows());
         assertEquals(size - pos, iA.getColumns());
-        assertTrue(d.multiplyAndReturnNew(iA).equals(
-                Matrix.identity(size - pos, size - pos), ABSOLUTE_ERROR));
+        assertTrue(d.multiplyAndReturnNew(iA).equals(Matrix.identity(size - pos, size - pos),
+                ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        try {
-            Utils.schurc(wrong, pos, false, result, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.schurc(m, size, true, result, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.schurc(m, 0, false, result, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var result4 = new Matrix(pos, pos);
+        final var iA3 = new Matrix(size - pos, size - pos);
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurc(wrong, pos, false, result4, iA3));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurc(m, size, true, result4, iA3));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurc(m, 0, false, result4, iA3));
 
         // Force RankDeficientMatrixException
-        try {
-            Utils.schurc(m2, pos, true, result, iA);
-            fail("RankDeficientMatrixException expected but not thrown");
-        } catch (final RankDeficientMatrixException ignore) {
-        }
-
+        assertThrows(RankDeficientMatrixException.class, () -> Utils.schurc(m2, pos, true, result4, iA3));
 
         // test 3rd schurc method
 
@@ -1257,41 +1028,24 @@ public class UtilsTest {
         assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B,
-        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
-                Utils.inverse(a).multiplyAndReturnNew(b)));
+        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(Utils.inverse(a).multiplyAndReturnNew(b)));
 
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of A
         assertEquals(pos, iA.getRows());
         assertEquals(pos, iA.getColumns());
-        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
-                ABSOLUTE_ERROR));
+        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos), ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        try {
-            Utils.schurc(wrong, pos, result, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.schurc(m, size, result, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.schurc(m, 0, result, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var result5 = new Matrix(size - pos, size - pos);
+        final var iA4 = new Matrix(pos, pos);
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurc(wrong, pos, result5, iA4));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurc(m, size, result5, iA4));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurc(m, 0, result5, iA4));
 
         //Force RankDeficientMatrixException
-        try {
-            Utils.schurc(m2, pos, result, iA);
-            fail("RankDeficientMatrixException expected but not thrown");
-        } catch (final RankDeficientMatrixException ignore) {
-        }
-
+        assertThrows(RankDeficientMatrixException.class, () -> Utils.schurc(m2, pos, result5, iA4));
 
         // test 4th schurc method
         // (which returns new instance)
@@ -1307,16 +1061,14 @@ public class UtilsTest {
 
         // Schur complement of A is: M/A = D - C*A^-1*B,
         // but result is the sqrt root of that (an upper triangle matrix)
-        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
-                Utils.inverse(a).multiplyAndReturnNew(b)));
+        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(Utils.inverse(a).multiplyAndReturnNew(b)));
         schurc = result.transposeAndReturnNew().multiplyAndReturnNew(result);
         assertTrue(schurc.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of A
         assertEquals(pos, iA.getRows());
         assertEquals(pos, iA.getColumns());
-        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
-                ABSOLUTE_ERROR));
+        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos), ABSOLUTE_ERROR));
 
         // test with pos from start, and no sqrt
         iA = new Matrix(pos, pos);
@@ -1330,9 +1082,7 @@ public class UtilsTest {
         // iA is the inverse of A
         assertEquals(pos, iA.getRows());
         assertEquals(pos, iA.getColumns());
-        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
-                ABSOLUTE_ERROR));
-
+        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos), ABSOLUTE_ERROR));
 
         // test with pos from end, with sqrt
         iA = new Matrix(size - pos, size - pos);
@@ -1344,17 +1094,15 @@ public class UtilsTest {
 
         // Schur complement of D is: M/D = A - B*D^-1*C
         // but result is the sqrt root of that (an upper triangle matrix)
-        result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(
-                Utils.inverse(d).multiplyAndReturnNew(c)));
+        result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(Utils.inverse(d).multiplyAndReturnNew(c)));
         schurc = result.transposeAndReturnNew().multiplyAndReturnNew(result);
         assertTrue(schurc.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of D
         assertEquals(size - pos, iA.getRows());
         assertEquals(size - pos, iA.getColumns());
-        assertTrue(d.multiplyAndReturnNew(iA).equals(
-                Matrix.identity(size - pos, size - pos), ABSOLUTE_ERROR));
-
+        assertTrue(d.multiplyAndReturnNew(iA).equals(Matrix.identity(size - pos, size - pos),
+                ABSOLUTE_ERROR));
 
         // test with pos from end, and no sqrt
         iA = new Matrix(size - pos, size - pos);
@@ -1368,35 +1116,21 @@ public class UtilsTest {
         // iA is the inverse of D
         assertEquals(size - pos, iA.getRows());
         assertEquals(size - pos, iA.getColumns());
-        assertTrue(d.multiplyAndReturnNew(iA).equals(
-                Matrix.identity(size - pos, size - pos), ABSOLUTE_ERROR));
+        assertTrue(d.multiplyAndReturnNew(iA).equals(Matrix.identity(size - pos, size - pos),
+                ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        result = null;
-        try {
-            result = Utils.schurcAndReturnNew(wrong, pos, true, true, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            result = Utils.schurcAndReturnNew(m, size, true, true, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            result = Utils.schurcAndReturnNew(m, 0, true, true, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var iA5 = new Matrix(size - pos, size - pos);
+        assertThrows(IllegalArgumentException.class,
+                () -> Utils.schurcAndReturnNew(wrong, pos, true, true, iA5));
+        assertThrows(IllegalArgumentException.class,
+                () -> Utils.schurcAndReturnNew(m, size, true, true, iA5));
+        assertThrows(IllegalArgumentException.class,
+                () -> Utils.schurcAndReturnNew(m, 0, true, true, iA5));
 
         // Force RankDeficientMatrixException
-        try {
-            result = Utils.schurcAndReturnNew(m2, pos, true, true, iA);
-            fail("RankDeficientMatrixException expected but not thrown");
-        } catch (final RankDeficientMatrixException ignore) {
-        }
-        assertNull(result);
-
+        assertThrows(RankDeficientMatrixException.class,
+                () -> Utils.schurcAndReturnNew(m2, pos, true, true, iA5));
 
         // test 5th schurc method
         // (which returns new instance)
@@ -1410,16 +1144,13 @@ public class UtilsTest {
         assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B
-        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
-                Utils.inverse(a)).multiplyAndReturnNew(b));
+        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(Utils.inverse(a)).multiplyAndReturnNew(b));
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of A
         assertEquals(pos, iA.getRows());
         assertEquals(pos, iA.getColumns());
-        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
-                ABSOLUTE_ERROR));
-
+        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos), ABSOLUTE_ERROR));
 
         // test with pos from end and no sqrt
         iA = new Matrix(size - pos, size - pos);
@@ -1430,42 +1161,23 @@ public class UtilsTest {
         assertEquals(pos, result.getColumns());
 
         // Schur complement of D is: M/D = A - B*D^-1*C
-        result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(
-                Utils.inverse(d).multiplyAndReturnNew(c)));
+        result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(Utils.inverse(d).multiplyAndReturnNew(c)));
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of D
         assertEquals(size - pos, iA.getRows());
         assertEquals(size - pos, iA.getColumns());
-        assertTrue(d.multiplyAndReturnNew(iA).equals(
-                Matrix.identity(size - pos, size - pos), ABSOLUTE_ERROR));
+        assertTrue(d.multiplyAndReturnNew(iA).equals(Matrix.identity(size - pos, size - pos),
+                ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        result = null;
-        try {
-            result = Utils.schurcAndReturnNew(wrong, pos, false, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            result = Utils.schurcAndReturnNew(m, size, true, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            result = Utils.schurcAndReturnNew(m, 0, false, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var iA6 = new Matrix(size - pos, size - pos);
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurcAndReturnNew(wrong, pos, false, iA6));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurcAndReturnNew(m, size, true, iA6));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurcAndReturnNew(m, 0, false, iA6));
 
         // Force RankDeficientMatrixException
-        try {
-            result = Utils.schurcAndReturnNew(m2, pos, true, iA);
-            fail("RankDeficientMatrixException expected but not thrown");
-        } catch (final RankDeficientMatrixException ignore) {
-        }
-        assertNull(result);
-
+        assertThrows(RankDeficientMatrixException.class, () -> Utils.schurcAndReturnNew(m2, pos, true, iA6));
 
         // test 6th schurc method
         // (which returns new instance)
@@ -1479,43 +1191,23 @@ public class UtilsTest {
         assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B
-        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
-                Utils.inverse(a).multiplyAndReturnNew(b)));
+        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(Utils.inverse(a).multiplyAndReturnNew(b)));
 
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // iA is the inverse of A
         assertEquals(pos, iA.getRows());
         assertEquals(pos, iA.getColumns());
-        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos),
-                ABSOLUTE_ERROR));
+        assertTrue(a.multiplyAndReturnNew(iA).equals(Matrix.identity(pos, pos), ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        result = null;
-        try {
-            result = Utils.schurcAndReturnNew(wrong, pos, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            result = Utils.schurcAndReturnNew(m, size, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            result = Utils.schurcAndReturnNew(m, 0, iA);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var iA7 = new Matrix(pos, pos);
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurcAndReturnNew(wrong, pos, iA7));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurcAndReturnNew(m, size, iA7));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurcAndReturnNew(m, 0, iA7));
 
         // Force RankDeficientMatrixException
-        try {
-            result = Utils.schurcAndReturnNew(m2, pos, iA);
-            fail("RankDeficientMatrixException expected but not thrown");
-        } catch (final RankDeficientMatrixException ignore) {
-        }
-        assertNull(result);
-
+        assertThrows(RankDeficientMatrixException.class, () -> Utils.schurcAndReturnNew(m2, pos, iA7));
 
         // test 7th schurc method
 
@@ -1530,11 +1222,9 @@ public class UtilsTest {
 
         // Schur complement of A is: M/A = D - C*A^-1*B
         // but result is the sqrt root of that (an upper triangle matrix)
-        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
-                Utils.inverse(a).multiplyAndReturnNew(b)));
+        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(Utils.inverse(a).multiplyAndReturnNew(b)));
         schurc = result.transposeAndReturnNew().multiplyAndReturnNew(result);
         assertTrue(schurc.equals(result2, ABSOLUTE_ERROR));
-
 
         // test with pos from start, and no sqrt
         result = new Matrix(size - pos, size - pos);
@@ -1544,7 +1234,6 @@ public class UtilsTest {
         assertEquals(size - pos, result.getRows());
         assertEquals(size - pos, result.getColumns());
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
-
 
         // test with pos from end, with sqrt
         result = new Matrix(pos, pos);
@@ -1556,11 +1245,9 @@ public class UtilsTest {
 
         // Schur complement of D is: M/D = A - B*D^-1*C
         // but result is the sqrt root of that (an upper triangle matrix)
-        result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(
-                Utils.inverse(d).multiplyAndReturnNew(c)));
+        result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(Utils.inverse(d).multiplyAndReturnNew(c)));
         schurc = result.transposeAndReturnNew().multiplyAndReturnNew(result);
         assertTrue(schurc.equals(result2, ABSOLUTE_ERROR));
-
 
         // test with pos from end, and no sqrt
         result = new Matrix(pos, pos);
@@ -1572,22 +1259,10 @@ public class UtilsTest {
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        try {
-            Utils.schurc(wrong, pos, true, true, result);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.schurc(m, size, true, true, result);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.schurc(m, 0, true, true, result);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
+        final var result6 = new Matrix(pos, pos);
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurc(wrong, pos, true, true, result6));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurc(m, size, true, true, result6));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurc(m, 0, true, true, result6));
 
         // test 8th schurc method
 
@@ -1600,10 +1275,8 @@ public class UtilsTest {
         assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B
-        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
-                Utils.inverse(a).multiplyAndReturnNew(b)));
+        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(Utils.inverse(a).multiplyAndReturnNew(b)));
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
-
 
         // test with pos from end and no sqrt
         result = new Matrix(pos, pos);
@@ -1614,27 +1287,14 @@ public class UtilsTest {
         assertEquals(pos, result.getColumns());
 
         // Schur complement of D is: M/D = A - B*D^-1*C
-        result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(
-                Utils.inverse(d).multiplyAndReturnNew(c)));
+        result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(Utils.inverse(d).multiplyAndReturnNew(c)));
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        try {
-            Utils.schurc(wrong, pos, false, result);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.schurc(m, size, true, result);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.schurc(m, 0, false, result);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
+        final var result7 = new Matrix(size - pos, size - pos);
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurc(wrong, pos, false, result7));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurc(m, size, true, result7));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurc(m, 0, false, result7));
 
         // test 9th schurc method
 
@@ -1647,28 +1307,15 @@ public class UtilsTest {
         assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B
-        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
-                Utils.inverse(a).multiplyAndReturnNew(b)));
+        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(Utils.inverse(a).multiplyAndReturnNew(b)));
 
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        try {
-            Utils.schurc(wrong, pos, result);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.schurc(m, size, result);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Utils.schurc(m, 0, result);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
+        final var result8 = new Matrix(size - pos, size - pos);
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurc(wrong, pos, result8));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurc(m, size, result8));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurc(m, 0, result8));
 
         // test 10th schurc method
         // (which returns new instance)
@@ -1683,8 +1330,7 @@ public class UtilsTest {
 
         // Schur complement of A is: M/A = D - C*A^-1*B
         // but result is the sqrt root of that (an upper triangle matrix)
-        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
-                Utils.inverse(a).multiplyAndReturnNew(b)));
+        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(Utils.inverse(a).multiplyAndReturnNew(b)));
         schurc = result.transposeAndReturnNew().multiplyAndReturnNew(result);
         assertTrue(schurc.equals(result2, ABSOLUTE_ERROR));
 
@@ -1707,8 +1353,7 @@ public class UtilsTest {
 
         // Schur complement of D is: M/D = A - B*D^-1*C
         // but result is the sqrt root of that (an upper triangle matrix)
-        result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(
-                Utils.inverse(d).multiplyAndReturnNew(c)));
+        result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(Utils.inverse(d).multiplyAndReturnNew(c)));
         schurc = result.transposeAndReturnNew().multiplyAndReturnNew(result);
         assertTrue(schurc.equals(result2, ABSOLUTE_ERROR));
 
@@ -1722,24 +1367,12 @@ public class UtilsTest {
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        result = null;
-        try {
-            result = Utils.schurcAndReturnNew(wrong, pos, true, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            result = Utils.schurcAndReturnNew(m, size, true, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            result = Utils.schurcAndReturnNew(m, 0, true, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(result);
-
+        assertThrows(IllegalArgumentException.class,
+                () -> Utils.schurcAndReturnNew(wrong, pos, true, true));
+        assertThrows(IllegalArgumentException.class,
+                () -> Utils.schurcAndReturnNew(m, size, true, true));
+        assertThrows(IllegalArgumentException.class,
+                () -> Utils.schurcAndReturnNew(m, 0, true, true));
 
         // test 11th schurc method
         // (which returns new instance)
@@ -1752,8 +1385,7 @@ public class UtilsTest {
         assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B
-        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
-                Utils.inverse(a).multiplyAndReturnNew(b)));
+        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(Utils.inverse(a).multiplyAndReturnNew(b)));
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
 
@@ -1765,29 +1397,13 @@ public class UtilsTest {
         assertEquals(pos, result.getColumns());
 
         // Schur complement of D is: M/D = A - B*D^-1*C
-        result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(
-                Utils.inverse(d).multiplyAndReturnNew(c)));
+        result2 = a.subtractAndReturnNew(b.multiplyAndReturnNew(Utils.inverse(d).multiplyAndReturnNew(c)));
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        result = null;
-        try {
-            result = Utils.schurcAndReturnNew(wrong, pos, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            result = Utils.schurcAndReturnNew(m, size, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            result = Utils.schurcAndReturnNew(m, 0, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(result);
-
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurcAndReturnNew(wrong, pos, false));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurcAndReturnNew(m, size, true));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurcAndReturnNew(m, 0, false));
 
         // test 12th schurc method
         // (which returns new instance)
@@ -1800,28 +1416,13 @@ public class UtilsTest {
         assertEquals(size - pos, result.getColumns());
 
         // Schur complement of A is: M/A = D - C*A^-1*B
-        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(
-                Utils.inverse(a).multiplyAndReturnNew(b)));
+        result2 = d.subtractAndReturnNew(c.multiplyAndReturnNew(Utils.inverse(a).multiplyAndReturnNew(b)));
 
         assertTrue(result.equals(result2, ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        result = null;
-        try {
-            result = Utils.schurcAndReturnNew(wrong, pos);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            result = Utils.schurcAndReturnNew(m, size);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            result = Utils.schurcAndReturnNew(m, 0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(result);
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurcAndReturnNew(wrong, pos));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurcAndReturnNew(m, size));
+        assertThrows(IllegalArgumentException.class, () -> Utils.schurcAndReturnNew(m, 0));
     }
 }

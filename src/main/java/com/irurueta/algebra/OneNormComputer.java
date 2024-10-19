@@ -48,14 +48,14 @@ public class OneNormComputer extends NormComputer {
      */
     @SuppressWarnings("DuplicatedCode")
     public static double norm(final Matrix m) {
-        final int rows = m.getRows();
-        final int columns = m.getColumns();
+        final var rows = m.getRows();
+        final var columns = m.getColumns();
         double colSum;
-        double maxColSum = 0.0;
+        var maxColSum = 0.0;
 
-        for (int j = 0; j < columns; j++) {
+        for (var j = 0; j < columns; j++) {
             colSum = 0.0;
-            for (int i = 0; i < rows; i++) {
+            for (var i = 0; i < rows; i++) {
                 colSum += Math.abs(m.getElementAt(i, j));
             }
 
@@ -83,9 +83,9 @@ public class OneNormComputer extends NormComputer {
      * @return norm of provided vector.
      */
     public static double norm(final double[] array) {
-        double colSum = 0.0;
+        var colSum = 0.0;
 
-        for (final double value : array) {
+        for (final var value : array) {
             colSum += Math.abs(value);
         }
 
@@ -103,15 +103,12 @@ public class OneNormComputer extends NormComputer {
      * @throws WrongSizeException if provided jacobian is not 1xN, where N is
      *                            length of array.
      */
-    public static double norm(final double[] array, final Matrix jacobian)
-            throws WrongSizeException {
-        if (jacobian != null && (jacobian.getRows() != 1 ||
-                jacobian.getColumns() != array.length)) {
-            throw new WrongSizeException("jacobian must be 1xN, where " +
-                    "N is length of array");
+    public static double norm(final double[] array, final Matrix jacobian) throws WrongSizeException {
+        if (jacobian != null && (jacobian.getRows() != 1 || jacobian.getColumns() != array.length)) {
+            throw new WrongSizeException("jacobian must be 1xN, where N is length of array");
         }
 
-        final double norm = norm(array);
+        final var norm = norm(array);
 
         if (jacobian != null) {
             jacobian.fromArray(array);

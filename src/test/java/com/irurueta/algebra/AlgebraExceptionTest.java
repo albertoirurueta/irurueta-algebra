@@ -15,15 +15,15 @@
  */
 package com.irurueta.algebra;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class AlgebraExceptionTest {
+class AlgebraExceptionTest {
 
     @Test
-    public void testConstructor() {
-        AlgebraException ex = new AlgebraException();
+    void testConstructor() {
+        var ex = new AlgebraException();
         assertNotNull(ex);
 
         ex = new AlgebraException("message");

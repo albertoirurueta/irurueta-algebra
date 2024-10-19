@@ -44,12 +44,12 @@ public class FrobeniusNormComputer extends NormComputer {
      * @return norm of provided matrix.
      */
     public static double norm(final Matrix m) {
-        final int rows = m.getRows();
-        final int columns = m.getColumns();
-        final int length = rows * columns;
-        double sum = 0.0;
+        final var rows = m.getRows();
+        final var columns = m.getColumns();
+        final var length = rows * columns;
+        var sum = 0.0;
         double value;
-        for (int i = 0; i < length; i++) {
+        for (var i = 0; i < length; i++) {
             value = m.getElementAtIndex(i);
             sum += value * value;
         }
@@ -67,14 +67,12 @@ public class FrobeniusNormComputer extends NormComputer {
      * @throws WrongSizeException if provided jacobian is not 1xN, where N is
      *                            length of array.
      */
-    public static double norm(final double[] array, final Matrix jacobian)
-            throws WrongSizeException {
-        if (jacobian != null && (jacobian.getRows() != 1 ||
-                jacobian.getColumns() != array.length)) {
+    public static double norm(final double[] array, final Matrix jacobian) throws WrongSizeException {
+        if (jacobian != null && (jacobian.getRows() != 1 || jacobian.getColumns() != array.length)) {
             throw new WrongSizeException();
         }
 
-        final double norm = FrobeniusNormComputer.norm(array);
+        final var norm = FrobeniusNormComputer.norm(array);
 
         if (jacobian != null) {
             jacobian.fromArray(array);
@@ -102,8 +100,8 @@ public class FrobeniusNormComputer extends NormComputer {
      * @return norm of provided vector.
      */
     public static double norm(final double[] array) {
-        double sum = 0.0;
-        for (final double value : array) {
+        var sum = 0.0;
+        for (final var value : array) {
             sum += value * value;
         }
         return Math.sqrt(sum);

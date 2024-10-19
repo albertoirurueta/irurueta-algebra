@@ -15,15 +15,15 @@
  */
 package com.irurueta.algebra;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class SingularMatrixExceptionTest {
+class SingularMatrixExceptionTest {
 
     @Test
-    public void testConstructor() {
-        SingularMatrixException ex = new SingularMatrixException();
+    void testConstructor() {
+        var ex = new SingularMatrixException();
         assertNotNull(ex);
 
         ex = new SingularMatrixException("message");

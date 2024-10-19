@@ -16,15 +16,13 @@
 package com.irurueta.algebra;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class InfinityNormComputerTest {
+class InfinityNormComputerTest {
 
     private static final int MIN_LIMIT = 0;
     private static final int MAX_LIMIT = 50;
@@ -39,29 +37,28 @@ public class InfinityNormComputerTest {
     private static final double ABSOLUTE_ERROR = 1e-6;
 
     @Test
-    public void testGetNormType() {
-        final InfinityNormComputer normComputer = new InfinityNormComputer();
+    void testGetNormType() {
+        final var normComputer = new InfinityNormComputer();
         assertEquals(NormType.INFINITY_NORM, normComputer.getNormType());
     }
 
     @Test
-    public void testGetNormMatrix() throws WrongSizeException {
-        final InfinityNormComputer normComputer = new InfinityNormComputer();
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testGetNormMatrix() throws WrongSizeException {
+        final var normComputer = new InfinityNormComputer();
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         double rowSum;
         double maxRowSum = 0.0;
-        final double norm;
-        final double initValue = randomizer.nextDouble(MIN_COLUMNS, MAX_COLUMNS);
+        final var initValue = randomizer.nextDouble(MIN_COLUMNS, MAX_COLUMNS);
         double value;
 
         // For random non-initialized matrix
-        Matrix m = new Matrix(rows, columns);
-        for (int i = 0; i < rows; i++) {
+        var m = new Matrix(rows, columns);
+        for (var i = 0; i < rows; i++) {
             rowSum = 0.0;
-            for (int j = 0; j < columns; j++) {
+            for (var j = 0; j < columns; j++) {
                 value = randomizer.nextInt(MIN_LIMIT, MAX_LIMIT);
                 m.setElementAt(i, j, value);
                 rowSum += Math.abs(value);
@@ -77,7 +74,7 @@ public class InfinityNormComputerTest {
         m = new Matrix(rows, columns);
         m.initialize(initValue);
 
-        norm = initValue * columns;
+        final var norm = initValue * columns;
 
         assertEquals(norm, normComputer.getNorm(m), ABSOLUTE_ERROR);
         assertEquals(norm, InfinityNormComputer.norm(m), ABSOLUTE_ERROR);
@@ -89,17 +86,17 @@ public class InfinityNormComputerTest {
     }
 
     @Test
-    public void testGetNormArray() {
-        final InfinityNormComputer normComputer = new InfinityNormComputer();
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
+    void testGetNormArray() {
+        final var normComputer = new InfinityNormComputer();
+        final var randomizer = new UniformRandomizer();
+        final var length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
         double norm;
-        final double initValue = randomizer.nextDouble(MIN_LIMIT, MAX_LIMIT);
+        final var initValue = randomizer.nextDouble(MIN_LIMIT, MAX_LIMIT);
 
-        final double[] v = new double[length];
+        final var v = new double[length];
 
         // randomly initialize vector
-        for (int i = 0; i < length; i++) {
+        for (var i = 0; i < length; i++) {
             v[i] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
 
@@ -117,47 +114,35 @@ public class InfinityNormComputerTest {
     }
 
     @Test
-    public void testNormWithJacobian() throws AlgebraException {
-        final InfinityNormComputer normComputer = new InfinityNormComputer();
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
+    void testNormWithJacobian() throws AlgebraException {
+        final var normComputer = new InfinityNormComputer();
+        final var randomizer = new UniformRandomizer();
+        final var length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
         double norm;
 
-        final double[] v = new double[length];
+        final var v = new double[length];
 
         // randomly initialize vector
-        for (int i = 0; i < length; i++) {
+        for (var i = 0; i < length; i++) {
             v[i] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
 
         norm = Math.abs(v[0]);
 
-        Matrix jacobian = new Matrix(1, length);
-        assertEquals(InfinityNormComputer.norm(v, jacobian), norm,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian, Matrix.newFromArray(v).
-                multiplyByScalarAndReturnNew(1.0 / norm).
-                transposeAndReturnNew());
+        var jacobian = new Matrix(1, length);
+        assertEquals(InfinityNormComputer.norm(v, jacobian), norm, ABSOLUTE_ERROR);
+        assertEquals(jacobian, Matrix.newFromArray(v).multiplyByScalarAndReturnNew(1.0 / norm).transposeAndReturnNew());
 
         // Force WrongSizeException
-        try {
-            InfinityNormComputer.norm(v, new Matrix(2, length));
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-
+        final var m1 = new Matrix(2, length);
+        assertThrows(WrongSizeException.class, () -> InfinityNormComputer.norm(v, m1));
 
         jacobian = new Matrix(1, length);
         assertEquals(normComputer.getNorm(v, jacobian), norm, ABSOLUTE_ERROR);
-        assertEquals(jacobian, Matrix.newFromArray(v).
-                multiplyByScalarAndReturnNew(1.0 / norm).
-                transposeAndReturnNew());
+        assertEquals(jacobian, Matrix.newFromArray(v).multiplyByScalarAndReturnNew(1.0 / norm).transposeAndReturnNew());
 
         // Force WrongSizeException
-        try {
-            normComputer.getNorm(v, new Matrix(2, length));
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var m2 = new Matrix(2, length);
+        assertThrows(WrongSizeException.class, () -> normComputer.getNorm(v, m2));
     }
 }

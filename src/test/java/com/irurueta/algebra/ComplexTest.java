@@ -18,14 +18,13 @@ package com.irurueta.algebra;
 
 import com.irurueta.SerializationHelper;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ComplexTest {
+class ComplexTest {
 
     private static final double MIN_RANDOM_VALUE = -100.0;
 
@@ -46,7 +45,7 @@ public class ComplexTest {
     private static final double ABSOLUTE_ERROR = 1e-9;
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         Complex c;
 
         // Test 1st constructor
@@ -56,11 +55,9 @@ public class ComplexTest {
         assertEquals(0.0, c.getImaginary(), 0.0);
         assertEquals(0.0, c.getModulus(), ABSOLUTE_ERROR);
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double real = randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double imaginary = randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // Test 2nd constructor
         c = new Complex(real);
@@ -74,12 +71,11 @@ public class ComplexTest {
         assertNotNull(c);
         assertEquals(real, c.getReal(), 0.0);
         assertEquals(imaginary, c.getImaginary(), 0.0);
-        assertEquals(Math.sqrt(real * real + imaginary * imaginary),
-                c.getModulus(), ABSOLUTE_ERROR);
+        assertEquals(Math.sqrt(real * real + imaginary * imaginary), c.getModulus(), ABSOLUTE_ERROR);
         assertEquals(Math.atan2(imaginary, real), c.getPhase(), ABSOLUTE_ERROR);
 
         // Test 4th constructor
-        Complex c2 = new Complex(c);
+        var c2 = new Complex(c);
         assertEquals(c.getReal(), c2.getReal(), 0.0);
         assertEquals(c.getImaginary(), c2.getImaginary(), 0.0);
         assertEquals(real, c2.getReal(), 0.0);
@@ -89,10 +85,10 @@ public class ComplexTest {
     }
 
     @Test
-    public void testGetSetReal() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Complex c = new Complex();
+    void testGetSetReal() {
+        final var randomizer = new UniformRandomizer();
+        final var real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c = new Complex();
 
         assertEquals(0.0, c.getReal(), 0.0);
 
@@ -103,11 +99,10 @@ public class ComplexTest {
     }
 
     @Test
-    public void testGetSetImaginary() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final Complex c = new Complex();
+    void testGetSetImaginary() {
+        final var randomizer = new UniformRandomizer();
+        final var imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c = new Complex();
 
         assertEquals(0.0, c.getImaginary(), 0.0);
 
@@ -118,12 +113,11 @@ public class ComplexTest {
     }
 
     @Test
-    public void testGetSetRealAndImaginary() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final Complex c = new Complex();
+    void testGetSetRealAndImaginary() {
+        final var randomizer = new UniformRandomizer();
+        final var real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c = new Complex();
 
         assertEquals(0.0, c.getReal(), 0.0);
         assertEquals(0.0, c.getImaginary(), 0.0);
@@ -136,38 +130,36 @@ public class ComplexTest {
     }
 
     @Test
-    public void testGetModulus() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double modulus = Math.sqrt(real * real + imaginary * imaginary);
-        final Complex c = new Complex(real, imaginary);
+    void testGetModulus() {
+        final var randomizer = new UniformRandomizer();
+        final var real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var modulus = Math.sqrt(real * real + imaginary * imaginary);
+        final var c = new Complex(real, imaginary);
 
         assertEquals(modulus, c.getModulus(), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testGetPhase() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double phase = Math.atan2(imaginary, real);
-        final Complex c = new Complex(real, imaginary);
+    void testGetPhase() {
+        final var randomizer = new UniformRandomizer();
+        final var real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var phase = Math.atan2(imaginary, real);
+        final var c = new Complex(real, imaginary);
 
         assertEquals(phase, c.getPhase(), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testSetModulusAndPhase() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double modulus = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
-        final double phase = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
+    void testSetModulusAndPhase() {
+        final var randomizer = new UniformRandomizer();
+        final var modulus = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
+        final var phase = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
 
-        final double real = modulus * Math.cos(phase);
-        final double imaginary = modulus * Math.sin(phase);
-        final Complex c = new Complex();
+        final var real = modulus * Math.cos(phase);
+        final var imaginary = modulus * Math.sin(phase);
+        final var c = new Complex();
 
         c.setModulusAndPhase(modulus, phase);
         assertEquals(modulus, c.getModulus(), ABSOLUTE_ERROR);
@@ -177,19 +169,19 @@ public class ComplexTest {
     }
 
     @Test
-    public void testConjugate() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double modulus = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
-        final double phase = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
+    void testConjugate() {
+        final var randomizer = new UniformRandomizer();
+        final var modulus = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
+        final var phase = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
 
-        final double real = modulus * Math.cos(phase);
-        final double imaginary = modulus * Math.sin(phase);
+        final var real = modulus * Math.cos(phase);
+        final var imaginary = modulus * Math.sin(phase);
 
-        final Complex c = new Complex(real, imaginary);
+        final var c = new Complex(real, imaginary);
         assertEquals(real, c.getReal(), 0.0);
         assertEquals(imaginary, c.getImaginary(), 0.0);
 
-        Complex result = new Complex();
+        var result = new Complex();
         assertEquals(0.0, result.getReal(), 0.0);
         assertEquals(0.0, result.getImaginary(), 0.0);
 
@@ -216,20 +208,16 @@ public class ComplexTest {
     }
 
     @Test
-    public void testAdd() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double real1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double imaginary1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double real2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double imaginary2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+    void testAdd() {
+        final var randomizer = new UniformRandomizer();
+        final var real1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var imaginary1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var real2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var imaginary2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Complex c1 = new Complex(real1, imaginary1);
-        final Complex c2 = new Complex(real2, imaginary2);
-        Complex result = new Complex();
+        final var c1 = new Complex(real1, imaginary1);
+        final var c2 = new Complex(real2, imaginary2);
+        var result = new Complex();
 
         assertEquals(real1, c1.getReal(), 0.0);
         assertEquals(imaginary1, c1.getImaginary(), 0.0);
@@ -258,20 +246,16 @@ public class ComplexTest {
     }
 
     @Test
-    public void testSubtract() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double real1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double imaginary1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double real2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double imaginary2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+    void testSubtract() {
+        final var randomizer = new UniformRandomizer();
+        final var real1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var imaginary1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var real2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var imaginary2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Complex c1 = new Complex(real1, imaginary1);
-        final Complex c2 = new Complex(real2, imaginary2);
-        Complex result = new Complex();
+        final var c1 = new Complex(real1, imaginary1);
+        final var c2 = new Complex(real2, imaginary2);
+        var result = new Complex();
 
         assertEquals(real1, c1.getReal(), 0.0);
         assertEquals(imaginary1, c1.getImaginary(), 0.0);
@@ -300,21 +284,21 @@ public class ComplexTest {
     }
 
     @Test
-    public void testMultiply() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double modulus1 = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
-        final double phase1 = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
-        final double modulus2 = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
-        final double phase2 = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
+    void testMultiply() {
+        final var randomizer = new UniformRandomizer();
+        final var modulus1 = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
+        final var phase1 = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
+        final var modulus2 = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
+        final var phase2 = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
 
-        final double real1 = modulus1 * Math.cos(phase1);
-        final double imaginary1 = modulus1 * Math.sin(phase1);
-        final double real2 = modulus2 * Math.cos(phase2);
-        final double imaginary2 = modulus2 * Math.sin(phase2);
+        final var real1 = modulus1 * Math.cos(phase1);
+        final var imaginary1 = modulus1 * Math.sin(phase1);
+        final var real2 = modulus2 * Math.cos(phase2);
+        final var imaginary2 = modulus2 * Math.sin(phase2);
 
-        final Complex c1 = new Complex(real1, imaginary1);
-        final Complex c2 = new Complex(real2, imaginary2);
-        Complex result = new Complex();
+        final var c1 = new Complex(real1, imaginary1);
+        final var c2 = new Complex(real2, imaginary2);
+        var result = new Complex();
 
         assertEquals(real1, c1.getReal(), 0.0);
         assertEquals(imaginary1, c1.getImaginary(), 0.0);
@@ -326,10 +310,10 @@ public class ComplexTest {
         // multiply and store in result
         c1.multiply(c2, result);
         // check correctness
-        final double resultModulus = modulus1 * modulus2;
-        double resultPhase = phase1 + phase2;
-        final double resultReal = resultModulus * Math.cos(resultPhase);
-        final double resultImaginary = resultModulus * Math.sin(resultPhase);
+        final var resultModulus = modulus1 * modulus2;
+        var resultPhase = phase1 + phase2;
+        final var resultReal = resultModulus * Math.cos(resultPhase);
+        final var resultImaginary = resultModulus * Math.sin(resultPhase);
         resultPhase = Math.atan2(resultImaginary, resultReal);
         assertEquals(resultModulus, result.getModulus(), ABSOLUTE_ERROR);
         assertEquals(resultPhase, result.getPhase(), ABSOLUTE_ERROR);
@@ -354,21 +338,21 @@ public class ComplexTest {
     }
 
     @Test
-    public void testDivide() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double modulus1 = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
-        final double phase1 = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
-        final double modulus2 = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
-        final double phase2 = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
+    void testDivide() {
+        final var randomizer = new UniformRandomizer();
+        final var modulus1 = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
+        final var phase1 = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
+        final var modulus2 = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
+        final var phase2 = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
 
-        final double real1 = modulus1 * Math.cos(phase1);
-        final double imaginary1 = modulus1 * Math.sin(phase1);
-        final double real2 = modulus2 * Math.cos(phase2);
-        final double imaginary2 = modulus2 * Math.sin(phase2);
+        final var real1 = modulus1 * Math.cos(phase1);
+        final var imaginary1 = modulus1 * Math.sin(phase1);
+        final var real2 = modulus2 * Math.cos(phase2);
+        final var imaginary2 = modulus2 * Math.sin(phase2);
 
-        final Complex c1 = new Complex(real1, imaginary1);
-        final Complex c2 = new Complex(real2, imaginary2);
-        Complex result = new Complex();
+        final var c1 = new Complex(real1, imaginary1);
+        final var c2 = new Complex(real2, imaginary2);
+        var result = new Complex();
 
         assertEquals(real1, c1.getReal(), 0.0);
         assertEquals(imaginary1, c1.getImaginary(), 0.0);
@@ -380,10 +364,10 @@ public class ComplexTest {
         // divide and store in result
         c1.divide(c2, result);
         // check correctness
-        final double resultModulus = modulus1 / modulus2;
-        double resultPhase = phase1 - phase2;
-        final double resultReal = resultModulus * Math.cos(resultPhase);
-        final double resultImaginary = resultModulus * Math.sin(resultPhase);
+        final var resultModulus = modulus1 / modulus2;
+        var resultPhase = phase1 - phase2;
+        final var resultReal = resultModulus * Math.cos(resultPhase);
+        final var resultImaginary = resultModulus * Math.sin(resultPhase);
         resultPhase = Math.atan2(resultImaginary, resultReal);
         assertEquals(resultModulus, result.getModulus(), ABSOLUTE_ERROR);
         assertEquals(resultPhase, result.getPhase(), ABSOLUTE_ERROR);
@@ -408,17 +392,14 @@ public class ComplexTest {
     }
 
     @Test
-    public void testMultiplyByScalar() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double real = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double scalar = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+    void testMultiplyByScalar() {
+        final var randomizer = new UniformRandomizer();
+        final var real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var scalar = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Complex c = new Complex(real, imaginary);
-        Complex result = new Complex();
+        final var c = new Complex(real, imaginary);
+        var result = new Complex();
 
         assertEquals(real, c.getReal(), 0.0);
         assertEquals(imaginary, c.getImaginary(), 0.0);
@@ -445,17 +426,17 @@ public class ComplexTest {
     }
 
     @Test
-    public void testPow() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double modulus = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
-        final double phase = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
-        final double exponent = randomizer.nextDouble(MIN_EXPONENT, MAX_EXPONENT);
+    void testPow() {
+        final var randomizer = new UniformRandomizer();
+        final var modulus = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
+        final var phase = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
+        final var exponent = randomizer.nextDouble(MIN_EXPONENT, MAX_EXPONENT);
 
-        final double real = modulus * Math.cos(phase);
-        final double imaginary = modulus * Math.sin(phase);
+        final var real = modulus * Math.cos(phase);
+        final var imaginary = modulus * Math.sin(phase);
 
-        final Complex c = new Complex(real, imaginary);
-        Complex result = new Complex();
+        final var c = new Complex(real, imaginary);
+        var result = new Complex();
 
         assertEquals(real, c.getReal(), 0.0);
         assertEquals(imaginary, c.getImaginary(), 0.0);
@@ -465,10 +446,10 @@ public class ComplexTest {
         // compute power and store in result
         c.pow(exponent, result);
         // check correctness
-        final double resultModulus = Math.pow(modulus, exponent);
-        double resultPhase = exponent * phase;
-        final double resultReal = resultModulus * Math.cos(resultPhase);
-        final double resultImaginary = resultModulus * Math.sin(resultPhase);
+        final var resultModulus = Math.pow(modulus, exponent);
+        var resultPhase = exponent * phase;
+        final var resultReal = resultModulus * Math.cos(resultPhase);
+        final var resultImaginary = resultModulus * Math.sin(resultPhase);
         resultPhase = Math.atan2(resultImaginary, resultReal);
         assertEquals(resultModulus, result.getModulus(), ABSOLUTE_ERROR);
         assertEquals(resultPhase, result.getPhase(), ABSOLUTE_ERROR);
@@ -493,16 +474,16 @@ public class ComplexTest {
     }
 
     @Test
-    public void testSqrt() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double modulus = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
-        final double phase = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
+    void testSqrt() {
+        final var randomizer = new UniformRandomizer();
+        final var modulus = randomizer.nextDouble(MIN_MODULUS, MAX_MODULUS);
+        final var phase = randomizer.nextDouble(MIN_PHASE, MAX_PHASE);
 
-        final double real = modulus * Math.cos(phase);
-        final double imaginary = modulus * Math.sin(phase);
+        final var real = modulus * Math.cos(phase);
+        final var imaginary = modulus * Math.sin(phase);
 
-        final Complex c = new Complex(real, imaginary);
-        Complex result = new Complex();
+        final var c = new Complex(real, imaginary);
+        var result = new Complex();
 
         assertEquals(real, c.getReal(), 0.0);
         assertEquals(imaginary, c.getImaginary(), 0.0);
@@ -512,10 +493,10 @@ public class ComplexTest {
         // compute power and store in result
         c.sqrt(result);
         // check correctness
-        final double resultModulus = Math.sqrt(modulus);
-        double resultPhase = 0.5 * phase;
-        final double resultReal = resultModulus * Math.cos(resultPhase);
-        final double resultImaginary = resultModulus * Math.sin(resultPhase);
+        final var resultModulus = Math.sqrt(modulus);
+        var resultPhase = 0.5 * phase;
+        final var resultReal = resultModulus * Math.cos(resultPhase);
+        final var resultImaginary = resultModulus * Math.sin(resultPhase);
         resultPhase = Math.atan2(resultImaginary, resultReal);
         assertEquals(resultModulus, result.getModulus(), ABSOLUTE_ERROR);
         assertEquals(resultPhase, result.getPhase(), ABSOLUTE_ERROR);
@@ -540,18 +521,16 @@ public class ComplexTest {
     }
 
     @Test
-    public void testEqualsAndHashCode() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double real1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double real2 = 1.0 + real1;
-        final double imaginary1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double imaginary2 = 1.0 + imaginary1;
+    void testEqualsAndHashCode() {
+        final var randomizer = new UniformRandomizer();
+        final var real1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var real2 = 1.0 + real1;
+        final var imaginary1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var imaginary2 = 1.0 + imaginary1;
 
-        final Complex c1 = new Complex(real1, imaginary1);
-        final Complex c2 = new Complex(real1, imaginary1);
-        final Complex c3 = new Complex(real2, imaginary2);
+        final var c1 = new Complex(real1, imaginary1);
+        final var c2 = new Complex(real1, imaginary1);
+        final var c3 = new Complex(real2, imaginary2);
 
         //noinspection EqualsWithItself
         assertEquals(c1, c1);
@@ -563,25 +542,23 @@ public class ComplexTest {
     }
 
     @Test
-    public void testClone() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final Complex c1 = new Complex(real, imaginary);
-        final Complex c2 = new Complex(c1);
+    void testClone() {
+        final var randomizer = new UniformRandomizer();
+        final var real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c1 = new Complex(real, imaginary);
+        final var c2 = new Complex(c1);
 
         assertEquals(c1, c2);
     }
 
     @Test
-    public void testCopyFrom() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final Complex c1 = new Complex(real, imaginary);
-        final Complex c2 = new Complex();
+    void testCopyFrom() {
+        final var randomizer = new UniformRandomizer();
+        final var real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c1 = new Complex(real, imaginary);
+        final var c2 = new Complex();
 
         assertEquals(real, c1.getReal(), 0.0);
         assertEquals(imaginary, c1.getImaginary(), 0.0);
@@ -598,15 +575,14 @@ public class ComplexTest {
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final Complex c1 = new Complex(real, imaginary);
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
+        final var real = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var imaginary = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c1 = new Complex(real, imaginary);
 
-        final byte[] bytes = SerializationHelper.serialize(c1);
-        final Complex c2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(c1);
+        final var c2 = SerializationHelper.deserialize(bytes);
 
         assertEquals(c1, c2);
         assertNotSame(c1, c2);

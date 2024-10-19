@@ -16,14 +16,13 @@
 package com.irurueta.algebra;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class GaussJordanEliminationTest {
+class GaussJordanEliminationTest {
 
     public static final double MIN_RANDOM_VALUE = 0.0;
     public static final double MAX_RANDOM_VALUE = 50.0;
@@ -34,33 +33,24 @@ public class GaussJordanEliminationTest {
     public static final double ABSOLUTE_ERROR = 1e-6;
 
     @Test
-    public void testProcessMatrix() throws WrongSizeException,
-            SingularMatrixException, RankDeficientMatrixException,
+    void testProcessMatrix() throws WrongSizeException, SingularMatrixException, RankDeficientMatrixException,
             DecomposerException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_COLUMNS + 5, MAX_COLUMNS + 5);
-        final int colsB = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-
-        Matrix a;
-        Matrix b;
-        final Matrix a2;
-        final Matrix b2;
-        final Matrix invA;
-        final Matrix x;
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_COLUMNS + 5, MAX_COLUMNS + 5);
+        final var colsB = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         // Test for non-singular square matrix
-        a = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
-        b = Matrix.createWithUniformRandomValues(rows, colsB, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var a = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
+        final var b = Matrix.createWithUniformRandomValues(rows, colsB, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        a2 = new Matrix(a);
-        b2 = new Matrix(b);
+        final var a2 = new Matrix(a);
+        final var b2 = new Matrix(b);
 
         GaussJordanElimination.process(a2, b2);
 
         // check correctness
-        invA = Utils.inverse(a);
-        x = Utils.solve(a, b);
+        final var invA = Utils.inverse(a);
+        final var x = Utils.solve(a, b);
 
         assertTrue(a2.equals(invA, ABSOLUTE_ERROR));
         assertTrue(b2.equals(x, ABSOLUTE_ERROR));
@@ -68,61 +58,40 @@ public class GaussJordanEliminationTest {
         // Force WrongSizeException
 
         // non square matrix a
-        a = new Matrix(rows, rows + 1);
-        b = new Matrix(rows, colsB);
-        try {
-            GaussJordanElimination.process(a, b);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var a3 = new Matrix(rows, rows + 1);
+        final var b3 = new Matrix(rows, colsB);
+        assertThrows(WrongSizeException.class, () -> GaussJordanElimination.process(a3, b3));
 
         // different rows
-        a = new Matrix(rows, rows);
-        b = new Matrix(rows + 1, colsB);
-        try {
-            GaussJordanElimination.process(a, b);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var a4 = new Matrix(rows, rows);
+        final var b4 = new Matrix(rows + 1, colsB);
+        assertThrows(WrongSizeException.class, () -> GaussJordanElimination.process(a4, b4));
 
         // Force SingularMatrixException
-        a = new Matrix(rows, rows);
-        b = Matrix.createWithUniformRandomValues(rows, colsB, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        try {
-            GaussJordanElimination.process(a, b);
-            fail("SingularMatrixException expected but not thrown");
-        } catch (final SingularMatrixException ignore) {
-        }
+        final var a5 = new Matrix(rows, rows);
+        final var b5 = Matrix.createWithUniformRandomValues(rows, colsB, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        assertThrows(SingularMatrixException.class, () -> GaussJordanElimination.process(a5, b5));
     }
 
     @Test
-    public void testProcessArray() throws WrongSizeException,
-            SingularMatrixException, RankDeficientMatrixException,
+    void testProcessArray() throws WrongSizeException, SingularMatrixException, RankDeficientMatrixException,
             DecomposerException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_COLUMNS + 5, MAX_COLUMNS + 5);
-
-        Matrix a;
-        final Matrix a2;
-        final Matrix invA;
-        double[] b;
-        final double[] b2;
-        final double[] x;
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_COLUMNS + 5, MAX_COLUMNS + 5);
 
         // Test for non-singular square matrix
-        a = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
-        b = new double[rows];
+        var a = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
+        var b = new double[rows];
         randomizer.fill(b, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        a2 = new Matrix(a);
-        b2 = Arrays.copyOf(b, rows);
+        final var a2 = new Matrix(a);
+        final var b2 = Arrays.copyOf(b, rows);
 
         GaussJordanElimination.process(a2, b2);
 
         // check correctness
-        invA = Utils.inverse(a);
-        x = Utils.solve(a, b);
+        final var invA = Utils.inverse(a);
+        final var x = Utils.solve(a, b);
 
         assertTrue(a2.equals(invA, ABSOLUTE_ERROR));
         assertArrayEquals(x, b2, ABSOLUTE_ERROR);
@@ -130,72 +99,47 @@ public class GaussJordanEliminationTest {
         // Force WrongSizeException
 
         // non square matrix a
-        a = new Matrix(rows, rows + 1);
-        b = new double[rows];
-        try {
-            GaussJordanElimination.process(a, b);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var a3 = new Matrix(rows, rows + 1);
+        final var b3 = new double[rows];
+        assertThrows(WrongSizeException.class, () -> GaussJordanElimination.process(a3, b3));
 
         // different lengths
-        a = new Matrix(rows, rows);
-        b = new double[rows + 1];
-        try {
-            GaussJordanElimination.process(a, b);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var a4 = new Matrix(rows, rows);
+        final var b4 = new double[rows + 1];
+        assertThrows(WrongSizeException.class, () -> GaussJordanElimination.process(a4, b4));
 
         // Force SingularMatrixException
-        a = new Matrix(rows, rows);
-        b = new double[rows];
-        try {
-            GaussJordanElimination.process(a, b);
-            fail("SingularMatrixException expected but not thrown");
-        } catch (final SingularMatrixException ignore) {
-        }
+        final var a5 = new Matrix(rows, rows);
+        final var b5 = new double[rows];
+        assertThrows(SingularMatrixException.class, () -> GaussJordanElimination.process(a5, b5));
     }
 
     @Test
-    public void testInverse() throws WrongSizeException,
-            SingularMatrixException, RankDeficientMatrixException,
+    void testInverse() throws WrongSizeException, SingularMatrixException, RankDeficientMatrixException,
             DecomposerException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_COLUMNS + 5, MAX_COLUMNS + 5);
-
-        Matrix a;
-        final Matrix a2;
-        final Matrix invA;
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_COLUMNS + 5, MAX_COLUMNS + 5);
 
         // Test for non-singular square matrix
-        a = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
+        final var a = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
 
-        a2 = new Matrix(a);
+        final var a2 = new Matrix(a);
 
         GaussJordanElimination.inverse(a2);
 
         // check correctness
-        invA = Utils.inverse(a);
+        final var invA = Utils.inverse(a);
 
         assertTrue(a2.equals(invA, ABSOLUTE_ERROR));
 
         // Force WrongSizeException
 
         // non square matrix a
-        a = new Matrix(rows, rows + 1);
-        try {
-            GaussJordanElimination.inverse(a);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var a3 = new Matrix(rows, rows + 1);
+        assertThrows(WrongSizeException.class, () -> GaussJordanElimination.inverse(a3));
 
         // Force SingularMatrixException
-        a = new Matrix(rows, rows);
-        try {
-            GaussJordanElimination.inverse(a);
-            fail("SingularMatrixException expected but not thrown");
-        } catch (final SingularMatrixException ignore) {
-        }
+        final var a4 = new Matrix(rows, rows);
+        assertThrows(SingularMatrixException.class, () -> GaussJordanElimination.inverse(a4));
     }
 }

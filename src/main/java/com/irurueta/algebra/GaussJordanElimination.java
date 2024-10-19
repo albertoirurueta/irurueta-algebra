@@ -50,8 +50,7 @@ public class GaussJordanElimination {
      *                                 singular.
      * @throws WrongSizeException      if provided matrix "a" is not square.
      */
-    public static void process(final Matrix a, final Matrix b)
-            throws SingularMatrixException, WrongSizeException {
+    public static void process(final Matrix a, final Matrix b) throws SingularMatrixException, WrongSizeException {
         if (a.getRows() != a.getColumns()) {
             throw new WrongSizeException();
         }
@@ -60,22 +59,22 @@ public class GaussJordanElimination {
         }
 
         int i;
-        int icol = 0;
-        int irow = 0;
+        var icol = 0;
+        var irow = 0;
         int j;
         int k;
         int l;
         int ll;
-        final int n = a.getRows();
-        final int m = b != null ? b.getColumns() : 0;
+        final var n = a.getRows();
+        final var m = b != null ? b.getColumns() : 0;
 
         double big;
         double dum;
         double pivinv;
         double value;
-        final int[] indxc = new int[n];
-        final int[] indxr = new int[n];
-        final int[] ipiv = new int[n];
+        final var indxr = new int[n];
+        final var indxc = new int[n];
+        final var ipiv = new int[n];
 
         for (j = 0; j < n; j++) {
             ipiv[j] = 0;
@@ -99,14 +98,10 @@ public class GaussJordanElimination {
             ++(ipiv[icol]);
             if (irow != icol) {
                 for (l = 0; l < n; l++) {
-                    swap(a.getBuffer(), a.getBuffer(),
-                            a.getIndex(irow, l),
-                            a.getIndex(icol, l));
+                    swap(a.getBuffer(), a.getBuffer(), a.getIndex(irow, l), a.getIndex(icol, l));
                 }
                 for (l = 0; l < m; l++) {
-                    swap(b.getBuffer(), b.getBuffer(),
-                            b.getIndex(irow, l),
-                            b.getIndex(icol, l));
+                    swap(b.getBuffer(), b.getBuffer(), b.getIndex(irow, l), b.getIndex(icol, l));
                 }
             }
             indxr[i] = irow;
@@ -128,12 +123,10 @@ public class GaussJordanElimination {
                     dum = a.getElementAt(ll, icol);
                     a.setElementAt(ll, icol, 0.0);
                     for (l = 0; l < n; l++) {
-                        a.setElementAt(ll, l, a.getElementAt(ll, l) -
-                                a.getElementAt(icol, l) * dum);
+                        a.setElementAt(ll, l, a.getElementAt(ll, l) - a.getElementAt(icol, l) * dum);
                     }
                     for (l = 0; l < m; l++) {
-                        b.setElementAt(ll, l, b.getElementAt(ll, l) -
-                                b.getElementAt(icol, l) * dum);
+                        b.setElementAt(ll, l, b.getElementAt(ll, l) - b.getElementAt(icol, l) * dum);
                     }
                 }
             }
@@ -141,8 +134,7 @@ public class GaussJordanElimination {
         for (l = n - 1; l >= 0; l--) {
             if (indxr[l] != indxc[l]) {
                 for (k = 0; k < n; k++) {
-                    swap(a.getBuffer(), a.getBuffer(),
-                            a.getIndex(k, indxr[l]), a.getIndex(k, indxc[l]));
+                    swap(a.getBuffer(), a.getBuffer(), a.getIndex(k, indxr[l]), a.getIndex(k, indxc[l]));
                 }
             }
         }
@@ -165,12 +157,11 @@ public class GaussJordanElimination {
      *                                 singular.
      * @throws WrongSizeException      if provided matrix "a" is not square.
      */
-    public static void process(final Matrix a, final double[] b)
-            throws SingularMatrixException, WrongSizeException {
-        final Matrix mb = b != null ? Matrix.newFromArray(b) : null;
+    public static void process(final Matrix a, final double[] b) throws SingularMatrixException, WrongSizeException {
+        final var mb = b != null ? Matrix.newFromArray(b) : null;
         process(a, mb);
         if (mb != null) {
-            final double[] buffer = mb.getBuffer();
+            final var buffer = mb.getBuffer();
             System.arraycopy(buffer, 0, b, 0, b.length);
         }
     }
@@ -185,8 +176,7 @@ public class GaussJordanElimination {
      *                                 singular
      * @throws WrongSizeException      if provided matrix is not square
      */
-    public static void inverse(final Matrix a)
-            throws SingularMatrixException, WrongSizeException {
+    public static void inverse(final Matrix a) throws SingularMatrixException, WrongSizeException {
         process(a, (Matrix) null);
     }
 
@@ -200,8 +190,8 @@ public class GaussJordanElimination {
      */
     private static void swap(final double[] array1, final double[] array2,
                              final int pos1, final int pos2) {
-        final double value1 = array1[pos1];
-        final double value2 = array2[pos2];
+        final var value1 = array1[pos1];
+        final var value2 = array2[pos2];
 
         array1[pos1] = value2;
         array2[pos1] = value1;

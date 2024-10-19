@@ -171,7 +171,7 @@ public class Complex implements Serializable, Cloneable {
      * @return Complex conjugate.
      */
     public Complex conjugateAndReturnNew() {
-        final Complex result = new Complex();
+        final var result = new Complex();
         conjugate(result);
         return result;
     }
@@ -203,7 +203,7 @@ public class Complex implements Serializable, Cloneable {
      * @return Result of summation.
      */
     public Complex addAndReturnNew(final Complex other) {
-        final Complex result = new Complex();
+        final var result = new Complex();
         add(other, result);
         return result;
     }
@@ -237,7 +237,7 @@ public class Complex implements Serializable, Cloneable {
      * @return Result of subtraction.
      */
     public Complex subtractAndReturnNew(final Complex other) {
-        final Complex result = new Complex();
+        final var result = new Complex();
         subtract(other, result);
         return result;
     }
@@ -259,9 +259,8 @@ public class Complex implements Serializable, Cloneable {
      * @param result Complex instance where result is stored.
      */
     public void multiply(final Complex other, final Complex result) {
-        final double tmpReal = (real * other.real) - (imaginary * other.imaginary);
-        final double tmpImaginary = (imaginary * other.real) +
-                (real * other.imaginary);
+        final var tmpReal = (real * other.real) - (imaginary * other.imaginary);
+        final var tmpImaginary = (imaginary * other.real) + (real * other.imaginary);
 
         result.real = tmpReal;
         result.imaginary = tmpImaginary;
@@ -275,7 +274,7 @@ public class Complex implements Serializable, Cloneable {
      * @return Result of multiplication.
      */
     public Complex multiplyAndReturnNew(final Complex other) {
-        final Complex result = new Complex();
+        final var result = new Complex();
         multiply(other, result);
         return result;
     }
@@ -297,13 +296,10 @@ public class Complex implements Serializable, Cloneable {
      * @param result Complex instance where result is stored.
      */
     public void divide(final Complex other, final Complex result) {
-        final double tmpReal = ((real * other.real) + (imaginary * other.imaginary)) /
-                ((other.real * other.real) +
-                        (other.imaginary * other.imaginary));
-        final double tmpImaginary = ((imaginary * other.real) -
-                (real * other.imaginary)) /
-                ((other.real * other.real) +
-                        (other.imaginary * other.imaginary));
+        final var tmpReal = ((real * other.real) + (imaginary * other.imaginary))
+                / ((other.real * other.real) + (other.imaginary * other.imaginary));
+        final var tmpImaginary = ((imaginary * other.real) - (real * other.imaginary))
+                / ((other.real * other.real) + (other.imaginary * other.imaginary));
 
         result.real = tmpReal;
         result.imaginary = tmpImaginary;
@@ -317,7 +313,7 @@ public class Complex implements Serializable, Cloneable {
      * @return Result of division.
      */
     public Complex divideAndReturnNew(final Complex other) {
-        final Complex result = new Complex();
+        final var result = new Complex();
         divide(other, result);
         return result;
     }
@@ -353,7 +349,7 @@ public class Complex implements Serializable, Cloneable {
      * @return Result of multiplication by scalar.
      */
     public Complex multiplyByScalarAndReturnNew(final double scalar) {
-        final Complex result = new Complex();
+        final var result = new Complex();
         multiplyByScalar(scalar, result);
         return result;
     }
@@ -375,8 +371,7 @@ public class Complex implements Serializable, Cloneable {
      * @param result   Complex where the power is stored.
      */
     public void pow(final double exponent, final Complex result) {
-        result.setModulusAndPhase(Math.pow(getModulus(), exponent),
-                getPhase() * exponent);
+        result.setModulusAndPhase(Math.pow(getModulus(), exponent), getPhase() * exponent);
     }
 
     /**
@@ -387,7 +382,7 @@ public class Complex implements Serializable, Cloneable {
      * @return Complex where the power is stored.
      */
     public Complex powAndReturnNew(final double exponent) {
-        final Complex result = new Complex();
+        final var result = new Complex();
         pow(exponent, result);
         return result;
     }
@@ -418,7 +413,7 @@ public class Complex implements Serializable, Cloneable {
      * @return Squared root of this instance.
      */
     public Complex sqrtAndReturnNew() {
-        final Complex result = new Complex();
+        final var result = new Complex();
         sqrt(result);
         return result;
     }
@@ -446,11 +441,10 @@ public class Complex implements Serializable, Cloneable {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof Complex)) {
+        if (!(obj instanceof Complex other)) {
             return false;
         }
 
-        final Complex other = (Complex) obj;
         return equals(other, 0.0);
     }
 
@@ -490,7 +484,7 @@ public class Complex implements Serializable, Cloneable {
      */
     @Override
     public Complex clone() throws CloneNotSupportedException {
-        final Complex result = (Complex) super.clone();
+        final var result = (Complex) super.clone();
         result.setRealAndImaginary(real, imaginary);
         return result;
     }

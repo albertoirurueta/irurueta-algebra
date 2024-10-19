@@ -33,24 +33,24 @@ public class MultivariateGaussianRandomizer {
     /**
      * Contains mean values to be used for random value generation.
      */
-    private double[] mMean;
+    private double[] mean;
 
     /**
      * Covariance matrix.
      */
-    private Matrix mCovariance;
+    private Matrix covariance;
 
     /**
      * Lower triangular Cholesky decomposition of covariance matrix.
      */
-    private Matrix mL;
+    private Matrix l;
 
     /**
      * Instance in charge of generating pseudo-random values. Secure instances
      * can be used if the generated values need to be ensured "more" random at
      * the expense of higher computational cost.
      */
-    private final Random mInternalRandom;
+    private final Random internalRandom;
 
     /**
      * Constructor.
@@ -73,10 +73,10 @@ public class MultivariateGaussianRandomizer {
             throw new NullPointerException();
         }
 
-        mInternalRandom = internalRandom;
-        mMean = new double[1];
+        this.internalRandom = internalRandom;
+        mean = new double[1];
         try {
-            mCovariance = mL = Matrix.identity(1, 1);
+            covariance = l = Matrix.identity(1, 1);
         } catch (final WrongSizeException ignore) {
             // never thrown
         }
@@ -112,14 +112,14 @@ public class MultivariateGaussianRandomizer {
      *                                          not symmetric positive definite.
      * @throws NullPointerException             thrown if provided internal random is null.
      */
-    public MultivariateGaussianRandomizer(final Random internalRandom, final double[] mean,
-                                          final Matrix covariance) throws WrongSizeException,
+    public MultivariateGaussianRandomizer(
+            final Random internalRandom, final double[] mean, final Matrix covariance) throws WrongSizeException,
             InvalidCovarianceMatrixException {
         if (internalRandom == null) {
             throw new NullPointerException();
         }
 
-        mInternalRandom = internalRandom;
+        this.internalRandom = internalRandom;
         setMeanAndCovariance(mean, covariance);
     }
 
@@ -129,7 +129,7 @@ public class MultivariateGaussianRandomizer {
      * @return mean value.
      */
     public double[] getMean() {
-        return mMean;
+        return mean;
     }
 
     /**
@@ -138,7 +138,7 @@ public class MultivariateGaussianRandomizer {
      * @return covariance.
      */
     public Matrix getCovariance() {
-        return mCovariance;
+        return covariance;
     }
 
     /**
@@ -154,28 +154,25 @@ public class MultivariateGaussianRandomizer {
      */
     public final void setMeanAndCovariance(final double[] mean, final Matrix covariance)
             throws WrongSizeException, InvalidCovarianceMatrixException {
-        final int length = mean.length;
-        if (covariance.getRows() != length ||
-                covariance.getColumns() != length) {
+        final var length = mean.length;
+        if (covariance.getRows() != length || covariance.getColumns() != length) {
             throw new WrongSizeException("mean must have same covariance size");
         }
 
         try {
-            final CholeskyDecomposer decomposer = new CholeskyDecomposer(covariance);
+            final var decomposer = new CholeskyDecomposer(covariance);
             decomposer.decompose();
             if (!decomposer.isSPD()) {
                 throw new InvalidCovarianceMatrixException(
-                        "covariance matrix must be symmetric positive " +
-                                "definite (non singular)");
+                        "covariance matrix must be symmetric positive definite (non singular)");
             }
 
-            mMean = mean;
-            mCovariance = covariance;
+            this.mean = mean;
+            this.covariance = covariance;
 
-            mL = decomposer.getL();
+            l = decomposer.getL();
         } catch (final AlgebraException e) {
-            throw new InvalidCovarianceMatrixException(
-                    "covariance matrix must be square", e);
+            throw new InvalidCovarianceMatrixException("covariance matrix must be square", e);
         }
     }
 
@@ -188,33 +185,33 @@ public class MultivariateGaussianRandomizer {
      *                                  as provided mean array.
      */
     public void next(final double[] values) {
-        final int n = values.length;
+        final var n = values.length;
 
-        if (n != mMean.length) {
+        if (n != mean.length) {
             throw new IllegalArgumentException("values must have mean length");
         }
 
         // generate initial Gaussian values with zero mean and unitary standard
         // deviation
-        final double[] tmp = new double[n];
-        for (int i = 0; i < n; i++) {
-            tmp[i] = mInternalRandom.nextGaussian();
+        final var tmp = new double[n];
+        for (var i = 0; i < n; i++) {
+            tmp[i] = internalRandom.nextGaussian();
         }
 
         // multiply square root of covariance (its Lower triangular Cholesky
         // decomposition) by the generated values and add mean
-        for (int i = 0; i < n; i++) {
+        for (var i = 0; i < n; i++) {
             values[i] = 0.0;
 
-            for (int j = 0; j < n; j++) {
+            for (var j = 0; j < n; j++) {
                 if (i >= j) {
                     // only evaluate lower triangular portion
-                    values[i] += mL.getElementAt(i, j) * tmp[j];
+                    values[i] += l.getElementAt(i, j) * tmp[j];
                 }
             }
 
             // add mean
-            values[i] += mMean[i];
+            values[i] += mean[i];
         }
     }
 
@@ -225,7 +222,7 @@ public class MultivariateGaussianRandomizer {
      * @return a new array containing generated random values.
      */
     public double[] next() {
-        final double[] values = new double[mMean.length];
+        final var values = new double[mean.length];
         next(values);
         return values;
     }

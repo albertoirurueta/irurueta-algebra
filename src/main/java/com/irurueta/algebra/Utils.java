@@ -61,9 +61,9 @@ public class Utils {
      * @return Trace of provided matrix
      */
     public static double trace(final Matrix m) {
-        final int minSize = Math.min(m.getRows(), m.getColumns());
-        double trace = 0.0;
-        for (int i = 0; i < minSize; i++) {
+        final var minSize = Math.min(m.getRows(), m.getColumns());
+        var trace = 0.0;
+        for (var i = 0; i < minSize; i++) {
             trace += m.getElementAt(i, i);
         }
         return trace;
@@ -81,7 +81,7 @@ public class Utils {
      * @see SingularValueDecomposer
      */
     public static double cond(final Matrix m) throws DecomposerException {
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var decomposer = new SingularValueDecomposer(m);
         try {
             decomposer.decompose();
             return decomposer.getConditionNumber();
@@ -103,7 +103,7 @@ public class Utils {
      *                             any reason.
      */
     public static int rank(final Matrix m) throws DecomposerException {
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var decomposer = new SingularValueDecomposer(m);
         try {
             decomposer.decompose();
             return decomposer.getRank();
@@ -127,13 +127,12 @@ public class Utils {
      * @throws DecomposerException Exception thrown if decomposition fails for
      *                             any reason.
      */
-    public static double det(final Matrix m) throws WrongSizeException,
-            DecomposerException {
+    public static double det(final Matrix m) throws WrongSizeException, DecomposerException {
         if (m.getRows() != m.getColumns()) {
             throw new WrongSizeException();
         }
 
-        final LUDecomposer decomposer = new LUDecomposer(m);
+        final var decomposer = new LUDecomposer(m);
         try {
             decomposer.decompose();
             return decomposer.determinant();
@@ -162,10 +161,9 @@ public class Utils {
      *                                      any reason.
      */
     public static void solve(final Matrix m, final Matrix b, final Matrix result)
-            throws WrongSizeException, RankDeficientMatrixException,
-            DecomposerException {
+            throws WrongSizeException, RankDeficientMatrixException, DecomposerException {
         if (m.getRows() == m.getColumns()) {
-            final LUDecomposer decomposer = new LUDecomposer(m);
+            final var decomposer = new LUDecomposer(m);
             try {
                 decomposer.decompose();
                 decomposer.solve(b, result);
@@ -177,7 +175,7 @@ public class Utils {
                 throw new DecomposerException(e);
             }
         } else {
-            final EconomyQRDecomposer decomposer = new EconomyQRDecomposer(m);
+            final var decomposer = new EconomyQRDecomposer(m);
             try {
                 decomposer.decompose();
                 decomposer.solve(b, result);
@@ -192,12 +190,12 @@ public class Utils {
     /**
      * Solves a linear system of equations of the form: m * x = b.
      * Where x is the returned matrix containing the solution, m is the matrix
-     * of the linear system of equations and b is the parameters matrix.
+     * of the linear system of equations and b is the parameter matrix.
      *
      * @param m Matrix of the linear system of equations.
      * @param b Parameters matrix.
      * @return Solution of the linear system of equations.
-     * @throws WrongSizeException           Exception thrown if provided matrix m has less
+     * @throws WrongSizeException           Exception thrown if provided matrix m has fewer
      *                                      rows than columns, or if provided matrix b has a number of rows different
      *                                      from the number of rows of m.
      * @throws RankDeficientMatrixException Exception thrown if provided matrix
@@ -205,10 +203,10 @@ public class Utils {
      * @throws DecomposerException          Exception thrown if decomposition fails for
      *                                      any reason.
      */
-    public static Matrix solve(final Matrix m, final Matrix b) throws WrongSizeException,
-            RankDeficientMatrixException, DecomposerException {
+    public static Matrix solve(final Matrix m, final Matrix b) throws WrongSizeException, RankDeficientMatrixException,
+            DecomposerException {
         if (m.getRows() == m.getColumns()) {
-            final LUDecomposer decomposer = new LUDecomposer(m);
+            final var decomposer = new LUDecomposer(m);
             try {
                 decomposer.decompose();
                 return decomposer.solve(b);
@@ -220,7 +218,7 @@ public class Utils {
                 throw new DecomposerException(e);
             }
         } else {
-            final EconomyQRDecomposer decomposer = new EconomyQRDecomposer(m);
+            final var decomposer = new EconomyQRDecomposer(m);
             try {
                 decomposer.decompose();
                 return decomposer.solve(b);
@@ -245,25 +243,24 @@ public class Utils {
      * @throws DecomposerException Exception thrown if decomposition fails for
      *                             any reason.
      */
-    public static void solve(final Matrix m, final double[] b, final double[] result)
-            throws DecomposerException {
+    public static void solve(final Matrix m, final double[] b, final double[] result) throws DecomposerException {
         if (m.getRows() == m.getColumns()) {
-            final LUDecomposer decomposer = new LUDecomposer(m);
+            final var decomposer = new LUDecomposer(m);
             try {
                 decomposer.decompose();
-                System.arraycopy(decomposer.solve(Matrix.newFromArray(b,
-                        true)).toArray(true), 0, result, 0, result.length);
+                System.arraycopy(decomposer.solve(Matrix.newFromArray(b, true)).toArray(true),
+                        0, result, 0, result.length);
             } catch (final DecomposerException e) {
                 throw e;
             } catch (final Exception e) {
                 throw new DecomposerException(e);
             }
         } else {
-            final EconomyQRDecomposer decomposer = new EconomyQRDecomposer(m);
+            final var decomposer = new EconomyQRDecomposer(m);
             try {
                 decomposer.decompose();
-                System.arraycopy(decomposer.solve(Matrix.newFromArray(b,
-                        true)).toArray(true), 0, result, 0, result.length);
+                System.arraycopy(decomposer.solve(Matrix.newFromArray(b, true)).toArray(true),
+                        0, result, 0, result.length);
             } catch (final Exception e) {
                 throw new DecomposerException(e);
             }
@@ -282,25 +279,22 @@ public class Utils {
      * @throws DecomposerException Exception thrown if decomposition fails for
      *                             any reason.
      */
-    public static double[] solve(final Matrix m, double[] b)
-            throws DecomposerException {
+    public static double[] solve(final Matrix m, double[] b) throws DecomposerException {
         if (m.getRows() == m.getColumns()) {
-            final LUDecomposer decomposer = new LUDecomposer(m);
+            final var decomposer = new LUDecomposer(m);
             try {
                 decomposer.decompose();
-                return decomposer.solve(Matrix.newFromArray(b, true)).toArray(
-                        true);
+                return decomposer.solve(Matrix.newFromArray(b, true)).toArray(true);
             } catch (final DecomposerException e) {
                 throw e;
             } catch (final Exception e) {
                 throw new DecomposerException(e);
             }
         } else {
-            final EconomyQRDecomposer decomposer = new EconomyQRDecomposer(m);
+            final var decomposer = new EconomyQRDecomposer(m);
             try {
                 decomposer.decompose();
-                return decomposer.solve(Matrix.newFromArray(b, true)).toArray(
-                        true);
+                return decomposer.solve(Matrix.newFromArray(b, true)).toArray(true);
             } catch (final Exception e) {
                 throw new DecomposerException(e);
             }
@@ -356,7 +350,7 @@ public class Utils {
      *                             for any reason.
      */
     public static double norm2(final Matrix m) throws DecomposerException {
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var decomposer = new SingularValueDecomposer(m);
         try {
             decomposer.decompose();
             return decomposer.getNorm2();
@@ -376,8 +370,7 @@ public class Utils {
      *                             for any reason.
      */
     public static double norm2(final double[] array) throws DecomposerException {
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(
-                Matrix.newFromArray(array, true));
+        final var decomposer = new SingularValueDecomposer(Matrix.newFromArray(array, true));
         try {
             decomposer.decompose();
             return decomposer.getNorm2();
@@ -423,8 +416,7 @@ public class Utils {
      *                                      compute inverse fails for any other reason.
      */
     public static void inverse(final Matrix m, final Matrix result)
-            throws WrongSizeException, RankDeficientMatrixException,
-            DecomposerException {
+            throws WrongSizeException, RankDeficientMatrixException, DecomposerException {
         final int rows = m.getRows();
         final int columns = m.getColumns();
         if (result.getRows() != columns || result.getColumns() != rows) {
@@ -447,9 +439,9 @@ public class Utils {
      * @throws DecomposerException          Exception thrown if decomposition to
      *                                      compute inverse fails for any other reason.
      */
-    public static Matrix inverse(final Matrix m) throws WrongSizeException,
-            RankDeficientMatrixException, DecomposerException {
-        final int rows = m.getRows();
+    public static Matrix inverse(final Matrix m) throws WrongSizeException, RankDeficientMatrixException,
+            DecomposerException {
+        final var rows = m.getRows();
         return Utils.solve(m, Matrix.identity(rows, rows));
     }
 
@@ -466,17 +458,13 @@ public class Utils {
      * @throws DecomposerException          Exception thrown if decomposition to compute
      *                                      inverse fails for any other reason.
      */
-    public static void inverse(final double[] array, final Matrix result)
-            throws WrongSizeException, RankDeficientMatrixException,
-            DecomposerException {
-        if (result.getRows() != array.length ||
-                result.getColumns() != array.length) {
+    public static void inverse(final double[] array, final Matrix result) throws WrongSizeException,
+            RankDeficientMatrixException, DecomposerException {
+        if (result.getRows() != array.length || result.getColumns() != array.length) {
             // resize result matrix
             result.resize(array.length, array.length);
         }
-        Utils.solve(Matrix.newFromArray(array, true),
-                Matrix.identity(array.length, array.length), result);
-
+        Utils.solve(Matrix.newFromArray(array, true), Matrix.identity(array.length, array.length), result);
     }
 
     /**
@@ -492,8 +480,8 @@ public class Utils {
      */
     public static Matrix inverse(final double[] array) throws WrongSizeException,
             RankDeficientMatrixException, DecomposerException {
-        final int length = array.length;
-        final Matrix identity = Matrix.identity(length, length);
+        final var length = array.length;
+        final var identity = Matrix.identity(length, length);
         return Utils.solve(Matrix.newFromArray(array, true), identity);
     }
 
@@ -530,19 +518,19 @@ public class Utils {
      * matrix.
      */
     public static Matrix pseudoInverse(final Matrix m) throws DecomposerException {
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var decomposer = new SingularValueDecomposer(m);
         try {
             decomposer.decompose();
-            final Matrix u = decomposer.getU();
-            final Matrix v = decomposer.getV();
-            final double[] s = decomposer.getSingularValues();
-            final int rows = m.getRows();
-            final int cols = m.getColumns();
-            final double threshold = EPSILON * Math.max(rows, cols) * s[0];
-            final Matrix invW = new Matrix(cols, cols);
+            final var u = decomposer.getU();
+            final var v = decomposer.getV();
+            final var s = decomposer.getSingularValues();
+            final var rows = m.getRows();
+            final var cols = m.getColumns();
+            final var threshold = EPSILON * Math.max(rows, cols) * s[0];
+            final var invW = new Matrix(cols, cols);
             invW.initialize(0.0);
             double value;
-            for (int n = 0; n < cols; n++) {
+            for (var n = 0; n < cols; n++) {
                 value = s[n];
                 if (value > threshold) {
                     invW.setElementAt(n, n, 1.0 / value);
@@ -569,22 +557,20 @@ public class Utils {
      *                             such as NaN or inf.
      * @see #pseudoInverse(Matrix)
      */
-    public static Matrix pseudoInverse(final double[] array)
-            throws DecomposerException {
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(
-                Matrix.newFromArray(array, true));
+    public static Matrix pseudoInverse(final double[] array) throws DecomposerException {
+        final var decomposer = new SingularValueDecomposer(Matrix.newFromArray(array, true));
         try {
             decomposer.decompose();
-            final Matrix u = decomposer.getU();
-            final Matrix v = decomposer.getV();
-            final double[] s = decomposer.getSingularValues();
-            final int rows = array.length;
-            final int cols = 1;
-            final double threshold = EPSILON * Math.max(rows, cols) * s[0];
-            final Matrix invW = new Matrix(cols, cols);
+            final var u = decomposer.getU();
+            final var v = decomposer.getV();
+            final var s = decomposer.getSingularValues();
+            final var rows = array.length;
+            final var cols = 1;
+            final var threshold = EPSILON * Math.max(rows, cols) * s[0];
+            final var invW = new Matrix(cols, cols);
             invW.initialize(0.0);
             double value;
-            for (int n = 0; n < cols; n++) {
+            for (var n = 0; n < cols; n++) {
                 value = s[n];
                 if (value > threshold) {
                     invW.setElementAt(n, n, 1.0 / value);
@@ -625,8 +611,7 @@ public class Utils {
      * @throws WrongSizeException Exception thrown if provided array doesn't
      *                            have length equal to 3.
      */
-    public static void skewMatrix(final double[] array, final Matrix result)
-            throws WrongSizeException {
+    public static void skewMatrix(final double[] array, final Matrix result) throws WrongSizeException {
         if (array.length != 3) {
             throw new WrongSizeException("array length must be 3");
         }
@@ -671,10 +656,9 @@ public class Utils {
      * @throws WrongSizeException if provided array doesn't have length 3 or
      *                            if jacobian is not 9x3 (if provided).
      */
-    public static void skewMatrix(final double[] array, final Matrix result,
-                                  final Matrix jacobian) throws WrongSizeException {
-        if (jacobian != null && (jacobian.getRows() != 9 ||
-                jacobian.getColumns() != 3)) {
+    public static void skewMatrix(final double[] array, final Matrix result, final Matrix jacobian)
+            throws WrongSizeException {
+        if (jacobian != null && (jacobian.getRows() != 9 || jacobian.getColumns() != 3)) {
             throw new WrongSizeException("jacobian must be 9x3");
         }
 
@@ -717,7 +701,7 @@ public class Utils {
      *                            have length equal to 3.
      */
     public static Matrix skewMatrix(final double[] array) throws WrongSizeException {
-        final Matrix sk = new Matrix(3, 3);
+        final var sk = new Matrix(3, 3);
         skewMatrix(array, sk);
         return sk;
     }
@@ -732,8 +716,8 @@ public class Utils {
      * @throws WrongSizeException Exception thrown if provided m matrix doesn't
      *                            have proper size
      */
-    private static void internalSkewMatrix(final Matrix m, final Matrix result,
-                                           final boolean columnwise) throws WrongSizeException {
+    private static void internalSkewMatrix(
+            final Matrix m, final Matrix result, final boolean columnwise) throws WrongSizeException {
         if (result.getRows() != 3 || result.getColumns() != 3) {
             // resize result
             result.resize(3, 3);
@@ -775,8 +759,7 @@ public class Utils {
      * @throws WrongSizeException Exception thrown if provided matrix is not 3x1
      *                            or 1x3.
      */
-    public static void skewMatrix(final Matrix m, final Matrix result)
-            throws WrongSizeException {
+    public static void skewMatrix(final Matrix m, final Matrix result) throws WrongSizeException {
         boolean columnwise;
         if (m.getRows() == 3 && m.getColumns() == 1) {
             columnwise = false;
@@ -818,8 +801,7 @@ public class Utils {
      */
     public static void skewMatrix(final Matrix m, final Matrix result, final Matrix jacobian)
             throws WrongSizeException {
-        if (jacobian != null && (jacobian.getRows() != 9 ||
-                jacobian.getColumns() != 3)) {
+        if (jacobian != null && (jacobian.getRows() != 9 || jacobian.getColumns() != 3)) {
             throw new WrongSizeException("jacobian must be 9x3");
         }
 
@@ -872,7 +854,7 @@ public class Utils {
             throw new WrongSizeException();
         }
 
-        final Matrix sk = new Matrix(3, 3);
+        final var sk = new Matrix(3, 3);
         internalSkewMatrix(m, sk, columnwise);
         return sk;
     }
@@ -908,15 +890,11 @@ public class Utils {
             final double[] v1, final double[] v2, final double[] result,
             final Matrix jacobian1, final Matrix jacobian2) throws WrongSizeException {
 
-        if (jacobian1 != null && (jacobian1.getRows() != 3 ||
-                jacobian1.getColumns() != 3)) {
-            throw new WrongSizeException(
-                    "if provided jacobian of v1 is not 3x3");
+        if (jacobian1 != null && (jacobian1.getRows() != 3 || jacobian1.getColumns() != 3)) {
+            throw new WrongSizeException("if provided jacobian of v1 is not 3x3");
         }
-        if (jacobian2 != null && (jacobian2.getRows() != 3 ||
-                jacobian2.getColumns() != 3)) {
-            throw new WrongSizeException(
-                    "if provided jacobian of v2 is not 3x3");
+        if (jacobian2 != null && (jacobian2.getRows() != 3 || jacobian2.getColumns() != 3)) {
+            throw new WrongSizeException("if provided jacobian of v2 is not 3x3");
         }
 
         crossProduct(v1, v2, result);
@@ -959,14 +937,13 @@ public class Utils {
     public static void crossProduct(final double[] v1, final double[] v2, final double[] result)
             throws WrongSizeException {
         if (v1.length != 3 || v2.length != 3 || result.length != 3) {
-            throw new WrongSizeException(
-                    "v1, v2 and result must have length 3");
+            throw new WrongSizeException("v1, v2 and result must have length 3");
         }
 
-        final Matrix skm = Utils.skewMatrix(v1);
+        final var skm = Utils.skewMatrix(v1);
         skm.multiply(Matrix.newFromArray(v2));
 
-        final double[] buffer = skm.getBuffer();
+        final var buffer = skm.getBuffer();
         System.arraycopy(buffer, 0, result, 0, buffer.length);
     }
 
@@ -994,13 +971,12 @@ public class Utils {
      *                            have length 3.
      * @see #Utils  for more information.
      */
-    public static double[] crossProduct(final double[] v1, final double[] v2)
-            throws WrongSizeException {
+    public static double[] crossProduct(final double[] v1, final double[] v2) throws WrongSizeException {
         if (v1.length != 3 || v2.length != 3) {
             throw new WrongSizeException("v1, v2 must have length 3");
         }
 
-        final Matrix skm = Utils.skewMatrix(v1);
+        final var skm = Utils.skewMatrix(v1);
         skm.multiply(Matrix.newFromArray(v2));
 
         return skm.toArray();
@@ -1035,15 +1011,11 @@ public class Utils {
             final double[] v1, final double[] v2, final Matrix jacobian1, final Matrix jacobian2)
             throws WrongSizeException {
 
-        if (jacobian1 != null && (jacobian1.getRows() != 3 ||
-                jacobian1.getColumns() != 3)) {
-            throw new WrongSizeException(
-                    "if provided jacobian of v1 is not 3x3");
+        if (jacobian1 != null && (jacobian1.getRows() != 3 || jacobian1.getColumns() != 3)) {
+            throw new WrongSizeException("if provided jacobian of v1 is not 3x3");
         }
-        if (jacobian2 != null && (jacobian2.getRows() != 3 ||
-                jacobian2.getColumns() != 3)) {
-            throw new WrongSizeException(
-                    "if provided jacobian of v2 is not 3x3");
+        if (jacobian2 != null && (jacobian2.getRows() != 3 || jacobian2.getColumns() != 3)) {
+            throw new WrongSizeException("if provided jacobian of v2 is not 3x3");
         }
 
         if (jacobian1 != null) {
@@ -1087,8 +1059,7 @@ public class Utils {
      *                            have length 3 or if number of rows of provided matrix isn't 3.
      * @see Utils#skewMatrix(Matrix)  for more information.
      */
-    public static void crossProduct(final double[] v, final Matrix m, final Matrix result)
-            throws WrongSizeException {
+    public static void crossProduct(final double[] v, final Matrix m, final Matrix result) throws WrongSizeException {
         if (v.length != 3 || m.getColumns() != 3) {
             throw new WrongSizeException();
         }
@@ -1122,13 +1093,12 @@ public class Utils {
      *                            have length 3 or if number of rows of provided matrix isn't 3.
      * @see Utils#skewMatrix(Matrix)  for more information.
      */
-    public static Matrix crossProduct(final double[] v, final Matrix m)
-            throws WrongSizeException {
+    public static Matrix crossProduct(final double[] v, final Matrix m) throws WrongSizeException {
         if (v.length != 3 || m.getColumns() != 3) {
             throw new WrongSizeException();
         }
 
-        final Matrix skm = Utils.skewMatrix(v);
+        final var skm = Utils.skewMatrix(v);
         skm.multiply(m);
 
         return skm;
@@ -1149,15 +1119,14 @@ public class Utils {
             throw new IllegalArgumentException();
         }
 
-        final int length = m.getRows();
+        final var length = m.getRows();
         if (length != m.getColumns()) {
             return false;
         }
 
-        for (int j = 0; j < length; j++) {
-            for (int i = j + 1; i < length; i++) {
-                if (Math.abs(m.getElementAt(j, i) -
-                        m.getElementAt(i, j)) > threshold) {
+        for (var j = 0; j < length; j++) {
+            for (var i = j + 1; i < length; i++) {
+                if (Math.abs(m.getElementAt(j, i) - m.getElementAt(i, j)) > threshold) {
                     return false;
                 }
             }
@@ -1192,18 +1161,18 @@ public class Utils {
             throw new IllegalArgumentException();
         }
 
-        final int length = m.getRows();
+        final var length = m.getRows();
         if (length != m.getColumns()) {
             return false;
         }
 
         try {
             // to get faster computation it is better to try m' * m
-            final Matrix tmp = m.transposeAndReturnNew();
+            final var tmp = m.transposeAndReturnNew();
             tmp.multiply(m);
 
-            for (int j = 0; j < length; j++) {
-                for (int i = j + 1; i < length; i++) {
+            for (var j = 0; j < length; j++) {
+                for (var i = j + 1; i < length; i++) {
                     if (Math.abs(tmp.getElementAt(i, j)) > threshold) {
                         return false;
                     }
@@ -1239,8 +1208,7 @@ public class Utils {
      * @throws IllegalArgumentException Raised if provided threshold is negative
      */
     public static boolean isOrthonormal(final Matrix m, final double threshold) {
-        return isOrthogonal(m, threshold) &&
-                (Math.abs(Utils.normF(m) - 1.0) < threshold);
+        return isOrthogonal(m, threshold) && (Math.abs(Utils.normF(m) - 1.0) < threshold);
     }
 
     /**
@@ -1264,8 +1232,7 @@ public class Utils {
      * @throws IllegalArgumentException if first and second operands arrays
      *                                  don't have the same length.
      */
-    public static double dotProduct(final double[] firstOperand,
-                                    final double[] secondOperand) {
+    public static double dotProduct(final double[] firstOperand, final double[] secondOperand) {
         return ArrayUtils.dotProduct(firstOperand, secondOperand);
     }
 
@@ -1287,10 +1254,9 @@ public class Utils {
      *                                  same length as their respective operands.
      */
     public static double dotProduct(
-            final double[] firstOperand, final double[] secondOperand,
-            final Matrix jacobianFirst, final Matrix jacobianSecond) {
-        return ArrayUtils.dotProduct(firstOperand, secondOperand, jacobianFirst,
-                jacobianSecond);
+            final double[] firstOperand, final double[] secondOperand, final Matrix jacobianFirst,
+            final Matrix jacobianSecond) {
+        return ArrayUtils.dotProduct(firstOperand, secondOperand, jacobianFirst, jacobianSecond);
     }
 
     /**
@@ -1305,12 +1271,10 @@ public class Utils {
      *                            second operand rows, or if first operand rows is not one, or if second
      *                            operand columns is not one.
      */
-    public static double dotProduct(final Matrix firstOperand, final Matrix secondOperand)
-            throws WrongSizeException {
-        if (firstOperand.getColumns() != secondOperand.getRows() ||
-                firstOperand.getRows() != 1 || secondOperand.getColumns() != 1) {
-            throw new WrongSizeException("first operand must be 1xN, and "
-                    + "second operand must be Nx1");
+    public static double dotProduct(final Matrix firstOperand, final Matrix secondOperand) throws WrongSizeException {
+        if (firstOperand.getColumns() != secondOperand.getRows() || firstOperand.getRows() != 1
+                || secondOperand.getColumns() != 1) {
+            throw new WrongSizeException("first operand must be 1xN, and second operand must be Nx1");
         }
 
         return dotProduct(firstOperand.getBuffer(), secondOperand.getBuffer());
@@ -1336,17 +1300,15 @@ public class Utils {
      * @throws IllegalArgumentException if jacobian matrices are not column
      *                                  vectors having the same length as their respective operands.
      */
-    public static double dotProduct(final Matrix firstOperand, final Matrix secondOperand,
-                                    final Matrix jacobianFirst, final Matrix jacobianSecond)
-            throws WrongSizeException {
-        if (firstOperand.getColumns() != secondOperand.getRows() ||
-                firstOperand.getRows() != 1 || secondOperand.getColumns() != 1) {
-            throw new WrongSizeException("first operand must be 1xN, and "
-                    + "second operand must be Nx1");
+    public static double dotProduct(
+            final Matrix firstOperand, final Matrix secondOperand, final Matrix jacobianFirst,
+            final Matrix jacobianSecond) throws WrongSizeException {
+        if (firstOperand.getColumns() != secondOperand.getRows() || firstOperand.getRows() != 1
+                || secondOperand.getColumns() != 1) {
+            throw new WrongSizeException("first operand must be 1xN, and second operand must be Nx1");
         }
 
-        return dotProduct(firstOperand.getBuffer(), secondOperand.getBuffer(),
-                jacobianFirst, jacobianSecond);
+        return dotProduct(firstOperand.getBuffer(), secondOperand.getBuffer(), jacobianFirst, jacobianSecond);
     }
 
 
@@ -1398,11 +1360,10 @@ public class Utils {
      *                                      numerically unstable.
      * @see <a href="http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices">http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices</a>
      */
-    public static void schurc(final Matrix m, int pos, final boolean fromStart,
-                              final boolean sqrt, final Matrix result, final Matrix iA)
-            throws DecomposerException, RankDeficientMatrixException {
-        final int rows = m.getRows();
-        final int cols = m.getColumns();
+    public static void schurc(final Matrix m, int pos, final boolean fromStart, final boolean sqrt, final Matrix result,
+                              final Matrix iA) throws DecomposerException, RankDeficientMatrixException {
+        final var rows = m.getRows();
+        final var cols = m.getColumns();
         if (rows != cols) {
             throw new IllegalArgumentException("matrix must be square");
         }
@@ -1423,8 +1384,8 @@ public class Utils {
 
                 // create index positions to reorder matrix to decompose using
                 // Cholesky
-                final int[] index = new int[rows];
-                final int complSize = rows - pos;
+                final var index = new int[rows];
+                final var complSize = rows - pos;
                 for (int i = 0, value = pos; i < complSize; i++, value++) {
                     index[i] = value;
                 }
@@ -1433,8 +1394,8 @@ public class Utils {
                 }
 
                 m2 = new Matrix(rows, rows);
-                for (int j = 0; j < rows; j++) {
-                    for (int i = 0; i < rows; i++) {
+                for (var j = 0; j < rows; j++) {
+                    for (var i = 0; i < rows; i++) {
                         m2.setElementAt(i, j, m.getElementAt(index[i],
                                 index[j]));
                     }
@@ -1443,33 +1404,33 @@ public class Utils {
                 pos = rows - pos;
             }
 
-            final CholeskyDecomposer decomposer = new CholeskyDecomposer(m2);
+            final var decomposer = new CholeskyDecomposer(m2);
             decomposer.decompose();
 
             // pick the upper right matrix of cholesky
-            final Matrix r = decomposer.getR();
+            final var r = decomposer.getR();
 
             // s, which is the square root of Schur complement and is the result,
             // is an upper right matrix because it is a sub-matrix of r
-            final int sizeMinus1 = rows - 1;
+            final var sizeMinus1 = rows - 1;
             r.getSubmatrix(pos, pos, sizeMinus1, sizeMinus1, result);
 
             if (!sqrt) {
                 // if the full version of the Schur complement is required
                 // we multiply by its transpose S = S'*S
-                final Matrix transS = result.transposeAndReturnNew();
+                final var transS = result.transposeAndReturnNew();
                 transS.multiply(result); //transS is now S'*S
                 result.copyFrom(transS);
             }
 
             if (iA != null) {
                 // minor of r is the square root of inverse block
-                final int posMinus1 = pos - 1;
+                final var posMinus1 = pos - 1;
                 r.getSubmatrix(0, 0, posMinus1, posMinus1, iA);
                 Utils.inverse(iA, iA);
                 // to obtain full inverse block iA we need to multiply it by its
                 // transpose iA = iA * iA'
-                final Matrix transiA = iA.transposeAndReturnNew();
+                final var transiA = iA.transposeAndReturnNew();
                 iA.multiply(transiA);
             }
         } catch (final DecomposerException | RankDeficientMatrixException e) {
@@ -1500,8 +1461,7 @@ public class Utils {
      * @see <a href="http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices">http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices</a>
      */
     public static void schurc(
-            final Matrix m, final int pos, final boolean fromStart,
-            final Matrix result, final Matrix iA)
+            final Matrix m, final int pos, final boolean fromStart, final Matrix result, final Matrix iA)
             throws DecomposerException, RankDeficientMatrixException {
         schurc(m, pos, fromStart, false, result, iA);
     }
@@ -1551,8 +1511,8 @@ public class Utils {
     public static Matrix schurcAndReturnNew(
             final Matrix m, final int pos, final boolean fromStart, final boolean sqrt, final Matrix iA)
             throws DecomposerException, RankDeficientMatrixException {
-        final int rows = m.getRows();
-        final int cols = m.getColumns();
+        final var rows = m.getRows();
+        final var cols = m.getColumns();
         if (rows != cols) {
             throw new IllegalArgumentException("matrix must be square");
         }
@@ -1563,7 +1523,7 @@ public class Utils {
             throw new IllegalArgumentException("pos must be greater than 0");
         }
 
-        final int size = fromStart ? pos : rows - pos;
+        final var size = fromStart ? pos : rows - pos;
         Matrix result = null;
         try {
             result = new Matrix(size, size);
@@ -1638,8 +1598,8 @@ public class Utils {
      * @see #schurc(com.irurueta.algebra.Matrix, int, boolean, boolean, com.irurueta.algebra.Matrix, com.irurueta.algebra.Matrix)
      * @see <a href="http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices">http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices</a>
      */
-    public static void schurc(final Matrix m, final int pos, final boolean fromStart,
-                              final boolean sqrt, final Matrix result) throws DecomposerException {
+    public static void schurc(final Matrix m, final int pos, final boolean fromStart, final boolean sqrt,
+                              final Matrix result) throws DecomposerException {
         try {
             schurc(m, pos, fromStart, sqrt, result, null);
         } catch (final RankDeficientMatrixException ignore) {
@@ -1663,8 +1623,8 @@ public class Utils {
      * @see #schurc(com.irurueta.algebra.Matrix, int, boolean, boolean, com.irurueta.algebra.Matrix, com.irurueta.algebra.Matrix)
      * @see <a href="http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices">http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices</a>
      */
-    public static void schurc(final Matrix m, final int pos, final boolean fromStart,
-                              final Matrix result) throws DecomposerException {
+    public static void schurc(
+            final Matrix m, final int pos, final boolean fromStart, final Matrix result) throws DecomposerException {
         try {
             schurc(m, pos, fromStart, result, null);
         } catch (final RankDeficientMatrixException ignore) {
@@ -1686,8 +1646,7 @@ public class Utils {
      * @see #schurc(com.irurueta.algebra.Matrix, int, boolean, boolean, com.irurueta.algebra.Matrix, com.irurueta.algebra.Matrix)
      * @see <a href="http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices">http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices</a>
      */
-    public static void schurc(final Matrix m, final int pos, final Matrix result)
-            throws DecomposerException {
+    public static void schurc(final Matrix m, final int pos, final Matrix result) throws DecomposerException {
         try {
             schurc(m, pos, result, null);
         } catch (final RankDeficientMatrixException ignore) {
@@ -1713,8 +1672,7 @@ public class Utils {
      * @see <a href="http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices">http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices</a>
      */
     public static Matrix schurcAndReturnNew(
-            final Matrix m, final int pos, final boolean fromStart, final boolean sqrt)
-            throws DecomposerException {
+            final Matrix m, final int pos, final boolean fromStart, final boolean sqrt) throws DecomposerException {
         Matrix result = null;
         try {
             result = schurcAndReturnNew(m, pos, fromStart, sqrt, null);
@@ -1765,8 +1723,7 @@ public class Utils {
      * @see #schurc(com.irurueta.algebra.Matrix, int, boolean, boolean, com.irurueta.algebra.Matrix, com.irurueta.algebra.Matrix)
      * @see <a href="http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices">http://scicomp.stackexchange.com/questions/5050/cholesky-factorization-of-block-matrices</a>
      */
-    public static Matrix schurcAndReturnNew(final Matrix m, final int pos)
-            throws DecomposerException {
+    public static Matrix schurcAndReturnNew(final Matrix m, final int pos) throws DecomposerException {
         Matrix result = null;
         try {
             result = schurcAndReturnNew(m, pos, null);

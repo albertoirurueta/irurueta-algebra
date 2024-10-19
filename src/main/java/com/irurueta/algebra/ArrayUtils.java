@@ -40,7 +40,7 @@ public class ArrayUtils {
      */
     private static void internalMultiplyByScalar(
             final double[] inputArray, final double scalar, final double[] result) {
-        for (int i = 0; i < inputArray.length; ++i) {
+        for (var i = 0; i < inputArray.length; ++i) {
             result[i] = scalar * inputArray[i];
         }
     }
@@ -55,8 +55,7 @@ public class ArrayUtils {
      * @throws IllegalArgumentException Thrown if inputArray length and result
      *                                  array length are not equal.
      */
-    public static void multiplyByScalar(
-            final double[] inputArray, final double scalar, final double[] result) {
+    public static void multiplyByScalar(final double[] inputArray, final double scalar, final double[] result) {
         if (inputArray.length != result.length) {
             throw new IllegalArgumentException();
         }
@@ -72,9 +71,8 @@ public class ArrayUtils {
      * @return Result obtained after multiplying input array by provided scalar
      * value.
      */
-    public static double[] multiplyByScalarAndReturnNew(
-            final double[] inputArray, final double scalar) {
-        final double[] result = new double[inputArray.length];
+    public static double[] multiplyByScalarAndReturnNew(final double[] inputArray, final double scalar) {
+        final var result = new double[inputArray.length];
         internalMultiplyByScalar(inputArray, scalar, result);
         return result;
     }
@@ -91,10 +89,8 @@ public class ArrayUtils {
      * @param secondOperand Second operand.
      * @param result        Result of summation.
      */
-    private static void internalSum(
-            final double[] firstOperand, final double[] secondOperand,
-            final double[] result) {
-        for (int i = 0; i < firstOperand.length; i++) {
+    private static void internalSum(final double[] firstOperand, final double[] secondOperand, final double[] result) {
+        for (var i = 0; i < firstOperand.length; i++) {
             result[i] = firstOperand[i] + secondOperand[i];
         }
     }
@@ -112,11 +108,8 @@ public class ArrayUtils {
      * @throws IllegalArgumentException Raised if not all arrays have the same
      *                                  length.
      */
-    public static void sum(
-            final double[] firstOperand, final double[] secondOperand,
-            final double[] result) {
-        if (firstOperand.length != secondOperand.length ||
-                firstOperand.length != result.length) {
+    public static void sum(final double[] firstOperand, final double[] secondOperand, final double[] result) {
+        if (firstOperand.length != secondOperand.length || firstOperand.length != result.length) {
             throw new IllegalArgumentException();
         }
         internalSum(firstOperand, secondOperand, result);
@@ -132,13 +125,12 @@ public class ArrayUtils {
      * @throws IllegalArgumentException Raised if first and second operands
      *                                  arrays don't have the same length.
      */
-    public static double[] sumAndReturnNew(
-            final double[] firstOperand, final double[] secondOperand) {
+    public static double[] sumAndReturnNew(final double[] firstOperand, final double[] secondOperand) {
         if (firstOperand.length != secondOperand.length) {
             throw new IllegalArgumentException();
         }
 
-        final double[] result = new double[firstOperand.length];
+        final var result = new double[firstOperand.length];
         internalSum(firstOperand, secondOperand, result);
         return result;
     }
@@ -156,9 +148,8 @@ public class ArrayUtils {
      * @param result        Result of subtraction.
      */
     private static void internalSubtract(
-            final double[] firstOperand, final double[] secondOperand,
-            final double[] result) {
-        for (int i = 0; i < firstOperand.length; i++) {
+            final double[] firstOperand, final double[] secondOperand, final double[] result) {
+        for (var i = 0; i < firstOperand.length; i++) {
             result[i] = firstOperand[i] - secondOperand[i];
         }
     }
@@ -176,11 +167,8 @@ public class ArrayUtils {
      * @throws IllegalArgumentException Raised if not all arrays have the same
      *                                  length.
      */
-    public static void subtract(
-            final double[] firstOperand, final double[] secondOperand,
-            final double[] result) {
-        if (firstOperand.length != secondOperand.length ||
-                firstOperand.length != result.length) {
+    public static void subtract(final double[] firstOperand, final double[] secondOperand, final double[] result) {
+        if (firstOperand.length != secondOperand.length || firstOperand.length != result.length) {
             throw new IllegalArgumentException();
         }
         internalSubtract(firstOperand, secondOperand, result);
@@ -197,13 +185,12 @@ public class ArrayUtils {
      * @throws IllegalArgumentException Raised if first and second operands
      *                                  arrays don't have the same length
      */
-    public static double[] subtractAndReturnNew(
-            final double[] firstOperand, final double[] secondOperand) {
+    public static double[] subtractAndReturnNew(final double[] firstOperand, final double[] secondOperand) {
         if (firstOperand.length != secondOperand.length) {
             throw new IllegalArgumentException();
         }
 
-        final double[] result = new double[firstOperand.length];
+        final var result = new double[firstOperand.length];
         internalSubtract(firstOperand, secondOperand, result);
         return result;
     }
@@ -218,15 +205,13 @@ public class ArrayUtils {
      * @throws IllegalArgumentException Raised if first and second operands
      *                                  arrays don't have the same length.
      */
-    public static double dotProduct(
-            final double[] firstOperand, final double[] secondOperand) {
+    public static double dotProduct(final double[] firstOperand, final double[] secondOperand) {
         if (firstOperand.length != secondOperand.length) {
-            throw new IllegalArgumentException(
-                    "both operands must have same length");
+            throw new IllegalArgumentException("both operands must have same length");
         }
 
-        double result = 0.0;
-        for (int i = 0; i < firstOperand.length; i++) {
+        var result = 0.0;
+        for (var i = 0; i < firstOperand.length; i++) {
             result += firstOperand[i] * secondOperand[i];
         }
         return result;
@@ -249,31 +234,26 @@ public class ArrayUtils {
      *                                  the same length or if jacobian matrices are not column vectors having
      *                                  the same length as their respective operands.
      */
-    public static double dotProduct(
-            final double[] firstOperand, final double[] secondOperand,
-            final Matrix jacobianFirst, final Matrix jacobianSecond) {
-        if (jacobianFirst != null &&
-                (jacobianFirst.getRows() != 1 ||
-                        jacobianFirst.getColumns() != firstOperand.length)) {
-            throw new IllegalArgumentException("jacobian first must be a " +
-                    "row vector having the same number of columns as " +
-                    "first operand length");
+    public static double dotProduct(final double[] firstOperand, final double[] secondOperand,
+                                    final Matrix jacobianFirst, final Matrix jacobianSecond) {
+        if (jacobianFirst != null
+                && (jacobianFirst.getRows() != 1 || jacobianFirst.getColumns() != firstOperand.length)) {
+            throw new IllegalArgumentException("jacobian first must be a row vector having the same number of "
+                    + "columns as first operand length");
         }
-        if (jacobianSecond != null &&
-                (jacobianSecond.getRows() != 1 ||
-                        jacobianSecond.getColumns() != secondOperand.length)) {
-            throw new IllegalArgumentException("jacobian second must be a " +
-                    "row vector having the same number of columns as " +
-                    "second operand length");
+        if (jacobianSecond != null
+                && (jacobianSecond.getRows() != 1 || jacobianSecond.getColumns() != secondOperand.length)) {
+            throw new IllegalArgumentException("jacobian second must be a row vector having the same number of "
+                    + "columns as second operand length");
         }
 
         if (jacobianFirst != null) {
-            jacobianFirst.setSubmatrix(0, 0, 0, firstOperand.length - 1,
-                    firstOperand);
+            jacobianFirst.setSubmatrix(0, 0, 0,
+                    firstOperand.length - 1, firstOperand);
         }
         if (jacobianSecond != null) {
-            jacobianSecond.setSubmatrix(0, 0, 0, secondOperand.length - 1,
-                    secondOperand);
+            jacobianSecond.setSubmatrix(0, 0, 0,
+                    secondOperand.length - 1, secondOperand);
         }
 
         return dotProduct(firstOperand, secondOperand);
@@ -290,8 +270,8 @@ public class ArrayUtils {
      *                                  the same length.
      */
     public static double angle(final double[] firstOperand, final double[] secondOperand) {
-        final double norm1 = Utils.normF(firstOperand);
-        final double norm2 = Utils.normF(secondOperand);
+        final var norm1 = Utils.normF(firstOperand);
+        final var norm2 = Utils.normF(secondOperand);
         return Math.acos(Math.min(dotProduct(firstOperand, secondOperand) / norm1 / norm2, 1.0));
     }
 
@@ -306,9 +286,9 @@ public class ArrayUtils {
      * @param result     Array where result is stored.
      * @see #multiplyByScalar(double[], double, double[])
      */
-    private static void internalMultiplyByScalar(
-            final Complex[] inputArray, final double scalar, final Complex[] result) {
-        for (int i = 0; i < inputArray.length; ++i) {
+    private static void internalMultiplyByScalar(final Complex[] inputArray, final double scalar,
+                                                 final Complex[] result) {
+        for (var i = 0; i < inputArray.length; ++i) {
             result[i].setReal(inputArray[i].getReal() * scalar);
             result[i].setImaginary(inputArray[i].getImaginary() * scalar);
         }
@@ -324,8 +304,7 @@ public class ArrayUtils {
      * @throws IllegalArgumentException Thrown if inputArray length and result
      *                                  array length are not equal.
      */
-    public static void multiplyByScalar(
-            final Complex[] inputArray, final double scalar, final Complex[] result) {
+    public static void multiplyByScalar(final Complex[] inputArray, final double scalar, final Complex[] result) {
         if (inputArray.length != result.length) {
             throw new IllegalArgumentException();
         }
@@ -341,12 +320,11 @@ public class ArrayUtils {
      * @return Result obtained after multiplying input array by provided scalar
      * value.
      */
-    public static Complex[] multiplyByScalarAndReturnNew(
-            final Complex[] inputArray, final double scalar) {
-        final Complex[] result = new Complex[inputArray.length];
+    public static Complex[] multiplyByScalarAndReturnNew(final Complex[] inputArray, final double scalar) {
+        final var result = new Complex[inputArray.length];
         // instantiate Complex instances in result array containing values of
         // provided array multiplied by scalar value
-        for (int i = 0; i < inputArray.length; i++) {
+        for (var i = 0; i < inputArray.length; i++) {
             result[i] = new Complex(inputArray[i].getReal() * scalar,
                     inputArray[i].getImaginary() * scalar);
         }
@@ -365,14 +343,11 @@ public class ArrayUtils {
      * @param secondOperand Second operand.
      * @param result        Result of summation.
      */
-    private static void internalSum(
-            final Complex[] firstOperand, final Complex[] secondOperand,
-            final Complex[] result) {
-        for (int i = 0; i < firstOperand.length; i++) {
-            result[i].setReal(firstOperand[i].getReal() +
-                    secondOperand[i].getReal());
-            result[i].setImaginary(firstOperand[i].getImaginary() +
-                    secondOperand[i].getImaginary());
+    private static void internalSum(final Complex[] firstOperand, final Complex[] secondOperand,
+                                    final Complex[] result) {
+        for (var i = 0; i < firstOperand.length; i++) {
+            result[i].setReal(firstOperand[i].getReal() + secondOperand[i].getReal());
+            result[i].setImaginary(firstOperand[i].getImaginary() + secondOperand[i].getImaginary());
         }
     }
 
@@ -390,10 +365,8 @@ public class ArrayUtils {
      *                                  length.
      */
     public static void sum(
-            final Complex[] firstOperand, final Complex[] secondOperand,
-            final Complex[] result) {
-        if (firstOperand.length != secondOperand.length ||
-                firstOperand.length != result.length) {
+            final Complex[] firstOperand, final Complex[] secondOperand, final Complex[] result) {
+        if (firstOperand.length != secondOperand.length || firstOperand.length != result.length) {
             throw new IllegalArgumentException();
         }
         internalSum(firstOperand, secondOperand, result);
@@ -409,15 +382,14 @@ public class ArrayUtils {
      * @throws IllegalArgumentException Raised if first and second operands
      *                                  arrays don't have the same length
      */
-    public static Complex[] sumAndReturnNew(
-            final Complex[] firstOperand, final Complex[] secondOperand) {
+    public static Complex[] sumAndReturnNew(final Complex[] firstOperand, final Complex[] secondOperand) {
         if (firstOperand.length != secondOperand.length) {
             throw new IllegalArgumentException();
         }
 
-        final Complex[] result = new Complex[firstOperand.length];
+        final var result = new Complex[firstOperand.length];
         // initialize each element of result matrix
-        for (int i = 0; i < firstOperand.length; i++)
+        for (var i = 0; i < firstOperand.length; i++)
             result[i] = firstOperand[i].addAndReturnNew(secondOperand[i]);
         return result;
     }
@@ -435,13 +407,10 @@ public class ArrayUtils {
      * @param result        Result of subtraction
      */
     private static void internalSubtract(
-            final Complex[] firstOperand, final Complex[] secondOperand,
-            final Complex[] result) {
-        for (int i = 0; i < firstOperand.length; i++) {
-            result[i].setReal(firstOperand[i].getReal() -
-                    secondOperand[i].getReal());
-            result[i].setImaginary(firstOperand[i].getImaginary() -
-                    secondOperand[i].getImaginary());
+            final Complex[] firstOperand, final Complex[] secondOperand, final Complex[] result) {
+        for (var i = 0; i < firstOperand.length; i++) {
+            result[i].setReal(firstOperand[i].getReal() - secondOperand[i].getReal());
+            result[i].setImaginary(firstOperand[i].getImaginary() - secondOperand[i].getImaginary());
         }
     }
 
@@ -458,11 +427,8 @@ public class ArrayUtils {
      * @throws IllegalArgumentException Raised if not all arrays have the same
      *                                  length
      */
-    public static void subtract(
-            final Complex[] firstOperand, final Complex[] secondOperand,
-            final Complex[] result) {
-        if (firstOperand.length != secondOperand.length ||
-                firstOperand.length != result.length) {
+    public static void subtract(final Complex[] firstOperand, final Complex[] secondOperand, final Complex[] result) {
+        if (firstOperand.length != secondOperand.length || firstOperand.length != result.length) {
             throw new IllegalArgumentException();
         }
         internalSubtract(firstOperand, secondOperand, result);
@@ -479,13 +445,12 @@ public class ArrayUtils {
      * @throws IllegalArgumentException Raised if first and second operands
      *                                  arrays don't have the same length
      */
-    public static Complex[] subtractAndReturnNew(
-            final Complex[] firstOperand, final Complex[] secondOperand) {
+    public static Complex[] subtractAndReturnNew(final Complex[] firstOperand, final Complex[] secondOperand) {
         if (firstOperand.length != secondOperand.length) {
             throw new IllegalArgumentException();
         }
 
-        final Complex[] result = new Complex[firstOperand.length];
+        final var result = new Complex[firstOperand.length];
         // initialize each element of result matrix
         for (int i = 0; i < firstOperand.length; i++) {
             result[i] = firstOperand[i].subtractAndReturnNew(secondOperand[i]);
@@ -503,14 +468,13 @@ public class ArrayUtils {
      * @throws IllegalArgumentException Raised if first and second operands
      *                                  arrays don't have the same length
      */
-    public static Complex dotProduct(
-            final Complex[] firstOperand, final Complex[] secondOperand) {
+    public static Complex dotProduct(final Complex[] firstOperand, final Complex[] secondOperand) {
         if (firstOperand.length != secondOperand.length) {
             throw new IllegalArgumentException();
         }
 
-        final Complex result = new Complex(0.0);
-        for (int i = 0; i < firstOperand.length; i++) {
+        final var result = new Complex(0.0);
+        for (var i = 0; i < firstOperand.length; i++) {
             result.add(firstOperand[i].multiplyAndReturnNew(secondOperand[i]));
         }
         return result;
@@ -526,31 +490,28 @@ public class ArrayUtils {
      *                                  length or if provided jacobian is not NxN, where N is length of arrays.
      */
     public static void normalize(final double[] v, final double[] result, final Matrix jacobian) {
-        final double s = v.length;
+        final var s = v.length;
 
         if (s != result.length) {
-            throw new IllegalArgumentException(
-                    "both arrays must have the same length");
+            throw new IllegalArgumentException("both arrays must have the same length");
         }
 
-        if (jacobian != null && (jacobian.getRows() != s ||
-                jacobian.getColumns() != s)) {
-            throw new IllegalArgumentException(
-                    "provided jacobian is not NxN where N is length of v");
+        if (jacobian != null && (jacobian.getRows() != s || jacobian.getColumns() != s)) {
+            throw new IllegalArgumentException("provided jacobian is not NxN where N is length of v");
         }
 
-        final double n2 = dotProduct(v, v);
-        final double n = Math.sqrt(n2);
+        final var n2 = dotProduct(v, v);
+        final var n = Math.sqrt(n2);
 
         if (jacobian != null) {
             try {
-                final double n3 = n * n2;
+                final var n3 = n * n2;
 
                 // VN_v = (n2*eye(s) - v*v') / n3
                 Matrix.identity(jacobian);
                 jacobian.multiplyByScalar(n2);
-                jacobian.subtract(Matrix.newFromArray(v, true).
-                        multiplyAndReturnNew(Matrix.newFromArray(v, false)));
+                jacobian.subtract(Matrix.newFromArray(v, true)
+                        .multiplyAndReturnNew(Matrix.newFromArray(v, false)));
                 if (n3 != 0.0) {
                     jacobian.multiplyByScalar(1.0 / n3);
                 } else {
@@ -578,7 +539,7 @@ public class ArrayUtils {
      *                                  is length of arrays.
      */
     public static double[] normalizeAndReturnNew(final double[] v, final Matrix jacobian) {
-        final double[] result = new double[v.length];
+        final var result = new double[v.length];
         normalize(v, result, jacobian);
         return result;
     }
@@ -637,13 +598,13 @@ public class ArrayUtils {
      */
     public static void reverse(final double[] v, final double[] result) {
 
-        final int length = v.length;
+        final var length = v.length;
 
         if (result.length != length) {
             throw new IllegalArgumentException();
         }
 
-        final int halfLength = length / 2;
+        final var halfLength = length / 2;
         double tmp;
         for (int i = 0, j = length - 1; i < halfLength; i++, j--) {
             tmp = v[i];
@@ -675,7 +636,7 @@ public class ArrayUtils {
      * @return a new instance containing reversed array.
      */
     public static double[] reverseAndReturnNew(final double[] v) {
-        final double[] result = new double[v.length];
+        final var result = new double[v.length];
         reverse(v, result);
         return result;
     }
@@ -690,13 +651,13 @@ public class ArrayUtils {
      */
     public static void reverse(final Complex[] v, final Complex[] result) {
 
-        final int length = v.length;
+        final var length = v.length;
 
         if (result.length != length) {
             throw new IllegalArgumentException();
         }
 
-        final int halfLength = length / 2;
+        final var halfLength = length / 2;
         Complex tmp;
         if (v != result) {
             // for different instances, copy values
@@ -743,7 +704,7 @@ public class ArrayUtils {
      * @return a new instance containing reversed array.
      */
     public static Complex[] reverseAndReturnNew(final Complex[] v) {
-        final Complex[] result = new Complex[v.length];
+        final var result = new Complex[v.length];
         reverse(v, result);
         return result;
     }
@@ -758,7 +719,7 @@ public class ArrayUtils {
      *                                  length.
      */
     public static void sqrt(final double[] v, final double[] result) {
-        final int length = v.length;
+        final var length = v.length;
 
         if (result.length != length) {
             throw new IllegalArgumentException();
@@ -778,7 +739,7 @@ public class ArrayUtils {
      * array.
      */
     public static double[] sqrtAndReturnNew(final double[] v) {
-        final double[] result = new double[v.length];
+        final var result = new double[v.length];
         sqrt(v, result);
         return result;
     }
@@ -801,9 +762,9 @@ public class ArrayUtils {
      * @return minimum value.
      */
     public static double min(final double[] v, final int[] pos) {
-        final int length = v.length;
-        double min = Double.MAX_VALUE;
-        int foundPos = -1;
+        final var length = v.length;
+        var min = Double.MAX_VALUE;
+        var foundPos = -1;
         for (int i = 0; i < length; i++) {
             if (v[i] < min) {
                 min = v[i];
@@ -837,9 +798,9 @@ public class ArrayUtils {
      * @return maximum value.
      */
     public static double max(final double[] v, final int[] pos) {
-        final int length = v.length;
-        double max = -Double.MAX_VALUE;
-        int foundPos = -1;
+        final var length = v.length;
+        var max = -Double.MAX_VALUE;
+        var foundPos = -1;
         for (int i = 0; i < length; i++) {
             if (v[i] > max) {
                 max = v[i];
@@ -885,11 +846,11 @@ public class ArrayUtils {
             throw new IllegalArgumentException("pos must have length 2");
         }
 
-        final int length = v.length;
-        double min = Double.MAX_VALUE;
-        double max = -Double.MAX_VALUE;
-        int minPos = -1;
-        int maxPos = -1;
+        final var length = v.length;
+        var min = Double.MAX_VALUE;
+        var max = -Double.MAX_VALUE;
+        var minPos = -1;
+        var maxPos = -1;
         for (int i = 0; i < length; i++) {
             if (v[i] < min) {
                 min = v[i];

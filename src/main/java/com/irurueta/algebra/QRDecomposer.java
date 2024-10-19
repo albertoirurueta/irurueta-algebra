@@ -135,8 +135,7 @@ public class QRDecomposer extends Decomposer {
      *                             can not be obtained, etc.
      */
     @Override
-    public void decompose() throws NotReadyException, LockedException,
-            DecomposerException {
+    public void decompose() throws NotReadyException, LockedException, DecomposerException {
 
         if (!isReady()) {
             throw new NotReadyException();
@@ -147,8 +146,8 @@ public class QRDecomposer extends Decomposer {
 
         locked = true;
 
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
         if (rows < columns) {
             throw new DecomposerException();
         }
@@ -171,15 +170,15 @@ public class QRDecomposer extends Decomposer {
         q.setSubmatrix(0, 0, rows - 1, columns - 1, inputMatrix);
 
         // Construct QR decomposition by means of Gram-Schmidt
-        for (int j = 0; j < rows; j++) {
+        for (var j = 0; j < rows; j++) {
             // Find orthogonal base by means of Gram-Schmidt of all rows of Q
             // Previous columns of Q will contain already normalized vectors,
             // while column J must be made orthogonal and then normalized
-            for (int k = 0; k < j; k++) {
+            for (var k = 0; k < j; k++) {
                 // compute scalar product of previous k-th orthonormal Q column
                 // with current input matrix j-th column
                 prod = 0.0;
-                for (int i = 0; i < rows; i++) {
+                for (var i = 0; i < rows; i++) {
                     prod += q.getElementAt(i, k) * q.getElementAt(i, j);
                 }
 
@@ -192,7 +191,7 @@ public class QRDecomposer extends Decomposer {
                 // Update j-th column of Q by subtracting obtained dot product
                 // respect to previous k-th orthonormal column, on the direction
                 // of this latter column.
-                for (int i = 0; i < rows; i++) {
+                for (var i = 0; i < rows; i++) {
                     q.setElementAt(i, j, q.getElementAt(i, j) -
                             prod * q.getElementAt(i, k));
                 }
@@ -200,11 +199,11 @@ public class QRDecomposer extends Decomposer {
             // Normalize column j of Q after computing orthogonal Q column to
             // make it orthonormal
             norm = 0.0;
-            for (int i = 0; i < rows; i++) {
+            for (var i = 0; i < rows; i++) {
                 norm += Math.pow(q.getElementAt(i, j), 2.0); // compute norm
             }
             norm = Math.sqrt(norm);
-            for (int i = 0; i < rows; i++) {
+            for (var i = 0; i < rows; i++) {
                 q.setElementAt(i, j, q.getElementAt(i, j) / norm); // normalize
             }
 
@@ -240,7 +239,6 @@ public class QRDecomposer extends Decomposer {
      * @see #decompose()
      */
     public boolean isFullRank() throws NotAvailableException {
-
         return isFullRank(DEFAULT_ROUND_ERROR);
     }
 
@@ -267,8 +265,7 @@ public class QRDecomposer extends Decomposer {
      *                                  error is lower than minimum allowed value (MIN_ROUND_ERROR)
      * @see #decompose()
      */
-    public boolean isFullRank(final double roundingError)
-            throws NotAvailableException {
+    public boolean isFullRank(final double roundingError) throws NotAvailableException {
 
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
@@ -277,12 +274,14 @@ public class QRDecomposer extends Decomposer {
             throw new IllegalArgumentException();
         }
 
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
-        final int minSize = Math.min(rows, columns);
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
+        final var minSize = Math.min(rows, columns);
 
-        for (int j = 0; j < minSize; j++) {
-            if (Math.abs(r.getElementAt(j, j)) <= roundingError) return false;
+        for (var j = 0; j < minSize; j++) {
+            if (Math.abs(r.getElementAt(j, j)) <= roundingError) {
+                return false;
+            }
         }
         return true;
     }
@@ -367,8 +366,8 @@ public class QRDecomposer extends Decomposer {
      *                                      of equations cannot be solved.
      * @see #decompose()
      */
-    public void solve(final Matrix b, final Matrix result) throws NotAvailableException,
-            WrongSizeException, RankDeficientMatrixException {
+    public void solve(final Matrix b, final Matrix result) throws NotAvailableException, WrongSizeException,
+            RankDeficientMatrixException {
         solve(b, DEFAULT_ROUND_ERROR, result);
     }
 
@@ -419,17 +418,16 @@ public class QRDecomposer extends Decomposer {
      * @see #decompose()
      */
     public void solve(final Matrix b, final double roundingError, final Matrix result)
-            throws NotAvailableException, WrongSizeException,
-            RankDeficientMatrixException {
+            throws NotAvailableException, WrongSizeException, RankDeficientMatrixException {
 
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
         }
 
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
-        final int rowsB = b.getRows();
-        final int colsB = b.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
+        final var rowsB = b.getRows();
+        final var colsB = b.getColumns();
         double sum;
 
         if (rowsB != rows) {
@@ -446,7 +444,7 @@ public class QRDecomposer extends Decomposer {
         }
 
         // Compute Y = Q' * B
-        final Matrix y = q.transposeAndReturnNew().multiplyAndReturnNew(b);
+        final var y = q.transposeAndReturnNew().multiplyAndReturnNew(b);
 
         // resize result matrix if needed
         if (result.getRows() != columns || result.getColumns() != colsB) {
@@ -456,13 +454,13 @@ public class QRDecomposer extends Decomposer {
         // Solve R * X = Y
         // Each column of B will be a column of out (i.e. a solution of the
         // linear system of equations)
-        for (int j2 = 0; j2 < colsB; j2++) {
+        for (var j2 = 0; j2 < colsB; j2++) {
             // for overdetermined systems R has rows > columns, so we use only
             // first columns rows, which contain upper diagonal data of R, the
             // remaining rows of R are just zero.
-            for (int i = columns - 1; i >= 0; i--) {
+            for (var i = columns - 1; i >= 0; i--) {
                 sum = y.getElementAt(i, j2);
-                for (int j = i + 1; j < columns; j++) {
+                for (var j = i + 1; j < columns; j++) {
                     sum -= r.getElementAt(i, j) * result.getElementAt(j, j2);
                 }
                 result.setElementAt(i, j2, sum / r.getElementAt(i, i));
@@ -509,8 +507,7 @@ public class QRDecomposer extends Decomposer {
      *                                      of equations cannot be solved.
      * @see #decompose()
      */
-    public Matrix solve(final Matrix b) throws NotAvailableException,
-            WrongSizeException, RankDeficientMatrixException {
+    public Matrix solve(final Matrix b) throws NotAvailableException, WrongSizeException, RankDeficientMatrixException {
         return solve(b, DEFAULT_ROUND_ERROR);
     }
 
@@ -558,17 +555,16 @@ public class QRDecomposer extends Decomposer {
      *                                      error is lower than minimum allowed value (MIN_ROUND_ERROR).
      * @see #decompose()
      */
-    public Matrix solve(final Matrix b, final double roundingError)
-            throws NotAvailableException, WrongSizeException,
+    public Matrix solve(final Matrix b, final double roundingError) throws NotAvailableException, WrongSizeException,
             RankDeficientMatrixException {
 
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
         }
 
-        final int columns = inputMatrix.getColumns();
-        final int colsB = b.getColumns();
-        final Matrix out = new Matrix(columns, colsB);
+        final var columns = inputMatrix.getColumns();
+        final var colsB = b.getColumns();
+        final var out = new Matrix(columns, colsB);
         solve(b, roundingError, out);
         return out;
     }

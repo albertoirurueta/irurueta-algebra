@@ -42,8 +42,8 @@ public class NonSymmetricPositiveDefiniteMatrixException extends
      * @param message Message describing the cause of the exception.
      * @param cause   Instance containing the cause of the exception.
      */
-    public NonSymmetricPositiveDefiniteMatrixException(final String message,
-                                                       final Throwable cause) {
+    public NonSymmetricPositiveDefiniteMatrixException(
+            final String message, final Throwable cause) {
         super(message, cause);
     }
 

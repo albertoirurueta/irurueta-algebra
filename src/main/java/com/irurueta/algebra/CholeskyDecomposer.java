@@ -127,8 +127,7 @@ public class CholeskyDecomposer extends Decomposer {
      *                             results cannot be obtained, etc.
      */
     @Override
-    public void decompose() throws NotReadyException, LockedException,
-            DecomposerException {
+    public void decompose() throws NotReadyException, LockedException, DecomposerException {
 
         if (isLocked()) {
             throw new LockedException();
@@ -138,8 +137,8 @@ public class CholeskyDecomposer extends Decomposer {
             throw new NotReadyException();
         }
 
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
 
         if (rows != columns) {
             throw new DecomposerException();
@@ -154,30 +153,28 @@ public class CholeskyDecomposer extends Decomposer {
             throw new DecomposerException(e);
         }
 
-        boolean localSpd = true;
+        var localSpd = true;
         double d;
         double s;
 
         // Main loop
-        for (int j = 0; j < columns; j++) {
+        for (var j = 0; j < columns; j++) {
             d = 0.0;
-            for (int k = 0; k < j; k++) {
+            for (var k = 0; k < j; k++) {
                 s = inputMatrix.getElementAt(k, j);
-                for (int i = 0; i < k; i++) {
-                    s = s - localR.getElementAt(i, k) *
-                            localR.getElementAt(i, j);
+                for (var i = 0; i < k; i++) {
+                    s = s - localR.getElementAt(i, k) * localR.getElementAt(i, j);
                 }
                 s /= localR.getElementAt(k, k);
                 localR.setElementAt(k, j, s);
                 d += s * s;
-                localSpd &= inputMatrix.getElementAt(k, j) ==
-                        inputMatrix.getElementAt(j, k);
+                localSpd &= inputMatrix.getElementAt(k, j) == inputMatrix.getElementAt(j, k);
             }
             d = inputMatrix.getElementAt(j, j) - d;
             localSpd &= d > 0.0;
             // sqrt of max(d, 0.0)
             localR.setElementAt(j, j, Math.sqrt(Math.max(d, 0.0)));
-            for (int k = j + 1; k < columns; k++) {
+            for (var k = j + 1; k < columns; k++) {
                 localR.setElementAt(k, j, 0.0);
             }
         }
@@ -278,17 +275,17 @@ public class CholeskyDecomposer extends Decomposer {
      *                                                                          Cholesky decomposer.
      * @throws com.irurueta.algebra.NonSymmetricPositiveDefiniteMatrixException if input matrix provided to Cholesky decomposer is not positive definite.
      */
-    public void solve(final Matrix b, final Matrix result) throws NotAvailableException,
-            WrongSizeException, NonSymmetricPositiveDefiniteMatrixException {
+    public void solve(final Matrix b, final Matrix result) throws NotAvailableException, WrongSizeException,
+            NonSymmetricPositiveDefiniteMatrixException {
 
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
         }
 
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
-        final int rowsB = b.getRows();
-        final int colsB = b.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
+        final var rowsB = b.getRows();
+        final var colsB = b.getColumns();
 
         if (rowsB != rows) {
             throw new WrongSizeException();
@@ -306,31 +303,29 @@ public class CholeskyDecomposer extends Decomposer {
         // Copy b into result matrix
         result.copyFrom(b);
 
-        final Matrix l = getL();
+        final var l = getL();
 
         // Solve L * Y = B
-        for (int k = 0; k < columns; k++) {
-            for (int j = 0; j < colsB; j++) {
-                for (int i = 0; i < k; i++) {
-                    result.setElementAt(k, j, result.getElementAt(k, j) -
-                            result.getElementAt(i, j) * l.getElementAt(k, i));
+        for (var k = 0; k < columns; k++) {
+            for (var j = 0; j < colsB; j++) {
+                for (var i = 0; i < k; i++) {
+                    result.setElementAt(k, j, result.getElementAt(k, j)
+                            - result.getElementAt(i, j) * l.getElementAt(k, i));
                 }
-                result.setElementAt(k, j,
-                        result.getElementAt(k, j) / l.getElementAt(k, k));
+                result.setElementAt(k, j, result.getElementAt(k, j) / l.getElementAt(k, k));
             }
         }
 
         // Solve L' * X = Y
         int k2;
-        for (int k = columns - 1; k >= 0; k--) {
+        for (var k = columns - 1; k >= 0; k--) {
             k2 = k;
-            for (int j = 0; j < colsB; j++) {
-                for (int i = k2 + 1; i < columns; i++) {
-                    result.setElementAt(k2, j, result.getElementAt(k2, j) -
-                            result.getElementAt(i, j) * l.getElementAt(i, k2));
+            for (var j = 0; j < colsB; j++) {
+                for (var i = k2 + 1; i < columns; i++) {
+                    result.setElementAt(k2, j, result.getElementAt(k2, j)
+                            - result.getElementAt(i, j) * l.getElementAt(i, k2));
                 }
-                result.setElementAt(k2, j,
-                        result.getElementAt(k2, j) / l.getElementAt(k2, k2));
+                result.setElementAt(k2, j, result.getElementAt(k2, j) / l.getElementAt(k2, k2));
             }
         }
     }
@@ -361,12 +356,12 @@ public class CholeskyDecomposer extends Decomposer {
      *                                                                          Cholesky decomposer.
      * @throws com.irurueta.algebra.NonSymmetricPositiveDefiniteMatrixException if input matrix provided to Cholesky decomposer is not positive definite.
      */
-    public Matrix solve(final Matrix b) throws NotAvailableException,
-            WrongSizeException, NonSymmetricPositiveDefiniteMatrixException {
+    public Matrix solve(final Matrix b) throws NotAvailableException, WrongSizeException,
+            NonSymmetricPositiveDefiniteMatrixException {
 
-        final int columns = inputMatrix.getColumns();
-        final int colsB = b.getColumns();
-        final Matrix out = new Matrix(columns, colsB);
+        final var columns = inputMatrix.getColumns();
+        final var colsB = b.getColumns();
+        final var out = new Matrix(columns, colsB);
         solve(b, out);
         return out;
     }
