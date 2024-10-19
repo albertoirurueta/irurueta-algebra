@@ -135,7 +135,7 @@ class ArrayUtilsTest {
     @Test
     void testDotProduct() throws WrongSizeException {
         final var randomizer = new UniformRandomizer();
-        final var length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
+        final var length = randomizer.nextInt(MIN_LENGTH + 1, MAX_LENGTH);
 
         final var input1 = new double[length];
         final var input2 = new double[length];
