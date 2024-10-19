@@ -70,15 +70,12 @@ public abstract class NormComputer {
      * @throws WrongSizeException if provided jacobian is not 1xN, where N is
      *                            length of array.
      */
-    public double getNorm(final double[] array, final Matrix jacobian)
-            throws WrongSizeException {
-        if (jacobian != null && (jacobian.getRows() != 1 ||
-                jacobian.getColumns() != array.length)) {
-            throw new WrongSizeException("jacobian must be 1xN, where " +
-                    "N is length of array");
+    public double getNorm(final double[] array, final Matrix jacobian) throws WrongSizeException {
+        if (jacobian != null && (jacobian.getRows() != 1 || jacobian.getColumns() != array.length)) {
+            throw new WrongSizeException("jacobian must be 1xN, where N is length of array");
         }
 
-        final double norm = getNorm(array);
+        final var norm = getNorm(array);
 
         if (jacobian != null) {
             jacobian.fromArray(array);
@@ -96,15 +93,11 @@ public abstract class NormComputer {
      * @return New instance of NormComputer.
      */
     public static NormComputer create(final NormType normType) {
-        switch (normType) {
-            case INFINITY_NORM:
-                return new InfinityNormComputer();
-            case ONE_NORM:
-                return new OneNormComputer();
-            case FROBENIUS_NORM:
-            default:
-                return new FrobeniusNormComputer();
-        }
+        return switch (normType) {
+            case INFINITY_NORM -> new InfinityNormComputer();
+            case ONE_NORM -> new OneNormComputer();
+            default -> new FrobeniusNormComputer();
+        };
     }
 
     /**

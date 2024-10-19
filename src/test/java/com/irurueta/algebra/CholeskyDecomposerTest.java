@@ -16,11 +16,9 @@
 package com.irurueta.algebra;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
-
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CholeskyDecomposerTest {
 
@@ -35,30 +33,27 @@ public class CholeskyDecomposerTest {
     public static final double ABSOLUTE_ERROR = 1e-6;
 
     @Test
-    public void testConstructor() throws WrongSizeException, LockedException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testConstructor() throws WrongSizeException, LockedException {
+        final var randomizer = new UniformRandomizer();
 
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // Test 1st constructor
-        CholeskyDecomposer decomposer = new CholeskyDecomposer();
+        var decomposer = new CholeskyDecomposer();
         assertFalse(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(DecomposerType.CHOLESKY_DECOMPOSITION,
-                decomposer.getDecomposerType());
+        assertEquals(DecomposerType.CHOLESKY_DECOMPOSITION, decomposer.getDecomposerType());
 
         decomposer.setInputMatrix(m);
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
         assertEquals(decomposer.getInputMatrix(), m);
-        assertEquals(DecomposerType.CHOLESKY_DECOMPOSITION,
-                decomposer.getDecomposerType());
+        assertEquals(DecomposerType.CHOLESKY_DECOMPOSITION, decomposer.getDecomposerType());
 
         // Test 2nd constructor
         decomposer = new CholeskyDecomposer(m);
@@ -66,24 +61,21 @@ public class CholeskyDecomposerTest {
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
         assertEquals(decomposer.getInputMatrix(), m);
-        assertEquals(DecomposerType.CHOLESKY_DECOMPOSITION,
-                decomposer.getDecomposerType());
+        assertEquals(DecomposerType.CHOLESKY_DECOMPOSITION, decomposer.getDecomposerType());
     }
 
     @Test
-    public void testGetSetInputMatrixAndIsReady() throws WrongSizeException,
-            LockedException, NotReadyException, DecomposerException {
+    void testGetSetInputMatrixAndIsReady() throws WrongSizeException, LockedException, NotReadyException,
+            DecomposerException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, rows,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var m = Matrix.createWithUniformRandomValues(rows, rows, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final CholeskyDecomposer decomposer = new CholeskyDecomposer();
+        final var decomposer = new CholeskyDecomposer();
 
-        assertEquals(DecomposerType.CHOLESKY_DECOMPOSITION,
-                decomposer.getDecomposerType());
+        assertEquals(DecomposerType.CHOLESKY_DECOMPOSITION, decomposer.getDecomposerType());
         assertFalse(decomposer.isReady());
 
         decomposer.setInputMatrix(m);
@@ -111,11 +103,11 @@ public class CholeskyDecomposerTest {
     }
 
     @Test
-    public void testDecompose() throws WrongSizeException, LockedException,
-            NotReadyException, DecomposerException, NotAvailableException {
+    void testDecompose() throws WrongSizeException, LockedException, NotReadyException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
         final Matrix initL;
         final Matrix initR;
@@ -126,7 +118,7 @@ public class CholeskyDecomposerTest {
         final Matrix l2;
         final Matrix r2;
 
-        CholeskyDecomposer decomposer = new CholeskyDecomposer();
+        var decomposer = new CholeskyDecomposer();
 
         // Initialize initL as a lower triangular matrix of size (rows, rows)
         // and initR as its transpose. Cholesky decomposition is unique, hence
@@ -165,17 +157,15 @@ public class CholeskyDecomposerTest {
 
         // Check that factors are equal (initL == l and initR == r) because
         // Cholesky decomposition is unique
-        for (int j = 0; j < l.getColumns(); j++) {
-            for (int i = 0; i < l.getRows(); i++) {
-                assertEquals(initL.getElementAt(i, j),
-                        l.getElementAt(i, j), ABSOLUTE_ERROR);
+        for (var j = 0; j < l.getColumns(); j++) {
+            for (var i = 0; i < l.getRows(); i++) {
+                assertEquals(initL.getElementAt(i, j), l.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
 
-        for (int j = 0; j < r.getColumns(); j++) {
-            for (int i = 0; i < r.getRows(); i++) {
-                assertEquals(initR.getElementAt(i, j),
-                        r.getElementAt(i, j), ABSOLUTE_ERROR);
+        for (var j = 0; j < r.getColumns(); j++) {
+            for (var i = 0; i < r.getRows(); i++) {
+                assertEquals(initR.getElementAt(i, j), r.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
 
@@ -195,37 +185,28 @@ public class CholeskyDecomposerTest {
         assertEquals(m2.getRows(), m.getRows());
         assertEquals(m2.getColumns(), m.getColumns());
 
-        for (int j = 0; j < m2.getColumns(); j++) {
-            for (int i = 0; i < m2.getRows(); i++) {
-                assertEquals(m.getElementAt(i, j), m2.getElementAt(i, j),
-                        ABSOLUTE_ERROR);
+        for (var j = 0; j < m2.getColumns(); j++) {
+            for (var i = 0; i < m2.getRows(); i++) {
+                assertEquals(m.getElementAt(i, j), m2.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
 
         // Force NotReadyException
         decomposer = new CholeskyDecomposer();
-        try {
-            decomposer.decompose();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, decomposer::decompose);
 
         // Force DecomposerException
         m = new Matrix(rows, rows + 1);
         decomposer.setInputMatrix(m);
-        try {
-            decomposer.decompose();
-            fail("DecomposerException expected but not thrown");
-        } catch (final DecomposerException ignore) {
-        }
+        assertThrows(DecomposerException.class, decomposer::decompose);
     }
 
     @Test
-    public void testGetL() throws WrongSizeException, LockedException,
-            NotReadyException, DecomposerException, NotAvailableException {
+    void testGetL() throws WrongSizeException, LockedException, NotReadyException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
         final Matrix initL;
         final Matrix m;
@@ -234,18 +215,14 @@ public class CholeskyDecomposerTest {
         final Matrix l2;
         final Matrix r2;
 
-        final CholeskyDecomposer decomposer = new CholeskyDecomposer();
+        final var decomposer = new CholeskyDecomposer();
 
         initL = DecomposerHelper.getLeftLowerTriangulatorFactor(rows);
         m = DecomposerHelper.getSymmetricPositiveDefiniteMatrixInstance(initL);
 
         decomposer.setInputMatrix(m);
         // Force NotAvailableException
-        try {
-            decomposer.getL();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, decomposer::getL);
 
         decomposer.decompose();
 
@@ -263,20 +240,19 @@ public class CholeskyDecomposerTest {
         assertEquals(r.getColumns(), rows);
 
         // Check that factors l and initL are equal
-        for (int j = 0; j < l.getColumns(); j++) {
-            for (int i = 0; i < l.getRows(); i++) {
-                assertEquals(initL.getElementAt(i, j),
-                        l.getElementAt(i, j), ABSOLUTE_ERROR);
+        for (var j = 0; j < l.getColumns(); j++) {
+            for (var i = 0; i < l.getRows(); i++) {
+                assertEquals(initL.getElementAt(i, j), l.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
     }
 
     @Test
-    public void testGetR() throws WrongSizeException, LockedException,
-            NotReadyException, DecomposerException, NotAvailableException {
+    void testGetR() throws WrongSizeException, LockedException, NotReadyException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
         final Matrix initL;
         final Matrix initR;
@@ -286,7 +262,7 @@ public class CholeskyDecomposerTest {
         final Matrix l2;
         final Matrix r2;
 
-        final CholeskyDecomposer decomposer = new CholeskyDecomposer();
+        final var decomposer = new CholeskyDecomposer();
 
         initL = DecomposerHelper.getLeftLowerTriangulatorFactor(rows);
         initR = initL.transposeAndReturnNew();
@@ -296,11 +272,7 @@ public class CholeskyDecomposerTest {
         decomposer.setInputMatrix(m);
 
         // Force NotAvailableException
-        try {
-            decomposer.getR();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, decomposer::getR);
 
         decomposer.decompose();
 
@@ -318,25 +290,24 @@ public class CholeskyDecomposerTest {
         assertEquals(r.getColumns(), rows);
 
         // Check that factors l and initL are equal
-        for (int j = 0; j < r.getColumns(); j++) {
-            for (int i = 0; i < r.getRows(); i++) {
-                assertEquals(initR.getElementAt(i, j),
-                        r.getElementAt(i, j), ABSOLUTE_ERROR);
+        for (var j = 0; j < r.getColumns(); j++) {
+            for (var i = 0; i < r.getRows(); i++) {
+                assertEquals(initR.getElementAt(i, j), r.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
     }
 
     @Test
-    public void testIsSPD() throws WrongSizeException, LockedException,
-            NotAvailableException, NotReadyException, DecomposerException {
+    void testIsSPD() throws WrongSizeException, LockedException, NotAvailableException, NotReadyException,
+            DecomposerException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
         final Matrix initL;
         final Matrix m;
 
-        final CholeskyDecomposer decomposer = new CholeskyDecomposer();
+        final var decomposer = new CholeskyDecomposer();
 
         // Test for symmetric positive definite matrix
         initL = DecomposerHelper.getLeftLowerTriangulatorFactor(rows);
@@ -345,19 +316,15 @@ public class CholeskyDecomposerTest {
         decomposer.setInputMatrix(m);
 
         // Force NotAvailableException
-        try {
-            decomposer.isSPD();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, decomposer::isSPD);
 
         decomposer.decompose();
 
         assertTrue(decomposer.isSPD());
 
         // we build a non-symmetric positive definite matrix using m
-        for (int v = 0; v < rows; v++) {
-            for (int u = 0; u < v; u++) {
+        for (var v = 0; v < rows; v++) {
+            for (var u = 0; u < v; u++) {
                 m.setElementAt(u, v, m.getElementAt(v, u) + 1.0);
             }
         }
@@ -369,46 +336,34 @@ public class CholeskyDecomposerTest {
     }
 
     @Test
-    public void testSolve() throws WrongSizeException, LockedException,
-            NonSymmetricPositiveDefiniteMatrixException, NotReadyException,
-            DecomposerException, NotAvailableException {
+    void testSolve() throws WrongSizeException, LockedException, NonSymmetricPositiveDefiniteMatrixException,
+            NotReadyException, DecomposerException, NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix initL;
-        final Matrix m;
-        Matrix b;
-        final Matrix s;
-        final Matrix b2;
-
-        final CholeskyDecomposer decomposer = new CholeskyDecomposer();
+        final var decomposer = new CholeskyDecomposer();
 
         // Test for symmetric positive definite matrix
-        initL = DecomposerHelper.getLeftLowerTriangulatorFactor(rows);
-        m = DecomposerHelper.getSymmetricPositiveDefiniteMatrixInstance(initL);
+        final var initL = DecomposerHelper.getLeftLowerTriangulatorFactor(rows);
+        final var m = DecomposerHelper.getSymmetricPositiveDefiniteMatrixInstance(initL);
 
-        b = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         decomposer.setInputMatrix(m);
 
         // Force NotAvailableException
-        try {
-            decomposer.solve(b);
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, () -> decomposer.solve(b));
 
         decomposer.decompose();
 
-        s = decomposer.solve(b);
+        final var s = decomposer.solve(b);
         assertTrue(decomposer.isSPD());
 
         // Check that solution after calling solve matches following equation
         // m * s = b
-        b2 = m.multiplyAndReturnNew(s);
+        final var b2 = m.multiplyAndReturnNew(s);
 
         assertEquals(b2.getRows(), b.getRows());
         assertEquals(b2.getColumns(), b.getColumns());
@@ -420,31 +375,23 @@ public class CholeskyDecomposerTest {
 
         // Test for non-symmetric positive definite matrices
         // we build a non-symmetric positive definite matrix using m
-        for (int v = 0; v < rows; v++) {
-            for (int u = 0; u < v; u++) {
+        for (var v = 0; v < rows; v++) {
+            for (var u = 0; u < v; u++) {
                 m.setElementAt(u, v, m.getElementAt(v, u) + 1.0);
             }
         }
 
         decomposer.setInputMatrix(m);
         decomposer.decompose();
-        try {
-            decomposer.solve(b);
-            fail("NonSymmetricPositiveDefiniteMatrixException expected but not thrown");
-        } catch (final NonSymmetricPositiveDefiniteMatrixException ignore) {
-        }
+        assertThrows(NonSymmetricPositiveDefiniteMatrixException.class, () -> decomposer.solve(b));
 
         // Force WrongSizeException
 
         // Test for parameters matrix b with different number of rows than input
         // matrix m
-        b = Matrix.createWithUniformRandomValues(rows + 1, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b3 = Matrix.createWithUniformRandomValues(rows + 1, columns, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
         // since m has already been decomposed, we can directly solve
-        try {
-            decomposer.solve(b);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> decomposer.solve(b3));
     }
 }

@@ -16,13 +16,11 @@
 package com.irurueta.algebra;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class SingularValueDecomposerTest {
+class SingularValueDecomposerTest {
 
     private static final int MIN_ROWS = 1;
     private static final int MAX_ROWS = 50;
@@ -43,18 +41,18 @@ public class SingularValueDecomposerTest {
 
     private static final double EPS = 1e-12;
 
+    private static final int TIMES = 10;
+
     @Test
-    public void testConstructor() throws WrongSizeException, LockedException,
-            NotReadyException, DecomposerException {
+    void testConstructor() throws WrongSizeException, LockedException, NotReadyException, DecomposerException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        SingularValueDecomposer decomposer = new SingularValueDecomposer();
+        var decomposer = new SingularValueDecomposer();
 
         assertFalse(decomposer.isReady());
         assertFalse(decomposer.isLocked());
@@ -68,26 +66,22 @@ public class SingularValueDecomposerTest {
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
         assertEquals(m, decomposer.getInputMatrix());
-        assertEquals(DecomposerType.SINGULAR_VALUE_DECOMPOSITION,
-                decomposer.getDecomposerType());
+        assertEquals(DecomposerType.SINGULAR_VALUE_DECOMPOSITION, decomposer.getDecomposerType());
 
         decomposer = new SingularValueDecomposer(SingularValueDecomposer.DEFAULT_MAX_ITERS + 1);
 
         assertFalse(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(DecomposerType.SINGULAR_VALUE_DECOMPOSITION,
-                decomposer.getDecomposerType());
-        assertEquals(SingularValueDecomposer.DEFAULT_MAX_ITERS + 1,
-                decomposer.getMaxIterations());
+        assertEquals(DecomposerType.SINGULAR_VALUE_DECOMPOSITION, decomposer.getDecomposerType());
+        assertEquals(SingularValueDecomposer.DEFAULT_MAX_ITERS + 1, decomposer.getMaxIterations());
 
         decomposer.setInputMatrix(m);
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
         assertEquals(m, decomposer.getInputMatrix());
-        assertEquals(DecomposerType.SINGULAR_VALUE_DECOMPOSITION,
-                decomposer.getDecomposerType());
+        assertEquals(DecomposerType.SINGULAR_VALUE_DECOMPOSITION, decomposer.getDecomposerType());
 
         decomposer = new SingularValueDecomposer(m);
         assertTrue(decomposer.isReady());
@@ -114,19 +108,16 @@ public class SingularValueDecomposerTest {
     }
 
     @Test
-    public void testGetSetInputMatrix() throws WrongSizeException,
-            LockedException, NotReadyException, DecomposerException {
+    void testGetSetInputMatrix() throws WrongSizeException, LockedException, NotReadyException, DecomposerException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer();
-        assertEquals(DecomposerType.SINGULAR_VALUE_DECOMPOSITION,
-                decomposer.getDecomposerType());
+        final var decomposer = new SingularValueDecomposer();
+        assertEquals(DecomposerType.SINGULAR_VALUE_DECOMPOSITION, decomposer.getDecomposerType());
         assertFalse(decomposer.isReady());
 
         decomposer.setInputMatrix(m);
@@ -154,46 +145,35 @@ public class SingularValueDecomposerTest {
     }
 
     @Test
-    public void testDecompose() throws WrongSizeException, LockedException,
-            DecomposerException, NotReadyException, NotAvailableException {
+    void testDecompose() throws WrongSizeException, LockedException, DecomposerException, NotReadyException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = randomizer.nextInt(columns, MAX_ROWS + 1);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = randomizer.nextInt(columns, MAX_ROWS + 1);
 
-        final Matrix m;
-        final Matrix u;
-        final Matrix w;
-        final Matrix v;
-        final Matrix vTrans;
-        final Matrix m2;
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer();
+        final var decomposer = new SingularValueDecomposer();
 
         // randomly initialize m
-        m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // Force NotReadyException
-        try {
-            decomposer.decompose();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        assertThrows(NotReadyException.class, decomposer::decompose);
 
         decomposer.setInputMatrix(m);
         decomposer.decompose();
 
-        u = decomposer.getU();
-        w = decomposer.getW();
-        v = decomposer.getV();
-        vTrans = v.transposeAndReturnNew();
+        final var u = decomposer.getU();
+        final var w = decomposer.getW();
+        final var v = decomposer.getV();
+        final var vTrans = v.transposeAndReturnNew();
 
         // check that w is diagonal with descending singular values
         assertEquals(columns, w.getRows());
         assertEquals(columns, w.getColumns());
-        double prevSingularValue = Double.MAX_VALUE;
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < columns; i++) {
+        var prevSingularValue = Double.MAX_VALUE;
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < columns; i++) {
                 if (i == j) {
                     assertTrue(w.getElementAt(i, j) <= prevSingularValue);
                     prevSingularValue = w.getElementAt(i, j);
@@ -204,7 +184,7 @@ public class SingularValueDecomposerTest {
         }
 
 
-        m2 = u.multiplyAndReturnNew(w.multiplyAndReturnNew(vTrans));
+        final var m2 = u.multiplyAndReturnNew(w.multiplyAndReturnNew(vTrans));
 
         // check that m2 is equal (except for rounding errors to m
         assertEquals(rows, m2.getRows());
@@ -213,75 +193,73 @@ public class SingularValueDecomposerTest {
     }
 
     @Test
-    public void testGetSetMaxIterations() throws WrongSizeException,
-            LockedException, NotReadyException {
+    void testGetSetMaxIterations() throws WrongSizeException, LockedException, NotReadyException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int maxIters = randomizer.nextInt(MIN_ITERS, MAX_ITERS);
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
+            var maxIters = randomizer.nextInt(MIN_ITERS, MAX_ITERS);
+            final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+            final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
 
-        // Check default value
-        assertEquals(SingularValueDecomposer.DEFAULT_MAX_ITERS,
-                decomposer.getMaxIterations());
+            // Check default value
+            assertEquals(SingularValueDecomposer.DEFAULT_MAX_ITERS, decomposer.getMaxIterations());
 
-        // Try before decomposing
-        decomposer.setMaxIterations(maxIters);
-        assertEquals(maxIters, decomposer.getMaxIterations());
-        try {
-            decomposer.decompose();
-        } catch (final DecomposerException ignore) {
-        }
+            // Try before decomposing
+            decomposer.setMaxIterations(maxIters);
+            assertEquals(maxIters, decomposer.getMaxIterations());
 
-        // Try after decomposing
-        maxIters = randomizer.nextInt(MIN_ITERS, MAX_ITERS);
-        decomposer.setMaxIterations(maxIters);
-        assertEquals(maxIters, decomposer.getMaxIterations());
+            try {
+                decomposer.decompose();
+            } catch (DecomposerException ex) {
+                continue;
+            }
 
-        // Try on constructor
-        decomposer = new SingularValueDecomposer(m, maxIters);
-        assertEquals(maxIters, decomposer.getMaxIterations());
+            // Try after decomposing
+            maxIters = randomizer.nextInt(MIN_ITERS, MAX_ITERS);
+            decomposer.setMaxIterations(maxIters);
+            assertEquals(maxIters, decomposer.getMaxIterations());
 
-        // Force IllegalArgumentException
-        try {
-            decomposer.setMaxIterations(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
+            // Try on constructor
+            final var decomposer2 = new SingularValueDecomposer(m, maxIters);
+            assertEquals(maxIters, decomposer2.getMaxIterations());
+
+            // Force IllegalArgumentException
+            assertThrows(IllegalArgumentException.class, () -> decomposer2.setMaxIterations(0));
+
+            break;
         }
     }
 
     @Test
-    public void testGetU() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testGetU() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // Works for any matrix size
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = randomizer.nextInt(columns, MAX_ROWS + 1);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = randomizer.nextInt(columns, MAX_ROWS + 1);
 
         // Randomly initialize m
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var decomposer = new SingularValueDecomposer(m);
 
         decomposer.decompose();
 
-        final Matrix u = decomposer.getU();
-        final Matrix uTrans = u.transposeAndReturnNew();
+        final var u = decomposer.getU();
+        final var uTrans = u.transposeAndReturnNew();
 
         // Check that U is orthogonal: U' * U = I
-        final Matrix ident = uTrans.multiplyAndReturnNew(u);
+        final var ident = uTrans.multiplyAndReturnNew(u);
         assertEquals(rows, u.getRows());
         assertEquals(columns, u.getColumns());
-        for (int j = 0; j < ident.getColumns(); j++) {
-            for (int i = 0; i < ident.getRows(); i++) {
+        for (var j = 0; j < ident.getColumns(); j++) {
+            for (var i = 0; i < ident.getRows(); i++) {
                 if (i == j) {
                     assertEquals(1.0, ident.getElementAt(i, j), RELATIVE_ERROR);
                 } else {
@@ -292,21 +270,20 @@ public class SingularValueDecomposerTest {
     }
 
     @Test
-    public void testGetV() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testGetV() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
         // Works for any matrix size
-        final int row = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var row = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         // Randomly initialize m
-        final Matrix m = Matrix.createWithUniformRandomValues(row, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var m = Matrix.createWithUniformRandomValues(row, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final Matrix v;
         final Matrix vTrans;
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var decomposer = new SingularValueDecomposer(m);
 
         decomposer.decompose();
 
@@ -314,11 +291,11 @@ public class SingularValueDecomposerTest {
         vTrans = v.transposeAndReturnNew();
 
         // Check that V is orthogonal: V' * V = I
-        final Matrix ident = vTrans.multiplyAndReturnNew(v);
+        final var ident = vTrans.multiplyAndReturnNew(v);
         assertEquals(columns, v.getRows());
         assertEquals(columns, v.getColumns());
-        for (int j = 0; j < ident.getColumns(); j++) {
-            for (int i = 0; i < ident.getRows(); i++) {
+        for (var j = 0; j < ident.getColumns(); j++) {
+            for (var i = 0; i < ident.getRows(); i++) {
                 if (i == j) {
                     assertEquals(1.0, ident.getElementAt(i, j), RELATIVE_ERROR);
                 } else {
@@ -329,20 +306,18 @@ public class SingularValueDecomposerTest {
     }
 
     @Test
-    public void testGetSingularValues() throws WrongSizeException,
-            NotReadyException, LockedException, DecomposerException,
+    void testGetSingularValues() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
             NotAvailableException {
 
         // Works for any matrix size
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         // Randomly initialize m
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final double[] singularValues;
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var decomposer = new SingularValueDecomposer(m);
 
         decomposer.decompose();
 
@@ -350,7 +325,7 @@ public class SingularValueDecomposerTest {
 
         // Check that singular values are ordered from largest to smallest
         assertEquals(singularValues.length, columns);
-        for (int i = 1; i < columns; i++) {
+        for (var i = 1; i < columns; i++) {
             assertTrue(singularValues[i] <= singularValues[i - 1]);
             // Algorithm computes positive singular values
             assertTrue(singularValues[i] >= 0.0);
@@ -359,20 +334,19 @@ public class SingularValueDecomposerTest {
     }
 
     @Test
-    public void testGetW() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testGetW() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
         // Works for any matrix size
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         // Randomly initialize m
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final Matrix w;
-        final Matrix w2 = new Matrix(columns, columns);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var w2 = new Matrix(columns, columns);
+        final var decomposer = new SingularValueDecomposer(m);
 
         decomposer.decompose();
 
@@ -383,12 +357,11 @@ public class SingularValueDecomposerTest {
         // that W is diagonal
         assertEquals(w.getRows(), columns);
         assertEquals(w.getColumns(), columns);
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < columns; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < columns; i++) {
                 if (i == j) {
                     if (i >= 1) {
-                        assertTrue(w.getElementAt(i, j) <=
-                                w.getElementAt(i - 1, j - 1));
+                        assertTrue(w.getElementAt(i, j) <= w.getElementAt(i - 1, j - 1));
                         //Algorithm computes positive singular values
                         assertTrue(w.getElementAt(i, j) >= 0.0);
                         assertTrue(w.getElementAt(i - 1, j - 1) >= 0.0);
@@ -401,41 +374,32 @@ public class SingularValueDecomposerTest {
 
         assertEquals(w, w2);
 
-        try {
-            decomposer.getW(new Matrix(columns + 1, columns));
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            decomposer.getW(new Matrix(columns, columns + 1));
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var m1 = new Matrix(columns + 1, columns);
+        assertThrows(WrongSizeException.class, () -> decomposer.getW(m1));
+        final var m2 = new Matrix(columns, columns + 1);
+        assertThrows(WrongSizeException.class, () -> decomposer.getW(m2));
     }
 
     @Test
-    public void testGetNorm2() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testGetNorm2() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final FrobeniusNormComputer normComputer = new FrobeniusNormComputer();
+        final var normComputer = new FrobeniusNormComputer();
 
         // works for any matrix size
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         // Randomly initialize m
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Matrix mTrans;
-        final Matrix m2;
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final double normFro;
         final double norm2;
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var decomposer = new SingularValueDecomposer(m);
 
-        mTrans = m.transposeAndReturnNew();
-        m2 = mTrans.multiplyAndReturnNew(m);
+        final var mTrans = m.transposeAndReturnNew();
+        final var m2 = mTrans.multiplyAndReturnNew(m);
         normFro = Math.sqrt(normComputer.getNorm(m2));
 
         decomposer.decompose();
@@ -444,18 +408,16 @@ public class SingularValueDecomposerTest {
     }
 
     @Test
-    public void testGetConditionNumber() throws WrongSizeException,
-            NotReadyException, LockedException, DecomposerException,
+    void testGetConditionNumber() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
             NotAvailableException {
 
         // Works for any matrix size
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(m);
         final double[] w;
         final double condNumber;
         final double recCondNumber;
@@ -466,8 +428,7 @@ public class SingularValueDecomposerTest {
         w = decomposer.getSingularValues();
 
         if (recCondNumber > EPS) {
-            assertEquals(condNumber, 1.0 / recCondNumber,
-                    condNumber * RELATIVE_ERROR);
+            assertEquals(condNumber, 1.0 / recCondNumber, condNumber * RELATIVE_ERROR);
         }
 
         if (w[0] >= EPS && w[columns - 1] >= EPS) {
@@ -476,31 +437,25 @@ public class SingularValueDecomposerTest {
     }
 
     @Test
-    public void testGetRank() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testGetRank() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = randomizer.nextInt(columns, MAX_ROWS + 1);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = randomizer.nextInt(columns, MAX_ROWS + 1);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
-        final Matrix u;
-        final Matrix v;
-        final Matrix vTrans;
-        final Matrix w;
-        final Matrix m2;
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var decomposer = new SingularValueDecomposer(m);
 
         decomposer.decompose();
-        u = decomposer.getU();
-        w = decomposer.getW();
-        v = decomposer.getV();
-        vTrans = v.transposeAndReturnNew();
+        final var u = decomposer.getU();
+        final var w = decomposer.getW();
+        final var v = decomposer.getV();
+        final var vTrans = v.transposeAndReturnNew();
 
         // Randomly set some singular values to zero
         int rank = columns;
-        for (int i = 0; i < columns; i++) {
+        for (var i = 0; i < columns; i++) {
             if (randomizer.nextInt(0, 2) == 0) {
                 // Set singular value with 50% probability
                 w.setElementAt(i, i, 0.0);
@@ -508,7 +463,7 @@ public class SingularValueDecomposerTest {
             }
         }
 
-        m2 = u.multiplyAndReturnNew(w.multiplyAndReturnNew(vTrans));
+        final var m2 = u.multiplyAndReturnNew(w.multiplyAndReturnNew(vTrans));
         decomposer = new SingularValueDecomposer(m2);
         decomposer.decompose();
 
@@ -516,31 +471,25 @@ public class SingularValueDecomposerTest {
     }
 
     @Test
-    public void testGetNullity() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testGetNullity() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = randomizer.nextInt(columns, MAX_ROWS + 1);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = randomizer.nextInt(columns, MAX_ROWS + 1);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
-        final Matrix u;
-        final Matrix v;
-        final Matrix vTrans;
-        final Matrix w;
-        final Matrix m2;
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var decomposer = new SingularValueDecomposer(m);
 
         decomposer.decompose();
-        u = decomposer.getU();
-        w = decomposer.getW();
-        v = decomposer.getV();
-        vTrans = v.transposeAndReturnNew();
+        final var u = decomposer.getU();
+        final var w = decomposer.getW();
+        final var v = decomposer.getV();
+        final var vTrans = v.transposeAndReturnNew();
 
         // Randomly set some singular values to zero
         int nullity = 0;
-        for (int i = 0; i < columns; i++) {
+        for (var i = 0; i < columns; i++) {
             if (randomizer.nextInt(0, 2) == 0) {
                 // Set singular value with 50% probability
                 w.setElementAt(i, i, 0.0);
@@ -548,7 +497,7 @@ public class SingularValueDecomposerTest {
             }
         }
 
-        m2 = u.multiplyAndReturnNew(w.multiplyAndReturnNew(vTrans));
+        final var m2 = u.multiplyAndReturnNew(w.multiplyAndReturnNew(vTrans));
         decomposer = new SingularValueDecomposer(m2);
         decomposer.decompose();
 
@@ -556,35 +505,28 @@ public class SingularValueDecomposerTest {
     }
 
     @Test
-    public void testGetRange() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testGetRange() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 3, MAX_COLUMNS + 3);
-        final int rows = randomizer.nextInt(columns, MAX_ROWS + 4);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 3, MAX_COLUMNS + 3);
+        final var rows = randomizer.nextInt(columns, MAX_ROWS + 4);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
-        final Matrix u;
-        final Matrix v;
-        final Matrix vTrans;
-        final Matrix w;
-        final Matrix m2;
-        final Matrix r;
-        final Matrix r2 = new Matrix(1, 1);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(m);
+        final var r2 = new Matrix(1, 1);
         final Matrix rTrans;
         final Matrix ident;
 
         decomposer.decompose();
-        u = decomposer.getU();
-        w = decomposer.getW();
-        v = decomposer.getV();
-        vTrans = v.transposeAndReturnNew();
+        final var u = decomposer.getU();
+        final var w = decomposer.getW();
+        final var v = decomposer.getV();
+        final var vTrans = v.transposeAndReturnNew();
 
         // Randomly set some singular values to zero
         int rank = columns;
-        for (int i = 0; i < columns; i++) {
+        for (var i = 0; i < columns; i++) {
             if (randomizer.nextInt(0, 2) == 0) {
                 // Set singular value with 50% probability
                 w.setElementAt(i, i, 0.0);
@@ -592,38 +534,28 @@ public class SingularValueDecomposerTest {
             }
         }
 
-        m2 = u.multiplyAndReturnNew(w.multiplyAndReturnNew(vTrans));
-        decomposer = new SingularValueDecomposer(m2);
-        decomposer.decompose();
+        final var m2 = u.multiplyAndReturnNew(w.multiplyAndReturnNew(vTrans));
+        final var decomposer2 = new SingularValueDecomposer(m2);
+        decomposer2.decompose();
 
         if (rank == 0) {
-            try {
-                decomposer.getRange();
-                fail("NotAvailableException expected but not thrown");
-            } catch (final NotAvailableException ignore) {
-            }
-            try {
-                decomposer.getRange(r2);
-                fail("NotAvailableException expected but not thrown");
-            } catch (final NotAvailableException ignore) {
-            }
+            assertThrows(NotAvailableException.class, decomposer2::getRange);
+            assertThrows(NotAvailableException.class, () -> decomposer2.getRange(r2));
         } else {
-            r = decomposer.getRange();
-            decomposer.getRange(r2);
+            final var r = decomposer2.getRange();
+            decomposer2.getRange(r2);
             rTrans = r.transposeAndReturnNew();
             ident = rTrans.multiplyAndReturnNew(r);
             assertEquals(rank, r.getColumns());
             assertEquals(rows, r.getRows());
             assertEquals(r2, r);
 
-            for (int j = 0; j < ident.getColumns(); j++) {
-                for (int i = 0; i < ident.getRows(); i++) {
+            for (var j = 0; j < ident.getColumns(); j++) {
+                for (var i = 0; i < ident.getRows(); i++) {
                     if (i == j) {
-                        assertEquals(1.0, ident.getElementAt(i, j),
-                                RELATIVE_ERROR);
+                        assertEquals(1.0, ident.getElementAt(i, j), RELATIVE_ERROR);
                     } else {
-                        assertEquals(0.0, ident.getElementAt(i, j),
-                                ROUND_ERROR);
+                        assertEquals(0.0, ident.getElementAt(i, j), ROUND_ERROR);
                     }
                 }
             }
@@ -631,35 +563,26 @@ public class SingularValueDecomposerTest {
     }
 
     @Test
-    public void testGetNullspace() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testGetNullspace() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
-        final int rows = randomizer.nextInt(columns, MAX_ROWS + 3);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+        final var rows = randomizer.nextInt(columns, MAX_ROWS + 3);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
-        final Matrix u;
-        final Matrix v;
-        final Matrix vTrans;
-        final Matrix w;
-        final Matrix m2;
-        final Matrix ns;
-        final Matrix ns2 = new Matrix(1, 1);
-        final Matrix nsTrans;
-        final Matrix ident;
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var decomposer = new SingularValueDecomposer(m);
+        final var ns2 = new Matrix(1, 1);
 
         decomposer.decompose();
-        u = decomposer.getU();
-        w = decomposer.getW();
-        v = decomposer.getV();
-        vTrans = v.transposeAndReturnNew();
+        final var u = decomposer.getU();
+        final var w = decomposer.getW();
+        final var v = decomposer.getV();
+        final var vTrans = v.transposeAndReturnNew();
 
         // Randomly set some singular values to zero
-        int nullity = 0;
-        for (int i = 0; i < columns; i++) {
+        var nullity = 0;
+        for (var i = 0; i < columns; i++) {
             if (randomizer.nextInt(0, 2) == 0) {
                 // Set singular value with 50% probability
                 w.setElementAt(i, i, 0.0);
@@ -667,39 +590,29 @@ public class SingularValueDecomposerTest {
             }
         }
 
-        m2 = u.multiplyAndReturnNew(w.multiplyAndReturnNew(vTrans));
+        final var m2 = u.multiplyAndReturnNew(w.multiplyAndReturnNew(vTrans));
 
-        decomposer = new SingularValueDecomposer(m2);
-        decomposer.decompose();
+        final var decomposer2 = new SingularValueDecomposer(m2);
+        decomposer2.decompose();
 
         if (nullity == 0) {
-            try {
-                decomposer.getNullspace();
-                fail("NotAvailableException expected but not thrown");
-            } catch (final NotAvailableException ignore) {
-            }
-            try {
-                decomposer.getNullspace(new Matrix(1, 1));
-                fail("NotAvailableException expected but not thrown");
-            } catch (final NotAvailableException ignore) {
-            }
+            assertThrows(NotAvailableException.class, decomposer2::getNullspace);
+            assertThrows(NotAvailableException.class, () -> decomposer2.getNullspace(new Matrix(1, 1)));
         } else {
-            ns = decomposer.getNullspace();
-            decomposer.getNullspace(ns2);
-            nsTrans = ns.transposeAndReturnNew();
-            ident = nsTrans.multiplyAndReturnNew(ns);
+            final var ns = decomposer2.getNullspace();
+            decomposer2.getNullspace(ns2);
+            final var nsTrans = ns.transposeAndReturnNew();
+            final var ident = nsTrans.multiplyAndReturnNew(ns);
             assertEquals(nullity, ns.getColumns());
             assertEquals(columns, ns.getRows());
             assertEquals(ns2, ns);
 
-            for (int j = 0; j < ident.getColumns(); j++) {
-                for (int i = 0; i < ident.getRows(); i++) {
+            for (var j = 0; j < ident.getColumns(); j++) {
+                for (var i = 0; i < ident.getRows(); i++) {
                     if (i == j) {
-                        assertEquals(1.0, ident.getElementAt(i, j),
-                                RELATIVE_ERROR);
+                        assertEquals(1.0, ident.getElementAt(i, j), RELATIVE_ERROR);
                     } else {
-                        assertEquals(0.0, ident.getElementAt(i, j),
-                                ROUND_ERROR);
+                        assertEquals(0.0, ident.getElementAt(i, j), ROUND_ERROR);
                     }
                 }
             }
@@ -707,59 +620,37 @@ public class SingularValueDecomposerTest {
     }
 
     @Test
-    public void testSolveMatrix() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testSolveMatrix() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 4, MAX_ROWS + 4);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, rows - 1);
-        final int columns2 = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 4, MAX_ROWS + 4);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, rows - 1);
+        final var columns2 = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        Matrix m;
-        Matrix b;
-        Matrix s;
-        Matrix b2;
-        Matrix s2;
         double relError;
 
         // Try for square matrix
-        m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
-        b = Matrix.createWithUniformRandomValues(rows, columns2,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        s2 = new Matrix(1, 1);
+        var m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
+        final var b = Matrix.createWithUniformRandomValues(rows, columns2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var s2 = new Matrix(1, 1);
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var decomposer = new SingularValueDecomposer(m);
 
         // Force NotAvailableException
-        try {
-            decomposer.solve(b);
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            decomposer.solve(b, s2);
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, () -> decomposer.solve(b));
+        assertThrows(NotAvailableException.class, () -> decomposer.solve(b, s2));
 
         decomposer.decompose();
-        try {
-            decomposer.solve(b, -1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            decomposer.solve(b, -1.0, s2);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> decomposer.solve(b, -1.0));
+        assertThrows(IllegalArgumentException.class, () -> decomposer.solve(b, -1.0, s2));
 
-        s = decomposer.solve(b);
+        var s = decomposer.solve(b);
         decomposer.solve(b, s2);
 
         // check that solution after calling solve matches following equation:
         // m * s = b
-        b2 = m.multiplyAndReturnNew(s);
+        var b2 = m.multiplyAndReturnNew(s);
 
         assertEquals(b.getRows(), b2.getRows());
         assertEquals(b.getColumns(), b2.getColumns());
@@ -768,38 +659,27 @@ public class SingularValueDecomposerTest {
 
         // Try for overdetermined system (rows > columns)
         m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
-        b = Matrix.createWithUniformRandomValues(rows, columns2,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b3 = Matrix.createWithUniformRandomValues(rows, columns2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         decomposer.setInputMatrix(m);
         decomposer.decompose();
-        try {
-            decomposer.solve(b, -1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            decomposer.solve(b, -1.0, s2);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> decomposer.solve(b3, -1.0));
+        assertThrows(IllegalArgumentException.class, () -> decomposer.solve(b3, -1.0, s2));
 
-        s = decomposer.solve(b);
-        decomposer.solve(b, s2);
+        s = decomposer.solve(b3);
+        decomposer.solve(b3, s2);
 
         // check that solution after calling solve matches following equation:
         // m * s = b
         b2 = m.multiplyAndReturnNew(s);
 
-        assertEquals(b.getRows(), b2.getRows());
-        assertEquals(b.getColumns(), b2.getColumns());
-        int valid = 0;
-        int total = b2.getColumns() * b2.getRows();
-        for (int j = 0; j < b2.getColumns(); j++) {
-            for (int i = 0; i < b2.getRows(); i++) {
-                relError = Math.abs(RELATIVE_ERROR_OVERDETERMINED *
-                        b2.getElementAt(i, j));
-                if (Math.abs(b2.getElementAt(i, j) - b.getElementAt(i, j)) <
-                        relError) {
+        assertEquals(b3.getRows(), b2.getRows());
+        assertEquals(b3.getColumns(), b2.getColumns());
+        var valid = 0;
+        final var total = b2.getColumns() * b2.getRows();
+        for (var j = 0; j < b2.getColumns(); j++) {
+            for (var i = 0; i < b2.getRows(); i++) {
+                relError = Math.abs(RELATIVE_ERROR_OVERDETERMINED * b2.getElementAt(i, j));
+                if (Math.abs(b2.getElementAt(i, j) - b.getElementAt(i, j)) < relError) {
                     valid++;
                 }
             }
@@ -812,76 +692,45 @@ public class SingularValueDecomposerTest {
         // Try for b matrix having different number of rows than m (Throws
         // WrongSizeException
         m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
-        b = Matrix.createWithUniformRandomValues(columns, columns2,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b4 = Matrix.createWithUniformRandomValues(columns, columns2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         decomposer.setInputMatrix(m);
         decomposer.decompose();
-        try {
-            decomposer.solve(b);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            decomposer.solve(b, s2);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> decomposer.solve(b4));
+        assertThrows(WrongSizeException.class, () -> decomposer.solve(b4, s2));
     }
 
     @Test
-    public void testSolveArray() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testSolveArray() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 4, MAX_ROWS + 4);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, rows - 1);
-        final int columns2 = 1;
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 4, MAX_ROWS + 4);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, rows - 1);
+        final var columns2 = 1;
 
-        Matrix m;
-        double[] b;
-        double[] s;
-        Matrix b2;
-        double[] s2;
         double relError;
 
         // Try for square matrix
-        m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
-        b = Matrix.createWithUniformRandomValues(rows, columns2,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE).toArray();
-        s2 = new double[rows];
+        var m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
+        final var b = Matrix.createWithUniformRandomValues(rows, columns2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE).toArray();
+        final var s2 = new double[rows];
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var decomposer = new SingularValueDecomposer(m);
 
         // Force NotAvailableException
-        try {
-            decomposer.solve(b);
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
-        try {
-            decomposer.solve(b, s2);
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, () -> decomposer.solve(b));
+        assertThrows(NotAvailableException.class, () -> decomposer.solve(b, s2));
 
         decomposer.decompose();
-        try {
-            decomposer.solve(b, -1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            decomposer.solve(b, -1.0, s2);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> decomposer.solve(b, -1.0));
+        assertThrows(IllegalArgumentException.class, () -> decomposer.solve(b, -1.0, s2));
 
-        s = decomposer.solve(b);
+        var s = decomposer.solve(b);
         decomposer.solve(b, s2);
 
         // check that solution after calling solve matches following equation:
         // m * s = b
-        b2 = m.multiplyAndReturnNew(Matrix.newFromArray(s));
+        var b2 = m.multiplyAndReturnNew(Matrix.newFromArray(s));
 
         assertEquals(b2.getRows(), b.length);
         assertEquals(1, b2.getColumns());
@@ -890,62 +739,45 @@ public class SingularValueDecomposerTest {
 
         // Try for overdetermined system (rows > columns)
         m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
-        b = Matrix.createWithUniformRandomValues(rows, columns2,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE).toArray();
-        s2 = new double[columns];
+        final var b3 = Matrix.createWithUniformRandomValues(rows, columns2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE).toArray();
+        final var s3 = new double[columns];
         decomposer.setInputMatrix(m);
         decomposer.decompose();
-        try {
-            decomposer.solve(b, -1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            decomposer.solve(b, -1.0, s2);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> decomposer.solve(b3, -1.0));
+        assertThrows(IllegalArgumentException.class, () -> decomposer.solve(b3, -1.0, s3));
 
-        s = decomposer.solve(b);
-        decomposer.solve(b, s2);
+        s = decomposer.solve(b3);
+        decomposer.solve(b3, s3);
 
         // check that solution after calling solve matches following equation:
         // m * s = b
-        b2 = m.multiplyAndReturnNew(Matrix.newFromArray(s));
+        b2 = m.multiplyAndReturnNew(Matrix.newFromArray(s3));
 
         assertEquals(b.length, b2.getRows());
         assertEquals(1, b2.getColumns());
-        int valid = 0, total = b2.getColumns() * b2.getRows();
-        for (int j = 0; j < b2.getColumns(); j++) {
-            for (int i = 0; i < b2.getRows(); i++) {
-                relError = Math.abs(RELATIVE_ERROR_OVERDETERMINED *
-                        b2.getElementAt(i, j));
+        var valid = 0;
+        final var  total = b2.getColumns() * b2.getRows();
+        for (var j = 0; j < b2.getColumns(); j++) {
+            for (var i = 0; i < b2.getRows(); i++) {
+                relError = Math.abs(RELATIVE_ERROR_OVERDETERMINED * b2.getElementAt(i, j));
                 if (Math.abs(b2.getElementAt(i, j) - b[i]) < relError) {
                     valid++;
                 }
             }
         }
 
-        assertArrayEquals(s, s2, 0.0);
+        assertArrayEquals(s3, s, 0.0);
 
         assertTrue(((double) valid / (double) total) > VALID_RATIO);
 
         // Try for b matrix having different number of rows than m (Throws
         // WrongSizeException
         m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
-        b = Matrix.createWithUniformRandomValues(columns, columns2,
+        final var b4 = Matrix.createWithUniformRandomValues(columns, columns2,
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE).toArray();
         decomposer.setInputMatrix(m);
         decomposer.decompose();
-        try {
-            decomposer.solve(b);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            decomposer.solve(b, s2);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> decomposer.solve(b4));
+        assertThrows(WrongSizeException.class, () -> decomposer.solve(b4, s2));
     }
 }

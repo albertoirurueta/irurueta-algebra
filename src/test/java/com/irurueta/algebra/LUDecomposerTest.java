@@ -16,13 +16,11 @@
 package com.irurueta.algebra;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class LUDecomposerTest {
+class LUDecomposerTest {
 
     private static final int MIN_ROWS = 3;
     private static final int MAX_ROWS = 50;
@@ -39,29 +37,26 @@ public class LUDecomposerTest {
     private static final double EPSILON = 1e-10;
 
     @Test
-    public void testConstructor() throws WrongSizeException, LockedException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+    void testConstructor() throws WrongSizeException, LockedException {
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // Test 1st constructor
-        LUDecomposer decomposer = new LUDecomposer();
+        var decomposer = new LUDecomposer();
         assertFalse(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
-        assertEquals(DecomposerType.LU_DECOMPOSITION,
-                decomposer.getDecomposerType());
+        assertEquals(DecomposerType.LU_DECOMPOSITION, decomposer.getDecomposerType());
 
         decomposer.setInputMatrix(m);
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
         assertEquals(m, decomposer.getInputMatrix());
-        assertEquals(DecomposerType.LU_DECOMPOSITION,
-                decomposer.getDecomposerType());
+        assertEquals(DecomposerType.LU_DECOMPOSITION, decomposer.getDecomposerType());
 
         // Test 2nd constructor
         decomposer = new LUDecomposer(m);
@@ -69,24 +64,21 @@ public class LUDecomposerTest {
         assertFalse(decomposer.isLocked());
         assertFalse(decomposer.isDecompositionAvailable());
         assertEquals(m, decomposer.getInputMatrix());
-        assertEquals(DecomposerType.LU_DECOMPOSITION,
-                decomposer.getDecomposerType());
+        assertEquals(DecomposerType.LU_DECOMPOSITION, decomposer.getDecomposerType());
     }
 
     @Test
-    public void testGetSetInputMatrixAndIsReady() throws WrongSizeException,
-            LockedException, NotReadyException, DecomposerException {
+    void testGetSetInputMatrixAndIsReady() throws WrongSizeException, LockedException, NotReadyException,
+            DecomposerException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-        final Matrix m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final LUDecomposer decomposer = new LUDecomposer();
-        assertEquals(DecomposerType.LU_DECOMPOSITION,
-                decomposer.getDecomposerType());
+        final var decomposer = new LUDecomposer();
+        assertEquals(DecomposerType.LU_DECOMPOSITION, decomposer.getDecomposerType());
         assertFalse(decomposer.isReady());
 
         decomposer.setInputMatrix(m);
@@ -114,24 +106,17 @@ public class LUDecomposerTest {
     }
 
     @Test
-    public void testDecomposer() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testDecomposer() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
         // works for any rectangular matrix size with rows >= columns
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-        final Matrix m;
-        Matrix l;
-        final Matrix u;
-        Matrix m2;
-        final int[] pivot;
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-
-        LUDecomposer decomposer = new LUDecomposer(m);
+        var decomposer = new LUDecomposer(m);
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
@@ -146,17 +131,17 @@ public class LUDecomposerTest {
         assertEquals(m, decomposer.getInputMatrix());
 
         // Check using pivoted L
-        l = decomposer.getPivottedL();
-        u = decomposer.getU();
-        pivot = decomposer.getPivot();
+        var l = decomposer.getPivottedL();
+        final var u = decomposer.getU();
+        final var pivot = decomposer.getPivot();
 
-        m2 = l.multiplyAndReturnNew(u);
+        var m2 = l.multiplyAndReturnNew(u);
 
         int pivotIndex;
         assertEquals(m.getRows(), m2.getRows());
         assertEquals(m.getColumns(), m2.getColumns());
-        for (int j = 0; j < m2.getColumns(); j++) {
-            for (int i = 0; i < m2.getRows(); i++) {
+        for (var j = 0; j < m2.getColumns(); j++) {
+            for (var i = 0; i < m2.getRows(); i++) {
                 pivotIndex = pivot[i];
                 if (!Double.isNaN(m2.getElementAt(i, j))) {
                     assertEquals(m2.getElementAt(i, j), m.getElementAt(pivotIndex, j), ROUND_ERROR);
@@ -181,46 +166,32 @@ public class LUDecomposerTest {
         }
 
         // Force NotReadyException
-        decomposer = new LUDecomposer();
-        try {
-            decomposer.decompose();
-            fail("NotReadyException expected but not thrown");
-        } catch (final NotReadyException ignore) {
-        }
+        final var decomposer2 = new LUDecomposer();
+        assertThrows(NotReadyException.class, decomposer2::decompose);
     }
 
     @Test
-    public void testIsSingular() throws WrongSizeException, LockedException,
-            NotReadyException, DecomposerException, NotAvailableException {
+    void testIsSingular() throws WrongSizeException, LockedException, NotReadyException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-        Matrix m;
-
-        final LUDecomposer decomposer = new LUDecomposer();
+        final var decomposer = new LUDecomposer();
 
         // Test for square matrix
-        m = DecomposerHelper.getSingularMatrixInstance(rows, rows);
+        var m = DecomposerHelper.getSingularMatrixInstance(rows, rows);
 
         decomposer.setInputMatrix(m);
 
         // Force NotAvailableException
-        try {
-            decomposer.isSingular();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, decomposer::isSingular);
 
         decomposer.decompose();
 
         // Force IllegalArgumentException
-        try {
-            decomposer.isSingular(-1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> decomposer.isSingular(-1.0));
 
         assertTrue(decomposer.isSingular());
 
@@ -235,28 +206,20 @@ public class LUDecomposerTest {
         decomposer.setInputMatrix(m);
         decomposer.decompose();
 
-        try {
-            decomposer.isSingular();
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, decomposer::isSingular);
     }
 
     @Test
-    public void testGetPivottedL() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testGetPivottedL() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-        final Matrix m;
-        final Matrix l;
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-
-        final LUDecomposer decomposer = new LUDecomposer(m);
+        final var decomposer = new LUDecomposer(m);
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
@@ -264,11 +227,7 @@ public class LUDecomposerTest {
         assertEquals(m, decomposer.getInputMatrix());
 
         // Force NotAvailableException
-        try {
-            decomposer.getPivottedL();
-            fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, decomposer::getPivottedL);
 
         decomposer.decompose();
 
@@ -277,14 +236,14 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isDecompositionAvailable());
         assertEquals(m, decomposer.getInputMatrix());
 
-        l = decomposer.getPivottedL();
+        final var l = decomposer.getPivottedL();
 
         // Ensure size of l is correct
         assertEquals(l.getRows(), m.getRows());
         assertEquals(l.getColumns(), m.getColumns());
 
-        for (int j = 0; j < l.getColumns(); j++) {
-            for (int i = 0; i < l.getRows(); i++) {
+        for (var j = 0; j < l.getColumns(); j++) {
+            for (var i = 0; i < l.getRows(); i++) {
                 if (j > i) {
                     assertEquals(0.0, l.getElementAt(i, j), ROUND_ERROR);
                 } else {
@@ -295,22 +254,16 @@ public class LUDecomposerTest {
     }
 
     @Test
-    public void testGetL() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testGetL() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-        final Matrix m;
-        final Matrix pivottedL;
-        final Matrix l;
-        final int[] pivot;
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-
-        final LUDecomposer decomposer = new LUDecomposer(m);
+        final var decomposer = new LUDecomposer(m);
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
@@ -318,11 +271,7 @@ public class LUDecomposerTest {
         assertEquals(m, decomposer.getInputMatrix());
 
         // Force NotAvailableException
-        try {
-            decomposer.getL();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, decomposer::getL);
 
         decomposer.decompose();
 
@@ -331,16 +280,16 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isDecompositionAvailable());
         assertEquals(m, decomposer.getInputMatrix());
 
-        pivottedL = decomposer.getPivottedL();
-        l = decomposer.getL();
-        pivot = decomposer.getPivot();
+        final var pivottedL = decomposer.getPivottedL();
+        final var l = decomposer.getL();
+        final var pivot = decomposer.getPivot();
 
         assertEquals(l.getRows(), pivottedL.getRows());
         assertEquals(l.getColumns(), pivottedL.getColumns());
 
         int pivotIndex;
-        for (int j = 0; j < l.getColumns(); j++) {
-            for (int i = 0; i < l.getRows(); i++) {
+        for (var j = 0; j < l.getColumns(); j++) {
+            for (var i = 0; i < l.getRows(); i++) {
                 pivotIndex = pivot[i];
                 assertEquals(l.getElementAt(pivotIndex, j), pivottedL.getElementAt(i, j), 0.0);
             }
@@ -348,20 +297,16 @@ public class LUDecomposerTest {
     }
 
     @Test
-    public void testGetU() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testGetU() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-        final Matrix m;
-        final Matrix u;
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-
-        final LUDecomposer decomposer = new LUDecomposer(m);
+        final var decomposer = new LUDecomposer(m);
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
@@ -369,11 +314,7 @@ public class LUDecomposerTest {
         assertEquals(m, decomposer.getInputMatrix());
 
         // Force NotAvailableException
-        try {
-            decomposer.getU();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, decomposer::getU);
 
         decomposer.decompose();
 
@@ -382,14 +323,14 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isDecompositionAvailable());
         assertEquals(m, decomposer.getInputMatrix());
 
-        u = decomposer.getU();
+        final var u = decomposer.getU();
 
         // Ensure size of l is correct
         assertEquals(u.getRows(), m.getColumns());
         assertEquals(u.getColumns(), m.getColumns());
 
-        for (int j = 0; j < u.getColumns(); j++) {
-            for (int i = 0; i < u.getRows(); i++) {
+        for (var j = 0; j < u.getColumns(); j++) {
+            for (var i = 0; i < u.getRows(); i++) {
                 if (i > j) {
                     assertEquals(0.0, u.getElementAt(i, j), ROUND_ERROR);
                 }
@@ -398,21 +339,19 @@ public class LUDecomposerTest {
     }
 
     @Test
-    public void testGetPivot() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException {
+    void testGetPivot() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
         final int length;
-        final Matrix m;
         final int[] pivot;
 
-        m = Matrix.createWithUniformRandomValues(rows, columns,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final LUDecomposer decomposer = new LUDecomposer(m);
+        final var decomposer = new LUDecomposer(m);
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
@@ -420,11 +359,7 @@ public class LUDecomposerTest {
         assertEquals(m, decomposer.getInputMatrix());
 
         // Force NotAvailableException
-        try {
-            decomposer.getPivot();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, decomposer::getPivot);
 
         decomposer.decompose();
 
@@ -438,29 +373,25 @@ public class LUDecomposerTest {
         length = pivot.length;
         assertEquals(m.getRows(), length);
 
-        for (int i = 0; i < length; i++) {
+        for (var i = 0; i < length; i++) {
             assertTrue(pivot[i] < length);
         }
     }
 
     @Test
-    public void testDeterminant() throws WrongSizeException, NotReadyException,
+    void testDeterminant() throws WrongSizeException, NotReadyException,
             LockedException, DecomposerException, NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-
-        Matrix m;
-        double determinant;
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
         // TEST FOR ONE ELEMENT MATRIX (DETERMINANT EQUAL TO THE ELEMENT)
         // Check for matrix of size (1, 1)
-        m = new Matrix(1, 1);
-        m.initialize(randomizer.nextDouble(MIN_RANDOM_VALUE + 1.0,
-                MAX_RANDOM_VALUE + 1.0));
+        var m = new Matrix(1, 1);
+        m.initialize(randomizer.nextDouble(MIN_RANDOM_VALUE + 1.0, MAX_RANDOM_VALUE + 1.0));
 
-        final LUDecomposer decomposer = new LUDecomposer(m);
+        final var decomposer = new LUDecomposer(m);
 
         assertTrue(decomposer.isReady());
         assertFalse(decomposer.isLocked());
@@ -468,11 +399,7 @@ public class LUDecomposerTest {
         assertEquals(m, decomposer.getInputMatrix());
 
         // Force NotAvailableException
-        try {
-            decomposer.determinant();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, decomposer::determinant);
 
         decomposer.decompose();
 
@@ -481,7 +408,7 @@ public class LUDecomposerTest {
         assertTrue(decomposer.isDecompositionAvailable());
         assertEquals(m, decomposer.getInputMatrix());
 
-        determinant = decomposer.determinant();
+        var determinant = decomposer.determinant();
 
         // Check determinant is equal to element located at (0, 0)
         assertEquals(m.getElementAt(0, 0), determinant, ROUND_ERROR);
@@ -552,84 +479,59 @@ public class LUDecomposerTest {
         assertEquals(m, decomposer.getInputMatrix());
 
         // Force WrongSizeException
-        try {
-            decomposer.determinant();
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, decomposer::determinant);
     }
 
     @Test
-    public void testSolve() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException, NotAvailableException,
-            SingularMatrixException {
+    void testSolve() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            NotAvailableException, SingularMatrixException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var randomizer = new UniformRandomizer();
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var rows = columns + randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-        final int columns2 = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-
-        Matrix m;
-        Matrix b;
-        final Matrix s;
-        final Matrix b2;
+        final var columns2 = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         // Try for square matrix
-        m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
-        b = Matrix.createWithUniformRandomValues(rows, columns2,
-                MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
+        var m = DecomposerHelper.getNonSingularMatrixInstance(rows, rows);
 
-        final LUDecomposer decomposer = new LUDecomposer(m);
+        final var decomposer = new LUDecomposer(m);
         decomposer.decompose();
 
         // Force IllegalArgumentException
-        try {
-            decomposer.solve(b, -1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var b = Matrix.createWithUniformRandomValues(rows, columns2, MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
+        assertThrows(IllegalArgumentException.class, () -> decomposer.solve(b, -1.0));
 
-        s = decomposer.solve(b);
+        final var s = decomposer.solve(b);
 
         // check that solution after calling solve matches following equation:
         // m * s = b
-        b2 = m.multiplyAndReturnNew(s);
+        final var b2 = m.multiplyAndReturnNew(s);
 
         assertEquals(b.getRows(), b2.getRows());
         assertEquals(b.getColumns(), b2.getColumns());
-        for (int j = 0; j < b2.getColumns(); j++) {
-            for (int i = 0; i < b2.getRows(); i++) {
+        for (var j = 0; j < b2.getColumns(); j++) {
+            for (var i = 0; i < b2.getRows(); i++) {
                 assertEquals(b.getElementAt(i, j), b2.getElementAt(i, j), ROUND_ERROR);
             }
         }
 
         // Try for non-square matrix (Throw WrongSizeException)
         m = DecomposerHelper.getNonSingularMatrixInstance(rows, columns);
-        b = Matrix.createWithUniformRandomValues(rows, columns2,
-                MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
+        final var b3 = Matrix.createWithUniformRandomValues(rows, columns2, MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
 
         decomposer.setInputMatrix(m);
         decomposer.decompose();
 
         // Force WrongSizeException
-        try {
-            decomposer.solve(b);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> decomposer.solve(b3));
 
         // Test for singular square matrix (Throw SingularMatrixException)
         m = DecomposerHelper.getSingularMatrixInstance(rows, rows);
-        b = Matrix.createWithUniformRandomValues(rows, columns2,
-                MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
+        final var b4 = Matrix.createWithUniformRandomValues(rows, columns2, MIN_RANDOM_VALUE2, MAX_RANDOM_VALUE);
         decomposer.setInputMatrix(m);
         decomposer.decompose();
 
-        try {
-            decomposer.solve(b);
-            fail("SingularMatrixException expected but not thrown");
-        } catch (final SingularMatrixException ignore) {
-        }
+        assertThrows(SingularMatrixException.class, () -> decomposer.solve(b4));
     }
 }

@@ -21,14 +21,14 @@ import com.irurueta.algebra.DecomposerHelper;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MultivariateGaussianRandomizerTest {
+class MultivariateGaussianRandomizerTest {
 
     private static final int NUM_SAMPLES = 1000000;
     private static final double RELATIVE_ERROR = 0.05;
@@ -37,11 +37,9 @@ public class MultivariateGaussianRandomizerTest {
     private static final double MAX_RANDOM_VALUE = 100.0;
 
     @Test
-    public void testConstructor() throws WrongSizeException,
-            InvalidCovarianceMatrixException {
+    void testConstructor() throws WrongSizeException, InvalidCovarianceMatrixException {
         // test empty constructor
-        MultivariateGaussianRandomizer randomizer =
-                new MultivariateGaussianRandomizer();
+        var randomizer = new MultivariateGaussianRandomizer();
 
         // check correctness
         assertArrayEquals(new double[]{0.0}, randomizer.getMean(), 0.0);
@@ -56,23 +54,14 @@ public class MultivariateGaussianRandomizerTest {
         assertEquals(Matrix.identity(1, 1), randomizer.getCovariance());
 
         // Force NullPointerException
-        randomizer = null;
-        try {
-            randomizer = new MultivariateGaussianRandomizer(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
-        //noinspection ConstantConditions
-        assertNull(randomizer);
-
+        assertThrows(NullPointerException.class, () -> new MultivariateGaussianRandomizer(null));
 
         // test constructor with mean and covariance
-        final UniformRandomizer uniRandomizer = new UniformRandomizer(new Random());
-        final double[] mean = new double[2];
+        final var uniRandomizer = new UniformRandomizer(new Random());
+        final var mean = new double[2];
         uniRandomizer.fill(mean, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Matrix cov = DecomposerHelper.
-                getSymmetricPositiveDefiniteMatrixInstance(
-                        DecomposerHelper.getLeftLowerTriangulatorFactor(2));
+        final var cov = DecomposerHelper.getSymmetricPositiveDefiniteMatrixInstance(
+                DecomposerHelper.getLeftLowerTriangulatorFactor(2));
 
         randomizer = new MultivariateGaussianRandomizer(mean, cov);
 
@@ -81,66 +70,42 @@ public class MultivariateGaussianRandomizerTest {
         assertEquals(cov, randomizer.getCovariance());
 
         // Force WrongSizeException
-        randomizer = null;
-        try {
-            randomizer = new MultivariateGaussianRandomizer(new double[1], cov);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> new MultivariateGaussianRandomizer(new double[1], cov));
 
         // Force InvalidCovarianceMatrixException
-        try {
-            randomizer = new MultivariateGaussianRandomizer(mean,
-                    new Matrix(2, 2));
-            fail("InvalidCovarianceMatrixException expected but not thrown");
-        } catch (final InvalidCovarianceMatrixException ignore) {
-        }
-        assertNull(randomizer);
+        assertThrows(InvalidCovarianceMatrixException.class, () -> new MultivariateGaussianRandomizer(mean,
+                new Matrix(2, 2)));
 
         // test constructor with random, mean and covariance
-        randomizer = new MultivariateGaussianRandomizer(new Random(), mean,
-                cov);
+        randomizer = new MultivariateGaussianRandomizer(new Random(), mean, cov);
 
         // check correctness
         assertArrayEquals(mean, randomizer.getMean(), 0.0);
         assertEquals(cov, randomizer.getCovariance());
 
         // Force WrongSizeException
-        randomizer = null;
-        try {
-            randomizer = new MultivariateGaussianRandomizer(new Random(),
-                    new double[1], cov);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> new MultivariateGaussianRandomizer(new Random(), new double[1],
+                cov));
 
         // Force InvalidCovarianceMatrixException
-        try {
-            randomizer = new MultivariateGaussianRandomizer(new Random(), mean,
-                    new Matrix(2, 2));
-            fail("InvalidCovarianceMatrixException expected but not thrown");
-        } catch (final InvalidCovarianceMatrixException ignore) {
-        }
-        assertNull(randomizer);
+        assertThrows(InvalidCovarianceMatrixException.class, () -> new MultivariateGaussianRandomizer(new Random(),
+                mean, new Matrix(2, 2)));
     }
 
     @Test
-    public void testGetSetMeanAndCovariance() throws WrongSizeException,
-            InvalidCovarianceMatrixException {
-        final MultivariateGaussianRandomizer randomizer =
-                new MultivariateGaussianRandomizer();
+    void testGetSetMeanAndCovariance() throws WrongSizeException, InvalidCovarianceMatrixException {
+        final var randomizer = new MultivariateGaussianRandomizer();
 
         // check initial values
         assertArrayEquals(new double[]{0.0}, randomizer.getMean(), 0.0);
         assertEquals(Matrix.identity(1, 1), randomizer.getCovariance());
 
         // set new values
-        final UniformRandomizer uniRandomizer = new UniformRandomizer(new Random());
-        final double[] mean = new double[2];
+        final var uniRandomizer = new UniformRandomizer(new Random());
+        final var mean = new double[2];
         uniRandomizer.fill(mean, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Matrix cov = DecomposerHelper.
-                getSymmetricPositiveDefiniteMatrixInstance(
-                        DecomposerHelper.getLeftLowerTriangulatorFactor(2));
+        final var cov = DecomposerHelper.getSymmetricPositiveDefiniteMatrixInstance(
+                DecomposerHelper.getLeftLowerTriangulatorFactor(2));
 
         randomizer.setMeanAndCovariance(mean, cov);
 
@@ -149,53 +114,43 @@ public class MultivariateGaussianRandomizerTest {
         assertEquals(cov, randomizer.getCovariance());
 
         // Force WrongSizeException
-        try {
-            randomizer.setMeanAndCovariance(new double[1], cov);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> randomizer.setMeanAndCovariance(new double[1], cov));
 
         // Force InvalidCovarianceMatrixException
-        try {
-            randomizer.setMeanAndCovariance(mean, new Matrix(2, 2));
-            fail("InvalidCovarianceMatrixException expected but not thrown");
-        } catch (final InvalidCovarianceMatrixException ignore) {
-        }
+        assertThrows(InvalidCovarianceMatrixException.class, () -> randomizer.setMeanAndCovariance(mean,
+                new Matrix(2, 2)));
     }
 
     @Test
-    public void testNext() throws WrongSizeException,
-            InvalidCovarianceMatrixException, DecomposerException {
+    void testNext() throws WrongSizeException, InvalidCovarianceMatrixException, DecomposerException {
 
-        final UniformRandomizer uniRandomizer = new UniformRandomizer(new Random());
-        final double[] mean = new double[2];
+        final var uniRandomizer = new UniformRandomizer(new Random());
+        final var mean = new double[2];
         uniRandomizer.fill(mean, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Matrix cov = DecomposerHelper.
-                getSymmetricPositiveDefiniteMatrixInstance(
-                        DecomposerHelper.getLeftLowerTriangulatorFactor(2));
+        final var cov = DecomposerHelper.getSymmetricPositiveDefiniteMatrixInstance(
+                DecomposerHelper.getLeftLowerTriangulatorFactor(2));
 
-        final MultivariateGaussianRandomizer randomizer =
-                new MultivariateGaussianRandomizer(mean, cov);
+        final var randomizer = new MultivariateGaussianRandomizer(mean, cov);
 
-        final double[] mean1 = new double[2];
-        final double[] mean2 = new double[2];
+        final var mean1 = new double[2];
+        final var mean2 = new double[2];
 
-        final double[] values1 = new double[2];
+        final var values1 = new double[2];
         double[] values2;
         double[] tmp1;
         double[] tmp2;
 
-        final Matrix col1 = new Matrix(2, 1);
-        final Matrix row1 = new Matrix(1, 2);
-        final Matrix sqr1 = new Matrix(2, 2);
+        final var col1 = new Matrix(2, 1);
+        final var row1 = new Matrix(1, 2);
+        final var sqr1 = new Matrix(2, 2);
 
-        final Matrix col2 = new Matrix(2, 1);
-        final Matrix row2 = new Matrix(1, 2);
-        final Matrix sqr2 = new Matrix(2, 2);
+        final var col2 = new Matrix(2, 1);
+        final var row2 = new Matrix(1, 2);
+        final var sqr2 = new Matrix(2, 2);
 
-        final Matrix sqrSum1 = new Matrix(2, 2);
-        final Matrix sqrSum2 = new Matrix(2, 2);
-        for (int i = 0; i < NUM_SAMPLES; i++) {
+        final var sqrSum1 = new Matrix(2, 2);
+        final var sqrSum2 = new Matrix(2, 2);
+        for (var i = 0; i < NUM_SAMPLES; i++) {
             randomizer.next(values1);
             values2 = randomizer.next();
 
@@ -224,22 +179,21 @@ public class MultivariateGaussianRandomizerTest {
 
         col1.fromArray(mean1);
         row1.fromArray(mean1);
-        Matrix sqrMean1 = col1.multiplyAndReturnNew(row1);
+        var sqrMean1 = col1.multiplyAndReturnNew(row1);
 
         col2.fromArray(mean2);
         row2.fromArray(mean2);
-        Matrix sqrMean2 = col2.multiplyAndReturnNew(row2);
+        var sqrMean2 = col2.multiplyAndReturnNew(row2);
 
-        final Matrix cov1 = sqrSum1.subtractAndReturnNew(sqrMean1);
-        final Matrix cov2 = sqrSum2.subtractAndReturnNew(sqrMean2);
+        final var cov1 = sqrSum1.subtractAndReturnNew(sqrMean1);
+        final var cov2 = sqrSum2.subtractAndReturnNew(sqrMean2);
 
         // check correctness
-        final double maxMean = Math.max(ArrayUtils.max(mean),
-                Math.abs(ArrayUtils.min(mean)));
+        final var maxMean = Math.max(ArrayUtils.max(mean), Math.abs(ArrayUtils.min(mean)));
         assertArrayEquals(mean1, mean, RELATIVE_ERROR * maxMean);
         assertArrayEquals(mean2, mean, RELATIVE_ERROR * maxMean);
 
-        final double detCov = Utils.det(cov);
+        final var detCov = Utils.det(cov);
         assertTrue(cov1.equals(cov, RELATIVE_ERROR * detCov));
         assertTrue(cov2.equals(cov, RELATIVE_ERROR * detCov));
     }

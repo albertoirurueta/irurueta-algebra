@@ -15,28 +15,24 @@
  */
 package com.irurueta.algebra;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class RankDeficientMatrixExceptionTest {
+class RankDeficientMatrixExceptionTest {
 
     @Test
-    public void testConstructor() {
-        RankDeficientMatrixException ex =
-                new RankDeficientMatrixException();
+    void testConstructor() {
+        var ex = new RankDeficientMatrixException();
         assertNotNull(ex);
 
-        ex = new RankDeficientMatrixException(
-                "message");
+        ex = new RankDeficientMatrixException("message");
         assertNotNull(ex);
 
-        ex = new RankDeficientMatrixException(
-                new Exception());
+        ex = new RankDeficientMatrixException(new Exception());
         assertNotNull(ex);
 
-        ex = new RankDeficientMatrixException(
-                "message", new Exception());
+        ex = new RankDeficientMatrixException("message", new Exception());
         assertNotNull(ex);
     }
 }

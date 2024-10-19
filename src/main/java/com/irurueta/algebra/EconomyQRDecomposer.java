@@ -133,8 +133,8 @@ public class EconomyQRDecomposer extends Decomposer {
 
         locked = true;
 
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
         qr = new Matrix(inputMatrix);
 
         rDiag = new double[columns];
@@ -142,13 +142,12 @@ public class EconomyQRDecomposer extends Decomposer {
         double s;
 
         // Main loop
-        for (int k = 0; k < columns; k++) {
+        for (var k = 0; k < columns; k++) {
             // Compute 2-norm of k-th column without under/overflow
             nrm = 0.0;
 
-            for (int i = k; i < rows; i++) {
-                nrm = Math.sqrt(nrm * nrm +
-                        Math.pow(qr.getElementAt(i, k), 2.0));
+            for (var i = k; i < rows; i++) {
+                nrm = Math.sqrt(nrm * nrm + Math.pow(qr.getElementAt(i, k), 2.0));
             }
 
             if (nrm != 0.0) {
@@ -157,21 +156,20 @@ public class EconomyQRDecomposer extends Decomposer {
                     nrm = -nrm;
                 }
 
-                for (int i = k; i < rows; i++) {
+                for (var i = k; i < rows; i++) {
                     qr.setElementAt(i, k, qr.getElementAt(i, k) / nrm);
                 }
                 qr.setElementAt(k, k, qr.getElementAt(k, k) + 1.0);
 
                 // Apply transformation to remaining columns
-                for (int j = k + 1; j < columns; j++) {
+                for (var j = k + 1; j < columns; j++) {
                     s = 0.0;
-                    for (int i = k; i < rows; i++) {
+                    for (var i = k; i < rows; i++) {
                         s += qr.getElementAt(i, k) * qr.getElementAt(i, j);
                     }
                     s = -s / qr.getElementAt(k, k);
-                    for (int i = k; i < rows; i++) {
-                        qr.setElementAt(i, j, qr.getElementAt(i, j) +
-                                s * qr.getElementAt(i, k));
+                    for (var i = k; i < rows; i++) {
+                        qr.setElementAt(i, j, qr.getElementAt(i, j) + s * qr.getElementAt(i, k));
                     }
                 }
             }
@@ -201,8 +199,7 @@ public class EconomyQRDecomposer extends Decomposer {
      *                               lower than minimum allowed value (MIN_ROUND_ERROR).
      * @see #decompose()
      */
-    public boolean isFullRank() throws NotAvailableException,
-            WrongSizeException {
+    public boolean isFullRank() throws NotAvailableException, WrongSizeException {
         return isFullRank(DEFAULT_ROUND_ERROR);
     }
 
@@ -231,8 +228,7 @@ public class EconomyQRDecomposer extends Decomposer {
      *                                  error is lower than minimum allowed value (MIN_ROUND_ERROR).
      * @see #decompose()
      */
-    public boolean isFullRank(final double roundingError)
-            throws NotAvailableException, WrongSizeException {
+    public boolean isFullRank(final double roundingError) throws NotAvailableException, WrongSizeException {
 
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
@@ -241,14 +237,14 @@ public class EconomyQRDecomposer extends Decomposer {
             throw new IllegalArgumentException();
         }
 
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
 
         if (rows < columns) {
             throw new WrongSizeException();
         }
 
-        for (int j = 0; j < columns; j++) {
+        for (var j = 0; j < columns; j++) {
             if (Math.abs(rDiag[j]) < roundingError) {
                 return false;
             }
@@ -271,8 +267,8 @@ public class EconomyQRDecomposer extends Decomposer {
             throw new NotAvailableException();
         }
 
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
         if (h.getRows() != rows || h.getColumns() != columns) {
             try {
                 h.resize(rows, columns);
@@ -281,8 +277,8 @@ public class EconomyQRDecomposer extends Decomposer {
             }
         }
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
+        for (var i = 0; i < rows; i++) {
+            for (var j = 0; j < columns; j++) {
                 if (i >= j) {
                     h.setElementAt(i, j, qr.getElementAt(i, j));
                 } else {
@@ -302,8 +298,8 @@ public class EconomyQRDecomposer extends Decomposer {
      * @see #decompose()
      */
     public Matrix getH() throws NotAvailableException {
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
         Matrix out = null;
         try {
             out = new Matrix(rows, columns);
@@ -330,8 +326,8 @@ public class EconomyQRDecomposer extends Decomposer {
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
         }
-        final int columns = inputMatrix.getColumns();
-        final int rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
+        final var rows = inputMatrix.getRows();
 
         if (r.getRows() != columns || r.getColumns() != columns) {
             try {
@@ -341,9 +337,9 @@ public class EconomyQRDecomposer extends Decomposer {
             }
         }
 
-        for (int i = 0; i < columns; i++) {
+        for (var i = 0; i < columns; i++) {
             if (i < rows) {
-                for (int j = 0; j < columns; j++) {
+                for (var j = 0; j < columns; j++) {
                     if (i < j) {
                         r.setElementAt(i, j, qr.getElementAt(i, j));
                     } else if (i == j) {
@@ -353,7 +349,7 @@ public class EconomyQRDecomposer extends Decomposer {
                     }
                 }
             } else {
-                for (int j = 0; j < columns; j++) {
+                for (var j = 0; j < columns; j++) {
                     r.setElementAt(i, j, 0.0);
                 }
             }
@@ -372,7 +368,7 @@ public class EconomyQRDecomposer extends Decomposer {
      * @see #decompose()
      */
     public Matrix getR() throws NotAvailableException {
-        final int columns = inputMatrix.getColumns();
+        final var columns = inputMatrix.getColumns();
         Matrix out = null;
         try {
             out = new Matrix(columns, columns);
@@ -400,8 +396,8 @@ public class EconomyQRDecomposer extends Decomposer {
             throw new NotAvailableException();
         }
 
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
         double s;
 
         if (rows < columns) {
@@ -416,22 +412,21 @@ public class EconomyQRDecomposer extends Decomposer {
             }
         }
 
-        for (int k = columns - 1; k >= 0; k--) {
-            for (int i = 0; i < rows; i++) {
+        for (var k = columns - 1; k >= 0; k--) {
+            for (var i = 0; i < rows; i++) {
                 q.setElementAt(i, k, 0.0);
             }
             q.setElementAt(k, k, 1.0);
-            for (int j = k; j < columns; j++) {
+            for (var j = k; j < columns; j++) {
                 if (qr.getElementAt(k, k) != 0) {
                     s = 0.0;
-                    for (int i = k; i < rows; i++) {
+                    for (var i = k; i < rows; i++) {
                         s += qr.getElementAt(i, k) * q.getElementAt(i, j);
                     }
 
                     s = -s / qr.getElementAt(k, k);
-                    for (int i = k; i < rows; i++) {
-                        q.setElementAt(i, j, q.getElementAt(i, j) +
-                                s * qr.getElementAt(i, k));
+                    for (var i = k; i < rows; i++) {
+                        q.setElementAt(i, j, q.getElementAt(i, j) + s * qr.getElementAt(i, k));
                     }
                 }
             }
@@ -446,14 +441,14 @@ public class EconomyQRDecomposer extends Decomposer {
      * @return Orthogonal factor matrix.
      * @throws NotAvailableException Exception thrown if attempting to call
      * @throws WrongSizeException    Exception thrown if provided input matrix has
-     *                               less rows than columns.
+     *                               fewer rows than columns.
      * @see #decompose()
      */
     public Matrix getQ() throws NotAvailableException, WrongSizeException {
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
 
-        final Matrix out = new Matrix(rows, columns);
+        final var out = new Matrix(rows, columns);
         getQ(out);
         return out;
     }
@@ -489,15 +484,15 @@ public class EconomyQRDecomposer extends Decomposer {
      *                                      method before computing QR decomposition. To avoid this exception call
      *                                      decompose() method first.
      * @throws WrongSizeException           Exception thrown if attempting to call this
-     *                                      method using an input matrix with less rows than columns; or if provided
+     *                                      method using an input matrix with fewer rows than columns; or if provided
      *                                      parameters matrix (b) does not have the same number of rows as input
      *                                      matrix being QR decomposed.
      * @throws RankDeficientMatrixException Exception thrown if provided input
      *                                      matrix to be QR decomposed is rank deficient. In this case linear system
      *                                      of equations cannot be solved.
      */
-    public void solve(final Matrix b, final Matrix result) throws NotAvailableException,
-            WrongSizeException, RankDeficientMatrixException {
+    public void solve(final Matrix b, final Matrix result) throws NotAvailableException, WrongSizeException,
+            RankDeficientMatrixException {
         solve(b, DEFAULT_ROUND_ERROR, result);
     }
 
@@ -534,7 +529,7 @@ public class EconomyQRDecomposer extends Decomposer {
      *                                      method before computing QR decomposition. To avoid this exception call
      *                                      decompose() method first.
      * @throws WrongSizeException           Exception thrown if attempting to call this
-     *                                      method using an input matrix with less rows than columns; or if provided
+     *                                      method using an input matrix with fewer rows than columns; or if provided
      *                                      parameters matrix (b) does not have the same number of rows as input
      *                                      matrix being QR decomposed.
      * @throws RankDeficientMatrixException Exception thrown if provided input
@@ -543,17 +538,16 @@ public class EconomyQRDecomposer extends Decomposer {
      * @throws IllegalArgumentException     if provided rounding error is negative.
      */
     public void solve(final Matrix b, final double roundingError, final Matrix result)
-            throws NotAvailableException, WrongSizeException,
-            RankDeficientMatrixException {
+            throws NotAvailableException, WrongSizeException, RankDeficientMatrixException {
 
         if (!isDecompositionAvailable()) {
             throw new NotAvailableException();
         }
 
-        final int rows = inputMatrix.getRows();
-        final int columns = inputMatrix.getColumns();
-        final int rowsB = b.getRows();
-        final int colsB = b.getColumns();
+        final var rows = inputMatrix.getRows();
+        final var columns = inputMatrix.getColumns();
+        final var rowsB = b.getRows();
+        final var colsB = b.getColumns();
         double s;
 
         if (rowsB != rows) {
@@ -572,32 +566,30 @@ public class EconomyQRDecomposer extends Decomposer {
         }
 
         // Copy b into X
-        final Matrix x = new Matrix(b);
+        final var x = new Matrix(b);
 
         // Compute Y = transpose(Q) * B
-        for (int k = 0; k < columns; k++) {
-            for (int j = 0; j < colsB; j++) {
+        for (var k = 0; k < columns; k++) {
+            for (var j = 0; j < colsB; j++) {
                 s = 0.0;
-                for (int i = k; i < rows; i++) {
+                for (var i = k; i < rows; i++) {
                     s += qr.getElementAt(i, k) * x.getElementAt(i, j);
                 }
                 s = -s / qr.getElementAt(k, k);
-                for (int i = k; i < rows; i++) {
-                    x.setElementAt(i, j, x.getElementAt(i, j) +
-                            s * qr.getElementAt(i, k));
+                for (var i = k; i < rows; i++) {
+                    x.setElementAt(i, j, x.getElementAt(i, j) + s * qr.getElementAt(i, k));
                 }
             }
         }
 
         // Solve R * X = Y
-        for (int k = columns - 1; k >= 0; k--) {
-            for (int j = 0; j < colsB; j++) {
+        for (var k = columns - 1; k >= 0; k--) {
+            for (var j = 0; j < colsB; j++) {
                 x.setElementAt(k, j, x.getElementAt(k, j) / rDiag[k]);
             }
-            for (int i = 0; i < k; i++) {
-                for (int j = 0; j < colsB; j++) {
-                    x.setElementAt(i, j, x.getElementAt(i, j) -
-                            x.getElementAt(k, j) * qr.getElementAt(i, k));
+            for (var i = 0; i < k; i++) {
+                for (var j = 0; j < colsB; j++) {
+                    x.setElementAt(i, j, x.getElementAt(i, j) - x.getElementAt(k, j) * qr.getElementAt(i, k));
                 }
             }
         }
@@ -608,7 +600,8 @@ public class EconomyQRDecomposer extends Decomposer {
             // resize result
             result.resize(columns, colsB);
         }
-        result.setSubmatrix(0, 0, columns - 1, colsB - 1, x, 0, 0, columns - 1,
+        result.setSubmatrix(0, 0, columns - 1, colsB - 1, x,
+                0, 0, columns - 1,
                 colsB - 1);
     }
 
@@ -642,15 +635,14 @@ public class EconomyQRDecomposer extends Decomposer {
      *                                      method before computing QR decomposition. To avoid this exception call
      *                                      decompose() method first.
      * @throws WrongSizeException           Exception thrown if attempting to call this
-     *                                      method using an input matrix with less rows than columns; or if provided
+     *                                      method using an input matrix with fewer rows than columns; or if provided
      *                                      parameters matrix (b) does not have the same number of rows as input
      *                                      matrix being QR decomposed.
      * @throws RankDeficientMatrixException Exception thrown if provided input
      *                                      matrix to be QR decomposed is rank deficient. In this case linear system
      *                                      of equations cannot be solved.
      */
-    public Matrix solve(final Matrix b) throws NotAvailableException,
-            WrongSizeException, RankDeficientMatrixException {
+    public Matrix solve(final Matrix b) throws NotAvailableException, WrongSizeException, RankDeficientMatrixException {
         return solve(b, DEFAULT_ROUND_ERROR);
     }
 
@@ -698,13 +690,12 @@ public class EconomyQRDecomposer extends Decomposer {
      *                                      error is lower than minimum allowed value (MIN_ROUND_ERROR)
      * @see #decompose()
      */
-    public Matrix solve(final Matrix b, final double roundingError)
-            throws NotAvailableException, WrongSizeException,
+    public Matrix solve(final Matrix b, final double roundingError) throws NotAvailableException, WrongSizeException,
             RankDeficientMatrixException {
 
-        final int columns = inputMatrix.getColumns();
-        final int colsB = b.getColumns();
-        final Matrix out = new Matrix(columns, colsB);
+        final var columns = inputMatrix.getColumns();
+        final var colsB = b.getColumns();
+        final var out = new Matrix(columns, colsB);
         solve(b, roundingError, out);
         return out;
     }

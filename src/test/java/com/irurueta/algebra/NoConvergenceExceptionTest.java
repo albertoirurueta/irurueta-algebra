@@ -15,15 +15,15 @@
  */
 package com.irurueta.algebra;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class NoConvergenceExceptionTest {
+class NoConvergenceExceptionTest {
 
     @Test
-    public void testConstructor() {
-        NoConvergenceException ex = new NoConvergenceException();
+    void testConstructor() {
+        var ex = new NoConvergenceException();
         assertNotNull(ex);
 
         ex = new NoConvergenceException("message");
@@ -32,8 +32,7 @@ public class NoConvergenceExceptionTest {
         ex = new NoConvergenceException(new Exception());
         assertNotNull(ex);
 
-        ex = new NoConvergenceException("message",
-                new Exception());
+        ex = new NoConvergenceException("message", new Exception());
         assertNotNull(ex);
     }
 }

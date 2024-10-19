@@ -171,8 +171,8 @@ public class Matrix implements Serializable, Cloneable {
         if (isColumnOrder) {
             return buffer[index];
         } else {
-            final int row = index / columns;
-            final int column = index % columns;
+            final var row = index / columns;
+            final var column = index % columns;
             return buffer[columnIndex[column] + row];
         }
     }
@@ -192,7 +192,6 @@ public class Matrix implements Serializable, Cloneable {
      *                                        always raise the exception.
      */
     public void setElementAt(final int row, final int column, final double value) {
-
         buffer[columnIndex[column] + row] = value;
     }
 
@@ -211,7 +210,6 @@ public class Matrix implements Serializable, Cloneable {
      *                                        rows * columns (exclusive)
      */
     public void setElementAtIndex(final int index, final double value) {
-
         setElementAtIndex(index, value, DEFAULT_USE_COLUMN_ORDER);
     }
 
@@ -227,13 +225,12 @@ public class Matrix implements Serializable, Cloneable {
      *                                        outside valid values, which range from zero (inclusive) to
      *                                        rows * columns (exclusive).
      */
-    public void setElementAtIndex(
-            final int index, final double value, final boolean isColumnOrder) {
+    public void setElementAtIndex(final int index, final double value, final boolean isColumnOrder) {
         if (isColumnOrder) {
             buffer[index] = value;
         } else {
-            final int row = index / columns;
-            final int column = index % columns;
+            final var row = index / columns;
+            final var column = index % columns;
             buffer[columnIndex[column] + row] = value;
         }
     }
@@ -246,7 +243,7 @@ public class Matrix implements Serializable, Cloneable {
      */
     @Override
     public Matrix clone() throws CloneNotSupportedException {
-        Matrix out = (Matrix) super.clone();
+        var out = (Matrix) super.clone();
         out.copyFrom(this);
         return out;
     }
@@ -337,7 +334,7 @@ public class Matrix implements Serializable, Cloneable {
             throw new WrongSizeException();
         }
 
-        final Matrix out = new Matrix(rows, columns);
+        final var out = new Matrix(rows, columns);
         internalAdd(other, out);
         return out;
     }
@@ -394,13 +391,12 @@ public class Matrix implements Serializable, Cloneable {
      *                              not have the same size as this matrix.
      * @throws NullPointerException Exception raised if provided matrix is null.
      */
-    public Matrix subtractAndReturnNew(final Matrix other)
-            throws WrongSizeException {
+    public Matrix subtractAndReturnNew(final Matrix other) throws WrongSizeException {
         if (other.getRows() != rows || other.getColumns() != columns) {
             throw new WrongSizeException();
         }
 
-        final Matrix out = new Matrix(rows, columns);
+        final var out = new Matrix(rows, columns);
         internalSubtract(other, out);
         return out;
     }
@@ -460,14 +456,13 @@ public class Matrix implements Serializable, Cloneable {
      *                              provided matrices have incompatible sizes for product computation.
      * @throws NullPointerException Exception thrown if provided matrix is null
      */
-    public Matrix multiplyAndReturnNew(final Matrix other)
-            throws WrongSizeException {
+    public Matrix multiplyAndReturnNew(final Matrix other) throws WrongSizeException {
 
         if (columns != other.rows) {
             throw new WrongSizeException();
         }
 
-        final Matrix out = new Matrix(rows, other.columns);
+        final var out = new Matrix(rows, other.columns);
         internalMultiply(other, out);
         return out;
     }
@@ -491,9 +486,9 @@ public class Matrix implements Serializable, Cloneable {
         }
 
         // instantiate new buffer and column index
-        final double[] resultBuffer = new double[rows * other.columns];
-        final int[] resultColumnIndex = new int[other.columns];
-        int counter = 0;
+        final var resultBuffer = new double[rows * other.columns];
+        final var resultColumnIndex = new int[other.columns];
+        var counter = 0;
         for (int i = 0; i < other.columns; i++) {
             resultColumnIndex[i] = counter;
             counter += rows;
@@ -516,8 +511,8 @@ public class Matrix implements Serializable, Cloneable {
      */
     public void multiplyKronecker(final Matrix other, final Matrix result) {
         // resize result if needed
-        final int resultRows = rows * other.rows;
-        final int resultCols = columns * other.columns;
+        final var resultRows = rows * other.rows;
+        final var resultCols = columns * other.columns;
         if (result.rows != resultRows || result.columns != resultCols) {
             try {
                 result.resize(resultRows, resultCols);
@@ -560,11 +555,11 @@ public class Matrix implements Serializable, Cloneable {
     public void multiplyKronecker(final Matrix other) {
 
         // instantiate new buffer and column index
-        final int resultRows = rows * other.rows;
-        final int resultCols = columns * other.columns;
-        final double[] resultBuffer = new double[resultRows * resultCols];
-        final int[] resultColumnIndex = new int[resultCols];
-        int counter = 0;
+        final var resultRows = rows * other.rows;
+        final var resultCols = columns * other.columns;
+        final var resultBuffer = new double[resultRows * resultCols];
+        final var resultColumnIndex = new int[resultCols];
+        var counter = 0;
         for (int i = 0; i < resultCols; i++) {
             resultColumnIndex[i] = counter;
             counter += resultRows;
@@ -588,7 +583,7 @@ public class Matrix implements Serializable, Cloneable {
      * @param result Matrix where result of operation is stored.
      */
     private void multiplyByScalar(final double scalar, final Matrix result) {
-        final int length = rows * columns;
+        final var length = rows * columns;
         for (int i = 0; i < length; i++) {
             result.buffer[i] = scalar * buffer[i];
         }
@@ -638,11 +633,10 @@ public class Matrix implements Serializable, Cloneable {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof Matrix)) {
+        if (!(obj instanceof Matrix other)) {
             return false;
         }
 
-        final Matrix other = (Matrix) obj;
         return equals(other);
     }
 
@@ -655,8 +649,7 @@ public class Matrix implements Serializable, Cloneable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(this.rows, this.columns,
-                Arrays.hashCode(this.buffer), Arrays.hashCode(this.columnIndex));
+        return Objects.hash(this.rows, this.columns, Arrays.hashCode(this.buffer), Arrays.hashCode(this.columnIndex));
     }
 
     /**
@@ -694,7 +687,7 @@ public class Matrix implements Serializable, Cloneable {
         }
 
         // check contents
-        final int length = rows * columns;
+        final var length = rows * columns;
         for (int i = 0; i < length; i++) {
             if (Math.abs(buffer[i] - other.buffer[i]) > threshold) {
                 return false;
@@ -715,8 +708,7 @@ public class Matrix implements Serializable, Cloneable {
      *                              element by element product on matrices of different size.
      * @throws NullPointerException Exception raised if provided matrix is null
      */
-    public void elementByElementProduct(final Matrix other, final Matrix result)
-            throws WrongSizeException {
+    public void elementByElementProduct(final Matrix other, final Matrix result) throws WrongSizeException {
         if (other.getRows() != rows || other.getColumns() != columns) {
             throw new WrongSizeException();
         }
@@ -752,13 +744,12 @@ public class Matrix implements Serializable, Cloneable {
      *                              perform element by element product on matrices of different size.
      * @throws NullPointerException Exception raised if provided matrix is null
      */
-    public Matrix elementByElementProductAndReturnNew(final Matrix other)
-            throws WrongSizeException {
+    public Matrix elementByElementProductAndReturnNew(final Matrix other) throws WrongSizeException {
         if (other.getRows() != rows || other.getColumns() != columns) {
             throw new WrongSizeException();
         }
 
-        final Matrix out = new Matrix(rows, columns);
+        final var out = new Matrix(rows, columns);
         internalElementByElementProduct(other, out);
         return out;
     }
@@ -785,8 +776,7 @@ public class Matrix implements Serializable, Cloneable {
      *                              perform element by element product on matrices of different size.
      * @throws NullPointerException Exception raised if provided matrix is null
      */
-    public void elementByElementProduct(final Matrix other)
-            throws WrongSizeException {
+    public void elementByElementProduct(final Matrix other) throws WrongSizeException {
         if (other.getRows() != rows || other.getColumns() != columns) {
             throw new WrongSizeException();
         }
@@ -841,10 +831,10 @@ public class Matrix implements Serializable, Cloneable {
      */
     public void transpose() {
 
-        final double[] newBuffer = new double[rows * columns];
-        final int[] newColumnIndex = new int[rows];
-        int counter = 0;
-        for (int i = 0; i < rows; i++) {
+        final var newBuffer = new double[rows * columns];
+        final var newColumnIndex = new int[rows];
+        var counter = 0;
+        for (var i = 0; i < rows; i++) {
             newColumnIndex[i] = counter;
             counter += columns;
         }
@@ -853,7 +843,7 @@ public class Matrix implements Serializable, Cloneable {
         // update matrix data
 
         // swap rows and columns
-        final int tmp = rows;
+        final var tmp = rows;
         rows = columns;
         columns = tmp;
 
@@ -894,8 +884,7 @@ public class Matrix implements Serializable, Cloneable {
      * @throws WrongSizeException Exception raised if either rows or
      *                            columns is zero.
      */
-    public void reset(final int rows, final int columns, final double initValue)
-            throws WrongSizeException {
+    public void reset(final int rows, final int columns, final double initValue) throws WrongSizeException {
         internalResize(rows, columns);
         initialize(initValue);
     }
@@ -919,17 +908,17 @@ public class Matrix implements Serializable, Cloneable {
      * @return Contents of matrix as an array,
      */
     public double[] toArray(final boolean isColumnOrder) {
-        final int length = rows * columns;
+        final var length = rows * columns;
 
         if (isColumnOrder) {
             return Arrays.copyOf(buffer, length);
         } else {
-            final double[] out = new double[length];
+            final var out = new double[length];
             double value;
-            int counter = 0;
+            var counter = 0;
 
-            for (int j = 0; j < rows; j++) {
-                for (int i = 0; i < columns; i++) {
+            for (var j = 0; j < rows; j++) {
+                for (var i = 0; i < columns; i++) {
                     value = buffer[columnIndex[i] + j];
                     out[counter] = value;
                     counter++;
@@ -962,21 +951,19 @@ public class Matrix implements Serializable, Cloneable {
      * @throws WrongSizeException if provided result array does not have the
      *                            same number of elements as the matrix (i.e. rows x columns).
      */
-    public void toArray(final double[] result, final boolean isColumnOrder)
-            throws WrongSizeException {
+    public void toArray(final double[] result, final boolean isColumnOrder) throws WrongSizeException {
         if (result.length != buffer.length) {
-            throw new WrongSizeException(
-                    "result array must be equal to rows x columns");
+            throw new WrongSizeException("result array must be equal to rows x columns");
         }
 
         if (isColumnOrder) {
             System.arraycopy(buffer, 0, result, 0, buffer.length);
         } else {
             double value;
-            int counter = 0;
+            var counter = 0;
 
-            for (int j = 0; j < rows; j++) {
-                for (int i = 0; i < columns; i++) {
+            for (var j = 0; j < rows; j++) {
+                for (var i = 0; i < columns; i++) {
                     value = buffer[columnIndex[i] + j];
                     result[counter] = value;
                     counter++;
@@ -1009,19 +996,16 @@ public class Matrix implements Serializable, Cloneable {
      *                                  corner is indeed located below or at right side of bottom-right corner.
      * @throws NullPointerException     If provided result matrix is null.
      */
-    public void getSubmatrix(final int topLeftRow, final int topLeftColumn,
-                             final int bottomRightRow, final int bottomRightColumn, final Matrix result) {
-        if (topLeftRow < 0 || topLeftRow >= rows ||
-                topLeftColumn < 0 || topLeftColumn >= columns ||
-                bottomRightRow < 0 || bottomRightRow >= rows ||
-                bottomRightColumn < 0 || bottomRightColumn >= columns ||
-                topLeftRow > bottomRightRow ||
-                topLeftColumn > bottomRightColumn) {
+    public void getSubmatrix(final int topLeftRow, final int topLeftColumn, final int bottomRightRow,
+                             final int bottomRightColumn, final Matrix result) {
+        if (topLeftRow < 0 || topLeftRow >= rows || topLeftColumn < 0 || topLeftColumn >= columns
+                || bottomRightRow < 0 || bottomRightRow >= rows || bottomRightColumn < 0 || bottomRightColumn >= columns
+                || topLeftRow > bottomRightRow || topLeftColumn > bottomRightColumn) {
             throw new IllegalArgumentException();
         }
 
-        final int subRows = bottomRightRow - topLeftRow + 1;
-        final int subCols = bottomRightColumn - topLeftColumn + 1;
+        final var subRows = bottomRightRow - topLeftRow + 1;
+        final var subCols = bottomRightColumn - topLeftColumn + 1;
         if (result.getRows() != subRows || result.getColumns() != subCols) {
             // resize result
             try {
@@ -1030,8 +1014,7 @@ public class Matrix implements Serializable, Cloneable {
                 // never happens
             }
         }
-        internalGetSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, result);
+        internalGetSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, result);
     }
 
     /**
@@ -1050,24 +1033,19 @@ public class Matrix implements Serializable, Cloneable {
      */
     public Matrix getSubmatrix(final int topLeftRow, final int topLeftColumn,
                                final int bottomRightRow, final int bottomRightColumn) {
-        if (topLeftRow < 0 || topLeftRow >= rows ||
-                topLeftColumn < 0 || topLeftColumn >= columns ||
-                bottomRightRow < 0 || bottomRightRow >= rows ||
-                bottomRightColumn < 0 || bottomRightColumn >= columns ||
-                topLeftRow > bottomRightRow ||
-                topLeftColumn > bottomRightColumn) {
+        if (topLeftRow < 0 || topLeftRow >= rows || topLeftColumn < 0 || topLeftColumn >= columns
+                || bottomRightRow < 0 || bottomRightRow >= rows || bottomRightColumn < 0 || bottomRightColumn >= columns
+                || topLeftRow > bottomRightRow || topLeftColumn > bottomRightColumn) {
             throw new IllegalArgumentException();
         }
 
         Matrix out;
         try {
-            out = new Matrix(bottomRightRow - topLeftRow + 1,
-                    bottomRightColumn - topLeftColumn + 1);
+            out = new Matrix(bottomRightRow - topLeftRow + 1, bottomRightColumn - topLeftColumn + 1);
         } catch (final WrongSizeException e) {
             throw new IllegalArgumentException(e);
         }
-        internalGetSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, out);
+        internalGetSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, out);
         return out;
     }
 
@@ -1091,25 +1069,20 @@ public class Matrix implements Serializable, Cloneable {
      */
     public void getSubmatrixAsArray(final int topLeftRow, final int topLeftColumn,
                                     final int bottomRightRow, final int bottomRightColumn,
-                                    final double[] array)
-            throws WrongSizeException {
-        if (topLeftRow < 0 || topLeftRow >= rows ||
-                topLeftColumn < 0 || topLeftColumn >= columns ||
-                bottomRightRow < 0 || bottomRightRow >= rows ||
-                bottomRightColumn < 0 || bottomRightColumn >= columns ||
-                topLeftRow > bottomRightRow ||
-                topLeftColumn > bottomRightColumn) {
+                                    final double[] array) throws WrongSizeException {
+        if (topLeftRow < 0 || topLeftRow >= rows || topLeftColumn < 0 || topLeftColumn >= columns || bottomRightRow < 0
+                || bottomRightRow >= rows || bottomRightColumn < 0 || bottomRightColumn >= columns
+                || topLeftRow > bottomRightRow || topLeftColumn > bottomRightColumn) {
             throw new IllegalArgumentException();
         }
 
-        final int length = (bottomRightRow - topLeftRow + 1) *
-                (bottomRightColumn - topLeftColumn + 1);
+        final var length = (bottomRightRow - topLeftRow + 1) * (bottomRightColumn - topLeftColumn + 1);
         if (array.length != length) {
             throw new WrongSizeException();
         }
 
-        getSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, DEFAULT_USE_COLUMN_ORDER, array);
+        getSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, DEFAULT_USE_COLUMN_ORDER,
+                array);
     }
 
     /**
@@ -1132,27 +1105,21 @@ public class Matrix implements Serializable, Cloneable {
      * @throws WrongSizeException       If provided array doesn't have proper length,
      *                                  which must be equal to the amount of elements in desired sub-matrix.
      */
-    public void getSubmatrixAsArray(final int topLeftRow, final int topLeftColumn,
-                                    final int bottomRightRow, final int bottomRightColumn,
-                                    final boolean isColumnOrder, final double[] array)
-            throws WrongSizeException {
-        if (topLeftRow < 0 || topLeftRow >= rows ||
-                topLeftColumn < 0 || topLeftColumn >= columns ||
-                bottomRightRow < 0 || bottomRightRow >= rows ||
-                bottomRightColumn < 0 || bottomRightColumn >= columns ||
-                topLeftRow > bottomRightRow ||
-                topLeftColumn > bottomRightColumn) {
+    public void getSubmatrixAsArray(
+            final int topLeftRow, final int topLeftColumn, final int bottomRightRow, final int bottomRightColumn,
+            final boolean isColumnOrder, final double[] array) throws WrongSizeException {
+        if (topLeftRow < 0 || topLeftRow >= rows || topLeftColumn < 0 || topLeftColumn >= columns || bottomRightRow < 0
+                || bottomRightRow >= rows || bottomRightColumn < 0 || bottomRightColumn >= columns
+                || topLeftRow > bottomRightRow || topLeftColumn > bottomRightColumn) {
             throw new IllegalArgumentException();
         }
 
-        final int length = (bottomRightRow - topLeftRow + 1) *
-                (bottomRightColumn - topLeftColumn + 1);
+        final var length = (bottomRightRow - topLeftRow + 1) * (bottomRightColumn - topLeftColumn + 1);
         if (array.length != length) {
             throw new WrongSizeException();
         }
 
-        internalGetSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, isColumnOrder, array);
+        internalGetSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, isColumnOrder, array);
     }
 
     /**
@@ -1170,10 +1137,10 @@ public class Matrix implements Serializable, Cloneable {
      *                                  bottom-right corners lie outside current matrix instance, or if top-left
      *                                  corner is indeed located belo or at right side of bottom-right corner.
      */
-    public double[] getSubmatrixAsArray(final int topLeftRow, final int topLeftColumn,
-                                        final int bottomRightRow, final int bottomRightColumn) {
-        return getSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, DEFAULT_USE_COLUMN_ORDER);
+    public double[] getSubmatrixAsArray(
+            final int topLeftRow, final int topLeftColumn, final int bottomRightRow, final int bottomRightColumn) {
+        return getSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn,
+                DEFAULT_USE_COLUMN_ORDER);
     }
 
     /**
@@ -1193,24 +1160,19 @@ public class Matrix implements Serializable, Cloneable {
      *                                  bottom-right corners lie outside current matrix instance, or if top-left
      *                                  corner is indeed located below or at right side of bottom-right corner.
      */
-    public double[] getSubmatrixAsArray(final int topLeftRow, final int topLeftColumn,
-                                        final int bottomRightRow, final int bottomRightColumn,
-                                        final boolean isColumnOrder) {
-        if (topLeftRow < 0 || topLeftRow >= rows ||
-                topLeftColumn < 0 || topLeftColumn >= columns ||
-                bottomRightRow < 0 || bottomRightRow >= rows ||
-                bottomRightColumn < 0 || bottomRightColumn >= columns ||
-                topLeftRow > bottomRightRow ||
-                topLeftColumn > bottomRightColumn) {
+    public double[] getSubmatrixAsArray(
+            final int topLeftRow, final int topLeftColumn, final int bottomRightRow, final int bottomRightColumn,
+            final boolean isColumnOrder) {
+        if (topLeftRow < 0 || topLeftRow >= rows || topLeftColumn < 0 || topLeftColumn >= columns || bottomRightRow < 0
+                || bottomRightRow >= rows || bottomRightColumn < 0 || bottomRightColumn >= columns
+                || topLeftRow > bottomRightRow || topLeftColumn > bottomRightColumn) {
             throw new IllegalArgumentException();
         }
 
-        final int length = (bottomRightRow - topLeftRow + 1) *
-                (bottomRightColumn - topLeftColumn + 1);
+        final var length = (bottomRightRow - topLeftRow + 1) * (bottomRightColumn - topLeftColumn + 1);
 
-        final double[] out = new double[length];
-        internalGetSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, isColumnOrder, out);
+        final var out = new double[length];
+        internalGetSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, isColumnOrder, out);
         return out;
     }
 
@@ -1228,12 +1190,11 @@ public class Matrix implements Serializable, Cloneable {
      *                                  bottom-right corners lie outside current matrix instance, or if top-left
      *                                  corner is indeed located below or at right side of bottom-right corner.
      */
-    public void setSubmatrix(final int topLeftRow, final int topLeftColumn,
-                             final int bottomRightRow, final int bottomRightColumn,
-                             final Matrix submatrix) {
-        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, submatrix, 0, 0,
-                submatrix.getRows() - 1,
+    public void setSubmatrix(
+            final int topLeftRow, final int topLeftColumn, final int bottomRightRow, final int bottomRightColumn,
+            final Matrix submatrix) {
+        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, submatrix, 0,
+                0, submatrix.getRows() - 1,
                 submatrix.getColumns() - 1);
     }
 
@@ -1260,46 +1221,38 @@ public class Matrix implements Serializable, Cloneable {
      *                                  top-left corners are indeed located below or at right side of
      *                                  bottom-right corners.
      */
-    public void setSubmatrix(final int topLeftRow, final int topLeftColumn,
-                             final int bottomRightRow, final int bottomRightColumn,
-                             final Matrix submatrix, final int submatrixTopLeftRow,
-                             final int submatrixTopLeftColumn, final int submatrixBottomRightRow,
-                             final int submatrixBottomRightColumn) {
-        if (topLeftRow < 0 || topLeftRow >= rows ||
-                topLeftColumn < 0 || topLeftColumn >= columns ||
-                bottomRightRow < 0 || bottomRightRow >= rows ||
-                bottomRightColumn < 0 || bottomRightColumn >= columns ||
-                topLeftRow > bottomRightRow ||
-                topLeftColumn > bottomRightColumn) {
+    public void setSubmatrix(
+            final int topLeftRow, final int topLeftColumn, final int bottomRightRow, final int bottomRightColumn,
+            final Matrix submatrix, final int submatrixTopLeftRow, final int submatrixTopLeftColumn,
+            final int submatrixBottomRightRow, final int submatrixBottomRightColumn) {
+        if (topLeftRow < 0 || topLeftRow >= rows || topLeftColumn < 0 || topLeftColumn >= columns || bottomRightRow < 0
+                || bottomRightRow >= rows || bottomRightColumn < 0 || bottomRightColumn >= columns
+                || topLeftRow > bottomRightRow || topLeftColumn > bottomRightColumn) {
             throw new IllegalArgumentException();
         }
 
-        if (submatrixTopLeftRow < 0 || submatrixTopLeftColumn < 0 ||
-                submatrixBottomRightRow < 0 ||
-                submatrixBottomRightRow >= submatrix.rows ||
-                submatrixBottomRightColumn < 0 ||
-                submatrixBottomRightColumn >= submatrix.columns ||
-                submatrixTopLeftRow > submatrixBottomRightRow ||
-                submatrixTopLeftColumn > submatrixBottomRightColumn) {
+        if (submatrixTopLeftRow < 0 || submatrixTopLeftColumn < 0 || submatrixBottomRightRow < 0
+                || submatrixBottomRightRow >= submatrix.rows || submatrixBottomRightColumn < 0
+                || submatrixBottomRightColumn >= submatrix.columns || submatrixTopLeftRow > submatrixBottomRightRow
+                || submatrixTopLeftColumn > submatrixBottomRightColumn) {
             throw new IllegalArgumentException();
         }
 
-        final int matrixRows = bottomRightRow - topLeftRow + 1;
-        final int matrixColumns = bottomRightColumn - topLeftColumn + 1;
-        final int submatrixRows = submatrixBottomRightRow - submatrixTopLeftRow + 1;
-        final int submatrixColumns = submatrixBottomRightColumn -
-                submatrixTopLeftColumn + 1;
+        final var matrixRows = bottomRightRow - topLeftRow + 1;
+        final var matrixColumns = bottomRightColumn - topLeftColumn + 1;
+        final var submatrixRows = submatrixBottomRightRow - submatrixTopLeftRow + 1;
+        final var submatrixColumns = submatrixBottomRightColumn - submatrixTopLeftColumn + 1;
         if (matrixRows != submatrixRows || matrixColumns != submatrixColumns) {
             throw new IllegalArgumentException();
         }
 
-        int j2 = submatrixTopLeftColumn;
+        var j2 = submatrixTopLeftColumn;
         int destPos;
         int sourcePos;
-        for (int j = topLeftColumn; j <= bottomRightColumn; j++) {
+        for (var j = topLeftColumn; j <= bottomRightColumn; j++) {
             destPos = columnIndex[j] + topLeftRow;
             sourcePos = submatrix.columnIndex[j2] + submatrixTopLeftRow;
-            for (int i = topLeftRow; i <= bottomRightRow; i++) {
+            for (var i = topLeftRow; i <= bottomRightRow; i++) {
                 // Lines below are equivalent to commented code
                 buffer[destPos] = submatrix.buffer[sourcePos];
                 destPos++;
@@ -1321,19 +1274,16 @@ public class Matrix implements Serializable, Cloneable {
      *                                  bottom-right corners lie outside current matrix instance, or if top-left
      *                                  corner is indeed located below or at right side of bottom-right corner.
      */
-    public void setSubmatrix(int topLeftRow, int topLeftColumn,
-                             int bottomRightRow, int bottomRightColumn, double value) {
-        if (topLeftRow < 0 || topLeftRow >= rows ||
-                topLeftColumn < 0 || topLeftColumn >= columns ||
-                bottomRightRow < 0 || bottomRightRow >= rows ||
-                bottomRightColumn < 0 || bottomRightColumn >= columns ||
-                topLeftRow > bottomRightRow ||
-                topLeftColumn > bottomRightColumn) {
+    public void setSubmatrix(
+            int topLeftRow, int topLeftColumn, int bottomRightRow, int bottomRightColumn, double value) {
+        if (topLeftRow < 0 || topLeftRow >= rows || topLeftColumn < 0 || topLeftColumn >= columns || bottomRightRow < 0
+                || bottomRightRow >= rows || bottomRightColumn < 0 || bottomRightColumn >= columns
+                || topLeftRow > bottomRightRow || topLeftColumn > bottomRightColumn) {
             throw new IllegalArgumentException();
         }
 
-        for (int j = topLeftColumn; j <= bottomRightColumn; j++) {
-            for (int i = topLeftRow; i <= bottomRightRow; i++) {
+        for (var j = topLeftColumn; j <= bottomRightColumn; j++) {
+            for (var i = topLeftRow; i <= bottomRightRow; i++) {
                 buffer[columnIndex[j] + i] = value;
             }
         }
@@ -1354,11 +1304,10 @@ public class Matrix implements Serializable, Cloneable {
      *                                  bottom-right corners lie outside current matrix instance, or if top-left
      *                                  corner is indeed located below or at right side of bottom-right corner.
      */
-    public void setSubmatrix(final int topLeftRow, final int topLeftColumn,
-                             final int bottomRightRow, final int bottomRightColumn,
-                             final double[] values) {
-        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, values, DEFAULT_USE_COLUMN_ORDER);
+    public void setSubmatrix(
+            final int topLeftRow, final int topLeftColumn, final int bottomRightRow, final int bottomRightColumn,
+            final double[] values) {
+        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, values, DEFAULT_USE_COLUMN_ORDER);
     }
 
     /**
@@ -1378,11 +1327,11 @@ public class Matrix implements Serializable, Cloneable {
      *                                  bottom-right corners lie outside current matrix instance, or if top-left
      *                                  corner is indeed located below or at right side of bottom-right corner.
      */
-    public void setSubmatrix(final int topLeftRow, final int topLeftColumn,
-                             final int bottomRightRow, final int bottomRightColumn, final double[] values,
-                             final boolean isColumnOrder) {
-        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, values, 0, values.length - 1, isColumnOrder);
+    public void setSubmatrix(
+            final int topLeftRow, final int topLeftColumn, final int bottomRightRow, final int bottomRightColumn,
+            final double[] values, final boolean isColumnOrder) {
+        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, values, 0,
+                values.length - 1, isColumnOrder);
     }
 
     /**
@@ -1405,11 +1354,10 @@ public class Matrix implements Serializable, Cloneable {
      *                                  or if valuesStart and valuesEnd lie outside valid array positions or
      *                                  start is greater than end position.
      */
-    public void setSubmatrix(final int topLeftRow, final int topLeftColumn,
-                             final int bottomRightRow, final int bottomRightColumn, final double[] values,
-                             final int valuesStart, final int valuesEnd) {
-        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, values, valuesStart, valuesEnd,
+    public void setSubmatrix(
+            final int topLeftRow, final int topLeftColumn, final int bottomRightRow, final int bottomRightColumn,
+            final double[] values, final int valuesStart, final int valuesEnd) {
+        setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, values, valuesStart, valuesEnd,
                 DEFAULT_USE_COLUMN_ORDER);
     }
 
@@ -1436,39 +1384,35 @@ public class Matrix implements Serializable, Cloneable {
      *                                  or if valuesStart and valuesEnd lie outside valid array positions or
      *                                  start is greater than end position.
      */
-    public void setSubmatrix(final int topLeftRow, final int topLeftColumn,
-                             final int bottomRightRow, final int bottomRightColumn, final double[] values,
-                             final int valuesStart, final int valuesEnd, final boolean isColumnOrder) {
+    public void setSubmatrix(
+            final int topLeftRow, final int topLeftColumn, final int bottomRightRow, final int bottomRightColumn,
+            final double[] values, final int valuesStart, final int valuesEnd, final boolean isColumnOrder) {
 
-        if (topLeftRow < 0 || topLeftRow >= rows ||
-                topLeftColumn < 0 || topLeftColumn >= columns ||
-                bottomRightRow < 0 || bottomRightRow >= rows ||
-                bottomRightColumn < 0 || bottomRightColumn >= columns ||
-                topLeftRow > bottomRightRow ||
-                topLeftColumn > bottomRightColumn) {
+        if (topLeftRow < 0 || topLeftRow >= rows || topLeftColumn < 0 || topLeftColumn >= columns || bottomRightRow < 0
+                || bottomRightRow >= rows || bottomRightColumn < 0 || bottomRightColumn >= columns
+                || topLeftRow > bottomRightRow || topLeftColumn > bottomRightColumn) {
             throw new IllegalArgumentException();
         }
 
-        if (valuesStart < 0 || valuesEnd < 0 || valuesEnd >= values.length ||
-                valuesStart > valuesEnd) {
+        if (valuesStart < 0 || valuesEnd < 0 || valuesEnd >= values.length || valuesStart > valuesEnd) {
             throw new IllegalArgumentException();
         }
 
-        final int matrixRows = bottomRightRow - topLeftRow + 1;
-        final int matrixColumns = bottomRightColumn - topLeftColumn + 1;
-        final int matrixLength = matrixRows * matrixColumns;
-        final int valuesLength = valuesEnd - valuesStart + 1;
+        final var matrixRows = bottomRightRow - topLeftRow + 1;
+        final var matrixColumns = bottomRightColumn - topLeftColumn + 1;
+        final var matrixLength = matrixRows * matrixColumns;
+        final var valuesLength = valuesEnd - valuesStart + 1;
 
         if (matrixLength != valuesLength) {
             throw new IllegalArgumentException();
         }
 
-        int counter = valuesStart;
+        var counter = valuesStart;
         if (isColumnOrder) {
             int destPos;
-            for (int j = topLeftColumn; j <= bottomRightColumn; j++) {
+            for (var j = topLeftColumn; j <= bottomRightColumn; j++) {
                 destPos = columnIndex[j] + topLeftRow;
-                for (int i = topLeftRow; i <= bottomRightRow; i++) {
+                for (var i = topLeftRow; i <= bottomRightRow; i++) {
                     // Two Lines below are equivalent to:
                     // buffer[columnIndex[j] + i] = values[counter]
                     buffer[destPos] = values[counter];
@@ -1478,8 +1422,8 @@ public class Matrix implements Serializable, Cloneable {
             }
 
         } else {
-            for (int i = topLeftRow; i <= bottomRightRow; i++) {
-                for (int j = topLeftColumn; j <= bottomRightColumn; j++) {
+            for (var i = topLeftRow; i <= bottomRightRow; i++) {
+                for (var j = topLeftColumn; j <= bottomRightColumn; j++) {
                     buffer[columnIndex[j] + i] = values[counter];
                     counter++;
                 }
@@ -1496,8 +1440,8 @@ public class Matrix implements Serializable, Cloneable {
     public static void identity(final Matrix m) {
         m.initialize(0.0);
 
-        final int minSize = Math.min(m.rows, m.columns);
-        for (int i = 0; i < minSize; i++) {
+        final var minSize = Math.min(m.rows, m.columns);
+        for (var i = 0; i < minSize; i++) {
             m.buffer[m.columnIndex[i] + i] = 1.0;
         }
     }
@@ -1512,10 +1456,8 @@ public class Matrix implements Serializable, Cloneable {
      * @throws WrongSizeException Raised if either rows or columns is
      *                            equal to zero
      */
-    public static Matrix identity(final int rows, final int columns)
-            throws WrongSizeException {
-
-        final Matrix out = new Matrix(rows, columns);
+    public static Matrix identity(final int rows, final int columns) throws WrongSizeException {
+        final var out = new Matrix(rows, columns);
         identity(out);
         return out;
     }
@@ -1534,9 +1476,9 @@ public class Matrix implements Serializable, Cloneable {
      */
     public static void fillWithUniformRandomValues(
             final double minValue, final double maxValue, final Random random, final Matrix result) {
-        final UniformRandomizer randomizer = new UniformRandomizer(random);
+        final var randomizer = new UniformRandomizer(random);
 
-        final int length = result.rows * result.columns;
+        final var length = result.rows * result.columns;
 
         for (int i = 0; i < length; i++) {
             result.buffer[i] = randomizer.nextDouble(minValue, maxValue);
@@ -1553,8 +1495,7 @@ public class Matrix implements Serializable, Cloneable {
      * @throws IllegalArgumentException if minValue &lt;= maxValue
      * @throws NullPointerException     if provided result matrix is null
      */
-    public static void fillWithUniformRandomValues(
-            final double minValue, final double maxValue, final Matrix result) {
+    public static void fillWithUniformRandomValues(final double minValue, final double maxValue, final Matrix result) {
         fillWithUniformRandomValues(minValue, maxValue, new Random(), result);
     }
 
@@ -1573,10 +1514,8 @@ public class Matrix implements Serializable, Cloneable {
      * @throws IllegalArgumentException if minValue &lt;= maxValue
      */
     public static Matrix createWithUniformRandomValues(
-            final int rows, final int columns, final double minValue, final double maxValue)
-            throws WrongSizeException {
-        return createWithUniformRandomValues(rows, columns, minValue, maxValue,
-                new Random());
+            final int rows, final int columns, final double minValue, final double maxValue) throws WrongSizeException {
+        return createWithUniformRandomValues(rows, columns, minValue, maxValue, new Random());
     }
 
     /**
@@ -1596,10 +1535,10 @@ public class Matrix implements Serializable, Cloneable {
      * @throws IllegalArgumentException if minValue &lt;= maxValue
      */
     public static Matrix createWithUniformRandomValues(
-            final int rows, final int columns, final double minValue, final double maxValue,
-            final Random random) throws WrongSizeException {
+            final int rows, final int columns, final double minValue, final double maxValue, final Random random)
+            throws WrongSizeException {
 
-        final Matrix out = new Matrix(rows, columns);
+        final var out = new Matrix(rows, columns);
         fillWithUniformRandomValues(minValue, maxValue, random, out);
         return out;
     }
@@ -1619,12 +1558,11 @@ public class Matrix implements Serializable, Cloneable {
     public static void fillWithGaussianRandomValues(
             final double mean, final double standardDeviation, final Random random, final Matrix result) {
 
-        final GaussianRandomizer randomizer = new GaussianRandomizer(random, mean,
-                standardDeviation);
+        final var randomizer = new GaussianRandomizer(random, mean, standardDeviation);
 
-        final int length = result.rows * result.columns;
+        final var length = result.rows * result.columns;
 
-        for (int i = 0; i < length; i++) {
+        for (var i = 0; i < length; i++) {
             result.buffer[i] = randomizer.nextDouble();
         }
     }
@@ -1642,8 +1580,7 @@ public class Matrix implements Serializable, Cloneable {
      */
     public static void fillWithGaussianRandomValues(
             final double mean, final double standardDeviation, final Matrix result) {
-        fillWithGaussianRandomValues(mean, standardDeviation, new Random(),
-                result);
+        fillWithGaussianRandomValues(mean, standardDeviation, new Random(), result);
     }
 
     /**
@@ -1665,8 +1602,7 @@ public class Matrix implements Serializable, Cloneable {
     public static Matrix createWithGaussianRandomValues(
             final int rows, final int columns, final double mean, final double standardDeviation)
             throws WrongSizeException {
-        return createWithGaussianRandomValues(rows, columns, mean,
-                standardDeviation, new Random());
+        return createWithGaussianRandomValues(rows, columns, mean, standardDeviation, new Random());
     }
 
     /**
@@ -1687,10 +1623,10 @@ public class Matrix implements Serializable, Cloneable {
      *                                  is negative or zero.
      */
     public static Matrix createWithGaussianRandomValues(
-            final int rows, final int columns, final double mean, final double standardDeviation,
-            final Random random) throws WrongSizeException {
+            final int rows, final int columns, final double mean, final double standardDeviation, final Random random)
+            throws WrongSizeException {
 
-        final Matrix out = new Matrix(rows, columns);
+        final var out = new Matrix(rows, columns);
         fillWithGaussianRandomValues(mean, standardDeviation, random, out);
         return out;
     }
@@ -1710,7 +1646,7 @@ public class Matrix implements Serializable, Cloneable {
         result.initialize(0.0);
         // set diagonal elements
         //noinspection ManualArrayCopy
-        for (int i = 0; i < diagonal.length; i++) {
+        for (var i = 0; i < diagonal.length; i++) {
             result.buffer[result.columnIndex[i] + i] = diagonal[i];
         }
     }
@@ -1789,20 +1725,18 @@ public class Matrix implements Serializable, Cloneable {
      * @throws WrongSizeException if provided array length is not equal to the
      *                            number of rows multiplied per the number of columns of this instance.
      */
-    public void fromArray(final double[] array, final boolean isColumnOrder)
-            throws WrongSizeException {
+    public void fromArray(final double[] array, final boolean isColumnOrder) throws WrongSizeException {
         if (array.length != buffer.length) {
-            throw new WrongSizeException(
-                    "array length must be equal to rows x columns");
+            throw new WrongSizeException("array length must be equal to rows x columns");
         }
 
         if (isColumnOrder) {
             System.arraycopy(array, 0, buffer, 0, array.length);
         } else {
-            int counter = 0;
+            var counter = 0;
 
-            for (int j = 0; j < rows; j++) {
-                for (int i = 0; i < columns; i++) {
+            for (var j = 0; j < rows; j++) {
+                for (var i = 0; i < columns; i++) {
                     buffer[columnIndex[i] + j] = array[counter];
                     counter++;
                 }
@@ -1825,8 +1759,7 @@ public class Matrix implements Serializable, Cloneable {
             throw new WrongSizeException("matrix must be square");
         }
         if (result.getRows() != rows || result.getColumns() != columns) {
-            throw new WrongSizeException(
-                    "result matrix must have the size of this instance");
+            throw new WrongSizeException("result matrix must have the size of this instance");
         }
 
         // S = (M+M')/2
@@ -1835,8 +1768,8 @@ public class Matrix implements Serializable, Cloneable {
         double avg;
         int pos1;
         int pos2;
-        for (int i = 0; i < columns; i++) {
-            for (int j = i; j < rows; j++) {
+        for (var i = 0; i < columns; i++) {
+            for (var j = i; j < rows; j++) {
                 // value at (i, j)
                 pos1 = columnIndex[i] + j;
                 value1 = buffer[pos1];
@@ -1861,7 +1794,7 @@ public class Matrix implements Serializable, Cloneable {
      * @throws WrongSizeException if this instance is not square.
      */
     public Matrix symmetrizeAndReturnNew() throws WrongSizeException {
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
         symmetrize(m);
         return m;
     }
@@ -1884,8 +1817,8 @@ public class Matrix implements Serializable, Cloneable {
      * @param result Matrix where result will be stored.
      */
     private void internalAdd(final Matrix other, final Matrix result) {
-        final int length = rows * columns;
-        for (int i = 0; i < length; i++) {
+        final var length = rows * columns;
+        for (var i = 0; i < length; i++) {
             result.buffer[i] = buffer[i] + other.buffer[i];
         }
     }
@@ -1897,8 +1830,8 @@ public class Matrix implements Serializable, Cloneable {
      * @param result Matrix where result will be stored.
      */
     private void internalSubtract(final Matrix other, final Matrix result) {
-        final int length = rows * columns;
-        for (int i = 0; i < length; i++) {
+        final var length = rows * columns;
+        for (var i = 0; i < length; i++) {
             result.buffer[i] = buffer[i] - other.buffer[i];
         }
     }
@@ -1911,14 +1844,14 @@ public class Matrix implements Serializable, Cloneable {
      * @param resultColumnIndex Array of matrix column indices where result will
      *                          be stored.
      */
-    private void internalMultiply(final Matrix other, final double[] resultBuffer,
-                                  final int[] resultColumnIndex) {
-        final int columns2 = other.columns;
+    private void internalMultiply(
+            final Matrix other, final double[] resultBuffer, final int[] resultColumnIndex) {
+        final var columns2 = other.columns;
         double value;
-        for (int k = 0; k < columns2; k++) {
-            for (int j = 0; j < rows; j++) {
+        for (var k = 0; k < columns2; k++) {
+            for (var j = 0; j < rows; j++) {
                 value = 0.0;
-                for (int i = 0; i < columns; i++) {
+                for (var i = 0; i < columns; i++) {
                     value += buffer[columnIndex[i] + j] *
                             other.buffer[other.columnIndex[k] + i];
                 }
@@ -1947,23 +1880,22 @@ public class Matrix implements Serializable, Cloneable {
      */
     private void internalMultiplyKronecker(
             final Matrix other, final double[] resultBuffer, final int[] resultColumnIndex) {
-        final int rows2 = other.rows;
-        final int columns2 = other.columns;
+        final var rows2 = other.rows;
+        final var columns2 = other.columns;
 
-        for (int j1 = 0; j1 < rows; j1++) {
-            final int startJ3 = j1 * other.rows;
-            for (int i1 = 0; i1 < columns; i1++) {
-                final int startI3 = i1 * other.columns;
-                final double value1 = buffer[columnIndex[i1] + j1];
+        for (var j1 = 0; j1 < rows; j1++) {
+            final var startJ3 = j1 * other.rows;
+            for (var i1 = 0; i1 < columns; i1++) {
+                final var startI3 = i1 * other.columns;
+                final var value1 = buffer[columnIndex[i1] + j1];
 
-                for (int j2 = 0; j2 < rows2; j2++) {
-                    final int j3 = startJ3 + j2;
-                    for (int i2 = 0; i2 < columns2; i2++) {
-                        final int i3 = startI3 + i2;
-                        final double value2 =
-                                other.buffer[other.columnIndex[i2] + j2];
+                for (var j2 = 0; j2 < rows2; j2++) {
+                    final var j3 = startJ3 + j2;
+                    for (var i2 = 0; i2 < columns2; i2++) {
+                        final var i3 = startI3 + i2;
+                        final var value2 = other.buffer[other.columnIndex[i2] + j2];
 
-                        final double value3 = value1 * value2;
+                        final var value3 = value1 * value2;
                         resultBuffer[resultColumnIndex[i3] + j3] = value3;
                     }
                 }
@@ -1988,8 +1920,8 @@ public class Matrix implements Serializable, Cloneable {
      * @param result Matrix where result will be stored.
      */
     private void internalElementByElementProduct(final Matrix other, final Matrix result) {
-        final int length = rows * columns;
-        for (int i = 0; i < length; i++) {
+        final var length = rows * columns;
+        for (var i = 0; i < length; i++) {
             result.buffer[i] = buffer[i] * other.buffer[i];
         }
     }
@@ -2001,12 +1933,10 @@ public class Matrix implements Serializable, Cloneable {
      * @param resultColumnIndex Buffer where indices of transposed matrix data
      *                          is stored.
      */
-    private void internalTranspose(final double[] resultBuffer,
-                                   final int[] resultColumnIndex) {
-        for (int j = 0; j < rows; j++) {
-            for (int i = 0; i < columns; i++) {
-                resultBuffer[resultColumnIndex[j] + i] =
-                        buffer[columnIndex[i] + j];
+    private void internalTranspose(final double[] resultBuffer, final int[] resultColumnIndex) {
+        for (var j = 0; j < rows; j++) {
+            for (var i = 0; i < columns; i++) {
+                resultBuffer[resultColumnIndex[j] + i] = buffer[columnIndex[i] + j];
             }
         }
     }
@@ -2028,8 +1958,7 @@ public class Matrix implements Serializable, Cloneable {
      * @throws WrongSizeException Exception raised if either rows or
      *                            columns is zero.
      */
-    private void internalResize(final int rows, final int columns)
-            throws WrongSizeException {
+    private void internalResize(final int rows, final int columns) throws WrongSizeException {
         if (rows == 0 || columns == 0) {
             throw new WrongSizeException();
         }
@@ -2042,8 +1971,8 @@ public class Matrix implements Serializable, Cloneable {
         columnIndex = new int[columns];
 
         // initialize column index
-        int counter = 0;
-        for (int i = 0; i < columns; i++) {
+        var counter = 0;
+        for (var i = 0; i < columns; i++) {
             columnIndex[i] = counter;
             counter += rows;
         }
@@ -2062,14 +1991,13 @@ public class Matrix implements Serializable, Cloneable {
      * @param result            Instance where sub-matrix data is stored.
      */
     private void internalGetSubmatrix(
-            final int topLeftRow, final int topLeftColumn, final int bottomRightRow,
-            final int bottomRightColumn, final Matrix result) {
-        int i2 = 0;
-        int j2 = 0;
-        for (int j = topLeftColumn; j <= bottomRightColumn; j++) {
-            for (int i = topLeftRow; i <= bottomRightRow; i++) {
-                result.buffer[result.columnIndex[j2] + i2] =
-                        buffer[columnIndex[j] + i];
+            final int topLeftRow, final int topLeftColumn, final int bottomRightRow, final int bottomRightColumn,
+            final Matrix result) {
+        var i2 = 0;
+        var j2 = 0;
+        for (var j = topLeftColumn; j <= bottomRightColumn; j++) {
+            for (var i = topLeftRow; i <= bottomRightRow; i++) {
+                result.buffer[result.columnIndex[j2] + i2] = buffer[columnIndex[j] + i];
                 i2++;
             }
             i2 = 0;
@@ -2096,17 +2024,17 @@ public class Matrix implements Serializable, Cloneable {
     private void internalGetSubmatrixAsArray(
             final int topLeftRow, final int topLeftColumn, final int bottomRightRow,
             final int bottomRightColumn, final boolean isColumnOrder, final double[] result) {
-        int counter = 0;
+        var counter = 0;
         if (isColumnOrder) {
-            for (int j = topLeftColumn; j <= bottomRightColumn; j++) {
-                for (int i = topLeftRow; i <= bottomRightRow; i++) {
+            for (var j = topLeftColumn; j <= bottomRightColumn; j++) {
+                for (var i = topLeftRow; i <= bottomRightRow; i++) {
                     result[counter] = buffer[columnIndex[j] + i];
                     counter++;
                 }
             }
         } else {
-            for (int i = topLeftRow; i <= bottomRightRow; i++) {
-                for (int j = topLeftColumn; j <= bottomRightColumn; j++) {
+            for (var i = topLeftRow; i <= bottomRightRow; i++) {
+                for (var j = topLeftColumn; j <= bottomRightColumn; j++) {
                     result[counter] = buffer[columnIndex[j] + i];
                     counter++;
                 }

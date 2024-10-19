@@ -15,15 +15,15 @@
  */
 package com.irurueta.algebra;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class WrongSizeExceptionTest {
+class WrongSizeExceptionTest {
 
     @Test
-    public void testConstructor() {
-        WrongSizeException ex = new WrongSizeException();
+    void testConstructor() {
+        var ex = new WrongSizeException();
         assertNotNull(ex);
 
         ex = new WrongSizeException("message");

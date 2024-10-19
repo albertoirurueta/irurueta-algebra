@@ -15,15 +15,15 @@
  */
 package com.irurueta.algebra;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class NormComputerTest {
+class NormComputerTest {
 
     @Test
-    public void testCreate() {
-        NormComputer normComputer = NormComputer.create(NormType.FROBENIUS_NORM);
+    void testCreate() {
+        var normComputer = NormComputer.create(NormType.FROBENIUS_NORM);
         assertEquals(NormType.FROBENIUS_NORM, normComputer.getNormType());
 
         normComputer = NormComputer.create(NormType.ONE_NORM);

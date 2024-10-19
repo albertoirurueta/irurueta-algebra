@@ -15,15 +15,15 @@
  */
 package com.irurueta.algebra;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class NotAvailableExceptionTest {
+class NotAvailableExceptionTest {
 
     @Test
-    public void testConstructor() {
-        NotAvailableException ex = new NotAvailableException();
+    void testConstructor() {
+        var ex = new NotAvailableException();
         assertNotNull(ex);
 
         ex = new NotAvailableException("message");
@@ -32,8 +32,7 @@ public class NotAvailableExceptionTest {
         ex = new NotAvailableException(new Exception());
         assertNotNull(ex);
 
-        ex = new NotAvailableException("message",
-                new Exception());
+        ex = new NotAvailableException("message", new Exception());
         assertNotNull(ex);
     }
 }

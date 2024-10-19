@@ -50,14 +50,14 @@ public class InfinityNormComputer extends NormComputer {
      */
     @SuppressWarnings("DuplicatedCode")
     public static double norm(final Matrix m) {
-        final int rows = m.getRows();
-        final int columns = m.getColumns();
+        final var rows = m.getRows();
+        final var columns = m.getColumns();
         double rowSum;
-        double maxRowSum = 0.0;
+        var maxRowSum = 0.0;
 
-        for (int i = 0; i < rows; i++) {
+        for (var i = 0; i < rows; i++) {
             rowSum = 0.0;
-            for (int j = 0; j < columns; j++) {
+            for (var j = 0; j < columns; j++) {
                 rowSum += Math.abs(m.getElementAt(i, j));
             }
 
@@ -78,14 +78,12 @@ public class InfinityNormComputer extends NormComputer {
      * @throws WrongSizeException if provided jacobian is not 1xN, where N is
      *                            length of array.
      */
-    public static double norm(final double[] array, final Matrix jacobian)
-            throws WrongSizeException {
-        if (jacobian != null && (jacobian.getRows() != 1 ||
-                jacobian.getColumns() != array.length)) {
+    public static double norm(final double[] array, final Matrix jacobian) throws WrongSizeException {
+        if (jacobian != null && (jacobian.getRows() != 1 || jacobian.getColumns() != array.length)) {
             throw new WrongSizeException();
         }
 
-        final double norm = InfinityNormComputer.norm(array);
+        final var norm = InfinityNormComputer.norm(array);
 
         if (jacobian != null) {
             jacobian.fromArray(array);

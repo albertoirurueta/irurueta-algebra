@@ -15,28 +15,24 @@
  */
 package com.irurueta.algebra;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class NonSymmetricPositiveDefiniteMatrixExceptionTest {
+class NonSymmetricPositiveDefiniteMatrixExceptionTest {
 
     @Test
-    public void testConstructor() {
-        NonSymmetricPositiveDefiniteMatrixException ex =
-                new NonSymmetricPositiveDefiniteMatrixException();
+    void testConstructor() {
+        var ex = new NonSymmetricPositiveDefiniteMatrixException();
         assertNotNull(ex);
 
-        ex = new NonSymmetricPositiveDefiniteMatrixException(
-                "message");
+        ex = new NonSymmetricPositiveDefiniteMatrixException("message");
         assertNotNull(ex);
 
-        ex = new NonSymmetricPositiveDefiniteMatrixException(
-                new Exception());
+        ex = new NonSymmetricPositiveDefiniteMatrixException(new Exception());
         assertNotNull(ex);
 
-        ex = new NonSymmetricPositiveDefiniteMatrixException(
-                "message", new Exception());
+        ex = new NonSymmetricPositiveDefiniteMatrixException("message", new Exception());
         assertNotNull(ex);
     }
 }

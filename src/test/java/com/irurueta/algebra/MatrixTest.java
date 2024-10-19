@@ -17,15 +17,14 @@ package com.irurueta.algebra;
 
 import com.irurueta.SerializationHelper;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MatrixTest {
+class MatrixTest {
 
     private static final int MIN_ROWS = 1;
     private static final int MAX_ROWS = 50;
@@ -44,41 +43,34 @@ public class MatrixTest {
     private static final double RELATIVE_ERROR = 0.1;
 
     @Test
-    public void testConstructorGetRowsAndGetColumns()
-            throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testConstructorGetRowsAndGetColumns() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
         assertNotNull(m);
         assertEquals(rows, m.getRows());
         assertEquals(columns, m.getColumns());
 
         // Force WrongSizeException
-        m = null;
-        try {
-            m = new Matrix(0, 0);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        assertNull(m);
+        assertThrows(WrongSizeException.class, () -> new Matrix(0, 0));
     }
 
     @Test
-    public void testCopyConstructor() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testCopyConstructor() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m1 = new Matrix(rows, columns);
+        final var m1 = new Matrix(rows, columns);
         assertNotNull(m1);
         assertEquals(rows, m1.getRows());
         assertEquals(columns, m1.getColumns());
 
         randomizer.fill(m1.getBuffer(), MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Matrix m2 = new Matrix(m1);
+        final var m2 = new Matrix(m1);
 
         // check
         assertEquals(rows, m2.getRows());
@@ -87,28 +79,27 @@ public class MatrixTest {
     }
 
     @Test
-    public void testGetSetElementAt() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testGetSetElementAt() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = new Matrix(rows, columns);
-        final double[][] tmp = new double[rows][columns];
+        final var m = new Matrix(rows, columns);
+        final var tmp = new double[rows][columns];
         double value;
 
         // initialize matrix and array to random values
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                value = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 tmp[i][j] = value;
                 m.setElementAt(i, j, value);
             }
         }
 
         // check that matrix contains same values in array
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 value = tmp[i][j];
                 assertEquals(value, m.getElementAt(i, j), 0.0);
             }
@@ -116,20 +107,19 @@ public class MatrixTest {
     }
 
     @Test
-    public void testGetIndex() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testGetIndex() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = new Matrix(rows, columns);
-        final double[][] tmp = new double[rows][columns];
+        final var m = new Matrix(rows, columns);
+        final var tmp = new double[rows][columns];
         double value;
 
         // initialize matrix and array to random values
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                value = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 tmp[i][j] = value;
                 m.setElementAt(i, j, value);
             }
@@ -138,8 +128,8 @@ public class MatrixTest {
         // check that matrix contains same values in array and that it
         // corresponds to computed index
         int index;
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 index = j * rows + i;
                 assertEquals(index, m.getIndex(i, j));
                 value = tmp[i][j];
@@ -150,21 +140,21 @@ public class MatrixTest {
     }
 
     @Test
-    public void testGetSetElementAtIndex() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int length = rows * columns;
+    void testGetSetElementAtIndex() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var length = rows * columns;
         int index;
 
-        final Matrix m1 = new Matrix(rows, columns);
-        final Matrix m2 = new Matrix(rows, columns);
+        final var m1 = new Matrix(rows, columns);
+        final var m2 = new Matrix(rows, columns);
 
-        final double[] tmp = new double[length];
+        final var tmp = new double[length];
         double value;
 
         // initialize matrix and array to random value using column order
-        for (int i = 0; i < length; i++) {
+        for (var i = 0; i < length; i++) {
             value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             tmp[i] = value;
             m1.setElementAtIndex(i, value, true);
@@ -173,8 +163,8 @@ public class MatrixTest {
 
         // check that matrices have the same values contained in array using
         // column order
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 index = j * rows + i;
                 value = tmp[index];
                 assertEquals(value, m1.getElementAt(i, j), 0.0);
@@ -188,15 +178,15 @@ public class MatrixTest {
         }
 
         // initialize matrix m1 and array to random values using row order
-        for (int i = 0; i < length; i++) {
+        for (var i = 0; i < length; i++) {
             value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             tmp[i] = value;
             m1.setElementAtIndex(i, value, false);
         }
 
         // checks that matrix contains same values in array using row order
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 index = i * columns + j;
                 value = tmp[index];
                 assertEquals(value, m1.getElementAt(i, j), 0.0);
@@ -206,51 +196,49 @@ public class MatrixTest {
     }
 
     @Test
-    public void testClone() throws WrongSizeException, CloneNotSupportedException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testClone() throws WrongSizeException, CloneNotSupportedException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         // instantiate matrix and fill with random values
-        final Matrix m1 = new Matrix(rows, columns);
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                m1.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+        final var m1 = new Matrix(rows, columns);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                m1.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
         // clone matrix
-        final Matrix m2 = m1.clone();
+        final var m2 = m1.clone();
 
         // check correctness
         assertEquals(rows, m2.getRows());
         assertEquals(columns, m2.getColumns());
 
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 assertEquals(m1.getElementAt(i, j), m2.getElementAt(i, j), 0.0);
             }
         }
     }
 
     @Test
-    public void testCopyTo() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testCopyTo() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         // instantiate matrix and fill with random values
-        final Matrix m = new Matrix(rows, columns);
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                m.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+        final var m = new Matrix(rows, columns);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                m.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
         // instantiate destination matrix
-        final Matrix destination = new Matrix(1, 1);
+        final var destination = new Matrix(1, 1);
         assertEquals(1, destination.getRows());
         assertEquals(1, destination.getColumns());
 
@@ -261,37 +249,31 @@ public class MatrixTest {
         assertEquals(rows, destination.getRows());
         assertEquals(columns, destination.getColumns());
 
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 assertEquals(destination.getElementAt(i, j), m.getElementAt(i, j), 0.0);
             }
         }
 
-        // Force NullPointerException
-        try {
-            //noinspection ConstantConditions
-            m.copyTo(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
+        //noinspection DataFlowIssue
+        assertThrows(NullPointerException.class, () -> m.copyTo(null));
     }
 
     @Test
-    public void testCopyFrom() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testCopyFrom() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix source = new Matrix(rows, columns);
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                source.setElementAt(i, j, randomizer.nextDouble(
-                        MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var source = new Matrix(rows, columns);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                source.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
         // instantiate destination matrix
-        final Matrix destination = new Matrix(1, 1);
+        final var destination = new Matrix(1, 1);
         assertEquals(1, destination.getRows());
         assertEquals(1, destination.getColumns());
 
@@ -301,234 +283,181 @@ public class MatrixTest {
         // check correctness
         assertEquals(destination.getRows(), rows);
         assertEquals(destination.getColumns(), columns);
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                assertEquals(destination.getElementAt(i, j),
-                        source.getElementAt(i, j), 0.0);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                assertEquals(destination.getElementAt(i, j), source.getElementAt(i, j), 0.0);
             }
         }
 
-        // Force NullPointerException
-        try {
-            //noinspection ConstantConditions
-            destination.copyFrom(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
+        //noinspection DataFlowIssue
+        assertThrows(NullPointerException.class, () -> destination.copyFrom(null));
     }
 
     @Test
-    public void testAddAndReturnNew() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testAddAndReturnNew() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m1 = new Matrix(rows, columns);
-        final Matrix m2 = new Matrix(rows, columns);
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                m1.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
-                m2.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+        final var m1 = new Matrix(rows, columns);
+        final var m2 = new Matrix(rows, columns);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                m1.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+                m2.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
-        Matrix m3 = m1.addAndReturnNew(m2);
+        var m3 = m1.addAndReturnNew(m2);
 
         // check correctness
         assertEquals(rows, m3.getRows());
         assertEquals(columns, m3.getColumns());
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                assertEquals( m1.getElementAt(i, j) + m2.getElementAt(i, j),
-                        m3.getElementAt(i, j), ABSOLUTE_ERROR);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                assertEquals( m1.getElementAt(i, j) + m2.getElementAt(i, j), m3.getElementAt(i, j),
+                        ABSOLUTE_ERROR);
             }
         }
 
         // Force WrongSizeException
-        final Matrix wrong = new Matrix(rows + 1, columns + 1);
-        m3 = null;
-        try {
-            m3 = m1.addAndReturnNew(wrong);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        assertNull(m3);
+        final var wrong = new Matrix(rows + 1, columns + 1);
+        assertThrows(WrongSizeException.class, () -> m1.addAndReturnNew(wrong));
 
         // Force NullPointerException
-        try {
-            //noinspection ConstantConditions
-            m3 = m1.addAndReturnNew(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
-        assertNull(m3);
+        //noinspection DataFlowIssue
+        assertThrows(NullPointerException.class, () -> m1.addAndReturnNew(null));
     }
 
     @Test
-    public void testAdd() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testAdd() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m1 = new Matrix(rows, columns);
-        final Matrix m2 = new Matrix(rows, columns);
-        final double[][] tmp = new double[rows][columns];
+        final var m1 = new Matrix(rows, columns);
+        final var m2 = new Matrix(rows, columns);
+        final var tmp = new double[rows][columns];
         double value;
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                value = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 m1.setElementAt(i, j, value);
                 tmp[i][j] = value;
-                m2.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+                m2.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
-        final Matrix m3 = new Matrix(rows, columns);
+        final var m3 = new Matrix(rows, columns);
         m1.add(m2, m3);
         m1.add(m2);
 
         // check correctness
         assertEquals(rows, m1.getRows());
         assertEquals(columns, m1.getColumns());
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                assertEquals( tmp[i][j] + m2.getElementAt(i, j),
-                        m1.getElementAt(i, j), ABSOLUTE_ERROR);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                assertEquals( tmp[i][j] + m2.getElementAt(i, j), m1.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
 
         assertEquals(m1, m3);
 
         // Force WrongSizeException
-        final Matrix wrong = new Matrix(rows + 1, columns + 1);
-        try {
-            m1.add(wrong);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var wrong = new Matrix(rows + 1, columns + 1);
+        assertThrows(WrongSizeException.class, () -> m1.add(wrong));
 
         // Force NullPointerException
-        try {
-            //noinspection ConstantConditions
-            m1.add(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
+        //noinspection DataFlowIssue
+        assertThrows(NullPointerException.class, () -> m1.add(null));
     }
 
     @Test
-    public void testSubtractAndReturnNew() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testSubtractAndReturnNew() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m1 = new Matrix(rows, columns);
-        final Matrix m2 = new Matrix(rows, columns);
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                m1.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
-                m2.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+        final var m1 = new Matrix(rows, columns);
+        final var m2 = new Matrix(rows, columns);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                m1.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+                m2.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
-        Matrix m3 = m1.subtractAndReturnNew(m2);
+        var m3 = m1.subtractAndReturnNew(m2);
 
         // check correctness
         assertEquals(rows, m3.getRows());
         assertEquals(columns, m3.getColumns());
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                assertEquals( m1.getElementAt(i, j) - m2.getElementAt(i, j),
-                        m3.getElementAt(i, j), ABSOLUTE_ERROR);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                assertEquals( m1.getElementAt(i, j) - m2.getElementAt(i, j), m3.getElementAt(i, j),
+                        ABSOLUTE_ERROR);
             }
         }
 
         // Force WrongSizeException
-        Matrix wrong = new Matrix(rows + 1, columns + 1);
-        m3 = null;
-        try {
-            m3 = m1.subtractAndReturnNew(wrong);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        assertNull(m3);
+        var wrong = new Matrix(rows + 1, columns + 1);
+        assertThrows(WrongSizeException.class, () -> m1.subtractAndReturnNew(wrong));
 
         // Force NullPointerException
-        try {
-            //noinspection ConstantConditions
-            m3 = m1.subtractAndReturnNew(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
-        assertNull(m3);
+        //noinspection DataFlowIssue
+        assertThrows(NullPointerException.class, () -> m1.subtractAndReturnNew(null));
     }
 
     @Test
-    public void testSubtract() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testSubtract() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m1 = new Matrix(rows, columns);
-        final Matrix m2 = new Matrix(rows, columns);
-        final double[][] tmp = new double[rows][columns];
+        final var m1 = new Matrix(rows, columns);
+        final var m2 = new Matrix(rows, columns);
+        final var tmp = new double[rows][columns];
         double value;
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                value = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 m1.setElementAt(i, j, value);
                 tmp[i][j] = value;
-                m2.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+                m2.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
-        final Matrix m3 = new Matrix(rows, columns);
+        final var m3 = new Matrix(rows, columns);
         m1.subtract(m2, m3);
         m1.subtract(m2);
 
         // check correctness
         assertEquals(rows, m1.getRows());
         assertEquals(columns, m1.getColumns());
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 assertEquals( tmp[i][j] - m2.getElementAt(i, j), m1.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
         assertEquals(m1, m3);
 
         // Force WrongSizeExceptionException
-        final Matrix wrong = new Matrix(rows + 1, columns + 1);
-        try {
-            m1.add(wrong);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var wrong = new Matrix(rows + 1, columns + 1);
+        assertThrows(WrongSizeException.class, () -> m1.add(wrong));
 
         // Force NullPointerException
-        try {
-            //noinspection ConstantConditions
-            m1.add(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
+        //noinspection DataFlowIssue
+        assertThrows(NullPointerException.class, () -> m1.add(null));
     }
 
     @Test
-    public void testMultiplyAndReturnNew() throws WrongSizeException {
-        final int rows1 = 4;
-        final int columns1 = 3;
-        final int rows2 = 3;
-        final int columns2 = 2;
-        final Matrix m1 = new Matrix(rows1, columns1);
-        final Matrix m2 = new Matrix(rows2, columns2);
+    void testMultiplyAndReturnNew() throws WrongSizeException {
+        final var rows1 = 4;
+        final var columns1 = 3;
+        final var rows2 = 3;
+        final var columns2 = 2;
+        final var m1 = new Matrix(rows1, columns1);
+        final var m2 = new Matrix(rows2, columns2);
 
         Matrix result;
 
@@ -572,35 +501,24 @@ public class MatrixTest {
 
 
         // Force IllegalArgumentException
-        final Matrix m3 = new Matrix(columns1, rows1);
-        final Matrix m4 = new Matrix(columns2, rows2);
+        final var m3 = new Matrix(columns1, rows1);
+        final var m4 = new Matrix(columns2, rows2);
 
-        result = null;
-        try {
-            result = m3.multiplyAndReturnNew(m4);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        assertNull(result);
+        assertThrows(WrongSizeException.class, () -> m3.multiplyAndReturnNew(m4));
 
         // Force NullPointerException
-        try {
-            //noinspection ConstantConditions
-            result = m3.multiplyAndReturnNew(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
-        assertNull(result);
+        //noinspection DataFlowIssue
+        assertThrows(NullPointerException.class, () -> m3.multiplyAndReturnNew(null));
     }
 
     @Test
-    public void testMultiply() throws WrongSizeException {
-        final int rows1 = 4;
-        final int columns1 = 3;
-        final int rows2 = 3;
-        final int columns2 = 2;
-        final Matrix m1 = new Matrix(rows1, columns1);
-        final Matrix m2 = new Matrix(rows2, columns2);
+    void testMultiply() throws WrongSizeException {
+        final var rows1 = 4;
+        final var columns1 = 3;
+        final var rows2 = 3;
+        final var columns2 = 2;
+        final var m1 = new Matrix(rows1, columns1);
+        final var m2 = new Matrix(rows2, columns2);
 
         // fill m1 and m2 with predefined values
         m1.setElementAt(0, 0, 1.0);
@@ -640,41 +558,32 @@ public class MatrixTest {
         assertEquals(14.0, m1.getElementAt(3, 0), ABSOLUTE_ERROR);
         assertEquals(20.0, m1.getElementAt(3, 1), ABSOLUTE_ERROR);
 
-
         // Force IllegalArgumentException
-        final Matrix m3 = new Matrix(columns1, rows1);
-        final Matrix m4 = new Matrix(columns2, rows2);
+        final var m3 = new Matrix(columns1, rows1);
+        final var m4 = new Matrix(columns2, rows2);
 
-        try {
-            m3.multiply(m4);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> m3.multiply(m4));
 
         // Force NullPointerException
-        try {
-            //noinspection ConstantConditions
-            m3.multiply(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException ignore) {
-        }
+        //noinspection DataFlowIssue
+        assertThrows(NullPointerException.class, () -> m3.multiply(null));
     }
 
     @Test
-    public void testMultiplyKroneckerAndReturnNew() throws WrongSizeException {
-        final Matrix m1 = new Matrix(2, 2);
-        final Matrix m2 = new Matrix(2, 2);
+    void testMultiplyKroneckerAndReturnNew() throws WrongSizeException {
+        final var m1 = new Matrix(2, 2);
+        final var m2 = new Matrix(2, 2);
 
         m1.setSubmatrix(0, 0, 1, 1, new double[]{1, 3, 2, 1});
         m2.setSubmatrix(0, 0, 1, 1, new double[]{0, 2, 3, 1});
 
-        final Matrix m3 = m1.multiplyKroneckerAndReturnNew(m2);
+        final var m3 = m1.multiplyKroneckerAndReturnNew(m2);
 
         // check correctness
         assertEquals(4, m3.getRows());
         assertEquals(4, m3.getColumns());
 
-        final Matrix m3b = new Matrix(4, 4);
+        final var m3b = new Matrix(4, 4);
         //noinspection all
         m3b.setSubmatrix(0, 0, 3, 3, new double[]{
                 1 * 0, 1 * 2, 3 * 0, 3 * 2,
@@ -687,14 +596,14 @@ public class MatrixTest {
     }
 
     @Test
-    public void testMultiplyKronecker() throws WrongSizeException {
-        final Matrix m1 = new Matrix(2, 2);
-        final Matrix m2 = new Matrix(2, 2);
+    void testMultiplyKronecker() throws WrongSizeException {
+        final var m1 = new Matrix(2, 2);
+        final var m2 = new Matrix(2, 2);
 
         m1.setSubmatrix(0, 0, 1, 1, new double[]{1, 3, 2, 1});
         m2.setSubmatrix(0, 0, 1, 1, new double[]{0, 2, 3, 1});
 
-        final Matrix m3 = new Matrix(2, 2);
+        final var m3 = new Matrix(2, 2);
         m1.multiplyKronecker(m2, m3);
         m1.multiplyKronecker(m2);
 
@@ -705,7 +614,7 @@ public class MatrixTest {
         assertEquals(4, m1.getRows());
         assertEquals(4, m1.getColumns());
 
-        final Matrix m3b = new Matrix(4, 4);
+        final var m3b = new Matrix(4, 4);
         //noinspection all
         m3b.setSubmatrix(0, 0, 3, 3, new double[]{
                 1 * 0, 1 * 2, 3 * 0, 3 * 2,
@@ -719,86 +628,81 @@ public class MatrixTest {
     }
 
     @Test
-    public void testMultiplyByScalarAndReturnNew() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testMultiplyByScalarAndReturnNew() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
         // fill matrix
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                m.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                m.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
-        final double scalar = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scalar = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Matrix result = m.multiplyByScalarAndReturnNew(scalar);
+        final var result = m.multiplyByScalarAndReturnNew(scalar);
 
         // check correctness
         assertEquals(result.getRows(), rows);
         assertEquals(result.getColumns(), columns);
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 assertEquals(m.getElementAt(i, j) * scalar, result.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
     }
 
     @Test
-    public void testMultiplyByScalar() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testMultiplyByScalar() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = new Matrix(rows, columns);
-        final double[][] tmp = new double[rows][columns];
+        final var m = new Matrix(rows, columns);
+        final var tmp = new double[rows][columns];
         double value;
         // fill matrix
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                value = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 m.setElementAt(i, j, value);
                 tmp[i][j] = value;
             }
         }
 
-        final double scalar = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scalar = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         m.multiplyByScalar(scalar);
 
         // check correctness
         assertEquals(m.getRows(), rows);
         assertEquals(m.getColumns(), columns);
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 assertEquals(tmp[i][j] * scalar, m.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
     }
 
     @Test
-    public void testEqualsAndHashCode() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testEqualsAndHashCode() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = new Matrix(rows, columns);
-        final Matrix equal = new Matrix(rows, columns);
-        final Matrix different1 = new Matrix(rows + 1, columns + 1);
-        final Matrix different2 = new Matrix(rows, columns);
-        final Object different3 = new Object();
+        final var m = new Matrix(rows, columns);
+        final var equal = new Matrix(rows, columns);
+        final var different1 = new Matrix(rows + 1, columns + 1);
+        final var different2 = new Matrix(rows, columns);
+        final var different3 = new Object();
 
         double value;
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                value = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 m.setElementAt(i, j, value);
                 equal.setElementAt(i, j, value);
                 different1.setElementAt(i, j, value);
@@ -826,160 +730,134 @@ public class MatrixTest {
     }
 
     @Test
-    public void testElementByElementProductAndReturnNew()
-            throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+    void testElementByElementProductAndReturnNew() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-        final Matrix m1 = new Matrix(rows, columns);
-        final Matrix m2 = new Matrix(rows, columns);
+        final var m1 = new Matrix(rows, columns);
+        final var m2 = new Matrix(rows, columns);
 
         // fill matrices
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                m1.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
-                m2.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                m1.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+                m2.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
-        Matrix m3 = m1.elementByElementProductAndReturnNew(m2);
+        var m3 = m1.elementByElementProductAndReturnNew(m2);
 
         // check correctness
         assertEquals(rows, m3.getRows());
         assertEquals(columns, m3.getColumns());
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                assertEquals(m1.getElementAt(i, j) * m2.getElementAt(i, j),
-                        m3.getElementAt(i, j), ABSOLUTE_ERROR);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                assertEquals(m1.getElementAt(i, j) * m2.getElementAt(i, j), m3.getElementAt(i, j),
+                        ABSOLUTE_ERROR);
             }
         }
 
         // Force WrongSizeException
-        final Matrix wrong = new Matrix(rows + 1, columns + 1);
-        m3 = null;
-        try {
-            m3 = m1.elementByElementProductAndReturnNew(wrong);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        assertNull(m3);
+        final var wrong = new Matrix(rows + 1, columns + 1);
+        assertThrows(WrongSizeException.class, () -> m1.elementByElementProductAndReturnNew(wrong));
 
         // Force NullPointerException
-        try {
-            //noinspection ConstantConditions
-            m3 = m1.elementByElementProductAndReturnNew(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
-        assertNull(m3);
+        //noinspection DataFlowIssue
+        assertThrows(NullPointerException.class, () -> m1.elementByElementProductAndReturnNew(null));
     }
 
     @Test
-    public void testElementByElementProduct() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+    void testElementByElementProduct() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-        final Matrix m1 = new Matrix(rows, columns);
-        final Matrix m2 = new Matrix(rows, columns);
-        final double[][] tmp = new double[rows][columns];
+        final var m1 = new Matrix(rows, columns);
+        final var m2 = new Matrix(rows, columns);
+        final var tmp = new double[rows][columns];
         double value;
 
         // fill matrices
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                value = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 m1.setElementAt(i, j, value);
                 tmp[i][j] = value;
-                m2.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+                m2.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
-        final Matrix m3 = new Matrix(rows, columns);
+        final var m3 = new Matrix(rows, columns);
         m1.elementByElementProduct(m2, m3);
         m1.elementByElementProduct(m2);
 
         // check correctness
         assertEquals(rows, m1.getRows());
         assertEquals(columns, m1.getColumns());
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 assertEquals(tmp[i][j] * m2.getElementAt(i, j), m1.getElementAt(i, j), ABSOLUTE_ERROR);
             }
         }
         assertEquals(m3, m1);
 
         // Force WrongSizeException
-        final Matrix wrong = new Matrix(rows + 1, columns + 1);
-        try {
-            m1.elementByElementProduct(wrong);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var wrong = new Matrix(rows + 1, columns + 1);
+        assertThrows(WrongSizeException.class, () -> m1.elementByElementProduct(wrong));
 
         // Force NullPointerException
-        try {
-            //noinspection ConstantConditions
-            m1.elementByElementProduct(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
+        //noinspection DataFlowIssue
+        assertThrows(NullPointerException.class, () -> m1.elementByElementProduct(null));
     }
 
     @Test
-    public void testTransposeAndReturnNEw() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testTransposeAndReturnNEw() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m1 = new Matrix(rows, columns);
+        final var m1 = new Matrix(rows, columns);
         // fill matrix
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                m1.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                m1.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
-        final Matrix m2 = m1.transposeAndReturnNew();
+        final var m2 = m1.transposeAndReturnNew();
 
         // check correctness
         assertEquals(columns, m2.getRows());
         assertEquals(rows, m2.getColumns());
 
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 assertEquals(m2.getElementAt(j, i), m1.getElementAt(i, j), 0.0);
             }
         }
     }
 
     @Test
-    public void testTranspose() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testTranspose() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = new Matrix(rows, columns);
-        final double[][] tmp = new double[rows][columns];
+        final var m = new Matrix(rows, columns);
+        final var tmp = new double[rows][columns];
         double value;
 
         // fill matrix
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                value = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 m.setElementAt(i, j, value);
                 tmp[i][j] = value;
             }
         }
 
-        final Matrix m2 = new Matrix(rows, columns);
+        final var m2 = new Matrix(rows, columns);
         m.transpose(m2);
         m.transpose();
 
@@ -987,8 +865,8 @@ public class MatrixTest {
         assertEquals(columns, m.getRows());
         assertEquals(rows, m.getColumns());
 
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 assertEquals(m.getElementAt(j, i), tmp[i][j], 0.0);
             }
         }
@@ -997,23 +875,21 @@ public class MatrixTest {
     }
 
     @Test
-    public void testInitialize() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testInitialize() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
         // fill with random values
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                m.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                m.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
         // pick an init value
-        final double value = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         m.initialize(value);
 
@@ -1021,22 +897,22 @@ public class MatrixTest {
         assertEquals(rows, m.getRows());
         assertEquals(columns, m.getColumns());
 
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 assertEquals(value, m.getElementAt(i, j), 0.0);
             }
         }
     }
 
     @Test
-    public void testResetAndResize() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows1 = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int rows2 = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns1 = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int columns2 = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testResetAndResize() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows1 = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var rows2 = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns1 = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var columns2 = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = new Matrix(rows1, columns1);
+        final var m = new Matrix(rows1, columns1);
         assertEquals(rows1, m.getRows());
         assertEquals(columns1, m.getColumns());
 
@@ -1048,26 +924,12 @@ public class MatrixTest {
         assertEquals(columns2, m.getColumns());
 
         // Force WrongSizeException
-        try {
-            m.resize(0, columns2);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            m.resize(rows2, 0);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            m.resize(0, 0);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-
+        assertThrows(WrongSizeException.class, () -> m.resize(0, columns2));
+        assertThrows(WrongSizeException.class, () -> m.resize(rows2, 0));
+        assertThrows(WrongSizeException.class, () -> m.resize(0, 0));
 
         // reset to new size and value
-        final double initValue = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var initValue = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // reset to new size and value
         m.reset(rows1, columns1, initValue);
@@ -1076,48 +938,35 @@ public class MatrixTest {
         assertEquals(rows1, m.getRows());
         assertEquals(columns1, m.getColumns());
 
-        for (int j = 0; j < columns1; j++) {
-            for (int i = 0; i < rows1; i++) {
+        for (var j = 0; j < columns1; j++) {
+            for (var i = 0; i < rows1; i++) {
                 assertEquals(initValue, m.getElementAt(i, j), 0.0);
             }
         }
 
         // Force WrongSizeException
-        try {
-            m.reset(0, columns1, initValue);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            m.reset(rows1, 0, initValue);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            m.reset(0, 0, initValue);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> m.reset(0, columns1, initValue));
+        assertThrows(WrongSizeException.class, () -> m.reset(rows1, 0, initValue));
+        assertThrows(WrongSizeException.class, () -> m.reset(0, 0, initValue));
     }
 
     @Test
-    public void testToArray() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testToArray() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = new Matrix(rows, columns);
-        final double[] array = new double[rows * columns];
+        final var m = new Matrix(rows, columns);
+        final var array = new double[rows * columns];
         double value;
-        int counter = 0;
+        var counter = 0;
 
         // fill matrix
         if (Matrix.DEFAULT_USE_COLUMN_ORDER) {
             // use column order
-            for (int j = 0; j < columns; j++) {
-                for (int i = 0; i < rows; i++) {
-                    value = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE);
+            for (var j = 0; j < columns; j++) {
+                for (var i = 0; i < rows; i++) {
+                    value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                     m.setElementAt(i, j, value);
                     array[counter] = value;
                     counter++;
@@ -1125,204 +974,162 @@ public class MatrixTest {
             }
         }
 
-        final double[] array2 = m.toArray();
-        final double[] array3 = new double[array.length];
+        final var array2 = m.toArray();
+        final var array3 = new double[array.length];
         m.toArray(array3);
 
         // check correctness
-        for (int i = 0; i < rows * columns; i++) {
+        for (var i = 0; i < rows * columns; i++) {
             assertEquals(array2[i], array[i], 0.0);
             assertEquals(array3[i], array[i], 0.0);
         }
     }
 
     @Test
-    public void testToArrayWithColumnOrder() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testToArrayWithColumnOrder() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = new Matrix(rows, columns);
-        final double[] array = new double[rows * columns];
+        final var m = new Matrix(rows, columns);
+        final var array = new double[rows * columns];
         double value;
-        int counter = 0;
+        var counter = 0;
 
         // fill with column order
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                value = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 m.setElementAt(i, j, value);
                 array[counter] = value;
                 counter++;
             }
         }
 
-        final double[] array2 = m.toArray(true);
-        final double[] array3 = new double[array.length];
+        final var array2 = m.toArray(true);
+        final var array3 = new double[array.length];
         m.toArray(array3, true);
 
         // check correctness
-        for (int i = 0; i < rows * columns; i++) {
+        for (var i = 0; i < rows * columns; i++) {
             assertEquals(array2[i], array[i], 0.0);
             assertEquals(array3[i], array[i], 0.0);
         }
     }
 
     @Test
-    public void testToArrayWithRowOrder() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testToArrayWithRowOrder() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = new Matrix(rows, columns);
-        final double[] array = new double[rows * columns];
+        final var m = new Matrix(rows, columns);
+        final var array = new double[rows * columns];
         double value;
-        int counter = 0;
+        var counter = 0;
 
         // fill with row order
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                value = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
+        for (var i = 0; i < rows; i++) {
+            for (var j = 0; j < columns; j++) {
+                value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 m.setElementAt(i, j, value);
                 array[counter] = value;
                 counter++;
             }
         }
 
-        final double[] array2 = m.toArray(false);
-        final double[] array3 = new double[array.length];
+        final var array2 = m.toArray(false);
+        final var array3 = new double[array.length];
         m.toArray(array3, false);
 
         // check correctness
-        for (int i = 0; i < rows * columns; i++) {
+        for (var i = 0; i < rows * columns; i++) {
             assertEquals(array2[i], array[i], 0.0);
             assertEquals(array3[i], array[i], 0.0);
         }
     }
 
     @Test
-    public void testGetSubmatrix() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+    void testGetSubmatrix() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
 
-        final int topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
-        final int topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
+        final var topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
+        final var topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
 
-        final int bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
-        final int bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
+        final var bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
+        final var bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
 
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
 
         // fill matrix with random values
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                m.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                m.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
-        Matrix submatrix = m.getSubmatrix(topLeftRow, topLeftColumn,
-                bottomRightRow, bottomRightColumn);
+        final var submatrix = m.getSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn);
 
         // check correctness
         assertEquals(bottomRightRow - topLeftRow + 1, submatrix.getRows());
         assertEquals(bottomRightColumn - topLeftColumn + 1, submatrix.getColumns());
 
-        for (int j = 0; j < submatrix.getColumns(); j++) {
-            for (int i = 0; i < submatrix.getRows(); i++) {
+        for (var j = 0; j < submatrix.getColumns(); j++) {
+            for (var i = 0; i < submatrix.getRows(); i++) {
                 assertEquals(m.getElementAt(i + topLeftRow, j + topLeftColumn),
                         submatrix.getElementAt(i, j), 0.0);
             }
         }
 
         // Force IllegalArgumentException
-        submatrix = null;
-        try {
-            submatrix = m.getSubmatrix(rows, topLeftColumn,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(submatrix);
-        try {
-            submatrix = m.getSubmatrix(topLeftRow, columns,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(submatrix);
-        try {
-            submatrix = m.getSubmatrix(topLeftRow, topLeftColumn, rows,
-                    bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(submatrix);
-        try {
-            submatrix = m.getSubmatrix(topLeftRow, topLeftColumn,
-                    bottomRightRow, columns);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(submatrix);
-        try {
-            submatrix = m.getSubmatrix(topLeftRow + 1, topLeftColumn,
-                    topLeftRow, topLeftColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(submatrix);
-        try {
-            submatrix = m.getSubmatrix(topLeftRow, topLeftColumn + 1,
-                    topLeftRow, topLeftColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(submatrix);
-        try {
-            submatrix = m.getSubmatrix(topLeftRow + 1, topLeftColumn + 1,
-                    topLeftRow, topLeftColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(submatrix);
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrix(rows, topLeftColumn, bottomRightRow,
+                bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrix(topLeftRow, columns, bottomRightRow,
+                bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrix(topLeftRow, topLeftColumn, rows,
+                bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                columns));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrix(topLeftRow + 1, topLeftColumn,
+                topLeftRow, topLeftColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrix(topLeftRow, topLeftColumn + 1,
+                topLeftRow, topLeftColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrix(topLeftRow + 1,
+                topLeftColumn + 1, topLeftRow, topLeftColumn));
     }
 
     @Test
-    public void testGetSubmatrixAsArray() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+    void testGetSubmatrixAsArray() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
 
-        final int topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
-        final int topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
+        final var topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
+        final var topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
 
-        final int bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
-        final int bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
+        final var bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
+        final var bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
 
-
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
 
         // fill matrix with random values
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                m.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                m.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
-        double[] array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn,
-                bottomRightRow, bottomRightColumn);
-        assertEquals((bottomRightRow - topLeftRow + 1) * (bottomRightColumn - topLeftColumn + 1), array.length);
-        int counter = 0;
+        var array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn);
+        assertEquals((bottomRightRow - topLeftRow + 1) * (bottomRightColumn - topLeftColumn + 1),
+                array.length);
+        var counter = 0;
 
         if (Matrix.DEFAULT_USE_COLUMN_ORDER) {
             // column order
-            for (int j = 0; j < (bottomRightColumn - topLeftColumn + 1); j++) {
-                for (int i = 0; i < (bottomRightRow - topLeftRow + 1); i++) {
+            for (var j = 0; j < (bottomRightColumn - topLeftColumn + 1); j++) {
+                for (var i = 0; i < (bottomRightRow - topLeftRow + 1); i++) {
                     assertEquals(m.getElementAt(i + topLeftRow, j + topLeftColumn), array[counter],
                             0.0);
                     counter++;
@@ -1331,600 +1138,317 @@ public class MatrixTest {
         }
 
         // Force IllegalArgumentException
-        array = null;
-        try {
-            array = m.getSubmatrixAsArray(rows, topLeftColumn,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow, columns,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn, rows,
-                    bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn,
-                    bottomRightRow, columns);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow + 1, topLeftColumn,
-                    topLeftRow, topLeftColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn + 1,
-                    topLeftRow, topLeftColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow + 1, topLeftColumn + 1,
-                    topLeftRow, topLeftColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(rows, topLeftColumn, bottomRightRow,
+                bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow, columns, bottomRightRow,
+                bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow, topLeftColumn, rows,
+                bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow, topLeftColumn,
+                bottomRightRow, columns));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow + 1,
+                topLeftColumn, topLeftRow, topLeftColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow,
+                topLeftColumn + 1, topLeftRow, topLeftColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow + 1,
+                topLeftColumn + 1, topLeftRow, topLeftColumn));
     }
 
     @Test
-    public void testGetSubmatrixAsArrayWithColumnOrder()
-            throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+    void testGetSubmatrixAsArrayWithColumnOrder() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
 
-        final int topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
-        final int topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
+        final var topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
+        final var topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
 
-        final int bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
-        final int bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
+        final var bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
+        final var bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
 
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
 
         // fill matrix with random values
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                m.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                m.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
-        double[] array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn,
-                bottomRightRow, bottomRightColumn, true);
+        var array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn,
+                true);
         assertEquals((bottomRightRow - topLeftRow + 1) * (bottomRightColumn - topLeftColumn + 1),
                 array.length);
-        int counter = 0;
+        var counter = 0;
 
         // column order
-        for (int j = 0; j < (bottomRightColumn - topLeftColumn + 1); j++) {
-            for (int i = 0; i < (bottomRightRow - topLeftRow + 1); i++) {
-                assertEquals(m.getElementAt(i + topLeftRow, j + topLeftColumn), array[counter],
-                        0.0);
+        for (var j = 0; j < (bottomRightColumn - topLeftColumn + 1); j++) {
+            for (var i = 0; i < (bottomRightRow - topLeftRow + 1); i++) {
+                assertEquals(m.getElementAt(i + topLeftRow, j + topLeftColumn), array[counter], 0.0);
                 counter++;
             }
         }
 
         // Force IllegalArgumentException
-        array = null;
-        try {
-            array = m.getSubmatrixAsArray(rows, topLeftColumn,
-                    bottomRightRow, bottomRightColumn, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow, columns,
-                    bottomRightRow, bottomRightColumn, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn, rows,
-                    bottomRightColumn, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn,
-                    bottomRightRow, columns, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow + 1, topLeftColumn,
-                    topLeftRow, topLeftColumn, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn + 1,
-                    topLeftRow, topLeftColumn, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow + 1, topLeftColumn + 1,
-                    topLeftRow, topLeftColumn, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(rows, topLeftColumn,
+                bottomRightRow, bottomRightColumn, true));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow, columns,
+                bottomRightRow, bottomRightColumn, true));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow, topLeftColumn, rows,
+                bottomRightColumn, true));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow, topLeftColumn,
+                bottomRightRow, columns, true));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow + 1,
+                topLeftColumn, topLeftRow, topLeftColumn, true));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow,
+                topLeftColumn + 1, topLeftRow, topLeftColumn, true));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow + 1,
+                topLeftColumn + 1, topLeftRow, topLeftColumn, true));
     }
 
     @Test
-    public void testGetSubmatrixAsArrayWithRowOrder() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+    void testGetSubmatrixAsArrayWithRowOrder() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
 
-        final int topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
-        final int topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
+        final var topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
+        final var topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
 
-        final int bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
-        final int bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
+        final var bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
+        final var bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
 
-
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
 
         // fill matrix with random values
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                m.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                m.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
-        double[] array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn,
-                bottomRightRow, bottomRightColumn, false);
+        var array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn,
+                false);
         assertEquals( (bottomRightRow - topLeftRow + 1) * (bottomRightColumn - topLeftColumn + 1),
                 array.length);
-        int counter = 0;
+        var counter = 0;
 
         // row order
-        for (int i = 0; i < (bottomRightRow - topLeftRow + 1); i++) {
-            for (int j = 0; j < (bottomRightColumn - topLeftColumn + 1); j++) {
-                assertEquals(m.getElementAt(i + topLeftRow, j + topLeftColumn), array[counter],
-                        0.0);
+        for (var i = 0; i < (bottomRightRow - topLeftRow + 1); i++) {
+            for (var j = 0; j < (bottomRightColumn - topLeftColumn + 1); j++) {
+                assertEquals(m.getElementAt(i + topLeftRow, j + topLeftColumn), array[counter], 0.0);
                 counter++;
             }
         }
 
         // Force IllegalArgumentException
-        array = null;
-        try {
-            array = m.getSubmatrixAsArray(rows, topLeftColumn,
-                    bottomRightRow, bottomRightColumn, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow, columns,
-                    bottomRightRow, bottomRightColumn, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn, rows,
-                    bottomRightColumn, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn,
-                    bottomRightRow, columns, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow + 1, topLeftColumn,
-                    topLeftRow, topLeftColumn, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow, topLeftColumn + 1,
-                    topLeftRow, topLeftColumn, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
-        try {
-            array = m.getSubmatrixAsArray(topLeftRow + 1, topLeftColumn + 1,
-                    topLeftRow, topLeftColumn, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(array);
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(rows, topLeftColumn,
+                bottomRightRow, bottomRightColumn, false));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow, columns,
+                bottomRightRow, bottomRightColumn, false));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow, topLeftColumn, rows,
+                bottomRightColumn, false));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow, topLeftColumn,
+                bottomRightRow, columns, false));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow + 1,
+                topLeftColumn, topLeftRow, topLeftColumn, false));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow,
+                topLeftColumn + 1, topLeftRow, topLeftColumn, false));
+        assertThrows(IllegalArgumentException.class, () -> m.getSubmatrixAsArray(topLeftRow + 1,
+                topLeftColumn + 1, topLeftRow, topLeftColumn, false));
     }
 
     @Test
-    public void testSetSubmatrix() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+    void testSetSubmatrix() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
 
-        final int topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
-        final int topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
+        final var topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
+        final var topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
 
-        final int bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
-        final int bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
+        final var bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
+        final var bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
 
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
 
-        final int submatrixRows = bottomRightRow - topLeftRow + 1;
-        final int submatrixColumns = bottomRightColumn - topLeftColumn + 1;
-        final Matrix submatrix = new Matrix(submatrixRows, submatrixColumns);
+        final var submatrixRows = bottomRightRow - topLeftRow + 1;
+        final var submatrixColumns = bottomRightColumn - topLeftColumn + 1;
+        final var submatrix = new Matrix(submatrixRows, submatrixColumns);
 
         // fill sub-matrix with random values
-        for (int j = 0; j < submatrixColumns; j++) {
-            for (int i = 0; i < submatrixRows; i++) {
-                submatrix.setElementAt(i, j, randomizer.nextDouble(
-                        MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        for (var j = 0; j < submatrixColumns; j++) {
+            for (var i = 0; i < submatrixRows; i++) {
+                submatrix.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
         // set sub-matrix
-        m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, submatrix);
+        m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, submatrix);
 
         // check correctness
-        for (int j = 0; j < submatrixColumns; j++) {
-            for (int i = 0; i < submatrixRows; i++) {
+        for (var j = 0; j < submatrixColumns; j++) {
+            for (var i = 0; i < submatrixRows; i++) {
                 assertEquals(submatrix.getElementAt(i, j),
                         m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
             }
         }
 
         // Force IllegalArgumentException
-        try {
-            m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, submatrix);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, submatrix);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
-                    bottomRightColumn, submatrix);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, columns, bottomRightRow,
-                    bottomRightColumn, submatrix);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
-                    bottomRightColumn, submatrix);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, rows, bottomRightColumn,
-                    submatrix);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    -bottomRightColumn, submatrix);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, columns,
-                    submatrix);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(bottomRightRow + 1, topLeftColumn, topLeftRow,
-                    bottomRightColumn, submatrix);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, bottomRightColumn + 1, bottomRightRow,
-                    topLeftColumn, submatrix);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, submatrix));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
+                bottomRightColumn, submatrix));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
+                bottomRightColumn, submatrix));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, columns, bottomRightRow,
+                bottomRightColumn, submatrix));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
+                bottomRightColumn, submatrix));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, rows,
+                bottomRightColumn, submatrix));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                -bottomRightColumn, submatrix));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                columns, submatrix));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(bottomRightRow + 1, topLeftColumn,
+                topLeftRow, bottomRightColumn, submatrix));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow,
+                bottomRightColumn + 1, bottomRightRow, topLeftColumn, submatrix));
 
-        Matrix wrong = new Matrix(submatrixRows + 1, submatrixColumns);
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, wrong);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var wrong = new Matrix(submatrixRows + 1, submatrixColumns);
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, wrong));
 
-        wrong = new Matrix(submatrixRows, submatrixColumns + 1);
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, wrong);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var wrong2 = new Matrix(submatrixRows, submatrixColumns + 1);
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, wrong2));
 
-        wrong = new Matrix(submatrixRows + 1, submatrixColumns + 1);
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, wrong);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var wrong3 = new Matrix(submatrixRows + 1, submatrixColumns + 1);
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, wrong3));
     }
 
     @Test
-    public void testSetSubmatrix2() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+    void testSetSubmatrix2() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
 
-        final int topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
-        final int topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
+        final var topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
+        final var topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
 
-        final int bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
-        final int bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
+        final var bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
+        final var bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
 
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
 
-        final Matrix submatrix = new Matrix(rows, columns);
+        final var submatrix = new Matrix(rows, columns);
 
         // fill sub-matrix with random values
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                submatrix.setElementAt(i, j, randomizer.nextDouble(
-                        MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                submatrix.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
         // set sub-matrix
-        m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, submatrix, topLeftRow, topLeftColumn,
-                bottomRightRow, bottomRightColumn);
+        m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, submatrix, topLeftRow,
+                topLeftColumn, bottomRightRow, bottomRightColumn);
 
         // check correctness
-        for (int j = topLeftColumn; j <= bottomRightColumn; j++) {
-            for (int i = topLeftRow; i < bottomRightRow; i++) {
+        for (var j = topLeftColumn; j <= bottomRightColumn; j++) {
+            for (var i = topLeftRow; i < bottomRightRow; i++) {
                 assertEquals(submatrix.getElementAt(i, j), m.getElementAt(i, j), 0.0);
             }
         }
 
         // Force IllegalArgumentException
-        try {
-            m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, submatrix, topLeftRow, topLeftColumn,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, submatrix, topLeftRow, topLeftColumn,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
-                    bottomRightColumn, submatrix, topLeftRow, topLeftColumn,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, columns, bottomRightRow,
-                    bottomRightColumn, submatrix, topLeftRow, topLeftColumn,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
-                    bottomRightColumn, submatrix, topLeftRow, topLeftColumn,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, rows, bottomRightColumn,
-                    submatrix, topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    -bottomRightColumn, submatrix, topLeftRow, topLeftColumn,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, columns,
-                    submatrix, topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(bottomRightRow + 1, topLeftColumn, topLeftRow,
-                    bottomRightColumn, submatrix, topLeftRow, topLeftColumn,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, bottomRightColumn + 1, bottomRightRow,
-                    topLeftColumn, submatrix, topLeftRow, topLeftColumn,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, submatrix, -topLeftRow, topLeftColumn,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, submatrix, rows, topLeftColumn,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, submatrix, topLeftRow, -topLeftColumn,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, submatrix, topLeftRow, columns,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, submatrix, topLeftRow, topLeftColumn,
-                    -bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, submatrix, topLeftRow, topLeftColumn,
-                    rows, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, submatrix, topLeftRow, topLeftColumn,
-                    bottomRightRow, -bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, submatrix, topLeftRow, topLeftColumn,
-                    bottomRightRow, columns);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(bottomRightRow + 1, topLeftColumn, topLeftRow,
-                    bottomRightColumn, submatrix, topLeftRow, topLeftColumn,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, bottomRightColumn + 1, bottomRightRow,
-                    topLeftColumn, submatrix, topLeftRow, topLeftColumn,
-                    bottomRightRow, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, m, topLeftRow, topLeftColumn,
-                    bottomRightRow + 1, bottomRightColumn);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, m, topLeftRow, topLeftColumn,
-                    bottomRightRow, bottomRightColumn + 1);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, m, topLeftRow, topLeftColumn,
-                    bottomRightRow + 1, bottomRightColumn + 1);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, submatrix, topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
+                bottomRightColumn, submatrix, topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
+                bottomRightColumn, submatrix, topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, columns, bottomRightRow,
+                bottomRightColumn, submatrix, topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
+                bottomRightColumn, submatrix, topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, rows,
+                bottomRightColumn, submatrix, topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                -bottomRightColumn, submatrix, topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                columns, submatrix, topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(bottomRightRow + 1, topLeftColumn,
+                topLeftRow, bottomRightColumn, submatrix, topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow,
+                bottomRightColumn + 1, bottomRightRow, topLeftColumn, submatrix, topLeftRow, topLeftColumn,
+                bottomRightRow, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, submatrix, -topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, submatrix, rows, topLeftColumn, bottomRightRow, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, submatrix, topLeftRow, -topLeftColumn, bottomRightRow, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, submatrix, topLeftRow, columns, bottomRightRow, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, submatrix, topLeftRow, topLeftColumn, -bottomRightRow, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, submatrix, topLeftRow, topLeftColumn, rows, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, submatrix, topLeftRow, topLeftColumn, bottomRightRow, -bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, submatrix, topLeftRow, topLeftColumn, bottomRightRow, columns));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(bottomRightRow + 1, topLeftColumn,
+                topLeftRow, bottomRightColumn, submatrix, topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow,
+                bottomRightColumn + 1, bottomRightRow, topLeftColumn, submatrix, topLeftRow, topLeftColumn,
+                bottomRightRow, bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, m, topLeftRow, topLeftColumn, bottomRightRow + 1,
+                bottomRightColumn));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, m, topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn + 1));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, m, topLeftRow, topLeftColumn, bottomRightRow + 1,
+                bottomRightColumn + 1));
     }
 
     @Test
-    public void testSetSubmatrixWithValue() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+    void testSetSubmatrixWithValue() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
 
-        final int topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
-        final int topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
+        final var topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
+        final var topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
 
-        final int bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
-        final int bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
+        final var bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
+        final var bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
 
-        final double value = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
 
         // fil matrix with random values
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 m.setElementAt(i, j, value + 1.0);
             }
         }
 
         // set sub-matrix
-        m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, value);
+        m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, value);
 
         // check correctness
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                if (i >= topLeftRow && i <= bottomRightRow &&
-                        j >= topLeftColumn && j <= bottomRightColumn) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                if (i >= topLeftRow && i <= bottomRightRow && j >= topLeftColumn && j <= bottomRightColumn) {
                     assertEquals(value, m.getElementAt(i, j), 0.0);
                 } else {
                     assertEquals(value + 1.0, m.getElementAt(i, j), 0.0);
@@ -1933,763 +1457,434 @@ public class MatrixTest {
         }
 
         // Force IllegalArgumentException
-        try {
-            m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, value);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, value);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
-                    bottomRightColumn, value);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, columns, bottomRightRow,
-                    bottomRightColumn, value);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
-                    bottomRightColumn, value);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, rows, bottomRightColumn,
-                    value);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    -bottomRightColumn, value);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, columns,
-                    value);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(bottomRightRow + 1, topLeftColumn, topLeftRow,
-                    bottomRightColumn, value);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, bottomRightColumn + 1, bottomRightRow,
-                    topLeftColumn, value);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, value));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
+                bottomRightColumn, value));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
+                bottomRightColumn, value));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, columns, bottomRightRow,
+                bottomRightColumn, value));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
+                bottomRightColumn, value));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, rows,
+                bottomRightColumn, value));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                -bottomRightColumn, value));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                columns, value));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(bottomRightRow + 1, topLeftColumn,
+                topLeftRow, bottomRightColumn, value));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow,
+                bottomRightColumn + 1, bottomRightRow, topLeftColumn, value));
     }
 
     @Test
-    public void testSetSubmatrixWithArray() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+    void testSetSubmatrixWithArray() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
 
-        final int topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
-        final int topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
+        final var topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
+        final var topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
 
-        final int bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
-        final int bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
+        final var bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
+        final var bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
 
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
 
-        final int submatrixRows = bottomRightRow - topLeftRow + 1;
-        final int submatrixColumns = bottomRightColumn - topLeftColumn + 1;
-        final int length = submatrixRows * submatrixColumns;
-        final double[] array = new double[length];
+        final var submatrixRows = bottomRightRow - topLeftRow + 1;
+        final var submatrixColumns = bottomRightColumn - topLeftColumn + 1;
+        final var length = submatrixRows * submatrixColumns;
+        final var array = new double[length];
 
         // fill array with random values
-        for (int i = 0; i < length; i++) {
-            array[i] = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
+        for (var i = 0; i < length; i++) {
+            array[i] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
 
         // set sub-matrix
-        m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, array);
-        int counter = 0;
+        m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, array);
+        var counter = 0;
 
         // check correctness
         if (Matrix.DEFAULT_USE_COLUMN_ORDER) {
             // column order
-            for (int j = 0; j < submatrixColumns; j++) {
-                for (int i = 0; i < submatrixRows; i++) {
-                    assertEquals(array[counter],
-                            m.getElementAt(i + topLeftRow, j + topLeftColumn),  0.0);
+            for (var j = 0; j < submatrixColumns; j++) {
+                for (var i = 0; i < submatrixRows; i++) {
+                    assertEquals(array[counter], m.getElementAt(i + topLeftRow, j + topLeftColumn),
+                            0.0);
                     counter++;
                 }
             }
         }
 
         // Force IllegalArgumentException
-        try {
-            m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, columns, bottomRightRow,
-                    bottomRightColumn, array);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
-                    bottomRightColumn, array);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, rows, bottomRightColumn,
-                    array);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    -bottomRightColumn, array);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, columns,
-                    array);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(bottomRightRow + 1, topLeftColumn, topLeftRow,
-                    bottomRightColumn, array);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, bottomRightColumn + 1, bottomRightRow,
-                    topLeftColumn, array);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, array));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
+                bottomRightColumn, array));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
+                bottomRightColumn, array));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, columns, bottomRightRow,
+                bottomRightColumn, array));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
+                bottomRightColumn, array));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, rows,
+                bottomRightColumn, array));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                -bottomRightColumn, array));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                columns, array));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(bottomRightRow + 1, topLeftColumn,
+                topLeftRow, bottomRightColumn, array));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow,
+                bottomRightColumn + 1, bottomRightRow, topLeftColumn, array));
 
-        final double[] wrong = new double[length + 1];
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, wrong);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var wrong = new double[length + 1];
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, wrong));
     }
 
     @Test
-    public void testSetSubmatrixWithArrayColumnOrder()
-            throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+    void testSetSubmatrixWithArrayColumnOrder() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
 
-        final int topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
-        final int topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
+        final var topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
+        final var topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
 
-        final int bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
-        final int bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
+        final var bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
+        final var bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
 
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
 
-        final int submatrixRows = bottomRightRow - topLeftRow + 1;
-        final int submatrixColumns = bottomRightColumn - topLeftColumn + 1;
-        final int length = submatrixRows * submatrixColumns;
-        final double[] array = new double[length];
+        final var submatrixRows = bottomRightRow - topLeftRow + 1;
+        final var submatrixColumns = bottomRightColumn - topLeftColumn + 1;
+        final var length = submatrixRows * submatrixColumns;
+        final var array = new double[length];
 
         // fill array with random values
-        for (int i = 0; i < length; i++) {
-            array[i] = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
+        for (var i = 0; i < length; i++) {
+            array[i] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
 
         // set sub-matrix
-        m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, array, true);
-        int counter = 0;
+        m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, array, true);
+        var counter = 0;
 
         // check correctness with column order
-        for (int j = 0; j < submatrixColumns; j++) {
-            for (int i = 0; i < submatrixRows; i++) {
-                assertEquals(array[counter],
-                        m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
+        for (var j = 0; j < submatrixColumns; j++) {
+            for (var i = 0; i < submatrixRows; i++) {
+                assertEquals(array[counter], m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
                 counter++;
             }
         }
 
         // Force IllegalArgumentException
-        try {
-            m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, columns, bottomRightRow,
-                    bottomRightColumn, array, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
-                    bottomRightColumn, array, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, rows, bottomRightColumn,
-                    array, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    -bottomRightColumn, array, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, columns,
-                    array, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(bottomRightRow + 1, topLeftColumn, topLeftRow,
-                    bottomRightColumn, array, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, bottomRightColumn + 1, bottomRightRow,
-                    topLeftColumn, array, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, columns, bottomRightRow,
+                bottomRightColumn, array, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
+                bottomRightColumn, array, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, rows,
+                bottomRightColumn, array, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                -bottomRightColumn, array, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                columns, array, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(bottomRightRow + 1, topLeftColumn,
+                topLeftRow, bottomRightColumn, array, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow,
+                bottomRightColumn + 1, bottomRightRow, topLeftColumn, array, true));
 
-        final double[] wrong = new double[length + 1];
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, wrong, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var wrong = new double[length + 1];
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, wrong, true));
     }
 
     @Test
-    public void testSetSubmatrixWithArrayRowOrder() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+    void testSetSubmatrixWithArrayRowOrder() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
 
-        final int topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
-        final int topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
+        final var topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
+        final var topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
 
-        final int bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
-        final int bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
+        final var bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
+        final var bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
 
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
 
-        final int submatrixRows = bottomRightRow - topLeftRow + 1;
-        final int submatrixColumns = bottomRightColumn - topLeftColumn + 1;
-        final int length = submatrixRows * submatrixColumns;
-        final double[] array = new double[length];
+        final var submatrixRows = bottomRightRow - topLeftRow + 1;
+        final var submatrixColumns = bottomRightColumn - topLeftColumn + 1;
+        final var length = submatrixRows * submatrixColumns;
+        final var array = new double[length];
 
         // fill array with random values
-        for (int i = 0; i < length; i++) {
-            array[i] = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
+        for (var i = 0; i < length; i++) {
+            array[i] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
 
         // set sub-matrix
-        m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, array, false);
-        int counter = 0;
+        m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, array, false);
+        var counter = 0;
 
         // check correctness with row order
-        for (int i = 0; i < submatrixRows; i++) {
-            for (int j = 0; j < submatrixColumns; j++) {
-                assertEquals(array[counter],
-                        m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
+        for (var i = 0; i < submatrixRows; i++) {
+            for (var j = 0; j < submatrixColumns; j++) {
+                assertEquals(array[counter], m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
                 counter++;
             }
         }
 
         // Force IllegalArgumentException
-        try {
-            m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, columns, bottomRightRow,
-                    bottomRightColumn, array, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
-                    bottomRightColumn, array, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, rows, bottomRightColumn,
-                    array, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    -bottomRightColumn, array, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, columns,
-                    array, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(bottomRightRow + 1, topLeftColumn, topLeftRow,
-                    bottomRightColumn, array, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, bottomRightColumn + 1, bottomRightRow,
-                    topLeftColumn, array, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, columns, bottomRightRow,
+                bottomRightColumn, array, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
+                bottomRightColumn, array, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, rows,
+                bottomRightColumn, array, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                -bottomRightColumn, array, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                columns, array, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(bottomRightRow + 1, topLeftColumn,
+                topLeftRow, bottomRightColumn, array, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow,
+                bottomRightColumn + 1, bottomRightRow, topLeftColumn, array, false));
 
-        final double[] wrong = new double[length + 1];
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, wrong, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var wrong = new double[length + 1];
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, wrong, false));
     }
 
     @Test
-    public void testSetSubmatrixWithArray2() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+    void testSetSubmatrixWithArray2() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
 
-        final int topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
-        final int topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
+        final var topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
+        final var topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
 
-        final int bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
-        final int bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
+        final var bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
+        final var bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
 
-        final int offset = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var offset = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
 
-        final int submatrixRows = bottomRightRow - topLeftRow + 1;
-        final int submatrixColumns = bottomRightColumn - topLeftColumn + 1;
-        final int length = submatrixRows * submatrixColumns;
-        final double[] array = new double[length + offset];
+        final var submatrixRows = bottomRightRow - topLeftRow + 1;
+        final var submatrixColumns = bottomRightColumn - topLeftColumn + 1;
+        final var length = submatrixRows * submatrixColumns;
+        final var array = new double[length + offset];
 
         // fill array with random values
         for (int i = 0; i < length; i++) {
-            array[i + offset] = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
+            array[i + offset] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
 
         // set sub-matrix
         m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
                 bottomRightColumn, array, offset, offset + length - 1);
-        int counter = offset;
+        var counter = offset;
 
         // check correctness
         if (Matrix.DEFAULT_USE_COLUMN_ORDER) {
             // column order
-            for (int j = 0; j < submatrixColumns; j++) {
-                for (int i = 0; i < submatrixRows; i++) {
-                    assertEquals(array[counter],
-                            m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
+            for (var j = 0; j < submatrixColumns; j++) {
+                for (var i = 0; i < submatrixRows; i++) {
+                    assertEquals(array[counter], m.getElementAt(i + topLeftRow, j + topLeftColumn),
+                            0.0);
                     counter++;
                 }
             }
         }
 
         // Force IllegalArgumentException
-        try {
-            m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length - 1);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length - 1);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length - 1);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, columns, bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length - 1);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length - 1);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, rows, bottomRightColumn,
-                    array, offset, offset + length - 1);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    -bottomRightColumn, array, offset, offset + length - 1);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, columns,
-                    array, offset, offset + length - 1);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(bottomRightRow + 1, topLeftColumn, topLeftRow,
-                    bottomRightColumn, array, offset, offset + length - 1);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, bottomRightColumn + 1, bottomRightRow,
-                    topLeftColumn, array, offset, offset + length - 1);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, offset, offset + length - 1));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, offset, offset + length - 1));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, offset, offset + length - 1));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, columns, bottomRightRow,
+                bottomRightColumn, array, offset, offset + length - 1));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
+                bottomRightColumn, array, offset, offset + length - 1));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, rows,
+                bottomRightColumn, array, offset, offset + length - 1));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                -bottomRightColumn, array, offset, offset + length - 1));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                columns, array, offset, offset + length - 1));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(bottomRightRow + 1, topLeftColumn,
+                topLeftRow, bottomRightColumn, array, offset, offset + length - 1));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow,
+                bottomRightColumn + 1, bottomRightRow, topLeftColumn, array, offset,
+                offset + length - 1));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, offset, offset + length));
     }
 
     @Test
-    public void testSetSubmatrixWithArrayColumnOrder2()
-            throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+    void testSetSubmatrixWithArrayColumnOrder2() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
 
-        final int topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
-        final int topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
+        final var topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
+        final var topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
 
-        final int bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
-        final int bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
+        final var bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
+        final var bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
 
-        final int offset = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var offset = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
 
-        final int submatrixRows = bottomRightRow - topLeftRow + 1;
-        final int submatrixColumns = bottomRightColumn - topLeftColumn + 1;
-        final int length = submatrixRows * submatrixColumns;
-        final double[] array = new double[length + offset];
+        final var submatrixRows = bottomRightRow - topLeftRow + 1;
+        final var submatrixColumns = bottomRightColumn - topLeftColumn + 1;
+        final var length = submatrixRows * submatrixColumns;
+        final var array = new double[length + offset];
 
         // fill array with random values
-        for (int i = 0; i < length; i++) {
-            array[i + offset] = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
+        for (var i = 0; i < length; i++) {
+            array[i + offset] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
 
         // set sub-matrix
         m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
                 bottomRightColumn, array, offset, offset + length - 1, true);
-        int counter = offset;
+        var counter = offset;
 
         // check correctness with column order
-        for (int j = 0; j < submatrixColumns; j++) {
-            for (int i = 0; i < submatrixRows; i++) {
+        for (var j = 0; j < submatrixColumns; j++) {
+            for (var i = 0; i < submatrixRows; i++) {
                 assertEquals(array[counter], m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
                 counter++;
             }
         }
 
         // Force IllegalArgumentException
-        try {
-            m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length - 1,
-                    true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length - 1,
-                    true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length - 1,
-                    true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, columns, bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length - 1,
-                    true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length - 1,
-                    true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, rows, bottomRightColumn,
-                    array, offset, offset + length - 1, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    -bottomRightColumn, array, offset, offset + length - 1,
-                    true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, columns,
-                    array, offset, offset + length - 1, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(bottomRightRow + 1, topLeftColumn, topLeftRow,
-                    bottomRightColumn, array, offset, offset + length - 1,
-                    true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, bottomRightColumn + 1, bottomRightRow,
-                    topLeftColumn, array, offset, offset + length - 1, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, offset, offset + length - 1, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, offset, offset + length - 1, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, offset, offset + length - 1, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, columns, bottomRightRow,
+                bottomRightColumn, array, offset, offset + length - 1, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
+                bottomRightColumn, array, offset, offset + length - 1, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, rows,
+                bottomRightColumn, array, offset, offset + length - 1, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                -bottomRightColumn, array, offset, offset + length - 1, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                columns, array, offset, offset + length - 1, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(bottomRightRow + 1, topLeftColumn,
+                topLeftRow, bottomRightColumn, array, offset, offset + length - 1, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow,
+                bottomRightColumn + 1, bottomRightRow, topLeftColumn, array, offset,
+                offset + length - 1, true));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, offset, offset + length, true));
     }
 
     @Test
-    public void testSetSubmatrixWithArrayRowOrder2() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
-        final int columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
+    void testSetSubmatrixWithArrayRowOrder2() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS + 2, MAX_ROWS + 2);
+        final var columns = randomizer.nextInt(MIN_COLUMNS + 2, MAX_COLUMNS + 2);
 
-        final int topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
-        final int topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
+        final var topLeftColumn = randomizer.nextInt(MIN_COLUMNS, columns - 1);
+        final var topLeftRow = randomizer.nextInt(MIN_ROWS, rows - 1);
 
-        final int bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
-        final int bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
+        final var bottomRightColumn = randomizer.nextInt(topLeftColumn, columns - 1);
+        final var bottomRightRow = randomizer.nextInt(topLeftRow, rows - 1);
 
-        final int offset = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var offset = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-        final Matrix m = new Matrix(rows, columns);
+        final var m = new Matrix(rows, columns);
 
-        final int submatrixRows = bottomRightRow - topLeftRow + 1;
-        final int submatrixColumns = bottomRightColumn - topLeftColumn + 1;
-        final int length = submatrixRows * submatrixColumns;
-        final double[] array = new double[length + offset];
+        final var submatrixRows = bottomRightRow - topLeftRow + 1;
+        final var submatrixColumns = bottomRightColumn - topLeftColumn + 1;
+        final var length = submatrixRows * submatrixColumns;
+        final var array = new double[length + offset];
 
         // fill array with random values
-        for (int i = 0; i < length; i++) {
-            array[i + offset] = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
+        for (var i = 0; i < length; i++) {
+            array[i + offset] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
 
         // set sub-matrix
-        m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                bottomRightColumn, array, offset, offset + length - 1, false);
-        int counter = offset;
+        m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, bottomRightColumn, array,
+                offset, offset + length - 1, false);
+        var counter = offset;
 
         // check correctness with row order
-        for (int i = 0; i < submatrixRows; i++) {
-            for (int j = 0; j < submatrixColumns; j++) {
+        for (var i = 0; i < submatrixRows; i++) {
+            for (var j = 0; j < submatrixColumns; j++) {
                 assertEquals(array[counter], m.getElementAt(i + topLeftRow, j + topLeftColumn), 0.0);
                 counter++;
             }
         }
 
         // Force IllegalArgumentException
-        try {
-            m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length - 1,
-                    false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length - 1,
-                    false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length - 1,
-                    false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, columns, bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length - 1,
-                    false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length - 1,
-                    false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, rows, bottomRightColumn,
-                    array, offset, offset + length - 1, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    -bottomRightColumn, array, offset, offset + length - 1,
-                    false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow, columns,
-                    array, offset, offset + length - 1, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(bottomRightRow + 1, topLeftColumn, topLeftRow,
-                    bottomRightColumn, array, offset, offset + length - 1,
-                    false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, bottomRightColumn + 1, bottomRightRow,
-                    topLeftColumn, array, offset, offset + length - 1, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
-                    bottomRightColumn, array, offset, offset + length, false);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(-topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, offset, offset + length - 1, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(rows, topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, offset, offset + length - 1, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, -topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, offset, offset + length - 1, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, columns, bottomRightRow,
+                bottomRightColumn, array, offset, offset + length - 1, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, -bottomRightRow,
+                bottomRightColumn, array, offset, offset + length - 1, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, rows,
+                bottomRightColumn, array, offset, offset + length - 1, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                -bottomRightColumn, array, offset, offset + length - 1, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                columns, array, offset, offset + length - 1, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(bottomRightRow + 1, topLeftColumn,
+                topLeftRow, bottomRightColumn, array, offset, offset + length - 1, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow,
+                bottomRightColumn + 1, bottomRightRow, topLeftColumn, array, offset,
+                offset + length - 1, false));
+        assertThrows(IllegalArgumentException.class, () -> m.setSubmatrix(topLeftRow, topLeftColumn, bottomRightRow,
+                bottomRightColumn, array, offset, offset + length, false));
     }
 
     @Test
-    public void testIdentity() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testIdentity() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
-        final Matrix m = Matrix.identity(rows, columns);
+        final var m = Matrix.identity(rows, columns);
 
         // check correctness
         assertEquals(m.getRows(), rows);
         assertEquals(m.getColumns(), columns);
 
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
                 if (i == j) {
                     assertEquals(1.0, m.getElementAt(i, j), 0.0);
                 } else {
@@ -2699,35 +1894,22 @@ public class MatrixTest {
         }
 
         // force WrongSizeException
-        try {
-            Matrix.identity(0, columns);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Matrix.identity(rows, 0);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Matrix.identity(0, 0);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-
+        assertThrows(WrongSizeException.class, () -> Matrix.identity(0, columns));
+        assertThrows(WrongSizeException.class, () -> Matrix.identity(rows, 0));
+        assertThrows(WrongSizeException.class, () -> Matrix.identity(0, 0));
     }
 
     @Test
-    public void testFillWithUniformRandomValues() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testFillWithUniformRandomValues() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         Matrix m;
         double value;
-        double sum = 0.0;
-        double sqrSum = 0.0;
-        for (int k = 0; k < TIMES; k++) {
+        var sum = 0.0;
+        var sqrSum = 0.0;
+        for (var k = 0; k < TIMES; k++) {
             m = new Matrix(rows, columns);
             Matrix.fillWithUniformRandomValues(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE, m);
 
@@ -2735,8 +1917,8 @@ public class MatrixTest {
             assertEquals(m.getRows(), rows);
             assertEquals(m.getColumns(), columns);
 
-            for (int j = 0; j < columns; j++) {
-                for (int i = 0; i < rows; i++) {
+            for (var j = 0; j < columns; j++) {
+                for (var i = 0; i < rows; i++) {
                     value = m.getElementAt(i, j);
 
                     assertTrue(value >= MIN_RANDOM_VALUE);
@@ -2748,65 +1930,48 @@ public class MatrixTest {
             }
         }
 
-        final int numSamples = rows * columns * TIMES;
-        final double estimatedMeanValue = sum / (double) (numSamples);
-        final double estimatedVariance = (sqrSum - (double) numSamples *
-                estimatedMeanValue * estimatedMeanValue) /
-                ((double) numSamples - 1.0);
+        final var numSamples = rows * columns * TIMES;
+        final var estimatedMeanValue = sum / (double) (numSamples);
+        final var estimatedVariance = (sqrSum - (double) numSamples *
+                estimatedMeanValue * estimatedMeanValue) / ((double) numSamples - 1.0);
 
         // mean and variance of uniform distribution
-        final double meanValue = 0.5 * (MIN_RANDOM_VALUE + MAX_RANDOM_VALUE);
-        final double variance = (MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) *
-                (MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) / 12.0;
+        final var meanValue = 0.5 * (MIN_RANDOM_VALUE + MAX_RANDOM_VALUE);
+        final var variance = (MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) * (MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) / 12.0;
 
         // check correctness of results
-        assertEquals(estimatedMeanValue, meanValue,
-                estimatedMeanValue * RELATIVE_ERROR);
-        assertEquals(estimatedVariance, variance,
-                estimatedVariance * RELATIVE_ERROR);
+        assertEquals(estimatedMeanValue, meanValue, estimatedMeanValue * RELATIVE_ERROR);
+        assertEquals(estimatedVariance, variance, estimatedVariance * RELATIVE_ERROR);
 
         // Force WrongSizeException
-        try {
-            Matrix.createWithUniformRandomValues(0, columns, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Matrix.createWithUniformRandomValues(rows, 0, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        // Force IllegalArgumentException
-        try {
-            Matrix.createWithUniformRandomValues(rows, columns,
-                    MAX_RANDOM_VALUE, MIN_RANDOM_VALUE);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> Matrix.createWithUniformRandomValues(0, columns,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        assertThrows(WrongSizeException.class, () -> Matrix.createWithUniformRandomValues(rows, 0,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
+        // Force IllegalArgumentException
+        assertThrows(IllegalArgumentException.class, () -> Matrix.createWithUniformRandomValues(rows, columns,
+                MAX_RANDOM_VALUE, MIN_RANDOM_VALUE));
     }
 
     @Test
-    public void testCreateWithUniformRandomValues() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testCreateWithUniformRandomValues() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         Matrix m;
         double value;
-        double sum = 0.0;
-        double sqrSum = 0.0;
-        for (int k = 0; k < TIMES; k++) {
-            m = Matrix.createWithUniformRandomValues(rows, columns,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var sum = 0.0;
+        var sqrSum = 0.0;
+        for (var k = 0; k < TIMES; k++) {
+            m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             // check correctness
             assertEquals(rows, m.getRows());
             assertEquals(columns, m.getColumns());
 
-            for (int j = 0; j < columns; j++) {
-                for (int i = 0; i < rows; i++) {
+            for (var j = 0; j < columns; j++) {
+                for (var i = 0; i < rows; i++) {
                     value = m.getElementAt(i, j);
 
                     assertTrue(value >= MIN_RANDOM_VALUE);
@@ -2818,65 +1983,49 @@ public class MatrixTest {
             }
         }
 
-        final int numSamples = rows * columns * TIMES;
-        final double estimatedMeanValue = sum / (double) (numSamples);
-        final double estimatedVariance = (sqrSum - (double) numSamples *
-                estimatedMeanValue * estimatedMeanValue) /
-                ((double) numSamples - 1.0);
+        final var numSamples = rows * columns * TIMES;
+        final var estimatedMeanValue = sum / (double) (numSamples);
+        final var estimatedVariance = (sqrSum - (double) numSamples *
+                estimatedMeanValue * estimatedMeanValue) / ((double) numSamples - 1.0);
 
         // mean and variance of uniform distribution
-        final double meanValue = 0.5 * (MIN_RANDOM_VALUE + MAX_RANDOM_VALUE);
-        final double variance = (MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) *
-                (MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) / 12.0;
+        final var meanValue = 0.5 * (MIN_RANDOM_VALUE + MAX_RANDOM_VALUE);
+        final var variance = (MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) * (MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) / 12.0;
 
         // check correctness of results
-        assertEquals(estimatedMeanValue, meanValue,
-                estimatedMeanValue * RELATIVE_ERROR);
-        assertEquals(estimatedVariance, variance,
-                estimatedVariance * RELATIVE_ERROR);
+        assertEquals(estimatedMeanValue, meanValue, estimatedMeanValue * RELATIVE_ERROR);
+        assertEquals(estimatedVariance, variance, estimatedVariance * RELATIVE_ERROR);
 
         // Force WrongSizeException
-        try {
-            Matrix.createWithUniformRandomValues(0, columns, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Matrix.createWithUniformRandomValues(rows, 0, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        // Force IllegalArgumentException
-        try {
-            Matrix.createWithUniformRandomValues(rows, columns,
-                    MAX_RANDOM_VALUE, MIN_RANDOM_VALUE);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> Matrix.createWithUniformRandomValues(0, columns,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        assertThrows(WrongSizeException.class, () -> Matrix.createWithUniformRandomValues(rows, 0,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
+        // Force IllegalArgumentException
+        assertThrows(IllegalArgumentException.class, () -> Matrix.createWithUniformRandomValues(rows, columns,
+                MAX_RANDOM_VALUE, MIN_RANDOM_VALUE));
     }
 
     @Test
-    public void testCreateWithUniformRandomValues2() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testCreateWithUniformRandomValues2() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         Matrix m;
         double value;
-        double sum = 0.0;
-        double sqrSum = 0.0;
-        for (int k = 0; k < TIMES; k++) {
-            m = Matrix.createWithUniformRandomValues(rows, columns,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE, new SecureRandom());
+        var sum = 0.0;
+        var sqrSum = 0.0;
+        for (var k = 0; k < TIMES; k++) {
+            m = Matrix.createWithUniformRandomValues(rows, columns, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE,
+                    new SecureRandom());
             // check correctness
             assertEquals(rows, m.getRows());
             assertEquals(columns, m.getColumns());
 
-            for (int j = 0; j < columns; j++) {
-                for (int i = 0; i < rows; i++) {
+            for (var j = 0; j < columns; j++) {
+                for (var i = 0; i < rows; i++) {
                     value = m.getElementAt(i, j);
 
                     assertTrue(value >= MIN_RANDOM_VALUE);
@@ -2888,57 +2037,42 @@ public class MatrixTest {
             }
         }
 
-        final int numSamples = rows * columns * TIMES;
-        final double estimatedMeanValue = sum / (double) (numSamples);
-        final double estimatedVariance = (sqrSum - (double) numSamples *
-                estimatedMeanValue * estimatedMeanValue) /
-                ((double) numSamples - 1.0);
+        final var numSamples = rows * columns * TIMES;
+        final var estimatedMeanValue = sum / (double) (numSamples);
+        final var estimatedVariance = (sqrSum - (double) numSamples * estimatedMeanValue * estimatedMeanValue)
+                / ((double) numSamples - 1.0);
 
         // mean and variance of uniform distribution
-        final double meanValue = 0.5 * (MIN_RANDOM_VALUE + MAX_RANDOM_VALUE);
-        final double variance = (MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) *
-                (MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) / 12.0;
+        final var meanValue = 0.5 * (MIN_RANDOM_VALUE + MAX_RANDOM_VALUE);
+        final var variance = (MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) * (MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) / 12.0;
 
         // check correctness of results
-        assertEquals(estimatedMeanValue, meanValue,
-                estimatedMeanValue * RELATIVE_ERROR);
-        assertEquals(estimatedVariance, variance,
-                estimatedVariance * RELATIVE_ERROR);
+        assertEquals(estimatedMeanValue, meanValue, estimatedMeanValue * RELATIVE_ERROR);
+        assertEquals(estimatedVariance, variance, estimatedVariance * RELATIVE_ERROR);
 
         // Force WrongSizeException
-        try {
-            Matrix.createWithUniformRandomValues(0, columns, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Matrix.createWithUniformRandomValues(rows, 0, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> Matrix.createWithUniformRandomValues(0, columns,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        assertThrows(WrongSizeException.class, () -> Matrix.createWithUniformRandomValues(rows, 0,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+
         //Force IllegalArgumentException
-        try {
-            Matrix.createWithUniformRandomValues(rows, columns,
-                    MAX_RANDOM_VALUE, MIN_RANDOM_VALUE);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> Matrix.createWithUniformRandomValues(rows, columns,
+                MAX_RANDOM_VALUE, MIN_RANDOM_VALUE));
     }
 
     @Test
-    public void testFillWithGaussianRandomValues() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testFillWithGaussianRandomValues() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         Matrix m;
         double value;
-        double mean = 0.0;
-        double sqrSum = 0.0;
-        final int numSamples = rows * columns * TIMES;
-        for (int k = 0; k < TIMES; k++) {
+        var mean = 0.0;
+        var sqrSum = 0.0;
+        final var numSamples = rows * columns * TIMES;
+        for (var k = 0; k < TIMES; k++) {
             m = new Matrix(rows, columns);
             Matrix.fillWithGaussianRandomValues(MEAN, STANDARD_DEVIATION, m);
 
@@ -2946,8 +2080,8 @@ public class MatrixTest {
             assertEquals(rows, m.getRows());
             assertEquals(columns, m.getColumns());
 
-            for (int j = 0; j < columns; j++) {
-                for (int i = 0; i < rows; i++) {
+            for (var j = 0; j < columns; j++) {
+                for (var i = 0; i < rows; i++) {
                     value = m.getElementAt(i, j);
 
                     mean += value / (double) numSamples;
@@ -2956,55 +2090,40 @@ public class MatrixTest {
             }
         }
 
-        final double standardDeviation = Math.sqrt(sqrSum - mean);
-
+        final var standardDeviation = Math.sqrt(sqrSum - mean);
 
         // check correctness of results
         assertEquals(MEAN, mean, mean * RELATIVE_ERROR);
-        assertEquals(STANDARD_DEVIATION, standardDeviation,
-                standardDeviation * RELATIVE_ERROR);
+        assertEquals(STANDARD_DEVIATION, standardDeviation, standardDeviation * RELATIVE_ERROR);
 
         // Force WrongSizeException
-        try {
-            Matrix.createWithGaussianRandomValues(0, columns, MEAN,
-                    STANDARD_DEVIATION);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Matrix.createWithGaussianRandomValues(rows, 0, MEAN,
-                    STANDARD_DEVIATION);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Matrix.createWithGaussianRandomValues(rows, columns,
-                    MEAN, -STANDARD_DEVIATION);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> Matrix.createWithGaussianRandomValues(0, columns, MEAN,
+                STANDARD_DEVIATION));
+        assertThrows(WrongSizeException.class, () -> Matrix.createWithGaussianRandomValues(rows, 0, MEAN,
+                STANDARD_DEVIATION));
+        assertThrows(IllegalArgumentException.class, () -> Matrix.createWithGaussianRandomValues(rows, columns,
+                MEAN, -STANDARD_DEVIATION));
     }
 
     @Test
-    public void testCreateWithGaussianRandomValues() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testCreateWithGaussianRandomValues() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         Matrix m;
         double value;
-        double mean = 0.0;
-        double sqrSum = 0.0;
-        final int numSamples = rows * columns * TIMES;
-        for (int k = 0; k < TIMES; k++) {
-            m = Matrix.createWithGaussianRandomValues(rows, columns,
-                    MEAN, STANDARD_DEVIATION);
+        var mean = 0.0;
+        var sqrSum = 0.0;
+        final var numSamples = rows * columns * TIMES;
+        for (var k = 0; k < TIMES; k++) {
+            m = Matrix.createWithGaussianRandomValues(rows, columns, MEAN, STANDARD_DEVIATION);
             // check correctness
             assertEquals(rows, m.getRows());
             assertEquals(columns, m.getColumns());
 
-            for (int j = 0; j < columns; j++) {
-                for (int i = 0; i < rows; i++) {
+            for (var j = 0; j < columns; j++) {
+                for (var i = 0; i < rows; i++) {
                     value = m.getElementAt(i, j);
 
                     mean += value / (double) numSamples;
@@ -3013,56 +2132,41 @@ public class MatrixTest {
             }
         }
 
-        final double standardDeviation = Math.sqrt(sqrSum - mean);
-
+        final var standardDeviation = Math.sqrt(sqrSum - mean);
 
         // check correctness of results
         assertEquals(MEAN, mean, mean * RELATIVE_ERROR);
-        assertEquals(STANDARD_DEVIATION, standardDeviation,
-                standardDeviation * RELATIVE_ERROR);
+        assertEquals(STANDARD_DEVIATION, standardDeviation, standardDeviation * RELATIVE_ERROR);
 
         // Force WrongSizeException
-        try {
-            Matrix.createWithGaussianRandomValues(0, columns, MEAN,
-                    STANDARD_DEVIATION);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Matrix.createWithGaussianRandomValues(rows, 0, MEAN,
-                    STANDARD_DEVIATION);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        try {
-            Matrix.createWithGaussianRandomValues(rows, columns,
-                    MEAN, -STANDARD_DEVIATION);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> Matrix.createWithGaussianRandomValues(0, columns, MEAN,
+                STANDARD_DEVIATION));
+        assertThrows(WrongSizeException.class, () -> Matrix.createWithGaussianRandomValues(rows, 0, MEAN,
+                STANDARD_DEVIATION));
+        assertThrows(IllegalArgumentException.class, () -> Matrix.createWithGaussianRandomValues(rows, columns, MEAN,
+                -STANDARD_DEVIATION));
     }
 
     @Test
-    public void testDiagonal() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int length = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+    void testDiagonal() {
+        final var randomizer = new UniformRandomizer();
+        final var length = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-        final double[] diagonal = new double[length];
+        final var diagonal = new double[length];
 
         // fill diagonal with random values
-        for (int i = 0; i < length; i++) {
-            diagonal[i] = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
+        for (var i = 0; i < length; i++) {
+            diagonal[i] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
 
-        final Matrix m = Matrix.diagonal(diagonal);
+        final var m = Matrix.diagonal(diagonal);
 
         // check correctness
         assertEquals(length, m.getRows());
         assertEquals(length, m.getColumns());
 
-        for (int j = 0; j < length; j++) {
-            for (int i = 0; i < length; i++) {
+        for (var j = 0; j < length; j++) {
+            for (var i = 0; i < length; i++) {
                 if (i == j) {
                     assertEquals(diagonal[i], m.getElementAt(i, j), 0.0);
                 } else {
@@ -3073,18 +2177,18 @@ public class MatrixTest {
     }
 
     @Test
-    public void testNewFromArray() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int cols = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int length = rows * cols;
+    void testNewFromArray() {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var cols = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var length = rows * cols;
 
-        final double[] array = new double[length];
+        final var array = new double[length];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // use default column order
-        Matrix m = Matrix.newFromArray(array);
-        double[] array2 = m.toArray();
+        var m = Matrix.newFromArray(array);
+        var array2 = m.toArray();
 
         // check correctness
         assertEquals(length, m.getRows());
@@ -3111,20 +2215,20 @@ public class MatrixTest {
     }
 
     @Test
-    public void testFromArray() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int cols = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
-        final int length = rows * cols;
+    void testFromArray() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var cols = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+        final var length = rows * cols;
 
-        final double[] array = new double[length];
+        final var array = new double[length];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Matrix m = new Matrix(rows, cols);
+        final var m = new Matrix(rows, cols);
 
         // use default column order
         m.fromArray(array);
-        double[] array2 = m.toArray();
+        var array2 = m.toArray();
 
         // check correctness
         assertEquals(rows, m.getRows());
@@ -3132,12 +2236,7 @@ public class MatrixTest {
         assertArrayEquals(array2, array, 0.0);
 
         // Force WrongSizeException
-        try {
-            m.fromArray(new double[length + 1]);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-
+        assertThrows(WrongSizeException.class, () -> m.fromArray(new double[length + 1]));
 
         // use column order
         m.fromArray(array, true);
@@ -3149,12 +2248,7 @@ public class MatrixTest {
         assertArrayEquals(array2, array, 0.0);
 
         // Force WrongSizeException
-        try {
-            m.fromArray(new double[length + 1], true);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-
+        assertThrows(WrongSizeException.class, () -> m.fromArray(new double[length + 1], true));
 
         // use row order
         m.fromArray(array, false);
@@ -3166,33 +2260,28 @@ public class MatrixTest {
         assertArrayEquals(array2, array, 0.0);
 
         // Force WrongSizeException
-        try {
-            m.fromArray(new double[length + 1], false);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        assertThrows(WrongSizeException.class, () -> m.fromArray(new double[length + 1], false));
     }
 
     @Test
-    public void testSymmetrize() throws AlgebraException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+    void testSymmetrize() throws AlgebraException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
+            final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
 
-            final Matrix symmetric = DecomposerHelper.getSymmetricMatrix(rows);
+            final var symmetric = DecomposerHelper.getSymmetricMatrix(rows);
 
-            final Matrix nonSymmetric = new Matrix(rows, rows);
+            final var nonSymmetric = new Matrix(rows, rows);
             nonSymmetric.copyFrom(symmetric);
             nonSymmetric.setElementAt(0, rows - 1,
                     nonSymmetric.getElementAt(0, rows - 1) + 1.0);
 
-
             // symmetrize
-            final Matrix symmetric2 = new Matrix(rows, rows);
+            final var symmetric2 = new Matrix(rows, rows);
             symmetric.symmetrize(symmetric2);
 
-            final Matrix nonSymmetric2 = new Matrix(rows, rows);
+            final var nonSymmetric2 = new Matrix(rows, rows);
             nonSymmetric.symmetrize(nonSymmetric2);
 
             // check correctness
@@ -3214,11 +2303,11 @@ public class MatrixTest {
             }
             assertTrue(Utils.isSymmetric(nonSymmetric2));
 
-            boolean failed = false;
-            for (int i = 0; i < symmetric2.getColumns(); i++) {
-                for (int j = 0; j < symmetric2.getRows(); j++) {
-                    if (Math.abs(symmetric2.getElementAt(i, j) -
-                            0.5 * (symmetric.getElementAt(j, i) + symmetric.getElementAt(j, i))) > ABSOLUTE_ERROR) {
+            var failed = false;
+            for (var i = 0; i < symmetric2.getColumns(); i++) {
+                for (var j = 0; j < symmetric2.getRows(); j++) {
+                    if (Math.abs(symmetric2.getElementAt(i, j) - 0.5 * (symmetric.getElementAt(j, i)
+                            + symmetric.getElementAt(j, i))) > ABSOLUTE_ERROR) {
                         failed = true;
                         break;
                     }
@@ -3231,10 +2320,10 @@ public class MatrixTest {
                 continue;
             }
 
-            for (int i = 0; i < nonSymmetric2.getColumns(); i++) {
-                for (int j = 0; j < nonSymmetric2.getRows(); j++) {
-                    if (Math.abs(nonSymmetric2.getElementAt(i, j) -
-                            0.5 * (nonSymmetric.getElementAt(i, j) + nonSymmetric.getElementAt(j, i))) > ABSOLUTE_ERROR) {
+            for (var i = 0; i < nonSymmetric2.getColumns(); i++) {
+                for (var j = 0; j < nonSymmetric2.getRows(); j++) {
+                    if (Math.abs(nonSymmetric2.getElementAt(i, j) - 0.5 * (nonSymmetric.getElementAt(i, j)
+                            + nonSymmetric.getElementAt(j, i))) > ABSOLUTE_ERROR) {
                         failed = true;
                         break;
                     }
@@ -3249,22 +2338,13 @@ public class MatrixTest {
 
 
             // Force WrongSizeException
-            final Matrix wrong = new Matrix(1, 2);
-            try {
-                wrong.symmetrize(wrong);
-                fail("WrongSizeException expected but not thrown");
-            } catch (final WrongSizeException ignore) {
-            }
-            try {
-                symmetric.symmetrize(wrong);
-                fail("WrongSizeException expected but not thrown");
-            } catch (final WrongSizeException ignore) {
-            }
-
+            final var wrong = new Matrix(1, 2);
+            assertThrows(WrongSizeException.class, () -> wrong.symmetrize(wrong));
+            assertThrows(WrongSizeException.class, () -> symmetric.symmetrize(wrong));
 
             // symmetrize and return new
-            final Matrix symmetric3 = symmetric.symmetrizeAndReturnNew();
-            final Matrix nonSymmetric3 = nonSymmetric.symmetrizeAndReturnNew();
+            final var symmetric3 = symmetric.symmetrizeAndReturnNew();
+            final var nonSymmetric3 = nonSymmetric.symmetrizeAndReturnNew();
 
             // check correctness
             if (!Utils.isSymmetric(symmetric)) {
@@ -3286,12 +2366,7 @@ public class MatrixTest {
             assertTrue(Utils.isSymmetric(nonSymmetric3));
 
             // Force WrongSizeException
-            try {
-                wrong.symmetrizeAndReturnNew();
-                fail("WrongSizeException expected but not thrown");
-            } catch (final WrongSizeException ignore) {
-            }
-
+            assertThrows(WrongSizeException.class, wrong::symmetrizeAndReturnNew);
 
             // symmetrize and update
             symmetric.symmetrize();
@@ -3308,11 +2383,7 @@ public class MatrixTest {
             assertTrue(Utils.isSymmetric(nonSymmetric));
 
             // Force WrongSizeException
-            try {
-                wrong.symmetrize();
-                fail("WrongSizeException expected but not thrown");
-            } catch (final WrongSizeException ignore) {
-            }
+            assertThrows(WrongSizeException.class, wrong::symmetrize);
 
             numValid++;
             break;
@@ -3322,23 +2393,21 @@ public class MatrixTest {
     }
 
     @Test
-    public void testSerializeDeserialize() throws WrongSizeException, IOException,
-            ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testSerializeDeserialize() throws WrongSizeException, IOException, ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         // instantiate matrix and fill with random values
-        final Matrix m1 = new Matrix(rows, columns);
-        for (int j = 0; j < columns; j++) {
-            for (int i = 0; i < rows; i++) {
-                m1.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE));
+        final var m1 = new Matrix(rows, columns);
+        for (var j = 0; j < columns; j++) {
+            for (var i = 0; i < rows; i++) {
+                m1.setElementAt(i, j, randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             }
         }
 
-        final byte[] bytes = SerializationHelper.serialize(m1);
-        final Matrix m2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(m1);
+        final var m2 = SerializationHelper.deserialize(bytes);
 
         assertEquals(m2, m1);
         assertNotSame(m2, m1);

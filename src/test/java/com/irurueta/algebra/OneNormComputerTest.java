@@ -16,14 +16,13 @@
 package com.irurueta.algebra;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class OneNormComputerTest {
+class OneNormComputerTest {
 
     private static final int MIN_LIMIT = 0;
     private static final int MAX_LIMIT = 50;
@@ -36,28 +35,28 @@ public class OneNormComputerTest {
     private static final double ABSOLUTE_ERROR = 1e-6;
 
     @Test
-    public void testGetNormType() {
-        final OneNormComputer normComputer = new OneNormComputer();
+    void testGetNormType() {
+        final var normComputer = new OneNormComputer();
         assertNotNull(normComputer);
         assertEquals(NormType.ONE_NORM, normComputer.getNormType());
     }
 
     @Test
-    public void testGetNormMatrix() throws WrongSizeException {
-        final OneNormComputer normComputer = new OneNormComputer();
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
-        final int columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
+    void testGetNormMatrix() throws WrongSizeException {
+        final var normComputer = new OneNormComputer();
+        final var randomizer = new UniformRandomizer();
+        final var rows = randomizer.nextInt(MIN_ROWS, MAX_ROWS);
+        final var columns = randomizer.nextInt(MIN_COLUMNS, MAX_COLUMNS);
 
         double colSum;
-        double maxColSum = 0.0;
+        var maxColSum = 0.0;
         final double norm;
         double value;
 
-        Matrix m = new Matrix(rows, columns);
-        for (int j = 0; j < columns; j++) {
+        var m = new Matrix(rows, columns);
+        for (var j = 0; j < columns; j++) {
             colSum = 0.0;
-            for (int i = 0; i < rows; i++) {
+            for (var i = 0; i < rows; i++) {
                 value = randomizer.nextDouble(MIN_LIMIT, MAX_LIMIT);
                 m.setElementAt(i, j, value);
                 colSum += Math.abs(value);
@@ -70,7 +69,7 @@ public class OneNormComputerTest {
         assertEquals(maxColSum, OneNormComputer.norm(m), ABSOLUTE_ERROR);
 
         // For initialized matrix
-        final double initValue = randomizer.nextDouble(MIN_LIMIT, MAX_LIMIT);
+        final var initValue = randomizer.nextDouble(MIN_LIMIT, MAX_LIMIT);
         m.initialize(initValue);
 
         norm = initValue * rows;
@@ -84,17 +83,17 @@ public class OneNormComputerTest {
     }
 
     @Test
-    public void testGetNormArray() {
-        final OneNormComputer normComputer = new OneNormComputer();
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
-        double sum = 0.0;
+    void testGetNormArray() {
+        final var normComputer = new OneNormComputer();
+        final var randomizer = new UniformRandomizer();
+        final var length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
+        var sum = 0.0;
         double norm;
-        final double initValue = randomizer.nextDouble(MIN_LIMIT, MAX_LIMIT);
+        final var initValue = randomizer.nextDouble(MIN_LIMIT, MAX_LIMIT);
         double value;
 
-        final double[] v = new double[length];
-        for (int i = 0; i < length; i++) {
+        final var v = new double[length];
+        for (var i = 0; i < length; i++) {
             value = randomizer.nextDouble(MIN_LIMIT, MAX_LIMIT);
             v[i] = value;
             sum += Math.abs(value);
@@ -113,16 +112,16 @@ public class OneNormComputerTest {
     }
 
     @Test
-    public void testNormWithJacobian() throws AlgebraException {
-        final OneNormComputer normComputer = new OneNormComputer();
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
-        double sum = 0.0;
+    void testNormWithJacobian() throws AlgebraException {
+        final var normComputer = new OneNormComputer();
+        final var randomizer = new UniformRandomizer();
+        final var length = randomizer.nextInt(MIN_LENGTH, MAX_LENGTH);
+        var sum = 0.0;
         final double norm;
         double value;
 
-        double[] v = new double[length];
-        for (int i = 0; i < length; i++) {
+        final var v = new double[length];
+        for (var i = 0; i < length; i++) {
             value = randomizer.nextDouble(MIN_LIMIT, MAX_LIMIT);
             v[i] = value;
             sum += Math.abs(value);
@@ -130,18 +129,14 @@ public class OneNormComputerTest {
 
         norm = sum;
 
-        Matrix jacobian = new Matrix(1, length);
+        var jacobian = new Matrix(1, length);
         assertEquals(norm, OneNormComputer.norm(v, jacobian), ABSOLUTE_ERROR);
         assertEquals(jacobian, Matrix.newFromArray(v).
-                multiplyByScalarAndReturnNew(1.0 / norm).
-                transposeAndReturnNew());
+                multiplyByScalarAndReturnNew(1.0 / norm).transposeAndReturnNew());
 
         // Force WrongSizeException
-        try {
-            OneNormComputer.norm(v, new Matrix(2, length));
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var wrong = new Matrix(2, length);
+        assertThrows(WrongSizeException.class, () -> OneNormComputer.norm(v, wrong));
 
         jacobian = new Matrix(1, length);
         assertEquals(norm, normComputer.getNorm(v, jacobian), ABSOLUTE_ERROR);
@@ -150,22 +145,16 @@ public class OneNormComputerTest {
                 transposeAndReturnNew());
 
         // Force WrongSizeException
-        try {
-            normComputer.getNorm(v, new Matrix(2, length));
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
+        final var m = new Matrix(2, length);
+        assertThrows(WrongSizeException.class, () -> normComputer.getNorm(v, m));
 
         // test zero norm
-        v = new double[length];
-        assertEquals(0.0,
-                OneNormComputer.norm(v, jacobian), 0.0);
-        for (int i = 0; i < 1; i++) {
-            for (int j = 0; j < length; j++) {
-                assertEquals(Double.MAX_VALUE,
-                        jacobian.getElementAt(i, j), 0.0);
+        final var v2 = new double[length];
+        assertEquals(0.0, OneNormComputer.norm(v2, jacobian), 0.0);
+        for (var i = 0; i < 1; i++) {
+            for (var j = 0; j < length; j++) {
+                assertEquals(Double.MAX_VALUE, jacobian.getElementAt(i, j), 0.0);
             }
         }
-
     }
 }

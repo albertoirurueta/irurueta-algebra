@@ -15,27 +15,24 @@
  */
 package com.irurueta.statistics;
 
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class InvalidCovarianceMatrixExceptionTest {
+class InvalidCovarianceMatrixExceptionTest {
 
     @Test
-    public void testConstructor() {
-        InvalidCovarianceMatrixException ex =
-                new InvalidCovarianceMatrixException();
+    void testConstructor() {
+        var ex = new InvalidCovarianceMatrixException();
         assertNotNull(ex);
 
         ex = new InvalidCovarianceMatrixException("message");
         assertNotNull(ex);
 
-        ex = new InvalidCovarianceMatrixException(
-                new Exception());
+        ex = new InvalidCovarianceMatrixException(new Exception());
         assertNotNull(ex);
 
-        ex = new InvalidCovarianceMatrixException("message",
-                new Exception());
+        ex = new InvalidCovarianceMatrixException("message", new Exception());
         assertNotNull(ex);
     }
 }
