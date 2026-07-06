@@ -1,0 +1,73 @@
+= Infinity Norm
+:description: InfinityNormComputer computes the maximum absolute row sum of a matrix, the maximum (supremum) norm.
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`InfinityNormComputer` computes the *infinity norm* (maximum norm, uniform norm, supremum norm) of
+a matrix. For a matrix, it is the maximum absolute row sum:
+
+[stem]
+++++
+\|A\|_\infty = \max_{i} \sum_{j} |a_{ij}|
+++++
+
+The name "infinity norm" comes from the fact that, for a vector, it is the limit of the general
+`p`-norm family (see xref:one-norm.adoc[the one norm]) as `p` tends to infinity, which converges to
+the maximum absolute element — the reason it is also called the maximum or supremum norm:
+
+[stem]
+++++
+\|v\|_\infty = \lim_{p \to \infty} \|v\|_p = \max_i |v_i|
+++++
+
+Instances are obtained through `NormComputer.create(NormType.INFINITY_NORM)`, and `Utils.normInf`
+is built directly on this class.
+
+== Behavior on arrays
+
+This library represents an array as a single column matrix (one column, as many rows as elements),
+and `InfinityNormComputer` follows that convention literally: as documented on the class itself,
+each row of a column matrix holds exactly one element, so `norm(double[])` returns the absolute
+value of the *first* element of the array, rather than the maximum absolute value across all of
+its elements. Callers that need the conventional vector infinity norm (the maximum absolute
+element) should compute it directly rather than relying on this method for arrays of length greater
+than one.
+
+== Usage
+
+The `getNorm` instance methods implement the abstract `NormComputer` contract; static `norm`
+methods are also available for direct use without instantiating the class:
+
+[source,java]
+----
+import com.irurueta.algebra.InfinityNormComputer;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.NormComputer;
+import com.irurueta.algebra.NormType;
+
+Matrix a = new Matrix(2, 2);
+// ... fill a with data ...
+
+// static usage
+double norm = InfinityNormComputer.norm(a);
+
+// through the NormComputer factory
+NormComputer computer = NormComputer.create(NormType.INFINITY_NORM);
+double sameNorm = computer.getNorm(a);
+----
+
+A `norm(double[], Matrix jacobian)` overload also computes the norm's `1xN` Jacobian with respect
+to the input array.
+
+`Utils.normInf(Matrix)` and `Utils.normInf(double[])` are convenience wrappers around this class.
+
+== Error handling
+
+The Jacobian overload throws `WrongSizeException` if the provided Jacobian matrix is not `1xN`,
+where `N` is the length of the input array.
+
+== Reference
+
+The infinity norm is described in xref:reference.adoc[Wikipedia, "Norm (mathematics)", section
+"Maximum norm (special case of: infinity norm, uniform norm, or supremum norm)"].

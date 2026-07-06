@@ -1,0 +1,61 @@
+= Frobenius Norm
+:description: FrobeniusNormComputer computes the Frobenius norm of vectors and matrices, the default norm used throughout this library.
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`FrobeniusNormComputer` computes the *Frobenius norm* of a matrix or array: the square root of the
+sum of the squares of all its elements.
+
+[stem]
+++++
+\|A\|_F = \sqrt{ \sum_{i,j} |a_{ij}|^2 }
+++++
+
+For an array, this is exactly its Euclidean (`L2`) length, treating the array as a column vector.
+The Frobenius norm is `NormComputer.DEFAULT_NORM_TYPE`, so `NormComputer.create()` (with no
+arguments) returns a `FrobeniusNormComputer`, and `Utils.normF` is built directly on it.
+
+`Utils.isOrthonormal` also relies on the Frobenius norm: in addition to being orthogonal, an
+orthonormal matrix must have Frobenius norm equal to `1`.
+
+== Usage
+
+The `getNorm` instance methods implement the abstract `NormComputer` contract; static `norm`
+methods are also available for direct use without instantiating the class:
+
+[source,java]
+----
+import com.irurueta.algebra.FrobeniusNormComputer;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.NormComputer;
+import com.irurueta.algebra.NormType;
+
+Matrix a = new Matrix(2, 2);
+// ... fill a with data ...
+
+// static usage
+double norm = FrobeniusNormComputer.norm(a);
+
+double[] array = {3.0, 4.0};
+double arrayNorm = FrobeniusNormComputer.norm(array); // 5.0
+
+// through the NormComputer factory
+NormComputer computer = NormComputer.create(NormType.FROBENIUS_NORM);
+double sameNorm = computer.getNorm(a);
+----
+
+A `norm(double[], Matrix jacobian)` overload also computes the norm's `1xN` Jacobian with respect
+to the input array, useful when the norm is used inside a larger optimization.
+
+`Utils.normF(Matrix)` and `Utils.normF(double[])` are convenience wrappers around this class.
+
+== Error handling
+
+The Jacobian overload throws `WrongSizeException` if the provided Jacobian matrix is not `1xN`,
+where `N` is the length of the input array.
+
+== Reference
+
+Frobenius norm is one of the standard matrix norms described in xref:reference.adoc[Wikipedia,
+"Matrix norm"].

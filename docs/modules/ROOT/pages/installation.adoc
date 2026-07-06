@@ -1,0 +1,56 @@
+= Installation
+:description: Add irurueta-algebra to a Maven or Gradle project.
+
+Irurueta Algebra is a Maven artifact that can be integrated into Java projects using group id
+`com.irurueta` and artifact id `irurueta-algebra`. The project is built as a Java 17 Maven JAR, and
+depends on `com.irurueta:irurueta-statistics`.
+
+== Maven configuration
+
+Add this dependency to your `pom.xml`:
+
+Latest release:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.irurueta</groupId>
+    <artifactId>irurueta-algebra</artifactId>
+    <version>1.4.0</version>
+    <scope>compile</scope>
+</dependency>
+----
+
+Latest snapshot:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.irurueta</groupId>
+    <artifactId>irurueta-algebra</artifactId>
+    <version>1.5.0-SNAPSHOT</version>
+    <scope>compile</scope>
+</dependency>
+----
+
+== Gradle configuration
+
+Include this in your `build.gradle.kts`:
+
+[source,kotlin]
+----
+dependencies {
+    implementation("com.irurueta:irurueta-algebra:1.4.0")
+}
+----
+
+== Package imports
+
+Runtime types are located in `com.irurueta.algebra`. Common imports include:
+
+[source,java]
+----
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.Utils;
+import com.irurueta.algebra.WrongSizeException;
+----

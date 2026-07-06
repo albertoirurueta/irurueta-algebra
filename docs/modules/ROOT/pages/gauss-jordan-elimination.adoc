@@ -1,0 +1,116 @@
+= Gauss-Jordan Elimination
+:description: GaussJordanElimination solves linear systems of equations and computes matrix inverses using full-pivoting Gauss-Jordan elimination, from Numerical Recipes chapter 2.1.
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`GaussJordanElimination` solves a linear system of equations `A * x = b` and, as a side effect,
+computes the inverse of `A`, using Gauss-Jordan elimination with full pivoting. Unlike the
+xref:lu-decomposition.adoc[`LUDecomposer`], xref:qr-decomposition.adoc[`QRDecomposer`] and other
+`Decomposer` subclasses in this library, `GaussJordanElimination` is a stateless utility class: it
+does not keep a reusable factorization, and every call to `process` repeats the full elimination.
+
+== The algorithm
+
+Numerical Recipes poses the problem as a single column-augmented matrix equation (eq. 2.1.1/2.1.2):
+solving simultaneously for several right-hand sides `b_0`, `b_1`, `b_2` and for the matrix inverse
+`Y` of `A`, by column-augmenting them together with the identity matrix `1`:
+
+[stem]
+++++
+\Big[ A \Big] \cdot \Big[ \, x_0 \;\vdots\; x_1 \;\vdots\; x_2 \;\vdots\; Y \, \Big]
+= \Big[ \, b_0 \;\vdots\; b_1 \;\vdots\; b_2 \;\vdots\; 1 \, \Big]
+++++
+
+which simultaneously states the systems solved by `GaussJordanElimination.process`:
+
+[stem]
+++++
+A \cdot x_0 = b_0, \quad A \cdot x_1 = b_1, \quad A \cdot x_2 = b_2, \quad\text{and}\quad A \cdot Y = 1
+++++
+
+Gauss-Jordan elimination reduces the left factor `A` to the identity matrix by repeatedly combining
+rows: at each of the `N` steps, a pivot element is selected, the row containing it is normalized so
+the pivot becomes `1`, and that row is then subtracted (scaled appropriately) from every other row
+so that the pivot's column becomes zero everywhere except at the pivot itself. Applying the same
+sequence of row operations to the right-hand side vectors `b` and to the identity matrix
+simultaneously turns them into the solution vectors `x` and the inverse `Y` of `A`, exactly as the
+equation above states once `A` has become the identity.
+
+Numerical Recipes uses *full pivoting*: at each step, the pivot is chosen as the largest-magnitude
+element among all rows and columns not yet reduced, rather than only among rows in the current
+column (*partial pivoting*, used by xref:lu-decomposition.adoc[`LUDecomposer`]). Full pivoting
+requires bookkeeping of which rows and columns were swapped so that the solution can be
+"unscrambled" at the end, but it is at least as stable as any other direct method, and can be
+slightly more stable than partial pivoting.
+
+Each row operation can be seen as a left-multiplication of both sides of `A * x = b` by a simple
+matrix `R` that performs one row swap or one row combination. Gauss-Jordan elimination by row
+operations alone is the accumulation of `N` such multiplications (eq. 2.1.6), ending with `A`
+reduced to the identity and the right-hand side transformed into the solution:
+
+[mermaid]
+....
+graph LR
+    S0["A · x = b"] -->|"left-multiply by R0"| S1["(R0·A) · x = R0·b"]
+    S1 -->|"left-multiply by R1"| S2["(R1·R0·A) · x = R1·R0·b"]
+    S2 -->|"..."| S3["(R_(N-1)···R1·R0·A) · x = R_(N-1)···R1·R0·b"]
+    S3 -->|"left side reduces to 1"| S4["x = R_(N-1)···R1·R0·b"]
+....
+
+Gauss-Jordan elimination has two disadvantages compared to the triangular decomposition methods
+(xref:lu-decomposition.adoc[LU], xref:qr-decomposition.adoc[QR]) described elsewhere in this
+library: every right-hand side must be known and stored before elimination starts, and, when the
+inverse is not needed, it is about three times slower than LU decomposition for solving a single
+system. Its main strength is that it computes the matrix inverse about as efficiently as any other
+direct method, which makes it a reasonable choice when the inverse itself, rather than just a
+solution vector, is what is actually needed.
+
+== Usage
+
+`process` solves `A * x = b` for one or more right-hand sides (each column of `b` is treated as an
+independent system) and simultaneously overwrites `a` with its inverse:
+
+[source,java]
+----
+import com.irurueta.algebra.GaussJordanElimination;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularMatrixException;
+
+Matrix a = new Matrix(2, 2);
+a.setElementAt(0, 0, 2.0);
+a.setElementAt(0, 1, 1.0);
+a.setElementAt(1, 0, 1.0);
+a.setElementAt(1, 1, 3.0);
+
+Matrix b = Matrix.newFromArray(new double[]{5.0, 10.0});
+
+try {
+    GaussJordanElimination.process(a, b);
+    // b now contains the solution x
+    // a now contains the inverse of the original matrix
+} catch (final SingularMatrixException e) {
+    // the original matrix was singular
+}
+----
+
+Passing `null` as `b` (or using the `inverse` overload) skips solving and only computes the
+inverse:
+
+[source,java]
+----
+GaussJordanElimination.inverse(a); // a now contains its own inverse
+----
+
+A `double[]` overload of `process` is also available for a single right-hand side vector.
+
+== Error handling
+
+`process` and `inverse` throw `WrongSizeException` if `a` is not square, or if `b` does not have
+the same number of rows as `a`, and `SingularMatrixException` if `a` is found to be singular during
+elimination.
+
+== Reference
+
+`GaussJordanElimination` is based on the algorithm described in xref:reference.adoc[Numerical
+Recipes, 3rd Edition, section 2.1, "Gauss-Jordan Elimination"].

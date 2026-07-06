@@ -1,0 +1,101 @@
+= Economy QR Decomposition
+:description: EconomyQRDecomposer factors a matrix into an orthogonal factor and an upper triangular factor using Householder reflections, from Numerical Recipes chapter 2.10 and Wikipedia's QR decomposition article.
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`EconomyQRDecomposer` factors a matrix `A` with at least as many rows as columns into an
+orthogonal matrix `Q` and an upper triangular matrix `R`, exactly like
+xref:qr-decomposition.adoc[`QRDecomposer`]:
+
+[stem]
+++++
+A = Q \cdot R \qquad \text{where } Q^T \cdot Q = I
+++++
+
+The "economy" in the name refers to how the factorization is computed and represented internally,
+not to the shape of `Q` and `R` returned by `getQ()` and `getR()` (both classes return a full
+square `Q` and an upper triangular `R` sized like `A`). `EconomyQRDecomposer` is the faster of the
+two and is generally the better default choice, unless the alternative Gram-Schmidt-based
+xref:qr-decomposition.adoc[`QRDecomposer`] is specifically preferred.
+
+== The algorithm
+
+Unlike xref:qr-decomposition.adoc[`QRDecomposer`], which uses Gram-Schmidt orthogonalization,
+`EconomyQRDecomposer` follows the classical Numerical Recipes approach of successive *Householder
+reflections*. For each column `k`, letting stem:[x = A_{k:m,k}] be the sub-column at and below the
+diagonal, the Householder vector `v` and the reflection `H` it defines are:
+
+[stem]
+++++
+v = x + \text{sign}(x_k) \, \|x\|_2 \, e_k
+\qquad\qquad
+H = I - \frac{2 \, v v^T}{v^T v}
+++++
+
+where stem:[e_k] is the first standard basis vector of the sub-column. `H` is symmetric and
+orthogonal, and reflecting `x` through the hyperplane it defines zeroes every entry below the
+diagonal in that column while leaving its norm unchanged; the same reflection is then applied to
+the remaining columns to the right. After `n` such reflections (one per column), the upper
+triangle of the working matrix holds `R`, and the accumulated Householder vectors implicitly
+represent `Q`.
+
+`EconomyQRDecomposer` stores only these Householder vectors (in a lower trapezoidal matrix
+retrievable through `getH()`) and the diagonal of `R` (`rDiag`), rather than materializing `Q`
+eagerly. `getQ()` and `getR()` reconstruct the explicit matrices from this compact representation
+on demand, and `solve` applies the Householder reflections directly to the right-hand side instead
+of ever forming `Q` explicitly, which is both faster and more memory-efficient than the
+Gram-Schmidt approach used by `QRDecomposer`.
+
+As with `QRDecomposer`, `isFullRank()` inspects the diagonal of `R` (`rDiag`) to detect rank
+deficiency, and `solve` throws `RankDeficientMatrixException` when the input matrix is not full
+rank.
+
+== Usage
+
+[source,java]
+----
+import com.irurueta.algebra.EconomyQRDecomposer;
+import com.irurueta.algebra.Matrix;
+
+Matrix a = new Matrix(3, 2);
+a.setElementAt(0, 0, 1.0);
+a.setElementAt(1, 0, 1.0);
+a.setElementAt(2, 0, 0.0);
+a.setElementAt(0, 1, 0.0);
+a.setElementAt(1, 1, 1.0);
+a.setElementAt(2, 1, 1.0);
+
+final var decomposer = new EconomyQRDecomposer(a);
+decomposer.decompose();
+
+Matrix q = decomposer.getQ(); // 3x2 orthogonal factor
+Matrix r = decomposer.getR(); // 2x2 upper triangular factor
+Matrix h = decomposer.getH(); // Householder vectors
+
+boolean fullRank = decomposer.isFullRank();
+
+Matrix b = Matrix.newFromArray(new double[]{1.0, 2.0, 3.0});
+Matrix x = decomposer.solve(b); // least-squares solution when a has more rows than columns
+----
+
+`isFullRank` and `solve` accept an optional `roundingError` argument to relax the default
+(`DEFAULT_ROUND_ERROR`, `0.0`) tolerance used to decide whether a diagonal entry of `R` is
+effectively zero.
+
+This is the decomposer that xref:usage.adoc[`Utils.solve`] and `Utils.inverse` use for non-square
+matrices.
+
+== Error handling
+
+`decompose()` throws `NotReadyException` if no input matrix has been set and `LockedException` if
+the instance is already decomposing. Result accessors throw `NotAvailableException` if called
+before `decompose()`. `getQ`, `isFullRank` and `solve` throw `WrongSizeException` if the input
+matrix has fewer rows than columns (`solve` additionally if `b` does not have a matching number of
+rows), and `solve` throws `RankDeficientMatrixException` if the input matrix is not full rank.
+
+== Reference
+
+`EconomyQRDecomposer` implements the Householder-based algorithm described in
+xref:reference.adoc[Numerical Recipes, 3rd Edition, section 2.10, "QR Decomposition"]; see also
+xref:reference.adoc[Wikipedia, "QR decomposition"].

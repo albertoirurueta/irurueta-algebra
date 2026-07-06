@@ -1,0 +1,89 @@
+= Cholesky Decomposition
+:description: CholeskyDecomposer factors a symmetric positive-definite matrix into a triangular factor and its transpose, from Numerical Recipes chapter 2.9.
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`CholeskyDecomposer` factors a square, symmetric, positive-definite matrix `A` into a lower
+triangular matrix `L` whose own transpose serves as the upper triangular factor:
+
+[stem]
+++++
+A = L \cdot L^T = R^T \cdot R \qquad \text{where } R = L^T
+++++
+
+A matrix is symmetric when stem:[a_{ij} = a_{ji}] for every `i`, `j`, and positive-definite when
+(eq. 2.9.1):
+
+[stem]
+++++
+v^T \cdot A \cdot v > 0 \qquad \text{for every nonzero vector } v
+++++
+
+(equivalently, all its eigenvalues are positive). Symmetric positive-definite matrices show up
+frequently in practice — covariance matrices and Gram matrices, for example — and when applicable,
+Cholesky decomposition is about twice as fast as xref:lu-decomposition.adoc[LU decomposition] for
+solving linear systems, since it exploits the symmetry of `A` to compute only one triangular factor
+instead of two, at a cost of stem:[N^3/6] multiply-and-subtract operations plus `N` square roots.
+
+== The algorithm
+
+Writing out `A = L * L'` component by component gives closed-form expressions for the entries of
+`L` in terms of entries of `A` and previously computed entries of `L` (eq. 2.9.4-2.9.5):
+
+[stem]
+++++
+L_{ii} = \left( a_{ii} - \sum_{k=0}^{i-1} L_{ik}^2 \right)^{1/2}
+\qquad\qquad
+L_{ji} = \frac{1}{L_{ii}} \left( a_{ij} - \sum_{k=0}^{i-1} L_{ik} L_{jk} \right), \quad j > i
+++++
+
+Applying these in order `i = 0, 1, ..., N-1` only ever needs entries of `L` already computed, and
+only ever reads entries of `A` on or above the diagonal, so the factorization can be computed
+in-place. No pivoting is needed: Cholesky decomposition is extremely stable numerically, and if it
+fails, that failure itself is a reliable and efficient diagnostic that `A` (or a matrix very close
+to it, given rounding error) is not positive-definite. `CholeskyDecomposer` reports this through
+`isSPD()` rather than throwing an exception from `decompose()`, so an application can use it as an
+explicit positive-definiteness test.
+
+== Usage
+
+[source,java]
+----
+import com.irurueta.algebra.CholeskyDecomposer;
+import com.irurueta.algebra.Matrix;
+
+Matrix a = new Matrix(2, 2);
+a.setElementAt(0, 0, 4.0);
+a.setElementAt(0, 1, 2.0);
+a.setElementAt(1, 0, 2.0);
+a.setElementAt(1, 1, 3.0);
+
+final var decomposer = new CholeskyDecomposer(a);
+decomposer.decompose();
+
+if (decomposer.isSPD()) {
+    Matrix l = decomposer.getL(); // lower triangular factor
+    Matrix r = decomposer.getR(); // upper triangular factor, r = l'
+
+    Matrix b = Matrix.newFromArray(new double[]{1.0, 2.0});
+    Matrix x = decomposer.solve(b);
+}
+----
+
+`solve` can be called repeatedly with different right-hand sides without recomputing the
+decomposition, and throws `NonSymmetricPositiveDefiniteMatrixException` if `isSPD()` is `false`.
+
+== Error handling
+
+`decompose()` throws `NotReadyException` if no input matrix has been set, `LockedException` if the
+instance is already decomposing, and `DecomposerException` if the input matrix is not square.
+`getL()`, `getR()` and `isSPD()` throw `NotAvailableException` if called before `decompose()`.
+`solve` throws `WrongSizeException` if `b` does not have the same number of rows as the input
+matrix, and `NonSymmetricPositiveDefiniteMatrixException` if the input matrix is not symmetric
+positive-definite.
+
+== Reference
+
+`CholeskyDecomposer` is based on the algorithm described in xref:reference.adoc[Numerical Recipes,
+3rd Edition, section 2.9, "Cholesky Decomposition"].

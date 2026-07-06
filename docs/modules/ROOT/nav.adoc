@@ -1,0 +1,16 @@
+* xref:index.adoc[Overview]
+* xref:installation.adoc[Installation]
+* xref:usage.adoc[Usage]
+* Matrix Decomposition
+** xref:gauss-jordan-elimination.adoc[Gauss-Jordan elimination]
+** xref:lu-decomposition.adoc[LU decomposition]
+** xref:cholesky-decomposition.adoc[Cholesky decomposition]
+** xref:qr-decomposition.adoc[QR decomposition]
+** xref:economy-qr-decomposition.adoc[Economy QR decomposition]
+** xref:rq-decomposition.adoc[RQ decomposition]
+** xref:singular-value-decomposition.adoc[Singular Value Decomposition]
+* Norm Estimation
+** xref:frobenius-norm.adoc[Frobenius norm]
+** xref:one-norm.adoc[One norm]
+** xref:infinity-norm.adoc[Infinity norm]
+* xref:reference.adoc[Reference]

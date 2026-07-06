@@ -1,0 +1,56 @@
+= Irurueta Algebra
+:description: Matrix Algebra classes.
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Irurueta Algebra is a lightweight Java library for matrix algebra: it provides a dense `Matrix`
+class with the usual arithmetic operations, a family of matrix decomposers (LU, QR, Economy QR,
+RQ, Cholesky, Singular Value), and utility classes to solve linear systems of equations, invert or
+pseudo-invert matrices, and compute vector and matrix norms.
+
+## Core Components
+
+The library organizes its public API around a few abstractions:
+
+**`Matrix`**: A dense matrix of `double` values, stored internally in column-major order. It
+supports arithmetic operations (`add`, `subtract`, `multiply`, `multiplyByScalar`,
+`multiplyKronecker`, `elementByElementProduct`), `transpose`, sub-matrix extraction and insertion,
+and factory methods such as `identity`, `diagonal`, `createWithUniformRandomValues` and
+`createWithGaussianRandomValues`.
+
+**`Decomposer`**: The abstract base class for every matrix decomposition algorithm in this
+library. Concrete subclasses receive an input matrix, compute a decomposition through
+`decompose()`, and then expose the resulting factors and derived operations (solving linear
+systems, computing determinants, inverting matrices, and so on):
+
+- `LUDecomposer` factors a matrix into lower and upper triangular factors, `A = L * U`.
+- `QRDecomposer` and `EconomyQRDecomposer` factor a matrix into an orthogonal factor and an upper
+  triangular factor, `A = Q * R`.
+- `RQDecomposer` factors a matrix into an upper triangular factor and an orthogonal factor,
+  `A = R * Q`.
+- `CholeskyDecomposer` factors a symmetric, positive-definite matrix into a lower triangular
+  factor and its transpose, `A = L * L'`.
+- `SingularValueDecomposer` factors any matrix into `A = U * S * V'`, and is the most robust
+  choice for rank-deficient or ill-conditioned matrices.
+- `GaussJordanElimination` is a utility class (not a `Decomposer`) that solves linear systems of
+  equations and computes matrix inverses directly, without keeping a reusable factorization.
+
+**`NormComputer`**: The abstract base class for computing vector and matrix norms, with concrete
+implementations `FrobeniusNormComputer`, `OneNormComputer` and `InfinityNormComputer`. Instances
+are obtained through the static `NormComputer.create()` and `NormComputer.create(NormType)`
+factory methods.
+
+**`Utils`**: A collection of static helper methods built on top of the decomposers above, covering
+the most common operations: `trace`, `det`, `rank`, `cond`, `solve`, `inverse`, `pseudoInverse`,
+`normF`/`norm1`/`normInf`/`norm2`, `isSymmetric`, `isOrthogonal`, `crossProduct` and `skewMatrix`.
+
+## Getting Started
+
+Users should begin with the xref:installation.adoc[installation guide], continue with
+xref:usage.adoc[usage] for a tour of the `Matrix` API, and then read about the individual matrix
+decomposition algorithms (xref:gauss-jordan-elimination.adoc[Gauss-Jordan elimination],
+xref:lu-decomposition.adoc[LU], xref:cholesky-decomposition.adoc[Cholesky],
+xref:qr-decomposition.adoc[QR], xref:economy-qr-decomposition.adoc[Economy QR],
+xref:rq-decomposition.adoc[RQ] and xref:singular-value-decomposition.adoc[Singular Value
+Decomposition]) as well as norm estimation (xref:frobenius-norm.adoc[Frobenius],
+xref:one-norm.adoc[one] and xref:infinity-norm.adoc[infinity] norms).
