@@ -1,0 +1,118 @@
+= Usage
+:description: Create matrices, perform basic operations, and use decomposers and Utils to solve linear systems, invert matrices and compute norms.
+
+`Matrix` is the central class of this library: a dense matrix of `double` values on which every
+decomposer and utility method operates.
+
+== Create a matrix
+
+A matrix can be created with a given size (initialized to zero), copied from another matrix, built
+from an array, or generated with random values:
+
+[source,java]
+----
+import com.irurueta.algebra.Matrix;
+
+// 3x2 matrix initialized to zero
+Matrix m = new Matrix(3, 2);
+m.setElementAt(0, 0, 1.0);
+m.setElementAt(1, 0, 2.0);
+
+// copy constructor
+Matrix copy = new Matrix(m);
+
+// 3x3 identity matrix
+Matrix identity = Matrix.identity(3, 3);
+
+// column matrix built from an array
+double[] data = {1.0, 2.0, 3.0};
+Matrix column = Matrix.newFromArray(data);
+
+// 2x2 matrix with uniformly distributed random values in [0.0, 1.0)
+Matrix random = Matrix.createWithUniformRandomValues(2, 2, 0.0, 1.0);
+----
+
+== Basic operations
+
+`Matrix` provides in-place and return-new-instance variants of the usual arithmetic operations:
+
+[source,java]
+----
+Matrix a = Matrix.identity(2, 2);
+Matrix b = Matrix.identity(2, 2);
+
+a.add(b);              // a = a + b, in-place
+Matrix c = a.addAndReturnNew(b);
+
+a.multiply(b);          // a = a * b, in-place
+Matrix d = a.multiplyAndReturnNew(b);
+
+a.multiplyByScalar(2.0);
+a.transpose();          // in-place transpose
+Matrix t = a.transposeAndReturnNew();
+----
+
+`getElementAt`/`setElementAt` access individual elements by row and column; `getSubmatrix` and
+`setSubmatrix` extract or overwrite rectangular regions of a matrix.
+
+== Solve a linear system of equations
+
+`Utils.solve` picks a suitable decomposer automatically: `LUDecomposer` for square matrices, and
+`EconomyQRDecomposer` (least-squares solution) otherwise.
+
+[source,java]
+----
+import com.irurueta.algebra.Utils;
+
+Matrix a = new Matrix(2, 2);
+a.setElementAt(0, 0, 2.0);
+a.setElementAt(0, 1, 1.0);
+a.setElementAt(1, 0, 1.0);
+a.setElementAt(1, 1, 3.0);
+
+Matrix b = Matrix.newFromArray(new double[]{5.0, 10.0});
+
+Matrix x = Utils.solve(a, b);
+----
+
+For repeated solves against the same matrix `a` with different right-hand sides, instantiate the
+relevant xref:lu-decomposition.adoc[`LUDecomposer`], xref:qr-decomposition.adoc[`QRDecomposer`] or
+xref:singular-value-decomposition.adoc[`SingularValueDecomposer`] directly, call `decompose()`
+once, and reuse it by calling `solve(b)` as many times as needed.
+
+== Invert or pseudo-invert a matrix
+
+`Utils.inverse` inverts square matrices and returns the Moore-Penrose pseudo-inverse for
+non-square ones; `Utils.pseudoInverse` always uses
+xref:singular-value-decomposition.adoc[Singular Value Decomposition], which is more numerically
+stable at a higher computational cost.
+
+[source,java]
+----
+Matrix inv = Utils.inverse(a);
+Matrix pinv = Utils.pseudoInverse(a);
+----
+
+== Compute norms, rank, determinant and condition number
+
+[source,java]
+----
+double frobenius = Utils.normF(a);   // xref:frobenius-norm.adoc
+double one = Utils.norm1(a);         // xref:one-norm.adoc
+double infinity = Utils.normInf(a);  // xref:infinity-norm.adoc
+double two = Utils.norm2(a);         // largest singular value
+
+double determinant = Utils.det(a);
+int rank = Utils.rank(a);
+double condition = Utils.cond(a);
+----
+
+== Error handling
+
+Most operations throw `WrongSizeException` when matrix dimensions are incompatible. Decomposers
+additionally throw `NotReadyException` if `decompose()` is called before an input matrix has been
+set, `LockedException` if a decomposer is reconfigured while `decompose()` is running,
+`NotAvailableException` if a result is requested before `decompose()` has completed, and a
+decomposition-specific exception (`SingularMatrixException`, `RankDeficientMatrixException`,
+`NonSymmetricPositiveDefiniteMatrixException` or `NoConvergenceException`) when the input matrix
+does not meet the requirements of the algorithm. See each decomposer's page for details.

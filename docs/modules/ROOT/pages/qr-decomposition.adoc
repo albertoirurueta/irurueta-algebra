@@ -1,0 +1,105 @@
+= QR Decomposition
+:description: QRDecomposer factors a matrix into an orthogonal factor and an upper triangular factor using Gram-Schmidt orthogonalization, from Numerical Recipes chapter 2.10.
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`QRDecomposer` factors a matrix `A` with at least as many rows as columns into an orthogonal
+matrix `Q` and an upper triangular matrix `R` (eq. 2.10.1-2.10.2):
+
+[stem]
+++++
+A = Q \cdot R \qquad \text{where } Q^T \cdot Q = I
+++++
+
+Solving `A * x = b` with a QR factorization involves forming stem:[Q^T \cdot b] and then solving
+the triangular system stem:[R \cdot x = Q^T \cdot b] by backsubstitution (eq. 2.10.3-2.10.4). QR
+decomposition takes about twice as many operations as xref:lu-decomposition.adoc[LU
+decomposition], so it is not the preferred method for typical square linear systems; its
+usefulness comes from the fact that it also works, in a least-squares sense, when `A` has more
+rows than columns (an overdetermined system), and from the fact that `Q` provides an orthonormal
+basis for the column space of `A`.
+
+== The algorithm
+
+Numerical Recipes builds `Q` and `R` through a sequence of `N-1` Householder reflections, each
+written in the form (with stem:[c = \tfrac{1}{2} u \cdot u]):
+
+[stem]
+++++
+Q_k = I - \frac{u \otimes u}{c}
+++++
+
+chosen so that stem:[Q_0] zeroes all entries below the diagonal in column 0 of `A`, stem:[Q_1]
+zeroes all entries below the diagonal in column 1, and so on, so that (eq. 2.10.5-2.10.6):
+
+[stem]
+++++
+R = Q_{N-2} \cdots Q_1 \cdot Q_0 \cdot A
+\qquad\qquad
+Q = \left( Q_{N-2} \cdots Q_1 \cdot Q_0 \right)^{-1} = Q_0 \cdot Q_1 \cdots Q_{N-2}
+++++
+
+`QRDecomposer` in this library instead builds the factorization through *Gram-Schmidt
+orthogonalization*: starting from a copy of `A` seeded with small random values in any extra rows
+(needed only when `A` has more rows than columns), each column is made orthogonal to every
+previous column and then normalized to unit length, directly producing the orthonormal columns of
+`Q`; the dot products computed along the way are exactly the entries of `R`, which is
+diagonal-and-above by construction.
+
+`isFullRank()` inspects the diagonal of `R`: since stem:[|\det A'| = \prod R_{ii}] up to sign for
+the square part of `A`, a diagonal entry that is (numerically) zero indicates that `A` is rank
+deficient, in which case `solve` throws `RankDeficientMatrixException` rather than returning a
+meaningless answer.
+
+For a faster factorization based on Householder reflections applied directly to `A` (matching the
+algorithm described in Numerical Recipes) see xref:economy-qr-decomposition.adoc[
+`EconomyQRDecomposer`], which is generally the better choice unless the full, square `Q` is
+specifically required.
+
+== Usage
+
+[source,java]
+----
+import com.irurueta.algebra.QRDecomposer;
+import com.irurueta.algebra.Matrix;
+
+Matrix a = new Matrix(3, 2);
+a.setElementAt(0, 0, 1.0);
+a.setElementAt(1, 0, 1.0);
+a.setElementAt(2, 0, 0.0);
+a.setElementAt(0, 1, 0.0);
+a.setElementAt(1, 1, 1.0);
+a.setElementAt(2, 1, 1.0);
+
+final var decomposer = new QRDecomposer(a);
+decomposer.decompose();
+
+Matrix q = decomposer.getQ(); // 3x3 orthogonal matrix
+Matrix r = decomposer.getR(); // 3x2 upper triangular matrix
+
+boolean fullRank = decomposer.isFullRank();
+
+Matrix b = Matrix.newFromArray(new double[]{1.0, 2.0, 3.0});
+Matrix x = decomposer.solve(b); // least-squares solution when a has more rows than columns
+----
+
+`isFullRank` and `solve` accept an optional `roundingError` argument to relax the default
+(`DEFAULT_ROUND_ERROR`, `1e-8`) tolerance used to decide whether a diagonal entry of `R` is
+effectively zero.
+
+== Error handling
+
+`decompose()` throws `NotReadyException` if no input matrix has been set, `LockedException` if the
+instance is already decomposing, and `DecomposerException` if the input matrix has fewer rows than
+columns. Result accessors throw `NotAvailableException` if called before `decompose()`. `solve`
+throws `WrongSizeException` if `b` does not have a matching number of rows or if the input matrix
+has fewer rows than columns, and `RankDeficientMatrixException` if the input matrix is not full
+rank.
+
+== Reference
+
+`QRDecomposer` implements the factorization described in xref:reference.adoc[Numerical Recipes,
+3rd Edition, section 2.10, "QR Decomposition"], using Gram-Schmidt orthogonalization instead of
+the Householder reflections described there; see also
+xref:reference.adoc[Wikipedia, "QR decomposition"].

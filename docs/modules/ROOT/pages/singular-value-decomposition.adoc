@@ -1,0 +1,165 @@
+= Singular Value Decomposition
+:description: SingularValueDecomposer factors any matrix into two orthogonal factors and a diagonal matrix of singular values, from Numerical Recipes chapter 2.6.
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`SingularValueDecomposer` factors any `M`-by-`N` matrix `A`, singular or not, square or not, into:
+
+[stem]
+++++
+A = U \cdot S \cdot V^T
+++++
+
+where `U` is `M`-by-`N` and column-orthogonal (stem:[U^T \cdot U = I]), `S` is an `N`-by-`N`
+diagonal matrix of non-negative *singular values*, and `V` is `N`-by-`N` and orthogonal
+(stem:[V^T \cdot V = V \cdot V^T = I]). It is the most robust decomposer in this library: where
+xref:lu-decomposition.adoc[LU] or xref:gauss-jordan-elimination.adoc[Gauss-Jordan elimination] can
+only report failure on a singular or ill-conditioned matrix, SVD diagnoses precisely what is wrong
+and, in most cases, still produces a useful answer.
+
+Numerical Recipes shows the shapes of the three factors as tableaus (eq. 2.6.1-2.6.2), which differ
+depending on whether `A` has more rows than columns (the overdetermined case, `M > N`) or fewer
+(the underdetermined case, `M < N`):
+
+[cols="1,1,1,1",options="header"]
+|===
+|Case
+|`U`
+|`S`
+|`V^T`
+
+|`M > N` (eq. 2.6.1)
+|`M`-by-`N`, column-orthogonal
+|`N`-by-`N` diagonal
+|`N`-by-`N` orthogonal
+
+|`M < N` (eq. 2.6.2)
+|`M`-by-`N`, only the first `M` columns can be nonzero
+|`N`-by-`N` diagonal, singular values stem:[w_j = 0] for stem:[j \geq M]
+|`N`-by-`N` orthogonal
+|===
+
+== Range, nullspace and rank
+
+`A` maps its `N`-dimensional input space into (at most) an `M`-dimensional output space; the
+subspace it actually reaches is its *range*, and its dimension is the *rank* of `A`. Vectors that
+`A` maps to zero form its *nullspace*, with dimension the *nullity*. The rank-nullity theorem
+relates the two: `rank(A) + nullity(A) = N`.
+
+SVD constructs orthonormal bases for both subspaces directly: the columns of `U` whose matching
+singular value is non-negligible span the range (`getRange()`), and the columns of `V` whose
+matching singular value is negligible span the nullspace (`getNullspace()`). "Negligible" is
+decided against a threshold (`getRank(threshold)`, `getNullity(threshold)`); by default,
+`SingularValueDecomposer` derives one from the matrix size, largest singular value and machine
+precision (`getNegligibleSingularValueThreshold()`), which is adequate for most situations.
+
+The ratio of the largest to the smallest singular value is the matrix's *condition number*
+(`getConditionNumber()`, or its reciprocal `getReciprocalConditionNumber()`), which measures how
+much a small error in the right-hand side of a linear system can be amplified in the solution. The
+largest singular value alone is the matrix's 2-norm (`getNorm2()`).
+
+Numerical Recipes' Figure 2.6.1 illustrates what happens when solving `A * x = b` as `A` becomes
+singular: a nonsingular matrix maps its whole domain onto a codomain of the same dimension, but a
+singular matrix maps the domain onto a lower-dimensional *range*, collapsing its *nullspace* onto
+zero. A right-hand side inside the range (`d` below) still has a solution — in fact a whole family
+of them, differing by any vector in the nullspace, of which SVD's `solve` picks the one closest to
+zero — while a right-hand side outside the range (`c` below) has no exact solution at all, and
+`solve` instead returns the least-squares solution of the closest reachable point `c'`:
+
+[mermaid]
+....
+graph LR
+    subgraph Domain ["domain of A"]
+        x["particular solution x"]
+        n0["nullspace of A"]
+    end
+    subgraph Codomain ["codomain of A"]
+        rangeA["range of A"]
+        zero["0"]
+        d["d (inside range)"]
+        c["c (outside range)"]
+        cprime["c' (closest point in range)"]
+    end
+    x -->|"A ·"| d
+    n0 -->|"A ·"| zero
+    d --- rangeA
+    cprime --- rangeA
+    c -.->|"no exact solution; SVD returns least-squares c'"| cprime
+....
+
+== Solving linear systems with the pseudoinverse
+
+For a square, full-rank `A`, the inverse follows directly from the orthogonality of `U` and `V`
+and the diagonal shape of `S`:
+
+[stem]
+++++
+A^{-1} = V \cdot \text{diag}(1/S_j) \cdot U^T
+++++
+
+When some singular values are zero (or negligible), this expression is generalized into the
+*Moore-Penrose pseudoinverse* by replacing stem:[1/S_j] with zero wherever stem:[S_j] is
+negligible:
+
+[stem]
+++++
+x = V \cdot \text{diag}(1/S_j)^{+} \cdot U^T \cdot b
+++++
+
+This single formula, implemented by `solve`, covers every case: if `A` is nonsingular, it is the
+exact solution; if `A * x = b` has infinitely many solutions (a homogeneous or rank-deficient
+system with `b` in the range of `A`), it returns the one of smallest length; and if `A * x = b` has
+no exact solution at all, it returns the least-squares best approximation, minimizing
+stem:[\|A \cdot x - b\|]. Zeroing small-but-nonzero singular values before solving, rather than
+leaving them in, often *improves* the accuracy of the solution on ill-conditioned matrices: those
+tiny singular values are usually dominated by roundoff error, and dividing by them amplifies that
+error rather than any genuine signal.
+
+== Usage
+
+[source,java]
+----
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.Matrix;
+
+Matrix a = new Matrix(3, 2);
+// ... fill a with data ...
+
+final var decomposer = new SingularValueDecomposer(a);
+decomposer.decompose();
+
+Matrix u = decomposer.getU();
+Matrix v = decomposer.getV();
+double[] singularValues = decomposer.getSingularValues();
+Matrix s = decomposer.getW(); // diagonal matrix of singular values
+
+int rank = decomposer.getRank();
+int nullity = decomposer.getNullity();
+Matrix range = decomposer.getRange();
+Matrix nullspace = decomposer.getNullspace();
+
+double conditionNumber = decomposer.getConditionNumber();
+double norm2 = decomposer.getNorm2();
+
+Matrix b = Matrix.newFromArray(new double[]{1.0, 2.0, 3.0});
+Matrix x = decomposer.solve(b); // least-squares / pseudoinverse solution
+----
+
+`decompose()` may take an optional `maxIters` constructor argument (default `30`) bounding the
+number of iterations allowed for singular values to converge; `getRank`, `getNullity`, `getRange`,
+`getNullspace` and `solve` all accept an optional explicit threshold instead of the automatically
+derived one. `Utils.pseudoInverse` and `Utils.norm2` build on this decomposer directly.
+
+== Error handling
+
+`decompose()` throws `NotReadyException` if no input matrix has been set, `LockedException` if the
+instance is already decomposing, and `DecomposerException` (specifically,
+`NoConvergenceException`) if singular values fail to converge within `maxIters` iterations. Result
+accessors throw `NotAvailableException` if called before `decompose()`. `solve` throws
+`WrongSizeException` if `b` does not have a matching number of rows.
+
+== Reference
+
+`SingularValueDecomposer` is based on the algorithm described in xref:reference.adoc[Numerical
+Recipes, 3rd Edition, section 2.6, "Singular Value Decomposition"].

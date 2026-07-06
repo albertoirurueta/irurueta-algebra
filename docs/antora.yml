@@ -1,0 +1,5 @@
+name: irurueta-algebra
+version: 1.4.0
+title: Irurueta Algebra
+nav:
+  - modules/ROOT/nav.adoc

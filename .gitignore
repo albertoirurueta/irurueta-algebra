@@ -2,3 +2,4 @@ target
 .idea
 
 src/main/resources/com/irurueta/algebra/build-info.properties
+/docs/build/

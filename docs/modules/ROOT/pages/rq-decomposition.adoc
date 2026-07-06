@@ -1,0 +1,112 @@
+= RQ Decomposition
+:description: RQDecomposer factors a matrix into an upper triangular factor and an orthogonal factor by reducing it to QR decomposition, per a Mathematics Stack Exchange derivation.
+:stem: latexmath
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`RQDecomposer` factors a matrix `A` into an upper triangular matrix `R` and an orthogonal matrix
+`Q`:
+
+[stem]
+++++
+A = R \cdot Q \qquad \text{where } Q^T \cdot Q = I
+++++
+
+RQ decomposition is closely related to xref:qr-decomposition.adoc[QR decomposition]: both factor a
+matrix into an orthogonal factor and a triangular factor, differing in the order of the factors
+(`R * Q` versus `Q * R`) and in which triangle (`R` is upper triangular in both, but its role and
+values differ). RQ decomposition is used, for example, to recover a camera's intrinsic and
+rotation matrices from a projection matrix in computer vision.
+
+== The algorithm
+
+`RQDecomposer` does not implement RQ decomposition directly; instead, it reduces the problem to an
+ordinary xref:qr-decomposition.adoc[QR decomposition] through row and column reversals, following
+the standard trick for relating the two factorizations. Let `J` denote the *exchange matrix* (an
+identity matrix with its columns, and equivalently its rows, in reverse order), which is symmetric
+and its own inverse:
+
+[stem]
+++++
+J^T = J \qquad\qquad J^2 = I
+++++
+
+Reversing the row order of `A` and then transposing it (equivalently, transposing `A` and then
+reversing its column order) builds the auxiliary matrix:
+
+[stem]
+++++
+B = A^T \cdot J
+++++
+
+Computing the ordinary QR decomposition of `B` with the internal
+xref:qr-decomposition.adoc[`QRDecomposer`] gives stem:[B = Q_2 \cdot R_2]. Substituting and using
+stem:[J^2 = I] to isolate `A` gives:
+
+[stem]
+++++
+A^T \cdot J = Q_2 \cdot R_2
+\quad\Longrightarrow\quad
+A = J \cdot R_2^T \cdot Q_2^T
+++++
+
+`RQDecomposer` then defines `R` and `Q` by distributing a pair of self-cancelling `J` factors
+around this expression, which leaves the product `R * Q` unchanged while making `R` upper
+triangular and `Q` orthogonal:
+
+[stem]
+++++
+R = J \cdot R_2^T \cdot J \qquad\qquad Q = J \cdot Q_2^T
+\qquad\Longrightarrow\qquad
+R \cdot Q = J \cdot R_2^T \cdot (J \cdot J) \cdot Q_2^T = J \cdot R_2^T \cdot Q_2^T = A
+++++
+
+The diagram below summarizes the pipeline that `decompose()`, `getR()` and `getQ()` implement:
+
+[mermaid]
+....
+graph LR
+    A["A"] -->|"transpose, reverse columns (·J)"| B["B = A^T · J"]
+    B -->|"QRDecomposer.decompose()"| QR["B = Q2 · R2"]
+    QR -->|"R = J · R2^T · J"| R["R"]
+    QR -->|"Q = J · Q2^T"| Q["Q"]
+....
+
+Since `J` is orthogonal, the orthogonality of stem:[Q_2] carries over to `Q`. This construction
+means `RQDecomposer` inherits the numerical behavior of the underlying `QRDecomposer`, including
+its use of Gram-Schmidt orthogonalization rather than Householder reflections.
+
+== Usage
+
+[source,java]
+----
+import com.irurueta.algebra.RQDecomposer;
+import com.irurueta.algebra.Matrix;
+
+Matrix a = new Matrix(3, 3);
+// ... fill a with data ...
+
+final var decomposer = new RQDecomposer(a);
+decomposer.decompose();
+
+Matrix r = decomposer.getR(); // upper triangular factor
+Matrix q = decomposer.getQ(); // orthogonal factor
+----
+
+`RQDecomposer` does not expose `solve` or rank-related methods of its own; use the underlying
+xref:qr-decomposition.adoc[`QRDecomposer`] directly, or xref:usage.adoc[`Utils.solve`], to solve
+linear systems.
+
+== Error handling
+
+`decompose()` throws `NotReadyException` if no input matrix has been set, `LockedException` if the
+instance is already decomposing, and `DecomposerException` if the internal QR decomposition fails
+(in particular, if the input matrix ends up with fewer rows than columns after the row/column
+reversal). `getR()` and `getQ()` throw `NotAvailableException` if called before `decompose()`.
+
+== Reference
+
+`RQDecomposer` implements the reduction to QR decomposition described in
+xref:reference.adoc[Mathematics Stack Exchange, "RQ decomposition"], building on the QR
+decomposition described in xref:reference.adoc[Numerical Recipes, 3rd Edition, section 2.10, "QR
+Decomposition"].
