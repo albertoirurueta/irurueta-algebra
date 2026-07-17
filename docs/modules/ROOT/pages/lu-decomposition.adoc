@@ -66,29 +66,11 @@ corresponding stem:[\alpha_{ij}] or stem:[\beta_{ij}]: since Crout's method fixe
 
 Numerical Recipes' Figure 2.3.1 shows the order in which this combined matrix is filled: by
 columns, from left to right, and within each column from top to bottom. The diagram below
-reproduces that order for the 4x4 case, labeling each entry with the step at which it is computed:
+reproduces that figure for the 4x4 case, labeling each entry with the step at which it is computed
+and highlighting, for two typical entries, exactly which already-computed entries (shaded) they
+depend on:
 
-[mermaid]
-....
-graph LR
-    subgraph col0 ["column 0"]
-        direction TB
-        a0["β00 (1st)"] --> a1["α10 (2nd)"] --> a2["α20 (3rd)"] --> a3["α30 (4th)"]
-    end
-    subgraph col1 ["column 1"]
-        direction TB
-        b0["β01 (5th)"] --> b1["β11 (6th)"] --> b2["α21 (7th)"] --> b3["α31 (8th)"]
-    end
-    subgraph col2 ["column 2"]
-        direction TB
-        c0["β02 (9th)"] --> c1["β12 (10th)"] --> c2["β22 (11th)"] --> c3["α32 (12th)"]
-    end
-    subgraph col3 ["column 3"]
-        direction TB
-        d0["β03 (13th)"] --> d1["β13 (14th)"] --> d2["β23 (15th)"] --> d3["β33 (16th)"]
-    end
-    col0 --> col1 --> col2 --> col3
-....
+image::lu-decomposition-fill-order.svg[Order in which Crout's algorithm fills the combined L/U matrix one column at a time top to bottom within each column]
 
 Pivoting is essential for numerical stability: at each column, the algorithm selects the
 largest-magnitude candidate in that column (partial pivoting, i.e., row interchanges only, scaled

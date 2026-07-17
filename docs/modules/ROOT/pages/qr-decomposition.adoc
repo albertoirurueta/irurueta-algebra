@@ -47,6 +47,12 @@ previous column and then normalized to unit length, directly producing the ortho
 `Q`; the dot products computed along the way are exactly the entries of `R`, which is
 diagonal-and-above by construction.
 
+The diagram below shows one step of this process for two columns `a1` and `a2`: `a1` is normalized
+directly into `q1`, while `a2` has its projection onto `q1` subtracted away, leaving a residual
+`u2` that is orthogonal to `q1` and normalizes into `q2`:
+
+image::gram-schmidt-orthogonalization.svg[Gram-Schmidt orthogonalization of two columns into orthonormal vectors q1 and q2]
+
 `isFullRank()` inspects the diagonal of `R`: since stem:[|\det A'| = \prod R_{ii}] up to sign for
 the square part of `A`, a diagonal entry that is (numerically) zero indicates that `A` is rank
 deficient, in which case `solve` throws `RankDeficientMatrixException` rather than returning a

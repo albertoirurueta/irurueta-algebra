@@ -24,6 +24,12 @@ the maximum absolute element — the reason it is also called the maximum or sup
 Instances are obtained through `NormComputer.create(NormType.INFINITY_NORM)`, and `Utils.normInf`
 is built directly on this class.
 
+Its unit ball (the set of vectors with norm exactly `1`) is the axis-aligned square below, in
+contrast with the diamond of the xref:one-norm.adoc[one norm] (`p = 1`) and the circle of the
+xref:frobenius-norm.adoc[Euclidean/Frobenius norm] (`p = 2`):
+
+image::unit-norm-balls.svg[Unit balls for the 1-norm 2-norm 4-norm and infinity-norm showing the infinity norm's square shape]
+
 == Behavior on arrays
 
 This library represents an array as a single column matrix (one column, as many rows as elements),
