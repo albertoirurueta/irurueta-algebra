@@ -67,26 +67,7 @@ of them, differing by any vector in the nullspace, of which SVD's `solve` picks 
 zero — while a right-hand side outside the range (`c` below) has no exact solution at all, and
 `solve` instead returns the least-squares solution of the closest reachable point `c'`:
 
-[mermaid]
-....
-graph LR
-    subgraph Domain ["domain of A"]
-        x["particular solution x"]
-        n0["nullspace of A"]
-    end
-    subgraph Codomain ["codomain of A"]
-        rangeA["range of A"]
-        zero["0"]
-        d["d (inside range)"]
-        c["c (outside range)"]
-        cprime["c' (closest point in range)"]
-    end
-    x -->|"A ·"| d
-    n0 -->|"A ·"| zero
-    d --- rangeA
-    cprime --- rangeA
-    c -.->|"no exact solution; SVD returns least-squares c'"| cprime
-....
+image::svd-range-nullspace.svg[Nonsingular versus singular linear maps showing how SVD picks the smallest-length solution when one exists and the least-squares solution otherwise]
 
 == Solving linear systems with the pseudoinverse
 
