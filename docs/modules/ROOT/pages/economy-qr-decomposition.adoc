@@ -40,6 +40,12 @@ the remaining columns to the right. After `n` such reflections (one per column),
 triangle of the working matrix holds `R`, and the accumulated Householder vectors implicitly
 represent `Q`.
 
+The diagram below shows this geometrically for a single sub-column `x`: reflecting it through the
+hyperplane orthogonal to the Householder vector `v` maps it onto the `e1` axis, so every component
+except the first becomes zero.
+
+image::householder-reflection.svg[Geometric view of a Householder reflection mapping a vector onto the first basis axis]
+
 `EconomyQRDecomposer` stores only these Householder vectors (in a lower trapezoidal matrix
 retrievable through `getH()`) and the diagonal of `R` (`rDiag`), rather than materializing `Q`
 eagerly. `getQ()` and `getR()` reconstruct the explicit matrices from this compact representation

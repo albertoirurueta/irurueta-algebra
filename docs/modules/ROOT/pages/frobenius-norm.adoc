@@ -19,6 +19,12 @@ arguments) returns a `FrobeniusNormComputer`, and `Utils.normF` is built directl
 `Utils.isOrthonormal` also relies on the Frobenius norm: in addition to being orthogonal, an
 orthonormal matrix must have Frobenius norm equal to `1`.
 
+For an array, the Frobenius norm is the `p = 2` case of the general `p`-norm family; its unit ball
+is the familiar circle below, in contrast with the diamond of the xref:one-norm.adoc[one norm]
+(`p = 1`) and the square of the xref:infinity-norm.adoc[infinity norm] (`p` tending to infinity):
+
+image::unit-norm-balls.svg[Unit balls for the 1-norm 2-norm 4-norm and infinity-norm showing the Frobenius/Euclidean norm's circular shape]
+
 == Usage
 
 The `getNorm` instance methods implement the abstract `NormComputer` contract; static `norm`
