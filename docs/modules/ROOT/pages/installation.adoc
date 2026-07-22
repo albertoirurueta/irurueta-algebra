@@ -2,7 +2,7 @@
 :description: Add irurueta-algebra to a Maven or Gradle project.
 
 Irurueta Algebra is a Maven artifact that can be integrated into Java projects using group id
-`com.irurueta` and artifact id `irurueta-algebra`. The project is built as a Java 17 Maven JAR, and
+`com.irurueta` and artifact id `irurueta-algebra`. The project is built as a Java 21 Maven JAR, and
 depends on `com.irurueta:irurueta-statistics`.
 
 == Maven configuration

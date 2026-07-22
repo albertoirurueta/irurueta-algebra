@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-`irurueta-algebra` is a small Java 17 linear algebra library (Maven, `com.irurueta:irurueta-algebra`), published to Maven Central. It provides a dense `Matrix` type, matrix decompositions (LU, QR, economy QR, RQ, Cholesky, SVD), norm computation, complex numbers, and general-purpose algebra helpers in `Utils`/`ArrayUtils`. It depends on the sibling library `com.irurueta:irurueta-statistics` and is itself a building block for other `irurueta-*` libraries (e.g. geometry, numerical methods).
+`irurueta-algebra` is a small Java 21 linear algebra library (Maven, `com.irurueta:irurueta-algebra`), published to Maven Central. It provides a dense `Matrix` type, matrix decompositions (LU, QR, economy QR, RQ, Cholesky, SVD), norm computation, complex numbers, and general-purpose algebra helpers in `Utils`/`ArrayUtils`. It depends on the sibling library `com.irurueta:irurueta-statistics` and is itself a building block for other `irurueta-*` libraries (e.g. geometry, numerical methods).
 
 ## Commands
 
