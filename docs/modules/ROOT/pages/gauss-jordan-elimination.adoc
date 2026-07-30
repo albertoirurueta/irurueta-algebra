@@ -110,6 +110,27 @@ A `double[]` overload of `process` is also available for a single right-hand sid
 the same number of rows as `a`, and `SingularMatrixException` if `a` is found to be singular during
 elimination.
 
+== Related classes
+
+[cols="1,1,1",options="header"]
+|===
+|Class
+|Source
+|Javadoc
+
+|`GaussJordanElimination`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/GaussJordanElimination.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/GaussJordanElimination.html[Javadoc]
+
+|`Matrix`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html[Javadoc]
+
+|`SingularMatrixException`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/SingularMatrixException.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/SingularMatrixException.html[Javadoc]
+|===
+
 == Reference
 
 `GaussJordanElimination` is based on the algorithm described in xref:reference.adoc[Numerical
