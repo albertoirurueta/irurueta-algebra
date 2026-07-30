@@ -83,6 +83,23 @@ instance is already decomposing, and `DecomposerException` if the input matrix i
 matrix, and `NonSymmetricPositiveDefiniteMatrixException` if the input matrix is not symmetric
 positive-definite.
 
+== Related classes
+
+[cols="1,1,1",options="header"]
+|===
+|Class
+|Source
+|Javadoc
+
+|`CholeskyDecomposer`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/CholeskyDecomposer.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/CholeskyDecomposer.html[Javadoc]
+
+|`Matrix`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html[Javadoc]
+|===
+
 == Reference
 
 `CholeskyDecomposer` is based on the algorithm described in xref:reference.adoc[Numerical Recipes,

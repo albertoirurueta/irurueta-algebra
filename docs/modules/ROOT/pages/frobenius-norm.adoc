@@ -61,6 +61,31 @@ to the input array, useful when the norm is used inside a larger optimization.
 The Jacobian overload throws `WrongSizeException` if the provided Jacobian matrix is not `1xN`,
 where `N` is the length of the input array.
 
+== Related classes
+
+[cols="1,1,1",options="header"]
+|===
+|Class
+|Source
+|Javadoc
+
+|`FrobeniusNormComputer`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/FrobeniusNormComputer.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/FrobeniusNormComputer.html[Javadoc]
+
+|`Matrix`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html[Javadoc]
+
+|`NormComputer`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/NormComputer.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/NormComputer.html[Javadoc]
+
+|`NormType`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/NormType.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/NormType.html[Javadoc]
+|===
+
 == Reference
 
 Frobenius norm is one of the standard matrix norms described in xref:reference.adoc[Wikipedia,

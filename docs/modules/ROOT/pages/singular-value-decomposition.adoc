@@ -140,6 +140,23 @@ instance is already decomposing, and `DecomposerException` (specifically,
 accessors throw `NotAvailableException` if called before `decompose()`. `solve` throws
 `WrongSizeException` if `b` does not have a matching number of rows.
 
+== Related classes
+
+[cols="1,1,1",options="header"]
+|===
+|Class
+|Source
+|Javadoc
+
+|`SingularValueDecomposer`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/SingularValueDecomposer.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/SingularValueDecomposer.html[Javadoc]
+
+|`Matrix`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html[Javadoc]
+|===
+
 == Reference
 
 `SingularValueDecomposer` is based on the algorithm described in xref:reference.adoc[Numerical

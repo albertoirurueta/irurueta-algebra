@@ -54,3 +54,24 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
 ----
+
+== Related classes
+
+[cols="1,1,1",options="header"]
+|===
+|Class
+|Source
+|Javadoc
+
+|`Matrix`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html[Javadoc]
+
+|`Utils`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Utils.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Utils.html[Javadoc]
+
+|`WrongSizeException`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/WrongSizeException.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/WrongSizeException.html[Javadoc]
+|===

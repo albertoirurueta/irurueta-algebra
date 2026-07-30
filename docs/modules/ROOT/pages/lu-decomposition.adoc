@@ -137,6 +137,23 @@ than rows. Result accessors throw `NotAvailableException` if called before `deco
 square (`solve` additionally if `b` does not have a matching number of rows), and `solve` throws
 `SingularMatrixException` if the input matrix turns out to be singular.
 
+== Related classes
+
+[cols="1,1,1",options="header"]
+|===
+|Class
+|Source
+|Javadoc
+
+|`LUDecomposer`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/LUDecomposer.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/LUDecomposer.html[Javadoc]
+
+|`Matrix`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html[Javadoc]
+|===
+
 == Reference
 
 `LUDecomposer` is based on the algorithm described in xref:reference.adoc[Numerical Recipes, 3rd

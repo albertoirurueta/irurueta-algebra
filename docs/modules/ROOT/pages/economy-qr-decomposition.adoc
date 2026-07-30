@@ -100,6 +100,23 @@ before `decompose()`. `getQ`, `isFullRank` and `solve` throw `WrongSizeException
 matrix has fewer rows than columns (`solve` additionally if `b` does not have a matching number of
 rows), and `solve` throws `RankDeficientMatrixException` if the input matrix is not full rank.
 
+== Related classes
+
+[cols="1,1,1",options="header"]
+|===
+|Class
+|Source
+|Javadoc
+
+|`EconomyQRDecomposer`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/EconomyQRDecomposer.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/EconomyQRDecomposer.html[Javadoc]
+
+|`Matrix`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html[Javadoc]
+|===
+
 == Reference
 
 `EconomyQRDecomposer` implements the Householder-based algorithm described in

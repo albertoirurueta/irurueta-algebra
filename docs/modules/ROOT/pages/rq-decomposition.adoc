@@ -104,6 +104,23 @@ instance is already decomposing, and `DecomposerException` if the internal QR de
 (in particular, if the input matrix ends up with fewer rows than columns after the row/column
 reversal). `getR()` and `getQ()` throw `NotAvailableException` if called before `decompose()`.
 
+== Related classes
+
+[cols="1,1,1",options="header"]
+|===
+|Class
+|Source
+|Javadoc
+
+|`RQDecomposer`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/RQDecomposer.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/RQDecomposer.html[Javadoc]
+
+|`Matrix`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html[Javadoc]
+|===
+
 == Reference
 
 `RQDecomposer` implements the reduction to QR decomposition described in
