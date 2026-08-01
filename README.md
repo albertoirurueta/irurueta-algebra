@@ -70,6 +70,7 @@ graph LR
 - [Javadoc report](https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/index.html)
 - [JaCoCo coverage report](https://albertoirurueta.github.io/irurueta-algebra/mvn-site/jacoco/index.html)
 - [Surefire test report](https://albertoirurueta.github.io/irurueta-algebra/mvn-site/surefire.html)
+- [Maven site report](http://albertoirurueta.github.io/irurueta-algebra/mvn-site)
 - [SonarCloud dashboard](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-algebra)
 
 The Antora documentation source lives in [`docs/modules/ROOT`](docs/modules/ROOT).

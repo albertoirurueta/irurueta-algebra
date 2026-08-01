@@ -22,6 +22,9 @@ These reports are generated during the Maven build and site lifecycle.
 |https://sonarcloud.io/project/overview?id=albertoirurueta_algebra[SonarCloud]
 |Project quality dashboard with issue analysis, code quality information, and coverage metrics.
 
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site[Maven Site]
+|Aggregation of project reports.
+
 |https://github.com/albertoirurueta/irurueta-algebra[GitHub repository]
 |Source code repository for the project.
 |===
