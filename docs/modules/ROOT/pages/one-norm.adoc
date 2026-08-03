@@ -9,7 +9,7 @@ the maximum absolute column sum:
 
 [stem]
 ++++
-\|A\|_1 = \max_{j} \sum_{i} |a_{ij}|
+\|\mathbf{A}\|_1 = \max_{j} \sum_{i} |a_{ij}|
 ++++
 
 This library represents an array as a single column matrix, so for an array the one norm reduces
@@ -18,9 +18,9 @@ to the sum of the absolute values of its elements. This is the `p = 1` case of t
 
 [stem]
 ++++
-\|v\|_p = \left( \sum_i |v_i|^p \right)^{1/p}
+\|\mathbf{v}\|_p = \left( \sum_i |v_i|^p \right)^{1/p}
 \qquad\Longrightarrow\qquad
-\|v\|_1 = \sum_i |v_i|
+\|\mathbf{v}\|_1 = \sum_i |v_i|
 ++++
 
 Instances are obtained through `NormComputer.create(NormType.ONE_NORM)`, and `Utils.norm1` is

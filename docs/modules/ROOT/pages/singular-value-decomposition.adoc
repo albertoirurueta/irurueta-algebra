@@ -8,12 +8,12 @@ NOTE: This documentation was generated with the assistance of AI. Please report 
 
 [stem]
 ++++
-A = U \cdot S \cdot V^T
+\mathbf{A} = \mathbf{U} \cdot \mathbf{S} \cdot \mathbf{V}^T
 ++++
 
-where `U` is `M`-by-`N` and column-orthogonal (stem:[U^T \cdot U = I]), `S` is an `N`-by-`N`
+where `U` is `M`-by-`N` and column-orthogonal (stem:[\mathbf{U}^T \cdot \mathbf{U} = \mathbf{I}]), `S` is an `N`-by-`N`
 diagonal matrix of non-negative *singular values*, and `V` is `N`-by-`N` and orthogonal
-(stem:[V^T \cdot V = V \cdot V^T = I]). It is the most robust decomposer in this library: where
+(stem:[\mathbf{V}^T \cdot \mathbf{V} = \mathbf{V} \cdot \mathbf{V}^T = \mathbf{I}]). It is the most robust decomposer in this library: where
 xref:lu-decomposition.adoc[LU] or xref:gauss-jordan-elimination.adoc[Gauss-Jordan elimination] can
 only report failure on a singular or ill-conditioned matrix, SVD diagnoses precisely what is wrong
 and, in most cases, still produces a useful answer.
@@ -76,7 +76,7 @@ and the diagonal shape of `S`:
 
 [stem]
 ++++
-A^{-1} = V \cdot \text{diag}(1/S_j) \cdot U^T
+\mathbf{A}^{-1} = \mathbf{V} \cdot \text{diag}(1/S_j) \cdot \mathbf{U}^T
 ++++
 
 When some singular values are zero (or negligible), this expression is generalized into the
@@ -85,14 +85,14 @@ negligible:
 
 [stem]
 ++++
-x = V \cdot \text{diag}(1/S_j)^{+} \cdot U^T \cdot b
+\mathbf{x} = \mathbf{V} \cdot \text{diag}(1/S_j)^{+} \cdot \mathbf{U}^T \cdot \mathbf{b}
 ++++
 
 This single formula, implemented by `solve`, covers every case: if `A` is nonsingular, it is the
 exact solution; if `A * x = b` has infinitely many solutions (a homogeneous or rank-deficient
 system with `b` in the range of `A`), it returns the one of smallest length; and if `A * x = b` has
 no exact solution at all, it returns the least-squares best approximation, minimizing
-stem:[\|A \cdot x - b\|]. Zeroing small-but-nonzero singular values before solving, rather than
+stem:[\|\mathbf{A} \cdot \mathbf{x} - \mathbf{b}\|]. Zeroing small-but-nonzero singular values before solving, rather than
 leaving them in, often *improves* the accuracy of the solution on ill-conditioned matrices: those
 tiny singular values are usually dominated by roundoff error, and dividing by them amplifies that
 error rather than any genuine signal.

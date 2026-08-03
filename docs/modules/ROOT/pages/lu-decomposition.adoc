@@ -10,7 +10,7 @@ so that (eq. 2.3.1):
 
 [stem]
 ++++
-A = L \cdot U
+\mathbf{A} = \mathbf{L} \cdot \mathbf{U}
 ++++
 
 Once this factorization is available, solving `A * x = b` reduces to two cheap triangular solves:
@@ -122,7 +122,7 @@ diagonal of `U` and the sign accumulated from row interchanges during pivoting:
 
 [stem]
 ++++
-\det A = (\pm 1) \prod_{j=0}^{N-1} \beta_{jj}
+\det \mathbf{A} = (\pm 1) \prod_{j=0}^{N-1} \beta_{jj}
 ++++
 
 and `isSingular()` checks whether any of those diagonal elements stem:[\beta_{jj}] is (numerically)

@@ -9,7 +9,7 @@ NOTE: This documentation was generated with the assistance of AI. Please report 
 
 [stem]
 ++++
-A = R \cdot Q \qquad \text{where } Q^T \cdot Q = I
+\mathbf{A} = \mathbf{R} \cdot \mathbf{Q} \qquad \text{where } \mathbf{Q}^T \cdot \mathbf{Q} = \mathbf{I}
 ++++
 
 RQ decomposition is closely related to xref:qr-decomposition.adoc[QR decomposition]: both factor a
@@ -28,7 +28,7 @@ and its own inverse:
 
 [stem]
 ++++
-J^T = J \qquad\qquad J^2 = I
+\mathbf{J}^T = \mathbf{J} \qquad\qquad \mathbf{J}^2 = \mathbf{I}
 ++++
 
 Reversing the row order of `A` and then transposing it (equivalently, transposing `A` and then
@@ -36,18 +36,18 @@ reversing its column order) builds the auxiliary matrix:
 
 [stem]
 ++++
-B = A^T \cdot J
+\mathbf{B} = \mathbf{A}^T \cdot \mathbf{J}
 ++++
 
 Computing the ordinary QR decomposition of `B` with the internal
-xref:qr-decomposition.adoc[`QRDecomposer`] gives stem:[B = Q_2 \cdot R_2]. Substituting and using
-stem:[J^2 = I] to isolate `A` gives:
+xref:qr-decomposition.adoc[`QRDecomposer`] gives stem:[\mathbf{B} = \mathbf{Q}_2 \cdot \mathbf{R}_2]. Substituting and using
+stem:[\mathbf{J}^2 = \mathbf{I}] to isolate `A` gives:
 
 [stem]
 ++++
-A^T \cdot J = Q_2 \cdot R_2
+\mathbf{A}^T \cdot \mathbf{J} = \mathbf{Q}_2 \cdot \mathbf{R}_2
 \quad\Longrightarrow\quad
-A = J \cdot R_2^T \cdot Q_2^T
+\mathbf{A} = \mathbf{J} \cdot \mathbf{R}_2^T \cdot \mathbf{Q}_2^T
 ++++
 
 `RQDecomposer` then defines `R` and `Q` by distributing a pair of self-cancelling `J` factors
@@ -56,9 +56,9 @@ triangular and `Q` orthogonal:
 
 [stem]
 ++++
-R = J \cdot R_2^T \cdot J \qquad\qquad Q = J \cdot Q_2^T
+\mathbf{R} = \mathbf{J} \cdot \mathbf{R}_2^T \cdot \mathbf{J} \qquad\qquad \mathbf{Q} = \mathbf{J} \cdot \mathbf{Q}_2^T
 \qquad\Longrightarrow\qquad
-R \cdot Q = J \cdot R_2^T \cdot (J \cdot J) \cdot Q_2^T = J \cdot R_2^T \cdot Q_2^T = A
+\mathbf{R} \cdot \mathbf{Q} = \mathbf{J} \cdot \mathbf{R}_2^T \cdot (\mathbf{J} \cdot \mathbf{J}) \cdot \mathbf{Q}_2^T = \mathbf{J} \cdot \mathbf{R}_2^T \cdot \mathbf{Q}_2^T = \mathbf{A}
 ++++
 
 The diagram below summarizes the pipeline that `decompose()`, `getR()` and `getQ()` implement:

@@ -14,24 +14,24 @@ does not keep a reusable factorization, and every call to `process` repeats the 
 
 Numerical Recipes poses the problem as a single column-augmented matrix equation (eq. 2.1.1/2.1.2):
 solving simultaneously for several right-hand sides `b_0`, `b_1`, `b_2` and for the matrix inverse
-`Y` of `A`, by column-augmenting them together with the identity matrix `1`:
+`Y` of `A`, by column-augmenting them together with the identity matrix `I`:
 
 [stem]
 ++++
-\Big[ A \Big] \cdot \Big[ \, x_0 \;\vdots\; x_1 \;\vdots\; x_2 \;\vdots\; Y \, \Big]
-= \Big[ \, b_0 \;\vdots\; b_1 \;\vdots\; b_2 \;\vdots\; 1 \, \Big]
+\Big[ \mathbf{A} \Big] \cdot \Big[ \, x_0 \;\vdots\; x_1 \;\vdots\; x_2 \;\vdots\; \mathbf{Y} \, \Big]
+= \Big[ \, b_0 \;\vdots\; b_1 \;\vdots\; b_2 \;\vdots\; \mathbf{I} \, \Big]
 ++++
 
 which simultaneously states the systems solved by `GaussJordanElimination.process`:
 
 [stem]
 ++++
-A \cdot x_0 = b_0, \quad A \cdot x_1 = b_1, \quad A \cdot x_2 = b_2, \quad\text{and}\quad A \cdot Y = 1
+\mathbf{A} \cdot \mathbf{x_0} = \mathbf{b_0}, \quad \mathbf{A} \cdot \mathbf{x_1} = \mathbf{b_1}, \quad \mathbf{A} \cdot \mathbf{x_2} = \mathbf{b_2}, \quad\text{and}\quad \mathbf{A} \cdot \mathbf{Y} = \mathbf{I}
 ++++
 
 Gauss-Jordan elimination reduces the left factor `A` to the identity matrix by repeatedly combining
 rows: at each of the `N` steps, a pivot element is selected, the row containing it is normalized so
-the pivot becomes `1`, and that row is then subtracted (scaled appropriately) from every other row
+the pivot becomes `I`, and that row is then subtracted (scaled appropriately) from every other row
 so that the pivot's column becomes zero everywhere except at the pivot itself. Applying the same
 sequence of row operations to the right-hand side vectors `b` and to the identity matrix
 simultaneously turns them into the solution vectors `x` and the inverse `Y` of `A`, exactly as the
