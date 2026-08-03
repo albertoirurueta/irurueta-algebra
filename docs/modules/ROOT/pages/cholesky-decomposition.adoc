@@ -9,7 +9,7 @@ triangular matrix `L` whose own transpose serves as the upper triangular factor:
 
 [stem]
 ++++
-A = L \cdot L^T = R^T \cdot R \qquad \text{where } R = L^T
+\mathbf{A} = \mathbf{L} \cdot \mathbf{L}^T = \mathbf{R}^T \cdot \mathbf{R} \qquad \text{where } \mathbf{R} = \mathbf{L}^T
 ++++
 
 A matrix is symmetric when stem:[a_{ij} = a_{ji}] for every `i`, `j`, and positive-definite when
@@ -17,7 +17,7 @@ A matrix is symmetric when stem:[a_{ij} = a_{ji}] for every `i`, `j`, and positi
 
 [stem]
 ++++
-v^T \cdot A \cdot v > 0 \qquad \text{for every nonzero vector } v
+\mathbf{v}^T \cdot \mathbf{A} \cdot \mathbf{v} > 0 \qquad \text{for every nonzero vector } \mathbf{v}
 ++++
 
 (equivalently, all its eigenvalues are positive). Symmetric positive-definite matrices show up

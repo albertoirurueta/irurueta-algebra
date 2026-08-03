@@ -9,7 +9,7 @@ sum of the squares of all its elements.
 
 [stem]
 ++++
-\|A\|_F = \sqrt{ \sum_{i,j} |a_{ij}|^2 }
+\|\mathbf{A}\|_F = \sqrt{ \sum_{i,j} |a_{ij}|^2 }
 ++++
 
 For an array, this is exactly its Euclidean (`L2`) length, treating the array as a column vector.

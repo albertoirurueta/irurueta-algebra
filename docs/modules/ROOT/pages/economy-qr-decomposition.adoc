@@ -10,7 +10,7 @@ xref:qr-decomposition.adoc[`QRDecomposer`]:
 
 [stem]
 ++++
-A = Q \cdot R \qquad \text{where } Q^T \cdot Q = I
+\mathbf{A} = \mathbf{Q} \cdot \mathbf{R} \qquad \text{where } \mathbf{Q}^T \cdot \mathbf{Q} = \mathbf{I}
 ++++
 
 The "economy" in the name refers to how the factorization is computed and represented internally,
@@ -23,17 +23,17 @@ xref:qr-decomposition.adoc[`QRDecomposer`] is specifically preferred.
 
 Unlike xref:qr-decomposition.adoc[`QRDecomposer`], which uses Gram-Schmidt orthogonalization,
 `EconomyQRDecomposer` follows the classical Numerical Recipes approach of successive *Householder
-reflections*. For each column `k`, letting stem:[x = A_{k:m,k}] be the sub-column at and below the
+reflections*. For each column `k`, letting stem:[\mathbf{x} = \mathbf{A}_{k:m,k}] be the sub-column at and below the
 diagonal, the Householder vector `v` and the reflection `H` it defines are:
 
 [stem]
 ++++
-v = x + \text{sign}(x_k) \, \|x\|_2 \, e_k
+\mathbf{v} = \mathbf{x} + \text{sign}(x_k) \, \|\mathbf{x}\|_2 \, \mathbf{e}_k
 \qquad\qquad
-H = I - \frac{2 \, v v^T}{v^T v}
+\mathbf{H} = \mathbf{I} - \frac{2 \, \mathbf{v} \mathbf{v}^T}{\mathbf{v}^T \mathbf{v}}
 ++++
 
-where stem:[e_k] is the first standard basis vector of the sub-column. `H` is symmetric and
+where stem:[\mathbf{e}_k] is the first standard basis vector of the sub-column. `H` is symmetric and
 orthogonal, and reflecting `x` through the hyperplane it defines zeroes every entry below the
 diagonal in that column while leaving its norm unchanged; the same reflection is then applied to
 the remaining columns to the right. After `n` such reflections (one per column), the upper

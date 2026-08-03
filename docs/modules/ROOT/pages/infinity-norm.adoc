@@ -9,7 +9,7 @@ a matrix. For a matrix, it is the maximum absolute row sum:
 
 [stem]
 ++++
-\|A\|_\infty = \max_{i} \sum_{j} |a_{ij}|
+\|\mathbf{A}\|_\infty = \max_{i} \sum_{j} |a_{ij}|
 ++++
 
 The name "infinity norm" comes from the fact that, for a vector, it is the limit of the general
@@ -18,7 +18,7 @@ the maximum absolute element — the reason it is also called the maximum or sup
 
 [stem]
 ++++
-\|v\|_\infty = \lim_{p \to \infty} \|v\|_p = \max_i |v_i|
+\|\mathbf{v}\|_\infty = \lim_{p \to \infty} \|\mathbf{v}\|_p = \max_i |v_i|
 ++++
 
 Instances are obtained through `NormComputer.create(NormType.INFINITY_NORM)`, and `Utils.normInf`
