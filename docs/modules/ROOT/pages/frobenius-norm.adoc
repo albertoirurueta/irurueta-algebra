@@ -1,5 +1,6 @@
 = Frobenius Norm
 :description: FrobeniusNormComputer computes the Frobenius norm of vectors and matrices, the default norm used throughout this library.
+:keywords: FrobeniusNormComputer, Frobenius norm, Euclidean norm, L2 norm, matrix norm Java, vector norm, NormComputer
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

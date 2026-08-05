@@ -1,5 +1,6 @@
 = RQ Decomposition
 :description: RQDecomposer factors a matrix into an upper triangular factor and an orthogonal factor by reducing it to QR decomposition, per a Mathematics Stack Exchange derivation.
+:keywords: RQDecomposer, RQ decomposition Java, orthogonal matrix, upper triangular matrix, exchange matrix, QR decomposition, camera calibration, computer vision
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

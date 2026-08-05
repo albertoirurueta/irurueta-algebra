@@ -1,5 +1,6 @@
 = Reference
 :description: Generated project reports and the bibliography behind the matrix decomposition and norm estimation algorithms.
+:keywords: Numerical Recipes bibliography, Javadoc, JaCoCo code coverage, Surefire test report, SonarCloud, Maven site, matrix algebra references, linear algebra references
 
 These reports are generated during the Maven build and site lifecycle.
 

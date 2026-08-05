@@ -1,5 +1,6 @@
 = Infinity Norm
 :description: InfinityNormComputer computes the maximum absolute row sum of a matrix, the maximum (supremum) norm.
+:keywords: InfinityNormComputer, infinity norm, maximum norm, supremum norm, uniform norm, matrix norm Java, vector norm, NormComputer
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

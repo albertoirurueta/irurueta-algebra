@@ -1,5 +1,6 @@
 = Economy QR Decomposition
 :description: EconomyQRDecomposer factors a matrix into an orthogonal factor and an upper triangular factor using Householder reflections, from Numerical Recipes chapter 2.10 and Wikipedia's QR decomposition article.
+:keywords: EconomyQRDecomposer, QR decomposition Java, Householder reflections, orthogonal matrix, upper triangular matrix, least-squares solution, rank deficient matrix, Numerical Recipes
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

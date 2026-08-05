@@ -1,5 +1,6 @@
 = Gauss-Jordan Elimination
 :description: GaussJordanElimination solves linear systems of equations and computes matrix inverses using full-pivoting Gauss-Jordan elimination, from Numerical Recipes chapter 2.1.
+:keywords: GaussJordanElimination, Gauss-Jordan elimination Java, full pivoting, linear system solver, matrix inverse, Numerical Recipes
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

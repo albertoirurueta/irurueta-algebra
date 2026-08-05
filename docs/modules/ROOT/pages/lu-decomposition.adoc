@@ -1,5 +1,6 @@
 = LU Decomposition
 :description: LUDecomposer factors a matrix into lower and upper triangular factors using Crout's algorithm with partial pivoting, from Numerical Recipes chapter 2.3.
+:keywords: LUDecomposer, LU decomposition Java, Crout's algorithm, partial pivoting, lower triangular matrix, upper triangular matrix, linear system solver, matrix determinant, matrix inverse, Numerical Recipes
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
