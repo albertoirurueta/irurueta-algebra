@@ -1,5 +1,6 @@
 = Singular Value Decomposition
 :description: SingularValueDecomposer factors any matrix into two orthogonal factors and a diagonal matrix of singular values, from Numerical Recipes chapter 2.6.
+:keywords: SingularValueDecomposer, singular value decomposition Java, SVD, Moore-Penrose pseudoinverse, matrix rank, nullspace, condition number, least-squares solution, Numerical Recipes
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

@@ -1,5 +1,6 @@
 = QR Decomposition
 :description: QRDecomposer factors a matrix into an orthogonal factor and an upper triangular factor using Gram-Schmidt orthogonalization, from Numerical Recipes chapter 2.10.
+:keywords: QRDecomposer, QR decomposition Java, Gram-Schmidt orthogonalization, orthogonal matrix, upper triangular matrix, least-squares solution, overdetermined system, Numerical Recipes
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

@@ -1,5 +1,6 @@
 = Usage
 :description: Create matrices, perform basic operations, and use decomposers and Utils to solve linear systems, invert matrices and compute norms.
+:keywords: Matrix class usage, Java matrix operations, matrix multiplication, matrix transpose, Utils.solve, Utils.inverse, Utils.pseudoInverse, linear system solver, matrix determinant, matrix rank, condition number, matrix norms Java
 
 `Matrix` is the central class of this library: a dense matrix of `double` values on which every
 decomposer and utility method operates.

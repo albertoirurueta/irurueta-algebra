@@ -1,5 +1,6 @@
 = Cholesky Decomposition
 :description: CholeskyDecomposer factors a symmetric positive-definite matrix into a triangular factor and its transpose, from Numerical Recipes chapter 2.9.
+:keywords: CholeskyDecomposer, Cholesky decomposition Java, symmetric positive-definite matrix, triangular factorization, isSPD, linear system solver, covariance matrix, Gram matrix, Numerical Recipes
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.

@@ -1,5 +1,6 @@
 = One Norm
 :description: OneNormComputer computes the maximum absolute column sum of a matrix, or the sum of absolute values of an array.
+:keywords: OneNormComputer, one norm, L1 norm, taxicab norm, matrix norm Java, vector norm, NormComputer
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
