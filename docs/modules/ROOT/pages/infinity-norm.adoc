@@ -1,5 +1,6 @@
 = Infinity Norm
 :description: InfinityNormComputer computes the maximum absolute row sum of a matrix, the maximum (supremum) norm.
+:keywords: InfinityNormComputer, infinity norm, maximum norm, supremum norm, uniform norm, matrix norm Java, vector norm, NormComputer
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -9,7 +10,7 @@ a matrix. For a matrix, it is the maximum absolute row sum:
 
 [stem]
 ++++
-\|A\|_\infty = \max_{i} \sum_{j} |a_{ij}|
+\|\mathbf{A}\|_\infty = \max_{i} \sum_{j} |a_{ij}|
 ++++
 
 The name "infinity norm" comes from the fact that, for a vector, it is the limit of the general
@@ -18,11 +19,17 @@ the maximum absolute element — the reason it is also called the maximum or sup
 
 [stem]
 ++++
-\|v\|_\infty = \lim_{p \to \infty} \|v\|_p = \max_i |v_i|
+\|\mathbf{v}\|_\infty = \lim_{p \to \infty} \|\mathbf{v}\|_p = \max_i |v_i|
 ++++
 
 Instances are obtained through `NormComputer.create(NormType.INFINITY_NORM)`, and `Utils.normInf`
 is built directly on this class.
+
+Its unit ball (the set of vectors with norm exactly `1`) is the axis-aligned square below, in
+contrast with the diamond of the xref:one-norm.adoc[one norm] (`p = 1`) and the circle of the
+xref:frobenius-norm.adoc[Euclidean/Frobenius norm] (`p = 2`):
+
+image::unit-norm-balls.svg[Unit balls for the 1-norm 2-norm 4-norm and infinity-norm showing the infinity norm's square shape]
 
 == Behavior on arrays
 
@@ -66,6 +73,31 @@ to the input array.
 
 The Jacobian overload throws `WrongSizeException` if the provided Jacobian matrix is not `1xN`,
 where `N` is the length of the input array.
+
+== Related classes
+
+[cols="1,1,1",options="header"]
+|===
+|Class
+|Source
+|Javadoc
+
+|`InfinityNormComputer`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/InfinityNormComputer.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/InfinityNormComputer.html[Javadoc]
+
+|`Matrix`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html[Javadoc]
+
+|`NormComputer`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/NormComputer.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/NormComputer.html[Javadoc]
+
+|`NormType`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/NormType.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/NormType.html[Javadoc]
+|===
 
 == Reference
 

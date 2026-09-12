@@ -1,5 +1,6 @@
 = QR Decomposition
 :description: QRDecomposer factors a matrix into an orthogonal factor and an upper triangular factor using Gram-Schmidt orthogonalization, from Numerical Recipes chapter 2.10.
+:keywords: QRDecomposer, QR decomposition Java, Gram-Schmidt orthogonalization, orthogonal matrix, upper triangular matrix, least-squares solution, overdetermined system, Numerical Recipes
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -9,11 +10,11 @@ matrix `Q` and an upper triangular matrix `R` (eq. 2.10.1-2.10.2):
 
 [stem]
 ++++
-A = Q \cdot R \qquad \text{where } Q^T \cdot Q = I
+\mathbf{A} = \mathbf{Q} \cdot \mathbf{R} \qquad \text{where } \mathbf{Q}^T \cdot \mathbf{Q} = \mathbf{I}
 ++++
 
-Solving `A * x = b` with a QR factorization involves forming stem:[Q^T \cdot b] and then solving
-the triangular system stem:[R \cdot x = Q^T \cdot b] by backsubstitution (eq. 2.10.3-2.10.4). QR
+Solving `A * x = b` with a QR factorization involves forming stem:[\mathbf{Q}^T \cdot \mathbf{b}] and then solving
+the triangular system stem:[\mathbf{R} \cdot \mathbf{x} = \mathbf{Q}^T \cdot \mathbf{b}] by backsubstitution (eq. 2.10.3-2.10.4). QR
 decomposition takes about twice as many operations as xref:lu-decomposition.adoc[LU
 decomposition], so it is not the preferred method for typical square linear systems; its
 usefulness comes from the fact that it also works, in a least-squares sense, when `A` has more
@@ -23,21 +24,21 @@ basis for the column space of `A`.
 == The algorithm
 
 Numerical Recipes builds `Q` and `R` through a sequence of `N-1` Householder reflections, each
-written in the form (with stem:[c = \tfrac{1}{2} u \cdot u]):
+written in the form (with stem:[c = \tfrac{1}{2} \mathbf{u} \cdot \mathbf{u}]):
 
 [stem]
 ++++
-Q_k = I - \frac{u \otimes u}{c}
+\mathbf{Q}_k = \mathbf{I} - \frac{\mathbf{u} \otimes \mathbf{u}}{c}
 ++++
 
-chosen so that stem:[Q_0] zeroes all entries below the diagonal in column 0 of `A`, stem:[Q_1]
+chosen so that stem:[\mathbf{Q}_0] zeroes all entries below the diagonal in column 0 of `A`, stem:[\mathbf{Q}_1]
 zeroes all entries below the diagonal in column 1, and so on, so that (eq. 2.10.5-2.10.6):
 
 [stem]
 ++++
-R = Q_{N-2} \cdots Q_1 \cdot Q_0 \cdot A
+\mathbf{R} = \mathbf{Q}_{N-2} \cdots \mathbf{Q}_1 \cdot \mathbf{Q}_0 \cdot \mathbf{A}
 \qquad\qquad
-Q = \left( Q_{N-2} \cdots Q_1 \cdot Q_0 \right)^{-1} = Q_0 \cdot Q_1 \cdots Q_{N-2}
+\mathbf{Q} = \left( \mathbf{Q}_{N-2} \cdots \mathbf{Q}_1 \cdot \mathbf{Q}_0 \right)^{-1} = \mathbf{Q}_0 \cdot \mathbf{Q}_1 \cdots \mathbf{Q}_{N-2}
 ++++
 
 `QRDecomposer` in this library instead builds the factorization through *Gram-Schmidt
@@ -47,7 +48,13 @@ previous column and then normalized to unit length, directly producing the ortho
 `Q`; the dot products computed along the way are exactly the entries of `R`, which is
 diagonal-and-above by construction.
 
-`isFullRank()` inspects the diagonal of `R`: since stem:[|\det A'| = \prod R_{ii}] up to sign for
+The diagram below shows one step of this process for two columns `a1` and `a2`: `a1` is normalized
+directly into `q1`, while `a2` has its projection onto `q1` subtracted away, leaving a residual
+`u2` that is orthogonal to `q1` and normalizes into `q2`:
+
+image::gram-schmidt-orthogonalization.svg[Gram-Schmidt orthogonalization of two columns into orthonormal vectors q1 and q2]
+
+`isFullRank()` inspects the diagonal of `R`: since stem:[|\det \mathbf{A}'| = \prod R_{ii}] up to sign for
 the square part of `A`, a diagonal entry that is (numerically) zero indicates that `A` is rank
 deficient, in which case `solve` throws `RankDeficientMatrixException` rather than returning a
 meaningless answer.
@@ -96,6 +103,23 @@ columns. Result accessors throw `NotAvailableException` if called before `decomp
 throws `WrongSizeException` if `b` does not have a matching number of rows or if the input matrix
 has fewer rows than columns, and `RankDeficientMatrixException` if the input matrix is not full
 rank.
+
+== Related classes
+
+[cols="1,1,1",options="header"]
+|===
+|Class
+|Source
+|Javadoc
+
+|`QRDecomposer`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/QRDecomposer.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/QRDecomposer.html[Javadoc]
+
+|`Matrix`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html[Javadoc]
+|===
 
 == Reference
 

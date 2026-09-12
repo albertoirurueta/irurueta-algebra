@@ -1,5 +1,6 @@
 = Installation
 :description: Add irurueta-algebra to a Maven or Gradle project.
+:keywords: irurueta-algebra installation, Maven dependency, Gradle dependency, com.irurueta, Java 17 matrix library, Maven Central artifact, matrix algebra setup
 
 Irurueta Algebra is a Maven artifact that can be integrated into Java projects using group id
 `com.irurueta` and artifact id `irurueta-algebra`. The project is built as a Java 17 Maven JAR, and
@@ -16,7 +17,7 @@ Latest release:
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-algebra</artifactId>
-    <version>1.4.0</version>
+    <version>1.3.2</version>
     <scope>compile</scope>
 </dependency>
 ----
@@ -28,7 +29,7 @@ Latest snapshot:
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-algebra</artifactId>
-    <version>1.5.0-SNAPSHOT</version>
+    <version>1.4.0-SNAPSHOT</version>
     <scope>compile</scope>
 </dependency>
 ----
@@ -40,7 +41,7 @@ Include this in your `build.gradle.kts`:
 [source,kotlin]
 ----
 dependencies {
-    implementation("com.irurueta:irurueta-algebra:1.4.0")
+    implementation("com.irurueta:irurueta-algebra:1.3.2")
 }
 ----
 
@@ -54,3 +55,24 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
 ----
+
+== Related classes
+
+[cols="1,1,1",options="header"]
+|===
+|Class
+|Source
+|Javadoc
+
+|`Matrix`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html[Javadoc]
+
+|`Utils`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Utils.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Utils.html[Javadoc]
+
+|`WrongSizeException`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/WrongSizeException.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/WrongSizeException.html[Javadoc]
+|===

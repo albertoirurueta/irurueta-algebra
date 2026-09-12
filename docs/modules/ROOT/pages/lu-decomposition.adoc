@@ -1,5 +1,6 @@
 = LU Decomposition
 :description: LUDecomposer factors a matrix into lower and upper triangular factors using Crout's algorithm with partial pivoting, from Numerical Recipes chapter 2.3.
+:keywords: LUDecomposer, LU decomposition Java, Crout's algorithm, partial pivoting, lower triangular matrix, upper triangular matrix, linear system solver, matrix determinant, matrix inverse, Numerical Recipes
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -10,7 +11,7 @@ so that (eq. 2.3.1):
 
 [stem]
 ++++
-A = L \cdot U
+\mathbf{A} = \mathbf{L} \cdot \mathbf{U}
 ++++
 
 Once this factorization is available, solving `A * x = b` reduces to two cheap triangular solves:
@@ -66,29 +67,11 @@ corresponding stem:[\alpha_{ij}] or stem:[\beta_{ij}]: since Crout's method fixe
 
 Numerical Recipes' Figure 2.3.1 shows the order in which this combined matrix is filled: by
 columns, from left to right, and within each column from top to bottom. The diagram below
-reproduces that order for the 4x4 case, labeling each entry with the step at which it is computed:
+reproduces that figure for the 4x4 case, labeling each entry with the step at which it is computed
+and highlighting, for two typical entries, exactly which already-computed entries (shaded) they
+depend on:
 
-[mermaid]
-....
-graph LR
-    subgraph col0 ["column 0"]
-        direction TB
-        a0["β00 (1st)"] --> a1["α10 (2nd)"] --> a2["α20 (3rd)"] --> a3["α30 (4th)"]
-    end
-    subgraph col1 ["column 1"]
-        direction TB
-        b0["β01 (5th)"] --> b1["β11 (6th)"] --> b2["α21 (7th)"] --> b3["α31 (8th)"]
-    end
-    subgraph col2 ["column 2"]
-        direction TB
-        c0["β02 (9th)"] --> c1["β12 (10th)"] --> c2["β22 (11th)"] --> c3["α32 (12th)"]
-    end
-    subgraph col3 ["column 3"]
-        direction TB
-        d0["β03 (13th)"] --> d1["β13 (14th)"] --> d2["β23 (15th)"] --> d3["β33 (16th)"]
-    end
-    col0 --> col1 --> col2 --> col3
-....
+image::lu-decomposition-fill-order.svg[Order in which Crout's algorithm fills the combined L/U matrix one column at a time top to bottom within each column]
 
 Pivoting is essential for numerical stability: at each column, the algorithm selects the
 largest-magnitude candidate in that column (partial pivoting, i.e., row interchanges only, scaled
@@ -140,7 +123,7 @@ diagonal of `U` and the sign accumulated from row interchanges during pivoting:
 
 [stem]
 ++++
-\det A = (\pm 1) \prod_{j=0}^{N-1} \beta_{jj}
+\det \mathbf{A} = (\pm 1) \prod_{j=0}^{N-1} \beta_{jj}
 ++++
 
 and `isSingular()` checks whether any of those diagonal elements stem:[\beta_{jj}] is (numerically)
@@ -154,6 +137,23 @@ than rows. Result accessors throw `NotAvailableException` if called before `deco
 `solve`, `determinant()` and `isSingular()` throw `WrongSizeException` if the input matrix is not
 square (`solve` additionally if `b` does not have a matching number of rows), and `solve` throws
 `SingularMatrixException` if the input matrix turns out to be singular.
+
+== Related classes
+
+[cols="1,1,1",options="header"]
+|===
+|Class
+|Source
+|Javadoc
+
+|`LUDecomposer`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/LUDecomposer.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/LUDecomposer.html[Javadoc]
+
+|`Matrix`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html[Javadoc]
+|===
 
 == Reference
 

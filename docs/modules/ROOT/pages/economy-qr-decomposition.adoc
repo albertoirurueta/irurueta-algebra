@@ -1,5 +1,6 @@
 = Economy QR Decomposition
 :description: EconomyQRDecomposer factors a matrix into an orthogonal factor and an upper triangular factor using Householder reflections, from Numerical Recipes chapter 2.10 and Wikipedia's QR decomposition article.
+:keywords: EconomyQRDecomposer, QR decomposition Java, Householder reflections, orthogonal matrix, upper triangular matrix, least-squares solution, rank deficient matrix, Numerical Recipes
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -10,7 +11,7 @@ xref:qr-decomposition.adoc[`QRDecomposer`]:
 
 [stem]
 ++++
-A = Q \cdot R \qquad \text{where } Q^T \cdot Q = I
+\mathbf{A} = \mathbf{Q} \cdot \mathbf{R} \qquad \text{where } \mathbf{Q}^T \cdot \mathbf{Q} = \mathbf{I}
 ++++
 
 The "economy" in the name refers to how the factorization is computed and represented internally,
@@ -23,22 +24,28 @@ xref:qr-decomposition.adoc[`QRDecomposer`] is specifically preferred.
 
 Unlike xref:qr-decomposition.adoc[`QRDecomposer`], which uses Gram-Schmidt orthogonalization,
 `EconomyQRDecomposer` follows the classical Numerical Recipes approach of successive *Householder
-reflections*. For each column `k`, letting stem:[x = A_{k:m,k}] be the sub-column at and below the
+reflections*. For each column `k`, letting stem:[\mathbf{x} = \mathbf{A}_{k:m,k}] be the sub-column at and below the
 diagonal, the Householder vector `v` and the reflection `H` it defines are:
 
 [stem]
 ++++
-v = x + \text{sign}(x_k) \, \|x\|_2 \, e_k
+\mathbf{v} = \mathbf{x} + \text{sign}(x_k) \, \|\mathbf{x}\|_2 \, \mathbf{e}_k
 \qquad\qquad
-H = I - \frac{2 \, v v^T}{v^T v}
+\mathbf{H} = \mathbf{I} - \frac{2 \, \mathbf{v} \mathbf{v}^T}{\mathbf{v}^T \mathbf{v}}
 ++++
 
-where stem:[e_k] is the first standard basis vector of the sub-column. `H` is symmetric and
+where stem:[\mathbf{e}_k] is the first standard basis vector of the sub-column. `H` is symmetric and
 orthogonal, and reflecting `x` through the hyperplane it defines zeroes every entry below the
 diagonal in that column while leaving its norm unchanged; the same reflection is then applied to
 the remaining columns to the right. After `n` such reflections (one per column), the upper
 triangle of the working matrix holds `R`, and the accumulated Householder vectors implicitly
 represent `Q`.
+
+The diagram below shows this geometrically for a single sub-column `x`: reflecting it through the
+hyperplane orthogonal to the Householder vector `v` maps it onto the `e1` axis, so every component
+except the first becomes zero.
+
+image::householder-reflection.svg[Geometric view of a Householder reflection mapping a vector onto the first basis axis]
 
 `EconomyQRDecomposer` stores only these Householder vectors (in a lower trapezoidal matrix
 retrievable through `getH()`) and the diagonal of `R` (`rDiag`), rather than materializing `Q`
@@ -93,6 +100,23 @@ the instance is already decomposing. Result accessors throw `NotAvailableExcepti
 before `decompose()`. `getQ`, `isFullRank` and `solve` throw `WrongSizeException` if the input
 matrix has fewer rows than columns (`solve` additionally if `b` does not have a matching number of
 rows), and `solve` throws `RankDeficientMatrixException` if the input matrix is not full rank.
+
+== Related classes
+
+[cols="1,1,1",options="header"]
+|===
+|Class
+|Source
+|Javadoc
+
+|`EconomyQRDecomposer`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/EconomyQRDecomposer.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/EconomyQRDecomposer.html[Javadoc]
+
+|`Matrix`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html[Javadoc]
+|===
 
 == Reference
 

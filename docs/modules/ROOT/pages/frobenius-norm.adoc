@@ -1,5 +1,6 @@
 = Frobenius Norm
 :description: FrobeniusNormComputer computes the Frobenius norm of vectors and matrices, the default norm used throughout this library.
+:keywords: FrobeniusNormComputer, Frobenius norm, Euclidean norm, L2 norm, matrix norm Java, vector norm, NormComputer
 :stem: latexmath
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
@@ -9,7 +10,7 @@ sum of the squares of all its elements.
 
 [stem]
 ++++
-\|A\|_F = \sqrt{ \sum_{i,j} |a_{ij}|^2 }
+\|\mathbf{A}\|_F = \sqrt{ \sum_{i,j} |a_{ij}|^2 }
 ++++
 
 For an array, this is exactly its Euclidean (`L2`) length, treating the array as a column vector.
@@ -18,6 +19,12 @@ arguments) returns a `FrobeniusNormComputer`, and `Utils.normF` is built directl
 
 `Utils.isOrthonormal` also relies on the Frobenius norm: in addition to being orthogonal, an
 orthonormal matrix must have Frobenius norm equal to `1`.
+
+For an array, the Frobenius norm is the `p = 2` case of the general `p`-norm family; its unit ball
+is the familiar circle below, in contrast with the diamond of the xref:one-norm.adoc[one norm]
+(`p = 1`) and the square of the xref:infinity-norm.adoc[infinity norm] (`p` tending to infinity):
+
+image::unit-norm-balls.svg[Unit balls for the 1-norm 2-norm 4-norm and infinity-norm showing the Frobenius/Euclidean norm's circular shape]
 
 == Usage
 
@@ -54,6 +61,31 @@ to the input array, useful when the norm is used inside a larger optimization.
 
 The Jacobian overload throws `WrongSizeException` if the provided Jacobian matrix is not `1xN`,
 where `N` is the length of the input array.
+
+== Related classes
+
+[cols="1,1,1",options="header"]
+|===
+|Class
+|Source
+|Javadoc
+
+|`FrobeniusNormComputer`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/FrobeniusNormComputer.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/FrobeniusNormComputer.html[Javadoc]
+
+|`Matrix`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html[Javadoc]
+
+|`NormComputer`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/NormComputer.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/NormComputer.html[Javadoc]
+
+|`NormType`
+|https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/NormType.java[GitHub]
+|https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/NormType.html[Javadoc]
+|===
 
 == Reference
 
