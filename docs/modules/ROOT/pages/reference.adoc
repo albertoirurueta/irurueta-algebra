@@ -86,20 +86,22 @@ listed below. The table maps each class to the section or page it is based on.
 Numerical Recipes' own chapter 2 points to these works for a deeper treatment of linear algebra,
 and they are also cited directly in this library's class-level Javadoc:
 
-* Golub, G.H., and Van Loan, C.F. 1996, _Matrix Computations_, 3rd ed. (Baltimore: Johns Hopkins
-  University Press).
-* Wilkinson, J.H., and Reinsch, C. 1971, _Linear Algebra_, vol. II of _Handbook for Automatic
-  Computation_ (New York: Springer).
-* Wilkinson, J.H. 1965, _The Algebraic Eigenvalue Problem_ (New York: Oxford University Press).
-* Forsythe, G.E., and Moler, C.B. 1967, _Computer Solution of Linear Algebraic Systems_ (Englewood
-  Cliffs, NJ: Prentice-Hall).
-* Forsythe, G.E., Malcolm, M.A., and Moler, C.B. 1977, _Computer Methods for Mathematical
-  Computations_ (Englewood Cliffs, NJ: Prentice-Hall).
+* Golub, G.H., and Van Loan, C.F. 1996, https://jhupbooks.press.jhu.edu/title/matrix-computations[_Matrix
+  Computations_], 3rd ed. (Baltimore: Johns Hopkins University Press).
+* Wilkinson, J.H., and Reinsch, C. 1971, https://link.springer.com/book/10.1007/978-3-642-86940-2[_Linear
+  Algebra_], vol. II of _Handbook for Automatic Computation_ (New York: Springer).
+* Wilkinson, J.H. 1965, https://global.oup.com/academic/product/the-algebraic-eigenvalue-problem-9780198534181[_The
+  Algebraic Eigenvalue Problem_] (New York: Oxford University Press).
+* Forsythe, G.E., and Moler, C.B. 1967, https://archive.org/details/computersolution00fors[_Computer
+  Solution of Linear Algebraic Systems_] (Englewood Cliffs, NJ: Prentice-Hall).
+* Forsythe, G.E., Malcolm, M.A., and Moler, C.B. 1977, https://archive.org/details/computermethodsf00fors[_Computer
+  Methods for Mathematical Computations_] (Englewood Cliffs, NJ: Prentice-Hall).
 * Anderson, E., et al. 1999, _LAPACK User's Guide_, 3rd ed. (Philadelphia: S.I.A.M.). Online with
-  software at http://www.netlib.org/lapack.
+  software at https://www.netlib.org/lapack/[www.netlib.org/lapack].
 * Press, W.H., Teukolsky, S.A., Vetterling, W.T., and Flannery, B.P. 2007, _Numerical Recipes: The
   Art of Scientific Computing_, 3rd ed. (Cambridge, UK: Cambridge University Press), Chapter 2,
-  "Solution of Linear Algebraic Equations", pp. 37-109.
+  "Solution of Linear Algebraic Equations", pp. 37-109. Available at:
+  https://numerical.recipes[numerical.recipes].
 * Wikipedia contributors, "QR decomposition", _Wikipedia, The Free Encyclopedia_,
   https://en.wikipedia.org/wiki/QR_decomposition.
 * Wikipedia contributors, "Matrix norm", _Wikipedia, The Free Encyclopedia_,
