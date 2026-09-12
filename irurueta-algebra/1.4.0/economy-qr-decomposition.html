@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Economy QR Decomposition :: Irurueta Algebra</title>
+    <meta name="description" content="EconomyQRDecomposer factors a matrix into an orthogonal factor and an upper triangular factor using Householder reflections, from Numerical Recipes chapter 2.10 and Wikipedia's QR decomposition article.">
+    <meta name="keywords" content="EconomyQRDecomposer, QR decomposition Java, Householder reflections, orthogonal matrix, upper triangular matrix, least-squares solution, rank deficient matrix, Numerical Recipes">
+    <meta name="generator" content="Antora 3.1.15">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" type="image/svg+xml" href="../../_/img/logo.svg">
+  </head>
+  <body class="article">
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({"startOnLoad":true}); </script><header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../.."><img src="../../_/img/logo.svg" alt="Irurueta Algebra" class="navbar-brand-logo">Irurueta Algebra</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu" style="display: none;">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="irurueta-algebra" data-version="1.4.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Irurueta Algebra</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="installation.html">Installation</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="usage.html">Usage</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Matrix Decomposition</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="gauss-jordan-elimination.html">Gauss-Jordan elimination</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="lu-decomposition.html">LU decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="cholesky-decomposition.html">Cholesky decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="qr-decomposition.html">QR decomposition</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="economy-qr-decomposition.html">Economy QR decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="rq-decomposition.html">RQ decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="singular-value-decomposition.html">Singular Value Decomposition</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Norm Estimation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="frobenius-norm.html">Frobenius norm</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="one-norm.html">One norm</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="infinity-norm.html">Infinity norm</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reference.html">Reference</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Irurueta Algebra</span>
+    <span class="version">1.4.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">Irurueta Algebra</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.4.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Irurueta Algebra</a></li>
+    <li>Matrix Decomposition</li>
+    <li><a href="economy-qr-decomposition.html">Economy QR decomposition</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/albertoirurueta/irurueta-algebra/edit/develop/docs/modules/ROOT/pages/economy-qr-decomposition.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Economy QR Decomposition</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This documentation was generated with the assistance of AI. Please report any inaccuracies.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>EconomyQRDecomposer</code> factors a matrix <code>A</code> with at least as many rows as columns into an
+orthogonal matrix <code>Q</code> and an upper triangular matrix <code>R</code>, exactly like
+<a href="qr-decomposition.html" class="xref page"><code>QRDecomposer</code></a>:</p>
+</div>
+  <div class="stemblock">
+    <div class="content halign-center valign-middle" style="padding-top: 1rem">
+      <svg style="vertical-align: -0.437ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="32.262ex" height="2.454ex" role="img" focusable="false" viewBox="0 -891.7 14259.8 1084.7"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D400" d="M296 0Q278 3 164 3Q58 3 49 0H40V62H92Q144 62 144 64Q388 682 397 689Q403 698 434 698Q463 698 471 689Q475 686 538 530T663 218L724 64Q724 62 776 62H828V0H817Q796 3 658 3Q509 3 485 0H472V62H517Q561 62 561 63L517 175H262L240 120Q218 65 217 64Q217 62 261 62H306V0H296ZM390 237L492 238L440 365Q390 491 388 491Q287 239 287 237H390Z"></path></g></g><g data-mml-node="mo" transform="translate(1146.8,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(2202.6,0)"><g data-mml-node="mi"><path data-c="1D410" d="M64 339Q64 431 96 502T182 614T295 675T420 696Q469 696 481 695Q620 680 709 589T798 339Q798 255 768 184Q720 77 611 26L600 21Q635 -26 682 -26H696Q769 -26 769 0Q769 7 774 12T787 18Q805 18 805 -7V-13Q803 -64 785 -106T737 -171Q720 -183 697 -191Q687 -193 668 -193Q636 -193 613 -182T575 -144T552 -94T532 -27Q531 -23 530 -16T528 -6T526 -3L512 -5Q499 -7 477 -8T431 -10Q393 -10 382 -9Q238 8 151 97T64 339ZM326 80Q326 113 356 138T430 163Q492 163 542 100L553 86Q554 85 561 91T578 108Q637 179 637 330Q637 430 619 498T548 604Q500 641 425 641Q408 641 390 637T347 623T299 590T259 535Q226 469 226 338Q226 244 246 180T318 79L325 74Q326 74 326 80ZM506 58Q480 112 433 112Q412 112 395 104T378 77Q378 44 431 44Q480 44 506 58Z"></path></g></g><g data-mml-node="mo" transform="translate(3288.8,0)"><path data-c="22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(3789,0)"><g data-mml-node="mi"><path data-c="1D411" d="M394 0Q370 3 222 3Q75 3 51 0H39V62H147V624H39V686H234Q256 686 299 686T362 687Q479 687 554 669T681 593Q716 550 716 497Q716 390 568 338Q569 337 572 336T577 332Q605 317 623 300T650 258T662 218T668 172Q678 98 689 76Q707 40 748 40Q770 40 780 54T795 88T801 111Q805 117 827 117H831Q846 117 852 113T858 92Q857 78 852 63T834 30T797 1T739 -11Q630 -11 580 12T511 87Q506 104 506 168Q506 170 506 178T507 194Q507 289 438 313Q424 318 356 318H298V62H406V0H394ZM366 369Q459 370 490 381Q548 402 548 476V498V517Q548 578 513 600Q479 624 392 624H358H298V369H366Z"></path></g></g><g data-mml-node="mstyle" transform="translate(4651,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="mtext" transform="translate(6651,0)"><path data-c="77" d="M90 368Q84 378 76 380T40 385H18V431H24L43 430Q62 430 84 429T116 428Q206 428 221 431H229V385H215Q177 383 177 368Q177 367 221 239L265 113L339 328L333 345Q323 374 316 379Q308 384 278 385H258V431H264Q270 428 348 428Q439 428 454 431H461V385H452Q404 385 404 369Q404 366 418 324T449 234T481 143L496 100L537 219Q579 341 579 347Q579 363 564 373T530 385H522V431H529Q541 428 624 428Q692 428 698 431H703V385H697Q696 385 691 385T682 384Q635 377 619 334L559 161Q546 124 528 71Q508 12 503 1T487 -11H479Q460 -11 456 -4Q455 -3 407 133L361 267Q359 263 266 -4Q261 -11 243 -11H238Q225 -11 220 -3L90 368Z"></path><path data-c="68" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 124T102 167T103 217T103 272T103 329Q103 366 103 407T103 482T102 542T102 586T102 603Q99 622 88 628T43 637H25V660Q25 683 27 683L37 684Q47 685 66 686T103 688Q120 689 140 690T170 693T181 694H184V367Q244 442 328 442Q451 442 463 329Q464 322 464 190V104Q464 66 466 59T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z" transform="translate(722,0)"></path><path data-c="65" d="M28 218Q28 273 48 318T98 391T163 433T229 448Q282 448 320 430T378 380T406 316T415 245Q415 238 408 231H126V216Q126 68 226 36Q246 30 270 30Q312 30 342 62Q359 79 369 104L379 128Q382 131 395 131H398Q415 131 415 121Q415 117 412 108Q393 53 349 21T250 -11Q155 -11 92 58T28 218ZM333 275Q322 403 238 411H236Q228 411 220 410T195 402T166 381T143 340T127 274V267H333V275Z" transform="translate(1278,0)"></path><path data-c="72" d="M36 46H50Q89 46 97 60V68Q97 77 97 91T98 122T98 161T98 203Q98 234 98 269T98 328L97 351Q94 370 83 376T38 385H20V408Q20 431 22 431L32 432Q42 433 60 434T96 436Q112 437 131 438T160 441T171 442H174V373Q213 441 271 441H277Q322 441 343 419T364 373Q364 352 351 337T313 322Q288 322 276 338T263 372Q263 381 265 388T270 400T273 405Q271 407 250 401Q234 393 226 386Q179 341 179 207V154Q179 141 179 127T179 101T180 81T180 66V61Q181 59 183 57T188 54T193 51T200 49T207 48T216 47T225 47T235 46T245 46H276V0H267Q249 3 140 3Q37 3 28 0H20V46H36Z" transform="translate(1722,0)"></path><path data-c="65" d="M28 218Q28 273 48 318T98 391T163 433T229 448Q282 448 320 430T378 380T406 316T415 245Q415 238 408 231H126V216Q126 68 226 36Q246 30 270 30Q312 30 342 62Q359 79 369 104L379 128Q382 131 395 131H398Q415 131 415 121Q415 117 412 108Q393 53 349 21T250 -11Q155 -11 92 58T28 218ZM333 275Q322 403 238 411H236Q228 411 220 410T195 402T166 381T143 340T127 274V267H333V275Z" transform="translate(2114,0)"></path><path data-c="A0" d="" transform="translate(2558,0)"></path></g><g data-mml-node="msup" transform="translate(9459,0)"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D410" d="M64 339Q64 431 96 502T182 614T295 675T420 696Q469 696 481 695Q620 680 709 589T798 339Q798 255 768 184Q720 77 611 26L600 21Q635 -26 682 -26H696Q769 -26 769 0Q769 7 774 12T787 18Q805 18 805 -7V-13Q803 -64 785 -106T737 -171Q720 -183 697 -191Q687 -193 668 -193Q636 -193 613 -182T575 -144T552 -94T532 -27Q531 -23 530 -16T528 -6T526 -3L512 -5Q499 -7 477 -8T431 -10Q393 -10 382 -9Q238 8 151 97T64 339ZM326 80Q326 113 356 138T430 163Q492 163 542 100L553 86Q554 85 561 91T578 108Q637 179 637 330Q637 430 619 498T548 604Q500 641 425 641Q408 641 390 637T347 623T299 590T259 535Q226 469 226 338Q226 244 246 180T318 79L325 74Q326 74 326 80ZM506 58Q480 112 433 112Q412 112 395 104T378 77Q378 44 431 44Q480 44 506 58Z"></path></g></g><g data-mml-node="mi" transform="translate(897,413) scale(0.707)"><path data-c="1D447" d="M40 437Q21 437 21 445Q21 450 37 501T71 602L88 651Q93 669 101 677H569H659Q691 677 697 676T704 667Q704 661 687 553T668 444Q668 437 649 437Q640 437 637 437T631 442L629 445Q629 451 635 490T641 551Q641 586 628 604T573 629Q568 630 515 631Q469 631 457 630T439 622Q438 621 368 343T298 60Q298 48 386 46Q418 46 427 45T436 36Q436 31 433 22Q429 4 424 1L422 0Q419 0 415 0Q410 0 363 1T228 2Q99 2 64 0H49Q43 6 43 9T45 27Q49 40 55 46H83H94Q174 46 189 55Q190 56 191 56Q196 59 201 76T241 233Q258 301 269 344Q339 619 339 625Q339 630 310 630H279Q212 630 191 624Q146 614 121 583T67 467Q60 445 57 441T43 437H40Z"></path></g></g><g data-mml-node="mo" transform="translate(11126,0)"><path data-c="22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(11626.2,0)"><g data-mml-node="mi"><path data-c="1D410" d="M64 339Q64 431 96 502T182 614T295 675T420 696Q469 696 481 695Q620 680 709 589T798 339Q798 255 768 184Q720 77 611 26L600 21Q635 -26 682 -26H696Q769 -26 769 0Q769 7 774 12T787 18Q805 18 805 -7V-13Q803 -64 785 -106T737 -171Q720 -183 697 -191Q687 -193 668 -193Q636 -193 613 -182T575 -144T552 -94T532 -27Q531 -23 530 -16T528 -6T526 -3L512 -5Q499 -7 477 -8T431 -10Q393 -10 382 -9Q238 8 151 97T64 339ZM326 80Q326 113 356 138T430 163Q492 163 542 100L553 86Q554 85 561 91T578 108Q637 179 637 330Q637 430 619 498T548 604Q500 641 425 641Q408 641 390 637T347 623T299 590T259 535Q226 469 226 338Q226 244 246 180T318 79L325 74Q326 74 326 80ZM506 58Q480 112 433 112Q412 112 395 104T378 77Q378 44 431 44Q480 44 506 58Z"></path></g></g><g data-mml-node="mo" transform="translate(12768,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(13823.8,0)"><g data-mml-node="mi"><path data-c="1D408" d="M397 0Q370 3 218 3Q65 3 38 0H25V62H139V624H25V686H38Q65 683 218 683Q370 683 397 686H410V624H296V62H410V0H397Z"></path></g></g></g></g></svg>
+    </div>
+  </div>
+<div class="paragraph">
+<p>The "economy" in the name refers to how the factorization is computed and represented internally,
+not to the shape of <code>Q</code> and <code>R</code> returned by <code>getQ()</code> and <code>getR()</code> (both classes return a full
+square <code>Q</code> and an upper triangular <code>R</code> sized like <code>A</code>). <code>EconomyQRDecomposer</code> is the faster of the
+two and is generally the better default choice, unless the alternative Gram-Schmidt-based
+<a href="qr-decomposition.html" class="xref page"><code>QRDecomposer</code></a> is specifically preferred.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_algorithm"><a class="anchor" href="#_the_algorithm"></a>The algorithm</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Unlike <a href="qr-decomposition.html" class="xref page"><code>QRDecomposer</code></a>, which uses Gram-Schmidt orthogonalization,
+<code>EconomyQRDecomposer</code> follows the classical Numerical Recipes approach of successive <strong>Householder
+reflections</strong>. For each column <code>k</code>, letting <span class="steminline"> <svg style="vertical-align: -0.65ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="10.505ex" height="2.229ex" role="img" focusable="false" viewBox="0 -698 4643.4 985.2"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D431" d="M227 0Q212 3 121 3Q40 3 28 0H21V62H117L245 213L109 382H26V444H34Q49 441 143 441Q247 441 265 444H274V382H246L281 339Q315 297 316 297Q320 297 354 341L389 382H352V444H360Q375 441 466 441Q547 441 559 444H566V382H471L355 246L504 63L545 62H586V0H578Q563 3 469 3Q365 3 347 0H338V62H366Q366 63 326 112T285 163L198 63L217 62H235V0H227Z"></path></g></g><g data-mml-node="mo" transform="translate(884.8,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="msub" transform="translate(1940.6,0)"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D400" d="M296 0Q278 3 164 3Q58 3 49 0H40V62H92Q144 62 144 64Q388 682 397 689Q403 698 434 698Q463 698 471 689Q475 686 538 530T663 218L724 64Q724 62 776 62H828V0H817Q796 3 658 3Q509 3 485 0H472V62H517Q561 62 561 63L517 175H262L240 120Q218 65 217 64Q217 62 261 62H306V0H296ZM390 237L492 238L440 365Q390 491 388 491Q287 239 287 237H390Z"></path></g></g><g data-mml-node="TeXAtom" transform="translate(902,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D458" d="M121 647Q121 657 125 670T137 683Q138 683 209 688T282 694Q294 694 294 686Q294 679 244 477Q194 279 194 272Q213 282 223 291Q247 309 292 354T362 415Q402 442 438 442Q468 442 485 423T503 369Q503 344 496 327T477 302T456 291T438 288Q418 288 406 299T394 328Q394 353 410 369T442 390L458 393Q446 405 434 405H430Q398 402 367 380T294 316T228 255Q230 254 243 252T267 246T293 238T320 224T342 206T359 180T365 147Q365 130 360 106T354 66Q354 26 381 26Q429 26 459 145Q461 153 479 153H483Q499 153 499 144Q499 139 496 130Q455 -11 378 -11Q333 -11 305 15T277 90Q277 108 280 121T283 145Q283 167 269 183T234 206T200 217T182 220H180Q168 178 159 139T145 81T136 44T129 20T122 7T111 -2Q98 -11 83 -11Q66 -11 57 -1T48 16Q48 26 85 176T158 471L195 616Q196 629 188 632T149 637H144Q134 637 131 637T124 640T121 647Z"></path></g><g data-mml-node="mo" transform="translate(521,0)"><path data-c="3A" d="M78 370Q78 394 95 412T138 430Q162 430 180 414T199 371Q199 346 182 328T139 310T96 327T78 370ZM78 60Q78 84 95 102T138 120Q162 120 180 104T199 61Q199 36 182 18T139 0T96 17T78 60Z"></path></g><g data-mml-node="mi" transform="translate(799,0)"><path data-c="1D45A" d="M21 287Q22 293 24 303T36 341T56 388T88 425T132 442T175 435T205 417T221 395T229 376L231 369Q231 367 232 367L243 378Q303 442 384 442Q401 442 415 440T441 433T460 423T475 411T485 398T493 385T497 373T500 364T502 357L510 367Q573 442 659 442Q713 442 746 415T780 336Q780 285 742 178T704 50Q705 36 709 31T724 26Q752 26 776 56T815 138Q818 149 821 151T837 153Q857 153 857 145Q857 144 853 130Q845 101 831 73T785 17T716 -10Q669 -10 648 17T627 73Q627 92 663 193T700 345Q700 404 656 404H651Q565 404 506 303L499 291L466 157Q433 26 428 16Q415 -11 385 -11Q372 -11 364 -4T353 8T350 18Q350 29 384 161L420 307Q423 322 423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 181Q151 335 151 342Q154 357 154 369Q154 405 129 405Q107 405 92 377T69 316T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mo" transform="translate(1677,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(1955,0)"><path data-c="1D458" d="M121 647Q121 657 125 670T137 683Q138 683 209 688T282 694Q294 694 294 686Q294 679 244 477Q194 279 194 272Q213 282 223 291Q247 309 292 354T362 415Q402 442 438 442Q468 442 485 423T503 369Q503 344 496 327T477 302T456 291T438 288Q418 288 406 299T394 328Q394 353 410 369T442 390L458 393Q446 405 434 405H430Q398 402 367 380T294 316T228 255Q230 254 243 252T267 246T293 238T320 224T342 206T359 180T365 147Q365 130 360 106T354 66Q354 26 381 26Q429 26 459 145Q461 153 479 153H483Q499 153 499 144Q499 139 496 130Q455 -11 378 -11Q333 -11 305 15T277 90Q277 108 280 121T283 145Q283 167 269 183T234 206T200 217T182 220H180Q168 178 159 139T145 81T136 44T129 20T122 7T111 -2Q98 -11 83 -11Q66 -11 57 -1T48 16Q48 26 85 176T158 471L195 616Q196 629 188 632T149 637H144Q134 637 131 637T124 640T121 647Z"></path></g></g></g></g></g></svg> </span> be the sub-column at and below the
+diagonal, the Householder vector <code>v</code> and the reflection <code>H</code> it defines are:</p>
+</div>
+  <div class="stemblock">
+    <div class="content halign-center valign-middle" style="padding-top: 1rem">
+      <svg style="vertical-align: -1.646ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="48.528ex" height="5.08ex" role="img" focusable="false" viewBox="0 -1517.7 21449.2 2245.4"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D42F" d="M401 444Q413 441 495 441Q568 441 574 444H580V382H510L409 156Q348 18 339 6Q331 -4 320 -4Q318 -4 313 -4T303 -3H288Q273 -3 264 12T221 102Q206 135 197 156L96 382H26V444H34Q49 441 145 441Q252 441 270 444H279V382H231L284 264Q335 149 338 149Q338 150 389 264T442 381Q442 382 418 382H394V444H401Z"></path></g></g><g data-mml-node="mo" transform="translate(884.8,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(1940.6,0)"><g data-mml-node="mi"><path data-c="1D431" d="M227 0Q212 3 121 3Q40 3 28 0H21V62H117L245 213L109 382H26V444H34Q49 441 143 441Q247 441 265 444H274V382H246L281 339Q315 297 316 297Q320 297 354 341L389 382H352V444H360Q375 441 466 441Q547 441 559 444H566V382H471L355 246L504 63L545 62H586V0H578Q563 3 469 3Q365 3 347 0H338V62H366Q366 63 326 112T285 163L198 63L217 62H235V0H227Z"></path></g></g><g data-mml-node="mo" transform="translate(2769.8,0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></g><g data-mml-node="mtext" transform="translate(3770,0)"><path data-c="73" d="M295 316Q295 356 268 385T190 414Q154 414 128 401Q98 382 98 349Q97 344 98 336T114 312T157 287Q175 282 201 278T245 269T277 256Q294 248 310 236T342 195T359 133Q359 71 321 31T198 -10H190Q138 -10 94 26L86 19L77 10Q71 4 65 -1L54 -11H46H42Q39 -11 33 -5V74V132Q33 153 35 157T45 162H54Q66 162 70 158T75 146T82 119T101 77Q136 26 198 26Q295 26 295 104Q295 133 277 151Q257 175 194 187T111 210Q75 227 54 256T33 318Q33 357 50 384T93 424T143 442T187 447H198Q238 447 268 432L283 424L292 431Q302 440 314 448H322H326Q329 448 335 442V310L329 304H301Q295 310 295 316Z"></path><path data-c="69" d="M69 609Q69 637 87 653T131 669Q154 667 171 652T188 609Q188 579 171 564T129 549Q104 549 87 564T69 609ZM247 0Q232 3 143 3Q132 3 106 3T56 1L34 0H26V46H42Q70 46 91 49Q100 53 102 60T104 102V205V293Q104 345 102 359T88 378Q74 385 41 385H30V408Q30 431 32 431L42 432Q52 433 70 434T106 436Q123 437 142 438T171 441T182 442H185V62Q190 52 197 50T232 46H255V0H247Z" transform="translate(394,0)"></path><path data-c="67" d="M329 409Q373 453 429 453Q459 453 472 434T485 396Q485 382 476 371T449 360Q416 360 412 390Q410 404 415 411Q415 412 416 414V415Q388 412 363 393Q355 388 355 386Q355 385 359 381T368 369T379 351T388 325T392 292Q392 230 343 187T222 143Q172 143 123 171Q112 153 112 133Q112 98 138 81Q147 75 155 75T227 73Q311 72 335 67Q396 58 431 26Q470 -13 470 -72Q470 -139 392 -175Q332 -206 250 -206Q167 -206 107 -175Q29 -140 29 -75Q29 -39 50 -15T92 18L103 24Q67 55 67 108Q67 155 96 193Q52 237 52 292Q52 355 102 398T223 442Q274 442 318 416L329 409ZM299 343Q294 371 273 387T221 404Q192 404 171 388T145 343Q142 326 142 292Q142 248 149 227T179 192Q196 182 222 182Q244 182 260 189T283 207T294 227T299 242Q302 258 302 292T299 343ZM403 -75Q403 -50 389 -34T348 -11T299 -2T245 0H218Q151 0 138 -6Q118 -15 107 -34T95 -74Q95 -84 101 -97T122 -127T170 -155T250 -167Q319 -167 361 -139T403 -75Z" transform="translate(672,0)"></path><path data-c="6E" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q450 438 463 329Q464 322 464 190V104Q464 66 466 59T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z" transform="translate(1172,0)"></path></g><g data-mml-node="mo" transform="translate(5498,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="msub" transform="translate(5887,0)"><g data-mml-node="mi"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mi" transform="translate(605,-150) scale(0.707)"><path data-c="1D458" d="M121 647Q121 657 125 670T137 683Q138 683 209 688T282 694Q294 694 294 686Q294 679 244 477Q194 279 194 272Q213 282 223 291Q247 309 292 354T362 415Q402 442 438 442Q468 442 485 423T503 369Q503 344 496 327T477 302T456 291T438 288Q418 288 406 299T394 328Q394 353 410 369T442 390L458 393Q446 405 434 405H430Q398 402 367 380T294 316T228 255Q230 254 243 252T267 246T293 238T320 224T342 206T359 180T365 147Q365 130 360 106T354 66Q354 26 381 26Q429 26 459 145Q461 153 479 153H483Q499 153 499 144Q499 139 496 130Q455 -11 378 -11Q333 -11 305 15T277 90Q277 108 280 121T283 145Q283 167 269 183T234 206T200 217T182 220H180Q168 178 159 139T145 81T136 44T129 20T122 7T111 -2Q98 -11 83 -11Q66 -11 57 -1T48 16Q48 26 85 176T158 471L195 616Q196 629 188 632T149 637H144Q134 637 131 637T124 640T121 647Z"></path></g></g><g data-mml-node="mo" transform="translate(6910.4,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g><g data-mml-node="mstyle" transform="translate(7299.4,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="mo" transform="translate(7466.4,0)"><path data-c="2016" d="M133 736Q138 750 153 750Q164 750 170 739Q172 735 172 250T170 -239Q164 -250 152 -250Q144 -250 138 -244L137 -243Q133 -241 133 -179T132 250Q132 731 133 736ZM329 739Q334 750 346 750Q353 750 361 744L362 743Q366 741 366 679T367 250T367 -178T362 -243L361 -244Q355 -250 347 -250Q335 -250 329 -239Q327 -235 327 250T329 739Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(7966.4,0)"><g data-mml-node="mi"><path data-c="1D431" d="M227 0Q212 3 121 3Q40 3 28 0H21V62H117L245 213L109 382H26V444H34Q49 441 143 441Q247 441 265 444H274V382H246L281 339Q315 297 316 297Q320 297 354 341L389 382H352V444H360Q375 441 466 441Q547 441 559 444H566V382H471L355 246L504 63L545 62H586V0H578Q563 3 469 3Q365 3 347 0H338V62H366Q366 63 326 112T285 163L198 63L217 62H235V0H227Z"></path></g></g><g data-mml-node="msub" transform="translate(8573.4,0)"><g data-mml-node="mo"><path data-c="2016" d="M133 736Q138 750 153 750Q164 750 170 739Q172 735 172 250T170 -239Q164 -250 152 -250Q144 -250 138 -244L137 -243Q133 -241 133 -179T132 250Q132 731 133 736ZM329 739Q334 750 346 750Q353 750 361 744L362 743Q366 741 366 679T367 250T367 -178T362 -243L361 -244Q355 -250 347 -250Q335 -250 329 -239Q327 -235 327 250T329 739Z"></path></g><g data-mml-node="mn" transform="translate(533,-150) scale(0.707)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g></g><g data-mml-node="mstyle" transform="translate(9510,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="msub" transform="translate(9677,0)"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D41E" d="M32 225Q32 332 102 392T272 452H283Q382 452 436 401Q494 343 494 243Q494 226 486 222T440 217Q431 217 394 217T327 218H175V209Q175 177 179 154T196 107T236 69T306 50Q312 49 323 49Q376 49 410 85Q421 99 427 111T434 127T442 133T463 135H468Q494 135 494 117Q494 110 489 97T468 66T431 32T373 5T292 -6Q181 -6 107 55T32 225ZM383 276Q377 346 348 374T280 402Q253 402 230 390T195 357Q179 331 176 279V266H383V276Z"></path></g></g><g data-mml-node="mi" transform="translate(560,-150) scale(0.707)"><path data-c="1D458" d="M121 647Q121 657 125 670T137 683Q138 683 209 688T282 694Q294 694 294 686Q294 679 244 477Q194 279 194 272Q213 282 223 291Q247 309 292 354T362 415Q402 442 438 442Q468 442 485 423T503 369Q503 344 496 327T477 302T456 291T438 288Q418 288 406 299T394 328Q394 353 410 369T442 390L458 393Q446 405 434 405H430Q398 402 367 380T294 316T228 255Q230 254 243 252T267 246T293 238T320 224T342 206T359 180T365 147Q365 130 360 106T354 66Q354 26 381 26Q429 26 459 145Q461 153 479 153H483Q499 153 499 144Q499 139 496 130Q455 -11 378 -11Q333 -11 305 15T277 90Q277 108 280 121T283 145Q283 167 269 183T234 206T200 217T182 220H180Q168 178 159 139T145 81T136 44T129 20T122 7T111 -2Q98 -11 83 -11Q66 -11 57 -1T48 16Q48 26 85 176T158 471L195 616Q196 629 188 632T149 637H144Q134 637 131 637T124 640T121 647Z"></path></g></g><g data-mml-node="mstyle" transform="translate(10655.4,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="mstyle" transform="translate(12655.4,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(14655.4,0)"><g data-mml-node="mi"><path data-c="1D407" d="M400 0Q376 3 226 3Q75 3 51 0H39V62H147V624H39V686H51Q75 683 226 683Q376 683 400 686H412V624H304V388H595V624H487V686H499Q523 683 673 683Q824 683 848 686H860V624H752V62H860V0H848Q824 3 674 3Q523 3 499 0H487V62H595V326H304V62H412V0H400Z"></path></g></g><g data-mml-node="mo" transform="translate(15833.1,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(16888.9,0)"><g data-mml-node="mi"><path data-c="1D408" d="M397 0Q370 3 218 3Q65 3 38 0H25V62H139V624H25V686H38Q65 683 218 683Q370 683 397 686H410V624H296V62H410V0H397Z"></path></g></g><g data-mml-node="mo" transform="translate(17547.1,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mfrac" transform="translate(18547.4,0)"><g data-mml-node="mrow" transform="translate(220,676)"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><g data-mml-node="mstyle" transform="translate(500,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(667,0)"><g data-mml-node="mi"><path data-c="1D42F" d="M401 444Q413 441 495 441Q568 441 574 444H580V382H510L409 156Q348 18 339 6Q331 -4 320 -4Q318 -4 313 -4T303 -3H288Q273 -3 264 12T221 102Q206 135 197 156L96 382H26V444H34Q49 441 145 441Q252 441 270 444H279V382H231L284 264Q335 149 338 149Q338 150 389 264T442 381Q442 382 418 382H394V444H401Z"></path></g></g><g data-mml-node="msup" transform="translate(1274,0)"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D42F" d="M401 444Q413 441 495 441Q568 441 574 444H580V382H510L409 156Q348 18 339 6Q331 -4 320 -4Q318 -4 313 -4T303 -3H288Q273 -3 264 12T221 102Q206 135 197 156L96 382H26V444H34Q49 441 145 441Q252 441 270 444H279V382H231L284 264Q335 149 338 149Q338 150 389 264T442 381Q442 382 418 382H394V444H401Z"></path></g></g><g data-mml-node="mi" transform="translate(640,363) scale(0.707)"><path data-c="1D447" d="M40 437Q21 437 21 445Q21 450 37 501T71 602L88 651Q93 669 101 677H569H659Q691 677 697 676T704 667Q704 661 687 553T668 444Q668 437 649 437Q640 437 637 437T631 442L629 445Q629 451 635 490T641 551Q641 586 628 604T573 629Q568 630 515 631Q469 631 457 630T439 622Q438 621 368 343T298 60Q298 48 386 46Q418 46 427 45T436 36Q436 31 433 22Q429 4 424 1L422 0Q419 0 415 0Q410 0 363 1T228 2Q99 2 64 0H49Q43 6 43 9T45 27Q49 40 55 46H83H94Q174 46 189 55Q190 56 191 56Q196 59 201 76T241 233Q258 301 269 344Q339 619 339 625Q339 630 310 630H279Q212 630 191 624Q146 614 121 583T67 467Q60 445 57 441T43 437H40Z"></path></g></g></g><g data-mml-node="mrow" transform="translate(553.5,-727.7)"><g data-mml-node="msup"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D42F" d="M401 444Q413 441 495 441Q568 441 574 444H580V382H510L409 156Q348 18 339 6Q331 -4 320 -4Q318 -4 313 -4T303 -3H288Q273 -3 264 12T221 102Q206 135 197 156L96 382H26V444H34Q49 441 145 441Q252 441 270 444H279V382H231L284 264Q335 149 338 149Q338 150 389 264T442 381Q442 382 418 382H394V444H401Z"></path></g></g><g data-mml-node="mi" transform="translate(640,289) scale(0.707)"><path data-c="1D447" d="M40 437Q21 437 21 445Q21 450 37 501T71 602L88 651Q93 669 101 677H569H659Q691 677 697 676T704 667Q704 661 687 553T668 444Q668 437 649 437Q640 437 637 437T631 442L629 445Q629 451 635 490T641 551Q641 586 628 604T573 629Q568 630 515 631Q469 631 457 630T439 622Q438 621 368 343T298 60Q298 48 386 46Q418 46 427 45T436 36Q436 31 433 22Q429 4 424 1L422 0Q419 0 415 0Q410 0 363 1T228 2Q99 2 64 0H49Q43 6 43 9T45 27Q49 40 55 46H83H94Q174 46 189 55Q190 56 191 56Q196 59 201 76T241 233Q258 301 269 344Q339 619 339 625Q339 630 310 630H279Q212 630 191 624Q146 614 121 583T67 467Q60 445 57 441T43 437H40Z"></path></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(1187.8,0)"><g data-mml-node="mi"><path data-c="1D42F" d="M401 444Q413 441 495 441Q568 441 574 444H580V382H510L409 156Q348 18 339 6Q331 -4 320 -4Q318 -4 313 -4T303 -3H288Q273 -3 264 12T221 102Q206 135 197 156L96 382H26V444H34Q49 441 145 441Q252 441 270 444H279V382H231L284 264Q335 149 338 149Q338 150 389 264T442 381Q442 382 418 382H394V444H401Z"></path></g></g></g><rect width="2661.8" height="60" x="120" y="220"></rect></g></g></g></svg>
+    </div>
+  </div>
+<div class="paragraph">
+<p>where <span class="steminline"> <svg style="vertical-align: -0.357ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="2.214ex" height="1.38ex" role="img" focusable="false" viewBox="0 -452 978.4 609.8"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D41E" d="M32 225Q32 332 102 392T272 452H283Q382 452 436 401Q494 343 494 243Q494 226 486 222T440 217Q431 217 394 217T327 218H175V209Q175 177 179 154T196 107T236 69T306 50Q312 49 323 49Q376 49 410 85Q421 99 427 111T434 127T442 133T463 135H468Q494 135 494 117Q494 110 489 97T468 66T431 32T373 5T292 -6Q181 -6 107 55T32 225ZM383 276Q377 346 348 374T280 402Q253 402 230 390T195 357Q179 331 176 279V266H383V276Z"></path></g></g><g data-mml-node="mi" transform="translate(560,-150) scale(0.707)"><path data-c="1D458" d="M121 647Q121 657 125 670T137 683Q138 683 209 688T282 694Q294 694 294 686Q294 679 244 477Q194 279 194 272Q213 282 223 291Q247 309 292 354T362 415Q402 442 438 442Q468 442 485 423T503 369Q503 344 496 327T477 302T456 291T438 288Q418 288 406 299T394 328Q394 353 410 369T442 390L458 393Q446 405 434 405H430Q398 402 367 380T294 316T228 255Q230 254 243 252T267 246T293 238T320 224T342 206T359 180T365 147Q365 130 360 106T354 66Q354 26 381 26Q429 26 459 145Q461 153 479 153H483Q499 153 499 144Q499 139 496 130Q455 -11 378 -11Q333 -11 305 15T277 90Q277 108 280 121T283 145Q283 167 269 183T234 206T200 217T182 220H180Q168 178 159 139T145 81T136 44T129 20T122 7T111 -2Q98 -11 83 -11Q66 -11 57 -1T48 16Q48 26 85 176T158 471L195 616Q196 629 188 632T149 637H144Q134 637 131 637T124 640T121 647Z"></path></g></g></g></g></svg> </span> is the first standard basis vector of the sub-column. <code>H</code> is symmetric and
+orthogonal, and reflecting <code>x</code> through the hyperplane it defines zeroes every entry below the
+diagonal in that column while leaving its norm unchanged; the same reflection is then applied to
+the remaining columns to the right. After <code>n</code> such reflections (one per column), the upper
+triangle of the working matrix holds <code>R</code>, and the accumulated Householder vectors implicitly
+represent <code>Q</code>.</p>
+</div>
+<div class="paragraph">
+<p>The diagram below shows this geometrically for a single sub-column <code>x</code>: reflecting it through the
+hyperplane orthogonal to the Householder vector <code>v</code> maps it onto the <code>e1</code> axis, so every component
+except the first becomes zero.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/householder-reflection.svg" alt="Geometric view of a Householder reflection mapping a vector onto the first basis axis">
+</div>
+</div>
+<div class="paragraph">
+<p><code>EconomyQRDecomposer</code> stores only these Householder vectors (in a lower trapezoidal matrix
+retrievable through <code>getH()</code>) and the diagonal of <code>R</code> (<code>rDiag</code>), rather than materializing <code>Q</code>
+eagerly. <code>getQ()</code> and <code>getR()</code> reconstruct the explicit matrices from this compact representation
+on demand, and <code>solve</code> applies the Householder reflections directly to the right-hand side instead
+of ever forming <code>Q</code> explicitly, which is both faster and more memory-efficient than the
+Gram-Schmidt approach used by <code>QRDecomposer</code>.</p>
+</div>
+<div class="paragraph">
+<p>As with <code>QRDecomposer</code>, <code>isFullRank()</code> inspects the diagonal of <code>R</code> (<code>rDiag</code>) to detect rank
+deficiency, and <code>solve</code> throws <code>RankDeficientMatrixException</code> when the input matrix is not full
+rank.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_usage"><a class="anchor" href="#_usage"></a>Usage</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import com.irurueta.algebra.EconomyQRDecomposer;
+import com.irurueta.algebra.Matrix;
+
+Matrix a = new Matrix(3, 2);
+a.setElementAt(0, 0, 1.0);
+a.setElementAt(1, 0, 1.0);
+a.setElementAt(2, 0, 0.0);
+a.setElementAt(0, 1, 0.0);
+a.setElementAt(1, 1, 1.0);
+a.setElementAt(2, 1, 1.0);
+
+final var decomposer = new EconomyQRDecomposer(a);
+decomposer.decompose();
+
+Matrix q = decomposer.getQ(); // 3x2 orthogonal factor
+Matrix r = decomposer.getR(); // 2x2 upper triangular factor
+Matrix h = decomposer.getH(); // Householder vectors
+
+boolean fullRank = decomposer.isFullRank();
+
+Matrix b = Matrix.newFromArray(new double[]{1.0, 2.0, 3.0});
+Matrix x = decomposer.solve(b); // least-squares solution when a has more rows than columns</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>isFullRank</code> and <code>solve</code> accept an optional <code>roundingError</code> argument to relax the default
+(<code>DEFAULT_ROUND_ERROR</code>, <code>0.0</code>) tolerance used to decide whether a diagonal entry of <code>R</code> is
+effectively zero.</p>
+</div>
+<div class="paragraph">
+<p>This is the decomposer that <a href="usage.html" class="xref page"><code>Utils.solve</code></a> and <code>Utils.inverse</code> use for non-square
+matrices.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_error_handling"><a class="anchor" href="#_error_handling"></a>Error handling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>decompose()</code> throws <code>NotReadyException</code> if no input matrix has been set and <code>LockedException</code> if
+the instance is already decomposing. Result accessors throw <code>NotAvailableException</code> if called
+before <code>decompose()</code>. <code>getQ</code>, <code>isFullRank</code> and <code>solve</code> throw <code>WrongSizeException</code> if the input
+matrix has fewer rows than columns (<code>solve</code> additionally if <code>b</code> does not have a matching number of
+rows), and <code>solve</code> throws <code>RankDeficientMatrixException</code> if the input matrix is not full rank.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_classes"><a class="anchor" href="#_related_classes"></a>Related classes</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Class</th>
+<th class="tableblock halign-left valign-top">Source</th>
+<th class="tableblock halign-left valign-top">Javadoc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>EconomyQRDecomposer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/EconomyQRDecomposer.java">GitHub</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/EconomyQRDecomposer.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Matrix</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java">GitHub</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html">Javadoc</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_reference"><a class="anchor" href="#_reference"></a>Reference</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>EconomyQRDecomposer</code> implements the Householder-based algorithm described in
+<a href="reference.html" class="xref page">Numerical Recipes, 3rd Edition, section 2.10, "QR Decomposition"</a>; see also
+<a href="reference.html" class="xref page">Wikipedia, "QR decomposition"</a>.</p>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Made with ♥ from <strong>BCN</strong></p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

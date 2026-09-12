@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Reference :: Irurueta Algebra</title>
+    <meta name="description" content="Generated project reports and the bibliography behind the matrix decomposition and norm estimation algorithms.">
+    <meta name="keywords" content="Numerical Recipes bibliography, Javadoc, JaCoCo code coverage, Surefire test report, SonarCloud, Maven site, matrix algebra references, linear algebra references">
+    <meta name="generator" content="Antora 3.1.15">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" type="image/svg+xml" href="../../_/img/logo.svg">
+  </head>
+  <body class="article">
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({"startOnLoad":true}); </script><header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../.."><img src="../../_/img/logo.svg" alt="Irurueta Algebra" class="navbar-brand-logo">Irurueta Algebra</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu" style="display: none;">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="irurueta-algebra" data-version="1.4.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Irurueta Algebra</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="installation.html">Installation</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="usage.html">Usage</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Matrix Decomposition</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="gauss-jordan-elimination.html">Gauss-Jordan elimination</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="lu-decomposition.html">LU decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="cholesky-decomposition.html">Cholesky decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="qr-decomposition.html">QR decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="economy-qr-decomposition.html">Economy QR decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="rq-decomposition.html">RQ decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="singular-value-decomposition.html">Singular Value Decomposition</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Norm Estimation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="frobenius-norm.html">Frobenius norm</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="one-norm.html">One norm</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="infinity-norm.html">Infinity norm</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="reference.html">Reference</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Irurueta Algebra</span>
+    <span class="version">1.4.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">Irurueta Algebra</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.4.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Irurueta Algebra</a></li>
+    <li><a href="reference.html">Reference</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/albertoirurueta/irurueta-algebra/edit/develop/docs/modules/ROOT/pages/reference.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Reference</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>These reports are generated during the Maven build and site lifecycle.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_generated_reports"><a class="anchor" href="#_generated_reports"></a>Generated Reports</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Report</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/package-summary.html">Javadoc</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">API reference generated by the Maven Javadoc plugin as part of the Maven site.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-algebra/mvn-site/jacoco/index.html">JaCoCo</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Code coverage report generated during Maven execution.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-algebra/mvn-site/surefire.html">Surefire</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unit test execution report generated by the Maven Surefire reporting tools.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://sonarcloud.io/project/overview?id=albertoirurueta_algebra">SonarCloud</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Project quality dashboard with issue analysis, code quality information, and coverage metrics.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-algebra/mvn-site">Maven Site</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Aggregation of project reports.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-algebra">GitHub repository</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Source code repository for the project.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_bibliography"><a class="anchor" href="#_bibliography"></a>Bibliography</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Most of the matrix decomposition algorithms implemented by this library follow the descriptions
+and reference C++ implementations given in Chapter 2, "Solution of Linear Algebraic Equations", of
+<em>Numerical Recipes: The Art of Scientific Computing</em>, 3rd Edition (Cambridge University Press,
+2007). <code>RQDecomposer</code> and the norm estimation classes are instead based on the external references
+listed below. The table maps each class to the section or page it is based on.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 50%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Class</th>
+<th class="tableblock halign-left valign-top">Reference</th>
+<th class="tableblock halign-left valign-top">Section / pages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="gauss-jordan-elimination.html" class="xref page"><code>GaussJordanElimination</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numerical Recipes, 3rd Edition</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.1 "Gauss-Jordan Elimination", pp. 41-46</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="lu-decomposition.html" class="xref page"><code>LUDecomposer</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numerical Recipes, 3rd Edition</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.3 "LU Decomposition and Its Applications", pp. 48-56</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="singular-value-decomposition.html" class="xref page"><code>SingularValueDecomposer</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numerical Recipes, 3rd Edition</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.6 "Singular Value Decomposition", pp. 65-75</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="cholesky-decomposition.html" class="xref page"><code>CholeskyDecomposer</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numerical Recipes, 3rd Edition</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.9 "Cholesky Decomposition", pp. 100-102</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="qr-decomposition.html" class="xref page"><code>QRDecomposer</code></a> / <a href="economy-qr-decomposition.html" class="xref page"><code>EconomyQRDecomposer</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numerical Recipes, 3rd Edition</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.10 "QR Decomposition", pp. 102-106</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="economy-qr-decomposition.html" class="xref page"><code>EconomyQRDecomposer</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Wikipedia, "QR decomposition"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://en.wikipedia.org/wiki/QR_decomposition" class="bare">https://en.wikipedia.org/wiki/QR_decomposition</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="rq-decomposition.html" class="xref page"><code>RQDecomposer</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mathematics Stack Exchange, "RQ decomposition"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://math.stackexchange.com/questions/1640695/rq-decomposition" class="bare">https://math.stackexchange.com/questions/1640695/rq-decomposition</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="frobenius-norm.html" class="xref page"><code>FrobeniusNormComputer</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Wikipedia, "Matrix norm"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://en.wikipedia.org/wiki/Matrix_norm" class="bare">https://en.wikipedia.org/wiki/Matrix_norm</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="one-norm.html" class="xref page"><code>OneNormComputer</code></a> / <a href="infinity-norm.html" class="xref page"><code>InfinityNormComputer</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Wikipedia, "Norm (mathematics)"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://en.wikipedia.org/wiki/Norm_(mathematics)#Maximum_norm_(special_case_of:_infinity_norm,_uniform_norm,_or_supremum_norm" class="bare">https://en.wikipedia.org/wiki/Norm_(mathematics)#Maximum_norm_(special_case_of:_infinity_norm,_uniform_norm,_or_supremum_norm</a>)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect2">
+<h3 id="_cited_references"><a class="anchor" href="#_cited_references"></a>Cited references</h3>
+<div class="paragraph">
+<p>Numerical Recipes' own chapter 2 points to these works for a deeper treatment of linear algebra,
+and they are also cited directly in this library&#8217;s class-level Javadoc:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Golub, G.H., and Van Loan, C.F. 1996, <a href="https://jhupbooks.press.jhu.edu/title/matrix-computations"><em>Matrix
+Computations</em></a>, 3rd ed. (Baltimore: Johns Hopkins University Press).</p>
+</li>
+<li>
+<p>Wilkinson, J.H., and Reinsch, C. 1971, <a href="https://link.springer.com/book/10.1007/978-3-642-86940-2"><em>Linear
+Algebra</em></a>, vol. II of <em>Handbook for Automatic Computation</em> (New York: Springer).</p>
+</li>
+<li>
+<p>Wilkinson, J.H. 1965, <a href="https://global.oup.com/academic/product/the-algebraic-eigenvalue-problem-9780198534181"><em>The
+Algebraic Eigenvalue Problem</em></a> (New York: Oxford University Press).</p>
+</li>
+<li>
+<p>Forsythe, G.E., and Moler, C.B. 1967, <a href="https://archive.org/details/computersolution00fors"><em>Computer
+Solution of Linear Algebraic Systems</em></a> (Englewood Cliffs, NJ: Prentice-Hall).</p>
+</li>
+<li>
+<p>Forsythe, G.E., Malcolm, M.A., and Moler, C.B. 1977, <a href="https://archive.org/details/computermethodsf00fors"><em>Computer
+Methods for Mathematical Computations</em></a> (Englewood Cliffs, NJ: Prentice-Hall).</p>
+</li>
+<li>
+<p>Anderson, E., et al. 1999, <em>LAPACK User&#8217;s Guide</em>, 3rd ed. (Philadelphia: S.I.A.M.). Online with
+software at <a href="https://www.netlib.org/lapack/">www.netlib.org/lapack</a>.</p>
+</li>
+<li>
+<p>Press, W.H., Teukolsky, S.A., Vetterling, W.T., and Flannery, B.P. 2007, <em>Numerical Recipes: The
+Art of Scientific Computing</em>, 3rd ed. (Cambridge, UK: Cambridge University Press), Chapter 2,
+"Solution of Linear Algebraic Equations", pp. 37-109. Available at:
+<a href="https://numerical.recipes">numerical.recipes</a>.</p>
+</li>
+<li>
+<p>Wikipedia contributors, "QR decomposition", <em>Wikipedia, The Free Encyclopedia</em>,
+<a href="https://en.wikipedia.org/wiki/QR_decomposition" class="bare">https://en.wikipedia.org/wiki/QR_decomposition</a>.</p>
+</li>
+<li>
+<p>Wikipedia contributors, "Matrix norm", <em>Wikipedia, The Free Encyclopedia</em>,
+<a href="https://en.wikipedia.org/wiki/Matrix_norm" class="bare">https://en.wikipedia.org/wiki/Matrix_norm</a>.</p>
+</li>
+<li>
+<p>Wikipedia contributors, "Norm (mathematics)", <em>Wikipedia, The Free Encyclopedia</em>,
+<a href="https://en.wikipedia.org/wiki/Norm_(mathematics" class="bare">https://en.wikipedia.org/wiki/Norm_(mathematics</a>).</p>
+</li>
+<li>
+<p>Mathematics Stack Exchange contributors, "RQ decomposition",
+<a href="https://math.stackexchange.com/questions/1640695/rq-decomposition" class="bare">https://math.stackexchange.com/questions/1640695/rq-decomposition</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Made with ♥ from <strong>BCN</strong></p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

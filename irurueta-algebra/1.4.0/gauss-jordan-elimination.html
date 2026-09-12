@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Gauss-Jordan Elimination :: Irurueta Algebra</title>
+    <meta name="description" content="GaussJordanElimination solves linear systems of equations and computes matrix inverses using full-pivoting Gauss-Jordan elimination, from Numerical Recipes chapter 2.1.">
+    <meta name="keywords" content="GaussJordanElimination, Gauss-Jordan elimination Java, full pivoting, linear system solver, matrix inverse, Numerical Recipes">
+    <meta name="generator" content="Antora 3.1.15">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" type="image/svg+xml" href="../../_/img/logo.svg">
+  </head>
+  <body class="article">
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({"startOnLoad":true}); </script><header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../.."><img src="../../_/img/logo.svg" alt="Irurueta Algebra" class="navbar-brand-logo">Irurueta Algebra</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu" style="display: none;">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="irurueta-algebra" data-version="1.4.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Irurueta Algebra</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="installation.html">Installation</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="usage.html">Usage</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Matrix Decomposition</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="gauss-jordan-elimination.html">Gauss-Jordan elimination</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="lu-decomposition.html">LU decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="cholesky-decomposition.html">Cholesky decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="qr-decomposition.html">QR decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="economy-qr-decomposition.html">Economy QR decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="rq-decomposition.html">RQ decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="singular-value-decomposition.html">Singular Value Decomposition</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Norm Estimation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="frobenius-norm.html">Frobenius norm</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="one-norm.html">One norm</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="infinity-norm.html">Infinity norm</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reference.html">Reference</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Irurueta Algebra</span>
+    <span class="version">1.4.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">Irurueta Algebra</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.4.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Irurueta Algebra</a></li>
+    <li>Matrix Decomposition</li>
+    <li><a href="gauss-jordan-elimination.html">Gauss-Jordan elimination</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/albertoirurueta/irurueta-algebra/edit/develop/docs/modules/ROOT/pages/gauss-jordan-elimination.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Gauss-Jordan Elimination</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This documentation was generated with the assistance of AI. Please report any inaccuracies.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>GaussJordanElimination</code> solves a linear system of equations <code>A * x = b</code> and, as a side effect,
+computes the inverse of <code>A</code>, using Gauss-Jordan elimination with full pivoting. Unlike the
+<a href="lu-decomposition.html" class="xref page"><code>LUDecomposer</code></a>, <a href="qr-decomposition.html" class="xref page"><code>QRDecomposer</code></a> and other
+<code>Decomposer</code> subclasses in this library, <code>GaussJordanElimination</code> is a stateless utility class: it
+does not keep a reusable factorization, and every call to <code>process</code> repeats the full elimination.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_algorithm"><a class="anchor" href="#_the_algorithm"></a>The algorithm</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Numerical Recipes poses the problem as a single column-augmented matrix equation (eq. 2.1.1/2.1.2):
+solving simultaneously for several right-hand sides <code>b_0</code>, <code>b_1</code>, <code>b_2</code> and for the matrix inverse
+<code>Y</code> of <code>A</code>, by column-augmenting them together with the identity matrix <code>I</code>:</p>
+</div>
+  <div class="stemblock">
+    <div class="content halign-center valign-middle" style="padding-top: 1rem">
+      <svg style="vertical-align: -1.469ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="41.53ex" height="4.411ex" role="img" focusable="false" viewBox="0 -1300 18356.3 1949.5"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mo" transform="translate(0 -0.5)"><path data-c="5B" d="M224 -649V1150H455V1099H275V-598H455V-649H224Z"></path></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(472,0)"><g data-mml-node="mi"><path data-c="1D400" d="M296 0Q278 3 164 3Q58 3 49 0H40V62H92Q144 62 144 64Q388 682 397 689Q403 698 434 698Q463 698 471 689Q475 686 538 530T663 218L724 64Q724 62 776 62H828V0H817Q796 3 658 3Q509 3 485 0H472V62H517Q561 62 561 63L517 175H262L240 120Q218 65 217 64Q217 62 261 62H306V0H296ZM390 237L492 238L440 365Q390 491 388 491Q287 239 287 237H390Z"></path></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(1341,0)"><g data-mml-node="mo" transform="translate(0 -0.5)"><path data-c="5D" d="M16 1099V1150H247V-649H16V-598H196V1099H16Z"></path></g></g><g data-mml-node="mo" transform="translate(2035.2,0)"><path data-c="22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(2535.4,0)"><g data-mml-node="mo" transform="translate(0 -0.5)"><path data-c="5B" d="M224 -649V1150H455V1099H275V-598H455V-649H224Z"></path></g></g><g data-mml-node="mstyle" transform="translate(3007.4,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="msub" transform="translate(3174.4,0)"><g data-mml-node="mi"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mn" transform="translate(605,-150) scale(0.707)"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></g></g><g data-mml-node="mstyle" transform="translate(4183,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(4461,0)"><g data-mml-node="mo"><path data-c="22EE" d="M78 30Q78 54 95 72T138 90Q162 90 180 74T199 31Q199 6 182 -12T139 -30T96 -13T78 30ZM78 440Q78 464 95 482T138 500Q162 500 180 484T199 441Q199 416 182 398T139 380T96 397T78 440ZM78 840Q78 864 95 882T138 900Q162 900 180 884T199 841Q199 816 182 798T139 780T96 797T78 840Z"></path></g></g><g data-mml-node="mstyle" transform="translate(4739,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="msub" transform="translate(5017,0)"><g data-mml-node="mi"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mn" transform="translate(605,-150) scale(0.707)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g><g data-mml-node="mstyle" transform="translate(6025.6,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(6303.6,0)"><g data-mml-node="mo"><path data-c="22EE" d="M78 30Q78 54 95 72T138 90Q162 90 180 74T199 31Q199 6 182 -12T139 -30T96 -13T78 30ZM78 440Q78 464 95 482T138 500Q162 500 180 484T199 441Q199 416 182 398T139 380T96 397T78 440ZM78 840Q78 864 95 882T138 900Q162 900 180 884T199 841Q199 816 182 798T139 780T96 797T78 840Z"></path></g></g><g data-mml-node="mstyle" transform="translate(6581.6,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="msub" transform="translate(6859.6,0)"><g data-mml-node="mi"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mn" transform="translate(605,-150) scale(0.707)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g></g><g data-mml-node="mstyle" transform="translate(7868.1,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(8146.1,0)"><g data-mml-node="mo"><path data-c="22EE" d="M78 30Q78 54 95 72T138 90Q162 90 180 74T199 31Q199 6 182 -12T139 -30T96 -13T78 30ZM78 440Q78 464 95 482T138 500Q162 500 180 484T199 441Q199 416 182 398T139 380T96 397T78 440ZM78 840Q78 864 95 882T138 900Q162 900 180 884T199 841Q199 816 182 798T139 780T96 797T78 840Z"></path></g></g><g data-mml-node="mstyle" transform="translate(8424.1,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(8702.1,0)"><g data-mml-node="mi"><path data-c="1D418" d="M605 0Q581 3 434 3Q286 3 262 0H250V62H358V275L126 624H19V686H30Q54 683 189 683Q361 685 370 686H383V624H308L319 608Q330 591 353 556T396 491L484 359L660 623Q660 624 623 624H585V686H595Q613 683 728 683Q832 683 841 686H849V624H742L509 274V62H618V0H605Z"></path></g></g><g data-mml-node="mstyle" transform="translate(9571.1,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(9738.1,0)"><g data-mml-node="mo" transform="translate(0 -0.5)"><path data-c="5D" d="M16 1099V1150H247V-649H16V-598H196V1099H16Z"></path></g></g><g data-mml-node="mo" transform="translate(10487.9,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(11543.7,0)"><g data-mml-node="mo" transform="translate(0 -0.5)"><path data-c="5B" d="M224 -649V1150H455V1099H275V-598H455V-649H224Z"></path></g></g><g data-mml-node="mstyle" transform="translate(12015.7,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="msub" transform="translate(12182.7,0)"><g data-mml-node="mi"><path data-c="1D44F" d="M73 647Q73 657 77 670T89 683Q90 683 161 688T234 694Q246 694 246 685T212 542Q204 508 195 472T180 418L176 399Q176 396 182 402Q231 442 283 442Q345 442 383 396T422 280Q422 169 343 79T173 -11Q123 -11 82 27T40 150V159Q40 180 48 217T97 414Q147 611 147 623T109 637Q104 637 101 637H96Q86 637 83 637T76 640T73 647ZM336 325V331Q336 405 275 405Q258 405 240 397T207 376T181 352T163 330L157 322L136 236Q114 150 114 114Q114 66 138 42Q154 26 178 26Q211 26 245 58Q270 81 285 114T318 219Q336 291 336 325Z"></path></g><g data-mml-node="mn" transform="translate(462,-150) scale(0.707)"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></g></g><g data-mml-node="mstyle" transform="translate(13048.2,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(13326.2,0)"><g data-mml-node="mo"><path data-c="22EE" d="M78 30Q78 54 95 72T138 90Q162 90 180 74T199 31Q199 6 182 -12T139 -30T96 -13T78 30ZM78 440Q78 464 95 482T138 500Q162 500 180 484T199 441Q199 416 182 398T139 380T96 397T78 440ZM78 840Q78 864 95 882T138 900Q162 900 180 884T199 841Q199 816 182 798T139 780T96 797T78 840Z"></path></g></g><g data-mml-node="mstyle" transform="translate(13604.2,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="msub" transform="translate(13882.2,0)"><g data-mml-node="mi"><path data-c="1D44F" d="M73 647Q73 657 77 670T89 683Q90 683 161 688T234 694Q246 694 246 685T212 542Q204 508 195 472T180 418L176 399Q176 396 182 402Q231 442 283 442Q345 442 383 396T422 280Q422 169 343 79T173 -11Q123 -11 82 27T40 150V159Q40 180 48 217T97 414Q147 611 147 623T109 637Q104 637 101 637H96Q86 637 83 637T76 640T73 647ZM336 325V331Q336 405 275 405Q258 405 240 397T207 376T181 352T163 330L157 322L136 236Q114 150 114 114Q114 66 138 42Q154 26 178 26Q211 26 245 58Q270 81 285 114T318 219Q336 291 336 325Z"></path></g><g data-mml-node="mn" transform="translate(462,-150) scale(0.707)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g><g data-mml-node="mstyle" transform="translate(14747.8,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(15025.8,0)"><g data-mml-node="mo"><path data-c="22EE" d="M78 30Q78 54 95 72T138 90Q162 90 180 74T199 31Q199 6 182 -12T139 -30T96 -13T78 30ZM78 440Q78 464 95 482T138 500Q162 500 180 484T199 441Q199 416 182 398T139 380T96 397T78 440ZM78 840Q78 864 95 882T138 900Q162 900 180 884T199 841Q199 816 182 798T139 780T96 797T78 840Z"></path></g></g><g data-mml-node="mstyle" transform="translate(15303.8,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="msub" transform="translate(15581.8,0)"><g data-mml-node="mi"><path data-c="1D44F" d="M73 647Q73 657 77 670T89 683Q90 683 161 688T234 694Q246 694 246 685T212 542Q204 508 195 472T180 418L176 399Q176 396 182 402Q231 442 283 442Q345 442 383 396T422 280Q422 169 343 79T173 -11Q123 -11 82 27T40 150V159Q40 180 48 217T97 414Q147 611 147 623T109 637Q104 637 101 637H96Q86 637 83 637T76 640T73 647ZM336 325V331Q336 405 275 405Q258 405 240 397T207 376T181 352T163 330L157 322L136 236Q114 150 114 114Q114 66 138 42Q154 26 178 26Q211 26 245 58Q270 81 285 114T318 219Q336 291 336 325Z"></path></g><g data-mml-node="mn" transform="translate(462,-150) scale(0.707)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g></g><g data-mml-node="mstyle" transform="translate(16447.3,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(16725.3,0)"><g data-mml-node="mo"><path data-c="22EE" d="M78 30Q78 54 95 72T138 90Q162 90 180 74T199 31Q199 6 182 -12T139 -30T96 -13T78 30ZM78 440Q78 464 95 482T138 500Q162 500 180 484T199 441Q199 416 182 398T139 380T96 397T78 440ZM78 840Q78 864 95 882T138 900Q162 900 180 884T199 841Q199 816 182 798T139 780T96 797T78 840Z"></path></g></g><g data-mml-node="mstyle" transform="translate(17003.3,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(17281.3,0)"><g data-mml-node="mi"><path data-c="1D408" d="M397 0Q370 3 218 3Q65 3 38 0H25V62H139V624H25V686H38Q65 683 218 683Q370 683 397 686H410V624H296V62H410V0H397Z"></path></g></g><g data-mml-node="mstyle" transform="translate(17717.3,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(17884.3,0)"><g data-mml-node="mo" transform="translate(0 -0.5)"><path data-c="5D" d="M16 1099V1150H247V-649H16V-598H196V1099H16Z"></path></g></g></g></g></svg>
+    </div>
+  </div>
+<div class="paragraph">
+<p>which simultaneously states the systems solved by <code>GaussJordanElimination.process</code>:</p>
+</div>
+  <div class="stemblock">
+    <div class="content halign-center valign-middle" style="padding-top: 1rem">
+      <svg style="vertical-align: -0.439ex; overflow: visible;" xmlns="http://www.w3.org/2000/svg" width="60.241ex" height="2.018ex" role="img" focusable="false" viewBox="0 -698 26626.5 892"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D400" d="M296 0Q278 3 164 3Q58 3 49 0H40V62H92Q144 62 144 64Q388 682 397 689Q403 698 434 698Q463 698 471 689Q475 686 538 530T663 218L724 64Q724 62 776 62H828V0H817Q796 3 658 3Q509 3 485 0H472V62H517Q561 62 561 63L517 175H262L240 120Q218 65 217 64Q217 62 261 62H306V0H296ZM390 237L492 238L440 365Q390 491 388 491Q287 239 287 237H390Z"></path></g></g><g data-mml-node="mo" transform="translate(1091.2,0)"><path data-c="22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(1591.4,0)"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D431" d="M227 0Q212 3 121 3Q40 3 28 0H21V62H117L245 213L109 382H26V444H34Q49 441 143 441Q247 441 265 444H274V382H246L281 339Q315 297 316 297Q320 297 354 341L389 382H352V444H360Q375 441 466 441Q547 441 559 444H566V382H471L355 246L504 63L545 62H586V0H578Q563 3 469 3Q365 3 347 0H338V62H366Q366 63 326 112T285 163L198 63L217 62H235V0H227Z"></path></g><g data-mml-node="mn" transform="translate(640,-150) scale(0.707)"><path data-c="1D7CE" d="M266 654H280H282Q500 654 524 418Q529 370 529 320Q529 125 456 52Q397 -10 287 -10Q110 -10 63 154Q45 212 45 316Q45 504 113 585Q140 618 185 636T266 654ZM374 548Q347 604 286 604Q247 604 218 575Q197 552 193 511T188 311Q188 159 196 116Q202 87 225 64T287 41Q339 41 367 87Q379 107 382 152T386 329Q386 518 374 548Z"></path></g></g></g><g data-mml-node="mo" transform="translate(2965.8,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(4021.6,0)"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D41B" d="M32 686L123 690Q214 694 215 694H221V409Q289 450 378 450Q479 450 539 387T600 221Q600 122 535 58T358 -6H355Q272 -6 203 53L160 1L129 0H98V301Q98 362 98 435T99 525Q99 591 97 604T83 620Q69 624 42 624H29V686H32ZM227 105L232 99Q237 93 242 87T258 73T280 59T306 49T339 45Q380 45 411 66T451 131Q457 160 457 230Q457 264 456 284T448 329T430 367T396 389T343 398Q282 398 235 355L227 348V105Z"></path></g><g data-mml-node="mn" transform="translate(672,-150) scale(0.707)"><path data-c="1D7CE" d="M266 654H280H282Q500 654 524 418Q529 370 529 320Q529 125 456 52Q397 -10 287 -10Q110 -10 63 154Q45 212 45 316Q45 504 113 585Q140 618 185 636T266 654ZM374 548Q347 604 286 604Q247 604 218 575Q197 552 193 511T188 311Q188 159 196 116Q202 87 225 64T287 41Q339 41 367 87Q379 107 382 152T386 329Q386 518 374 548Z"></path></g></g></g><g data-mml-node="mo" transform="translate(5150.2,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mstyle" transform="translate(5428.2,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(6594.8,0)"><g data-mml-node="mi"><path data-c="1D400" d="M296 0Q278 3 164 3Q58 3 49 0H40V62H92Q144 62 144 64Q388 682 397 689Q403 698 434 698Q463 698 471 689Q475 686 538 530T663 218L724 64Q724 62 776 62H828V0H817Q796 3 658 3Q509 3 485 0H472V62H517Q561 62 561 63L517 175H262L240 120Q218 65 217 64Q217 62 261 62H306V0H296ZM390 237L492 238L440 365Q390 491 388 491Q287 239 287 237H390Z"></path></g></g><g data-mml-node="mo" transform="translate(7686.1,0)"><path data-c="22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(8186.3,0)"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D431" d="M227 0Q212 3 121 3Q40 3 28 0H21V62H117L245 213L109 382H26V444H34Q49 441 143 441Q247 441 265 444H274V382H246L281 339Q315 297 316 297Q320 297 354 341L389 382H352V444H360Q375 441 466 441Q547 441 559 444H566V382H471L355 246L504 63L545 62H586V0H578Q563 3 469 3Q365 3 347 0H338V62H366Q366 63 326 112T285 163L198 63L217 62H235V0H227Z"></path></g><g data-mml-node="mn" transform="translate(640,-150) scale(0.707)"><path data-c="1D7CF" d="M481 0L294 3Q136 3 109 0H96V62H227V304Q227 546 225 546Q169 529 97 529H80V591H97Q231 591 308 647L319 655H333Q355 655 359 644Q361 640 361 351V62H494V0H481Z"></path></g></g></g><g data-mml-node="mo" transform="translate(9560.6,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(10616.4,0)"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D41B" d="M32 686L123 690Q214 694 215 694H221V409Q289 450 378 450Q479 450 539 387T600 221Q600 122 535 58T358 -6H355Q272 -6 203 53L160 1L129 0H98V301Q98 362 98 435T99 525Q99 591 97 604T83 620Q69 624 42 624H29V686H32ZM227 105L232 99Q237 93 242 87T258 73T280 59T306 49T339 45Q380 45 411 66T451 131Q457 160 457 230Q457 264 456 284T448 329T430 367T396 389T343 398Q282 398 235 355L227 348V105Z"></path></g><g data-mml-node="mn" transform="translate(672,-150) scale(0.707)"><path data-c="1D7CF" d="M481 0L294 3Q136 3 109 0H96V62H227V304Q227 546 225 546Q169 529 97 529H80V591H97Q231 591 308 647L319 655H333Q355 655 359 644Q361 640 361 351V62H494V0H481Z"></path></g></g></g><g data-mml-node="mo" transform="translate(11745,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mstyle" transform="translate(12023,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(13189.7,0)"><g data-mml-node="mi"><path data-c="1D400" d="M296 0Q278 3 164 3Q58 3 49 0H40V62H92Q144 62 144 64Q388 682 397 689Q403 698 434 698Q463 698 471 689Q475 686 538 530T663 218L724 64Q724 62 776 62H828V0H817Q796 3 658 3Q509 3 485 0H472V62H517Q561 62 561 63L517 175H262L240 120Q218 65 217 64Q217 62 261 62H306V0H296ZM390 237L492 238L440 365Q390 491 388 491Q287 239 287 237H390Z"></path></g></g><g data-mml-node="mo" transform="translate(14280.9,0)"><path data-c="22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(14781.1,0)"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D431" d="M227 0Q212 3 121 3Q40 3 28 0H21V62H117L245 213L109 382H26V444H34Q49 441 143 441Q247 441 265 444H274V382H246L281 339Q315 297 316 297Q320 297 354 341L389 382H352V444H360Q375 441 466 441Q547 441 559 444H566V382H471L355 246L504 63L545 62H586V0H578Q563 3 469 3Q365 3 347 0H338V62H366Q366 63 326 112T285 163L198 63L217 62H235V0H227Z"></path></g><g data-mml-node="mn" transform="translate(640,-150) scale(0.707)"><path data-c="1D7D0" d="M175 580Q175 578 185 572T205 551T215 510Q215 467 191 449T137 430Q107 430 83 448T58 511Q58 558 91 592T168 640T259 654Q328 654 383 637Q451 610 484 563T517 459Q517 401 482 360T368 262Q340 243 265 184L210 140H274Q416 140 429 145Q439 148 447 186T455 237H517V233Q516 230 501 119Q489 9 486 4V0H57V25Q57 51 58 54Q60 57 109 106T215 214T288 291Q364 377 364 458Q364 515 328 553T231 592Q214 592 201 589T181 584T175 580Z"></path></g></g></g><g data-mml-node="mo" transform="translate(16155.5,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(17211.3,0)"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D41B" d="M32 686L123 690Q214 694 215 694H221V409Q289 450 378 450Q479 450 539 387T600 221Q600 122 535 58T358 -6H355Q272 -6 203 53L160 1L129 0H98V301Q98 362 98 435T99 525Q99 591 97 604T83 620Q69 624 42 624H29V686H32ZM227 105L232 99Q237 93 242 87T258 73T280 59T306 49T339 45Q380 45 411 66T451 131Q457 160 457 230Q457 264 456 284T448 329T430 367T396 389T343 398Q282 398 235 355L227 348V105Z"></path></g><g data-mml-node="mn" transform="translate(672,-150) scale(0.707)"><path data-c="1D7D0" d="M175 580Q175 578 185 572T205 551T215 510Q215 467 191 449T137 430Q107 430 83 448T58 511Q58 558 91 592T168 640T259 654Q328 654 383 637Q451 610 484 563T517 459Q517 401 482 360T368 262Q340 243 265 184L210 140H274Q416 140 429 145Q439 148 447 186T455 237H517V233Q516 230 501 119Q489 9 486 4V0H57V25Q57 51 58 54Q60 57 109 106T215 214T288 291Q364 377 364 458Q364 515 328 553T231 592Q214 592 201 589T181 584T175 580Z"></path></g></g></g><g data-mml-node="mo" transform="translate(18339.9,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mstyle" transform="translate(18617.9,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="mtext" transform="translate(19784.5,0)"><path data-c="61" d="M137 305T115 305T78 320T63 359Q63 394 97 421T218 448Q291 448 336 416T396 340Q401 326 401 309T402 194V124Q402 76 407 58T428 40Q443 40 448 56T453 109V145H493V106Q492 66 490 59Q481 29 455 12T400 -6T353 12T329 54V58L327 55Q325 52 322 49T314 40T302 29T287 17T269 6T247 -2T221 -8T190 -11Q130 -11 82 20T34 107Q34 128 41 147T68 188T116 225T194 253T304 268H318V290Q318 324 312 340Q290 411 215 411Q197 411 181 410T156 406T148 403Q170 388 170 359Q170 334 154 320ZM126 106Q126 75 150 51T209 26Q247 26 276 49T315 109Q317 116 318 175Q318 233 317 233Q309 233 296 232T251 223T193 203T147 166T126 106Z"></path><path data-c="6E" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q450 438 463 329Q464 322 464 190V104Q464 66 466 59T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z" transform="translate(500,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(1056,0)"></path></g><g data-mml-node="mstyle" transform="translate(21396.5,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(22396.5,0)"><g data-mml-node="mi"><path data-c="1D400" d="M296 0Q278 3 164 3Q58 3 49 0H40V62H92Q144 62 144 64Q388 682 397 689Q403 698 434 698Q463 698 471 689Q475 686 538 530T663 218L724 64Q724 62 776 62H828V0H817Q796 3 658 3Q509 3 485 0H472V62H517Q561 62 561 63L517 175H262L240 120Q218 65 217 64Q217 62 261 62H306V0H296ZM390 237L492 238L440 365Q390 491 388 491Q287 239 287 237H390Z"></path></g></g><g data-mml-node="mo" transform="translate(23487.7,0)"><path data-c="22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(23988,0)"><g data-mml-node="mi"><path data-c="1D418" d="M605 0Q581 3 434 3Q286 3 262 0H250V62H358V275L126 624H19V686H30Q54 683 189 683Q361 685 370 686H383V624H308L319 608Q330 591 353 556T396 491L484 359L660 623Q660 624 623 624H585V686H595Q613 683 728 683Q832 683 841 686H849V624H742L509 274V62H618V0H605Z"></path></g></g><g data-mml-node="mo" transform="translate(25134.7,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(26190.5,0)"><g data-mml-node="mi"><path data-c="1D408" d="M397 0Q370 3 218 3Q65 3 38 0H25V62H139V624H25V686H38Q65 683 218 683Q370 683 397 686H410V624H296V62H410V0H397Z"></path></g></g></g></g></svg>
+    </div>
+  </div>
+<div class="paragraph">
+<p>Gauss-Jordan elimination reduces the left factor <code>A</code> to the identity matrix by repeatedly combining
+rows: at each of the <code>N</code> steps, a pivot element is selected, the row containing it is normalized so
+the pivot becomes <code>I</code>, and that row is then subtracted (scaled appropriately) from every other row
+so that the pivot&#8217;s column becomes zero everywhere except at the pivot itself. Applying the same
+sequence of row operations to the right-hand side vectors <code>b</code> and to the identity matrix
+simultaneously turns them into the solution vectors <code>x</code> and the inverse <code>Y</code> of <code>A</code>, exactly as the
+equation above states once <code>A</code> has become the identity.</p>
+</div>
+<div class="paragraph">
+<p>Numerical Recipes uses <strong>full pivoting</strong>: at each step, the pivot is chosen as the largest-magnitude
+element among all rows and columns not yet reduced, rather than only among rows in the current
+column (<strong>partial pivoting</strong>, used by <a href="lu-decomposition.html" class="xref page"><code>LUDecomposer</code></a>). Full pivoting
+requires bookkeeping of which rows and columns were swapped so that the solution can be
+"unscrambled" at the end, but it is at least as stable as any other direct method, and can be
+slightly more stable than partial pivoting.</p>
+</div>
+<div class="paragraph">
+<p>Each row operation can be seen as a left-multiplication of both sides of <code>A * x = b</code> by a simple
+matrix <code>R</code> that performs one row swap or one row combination. Gauss-Jordan elimination by row
+operations alone is the accumulation of <code>N</code> such multiplications (eq. 2.1.6), ending with <code>A</code>
+reduced to the identity and the right-hand side transformed into the solution:</p>
+</div>
+<div class="imageblock"><div class="mermaid content" style=" ">graph LR
+    S0["A · x = b"] -->|"left-multiply by R0"| S1["(R0·A) · x = R0·b"]
+    S1 -->|"left-multiply by R1"| S2["(R1·R0·A) · x = R1·R0·b"]
+    S2 -->|"..."| S3["(R_(N-1)···R1·R0·A) · x = R_(N-1)···R1·R0·b"]
+    S3 -->|"left side reduces to 1"| S4["x = R_(N-1)···R1·R0·b"]</div></div>
+<div class="paragraph">
+<p>Gauss-Jordan elimination has two disadvantages compared to the triangular decomposition methods
+(<a href="lu-decomposition.html" class="xref page">LU</a>, <a href="qr-decomposition.html" class="xref page">QR</a>) described elsewhere in this
+library: every right-hand side must be known and stored before elimination starts, and, when the
+inverse is not needed, it is about three times slower than LU decomposition for solving a single
+system. Its main strength is that it computes the matrix inverse about as efficiently as any other
+direct method, which makes it a reasonable choice when the inverse itself, rather than just a
+solution vector, is what is actually needed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_usage"><a class="anchor" href="#_usage"></a>Usage</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>process</code> solves <code>A * x = b</code> for one or more right-hand sides (each column of <code>b</code> is treated as an
+independent system) and simultaneously overwrites <code>a</code> with its inverse:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import com.irurueta.algebra.GaussJordanElimination;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularMatrixException;
+
+Matrix a = new Matrix(2, 2);
+a.setElementAt(0, 0, 2.0);
+a.setElementAt(0, 1, 1.0);
+a.setElementAt(1, 0, 1.0);
+a.setElementAt(1, 1, 3.0);
+
+Matrix b = Matrix.newFromArray(new double[]{5.0, 10.0});
+
+try {
+    GaussJordanElimination.process(a, b);
+    // b now contains the solution x
+    // a now contains the inverse of the original matrix
+} catch (final SingularMatrixException e) {
+    // the original matrix was singular
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Passing <code>null</code> as <code>b</code> (or using the <code>inverse</code> overload) skips solving and only computes the
+inverse:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">GaussJordanElimination.inverse(a); // a now contains its own inverse</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A <code>double[]</code> overload of <code>process</code> is also available for a single right-hand side vector.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_error_handling"><a class="anchor" href="#_error_handling"></a>Error handling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>process</code> and <code>inverse</code> throw <code>WrongSizeException</code> if <code>a</code> is not square, or if <code>b</code> does not have
+the same number of rows as <code>a</code>, and <code>SingularMatrixException</code> if <code>a</code> is found to be singular during
+elimination.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_classes"><a class="anchor" href="#_related_classes"></a>Related classes</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Class</th>
+<th class="tableblock halign-left valign-top">Source</th>
+<th class="tableblock halign-left valign-top">Javadoc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GaussJordanElimination</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/GaussJordanElimination.java">GitHub</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/GaussJordanElimination.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Matrix</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java">GitHub</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SingularMatrixException</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/SingularMatrixException.java">GitHub</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/SingularMatrixException.html">Javadoc</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_reference"><a class="anchor" href="#_reference"></a>Reference</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>GaussJordanElimination</code> is based on the algorithm described in <a href="reference.html" class="xref page">Numerical
+Recipes, 3rd Edition, section 2.1, "Gauss-Jordan Elimination"</a>.</p>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Made with ♥ from <strong>BCN</strong></p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

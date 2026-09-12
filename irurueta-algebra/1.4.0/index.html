@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Irurueta Algebra :: Irurueta Algebra</title>
+    <meta name="description" content="Matrix Algebra classes.">
+    <meta name="keywords" content="Java matrix algebra library, linear algebra Java, Matrix class, LU decomposition, QR decomposition, Economy QR decomposition, RQ decomposition, Cholesky decomposition, Singular Value Decomposition, SVD, Gauss-Jordan elimination, matrix inverse, pseudoinverse, linear system solver, matrix norms, irurueta-algebra">
+    <meta name="generator" content="Antora 3.1.15">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" type="image/svg+xml" href="../../_/img/logo.svg">
+  </head>
+  <body class="article">
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({"startOnLoad":true}); </script><header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../.."><img src="../../_/img/logo.svg" alt="Irurueta Algebra" class="navbar-brand-logo">Irurueta Algebra</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs" autofocus>
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu" style="display: none;">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="irurueta-algebra" data-version="1.4.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Irurueta Algebra</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="index.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="installation.html">Installation</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="usage.html">Usage</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Matrix Decomposition</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="gauss-jordan-elimination.html">Gauss-Jordan elimination</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="lu-decomposition.html">LU decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="cholesky-decomposition.html">Cholesky decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="qr-decomposition.html">QR decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="economy-qr-decomposition.html">Economy QR decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="rq-decomposition.html">RQ decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="singular-value-decomposition.html">Singular Value Decomposition</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Norm Estimation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="frobenius-norm.html">Frobenius norm</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="one-norm.html">One norm</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="infinity-norm.html">Infinity norm</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reference.html">Reference</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Irurueta Algebra</span>
+    <span class="version">1.4.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">Irurueta Algebra</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.4.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link is-current"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Irurueta Algebra</a></li>
+    <li><a href="index.html">Overview</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/albertoirurueta/irurueta-algebra/edit/develop/docs/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Irurueta Algebra</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This documentation was generated with the assistance of AI. Please report any inaccuracies.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Irurueta Algebra is a lightweight Java library for matrix algebra: it provides a dense <code>Matrix</code>
+class with the usual arithmetic operations, a family of matrix decomposers (LU, QR, Economy QR,
+RQ, Cholesky, Singular Value), and utility classes to solve linear systems of equations, invert or
+pseudo-invert matrices, and compute vector and matrix norms.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_core_components"><a class="anchor" href="#_core_components"></a>Core Components</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The library organizes its public API around a few abstractions:</p>
+</div>
+<div class="paragraph">
+<p><strong><code>Matrix</code></strong>: A dense matrix of <code>double</code> values, stored internally in column-major order. It
+supports arithmetic operations (<code>add</code>, <code>subtract</code>, <code>multiply</code>, <code>multiplyByScalar</code>,
+<code>multiplyKronecker</code>, <code>elementByElementProduct</code>), <code>transpose</code>, sub-matrix extraction and insertion,
+and factory methods such as <code>identity</code>, <code>diagonal</code>, <code>createWithUniformRandomValues</code> and
+<code>createWithGaussianRandomValues</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong><code>Decomposer</code></strong>: The abstract base class for every matrix decomposition algorithm in this
+library. Concrete subclasses receive an input matrix, compute a decomposition through
+<code>decompose()</code>, and then expose the resulting factors and derived operations (solving linear
+systems, computing determinants, inverting matrices, and so on):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>LUDecomposer</code> factors a matrix into lower and upper triangular factors, <code>A = L * U</code>.</p>
+</li>
+<li>
+<p><code>QRDecomposer</code> and <code>EconomyQRDecomposer</code> factor a matrix into an orthogonal factor and an upper
+triangular factor, <code>A = Q * R</code>.</p>
+</li>
+<li>
+<p><code>RQDecomposer</code> factors a matrix into an upper triangular factor and an orthogonal factor,
+<code>A = R * Q</code>.</p>
+</li>
+<li>
+<p><code>CholeskyDecomposer</code> factors a symmetric, positive-definite matrix into a lower triangular
+factor and its transpose, <code>A = L * L'</code>.</p>
+</li>
+<li>
+<p><code>SingularValueDecomposer</code> factors any matrix into <code>A = U * S * V'</code>, and is the most robust
+choice for rank-deficient or ill-conditioned matrices.</p>
+</li>
+<li>
+<p><code>GaussJordanElimination</code> is a utility class (not a <code>Decomposer</code>) that solves linear systems of
+equations and computes matrix inverses directly, without keeping a reusable factorization.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong><code>NormComputer</code></strong>: The abstract base class for computing vector and matrix norms, with concrete
+implementations <code>FrobeniusNormComputer</code>, <code>OneNormComputer</code> and <code>InfinityNormComputer</code>. Instances
+are obtained through the static <code>NormComputer.create()</code> and <code>NormComputer.create(NormType)</code>
+factory methods.</p>
+</div>
+<div class="paragraph">
+<p><strong><code>Utils</code></strong>: A collection of static helper methods built on top of the decomposers above, covering
+the most common operations: <code>trace</code>, <code>det</code>, <code>rank</code>, <code>cond</code>, <code>solve</code>, <code>inverse</code>, <code>pseudoInverse</code>,
+<code>normF</code>/<code>norm1</code>/<code>normInf</code>/<code>norm2</code>, <code>isSymmetric</code>, <code>isOrthogonal</code>, <code>crossProduct</code> and <code>skewMatrix</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_getting_started"><a class="anchor" href="#_getting_started"></a>Getting Started</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Users should begin with the <a href="installation.html" class="xref page">installation guide</a>, continue with
+<a href="usage.html" class="xref page">usage</a> for a tour of the <code>Matrix</code> API, and then read about the individual matrix
+decomposition algorithms (<a href="gauss-jordan-elimination.html" class="xref page">Gauss-Jordan elimination</a>,
+<a href="lu-decomposition.html" class="xref page">LU</a>, <a href="cholesky-decomposition.html" class="xref page">Cholesky</a>,
+<a href="qr-decomposition.html" class="xref page">QR</a>, <a href="economy-qr-decomposition.html" class="xref page">Economy QR</a>,
+<a href="rq-decomposition.html" class="xref page">RQ</a> and <a href="singular-value-decomposition.html" class="xref page">Singular Value
+Decomposition</a>) as well as norm estimation (<a href="frobenius-norm.html" class="xref page">Frobenius</a>,
+<a href="one-norm.html" class="xref page">one</a> and <a href="infinity-norm.html" class="xref page">infinity</a> norms).</p>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Made with ♥ from <strong>BCN</strong></p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

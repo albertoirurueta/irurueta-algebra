@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Usage :: Irurueta Algebra</title>
+    <meta name="description" content="Create matrices, perform basic operations, and use decomposers and Utils to solve linear systems, invert matrices and compute norms.">
+    <meta name="keywords" content="Matrix class usage, Java matrix operations, matrix multiplication, matrix transpose, Utils.solve, Utils.inverse, Utils.pseudoInverse, linear system solver, matrix determinant, matrix rank, condition number, matrix norms Java">
+    <meta name="generator" content="Antora 3.1.15">
+    <link rel="stylesheet" href="../../_/css/site.css">
+<link rel="icon" type="image/svg+xml" href="../../_/img/logo.svg">
+  </head>
+  <body class="article">
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({"startOnLoad":true}); </script><header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../.."><img src="../../_/img/logo.svg" alt="Irurueta Algebra" class="navbar-brand-logo">Irurueta Algebra</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu" style="display: none;">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="irurueta-algebra" data-version="1.4.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Irurueta Algebra</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="installation.html">Installation</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="usage.html">Usage</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Matrix Decomposition</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="gauss-jordan-elimination.html">Gauss-Jordan elimination</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="lu-decomposition.html">LU decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="cholesky-decomposition.html">Cholesky decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="qr-decomposition.html">QR decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="economy-qr-decomposition.html">Economy QR decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="rq-decomposition.html">RQ decomposition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="singular-value-decomposition.html">Singular Value Decomposition</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Norm Estimation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="frobenius-norm.html">Frobenius norm</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="one-norm.html">One norm</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="infinity-norm.html">Infinity norm</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reference.html">Reference</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Irurueta Algebra</span>
+    <span class="version">1.4.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">Irurueta Algebra</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.4.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Irurueta Algebra</a></li>
+    <li><a href="usage.html">Usage</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/albertoirurueta/irurueta-algebra/edit/develop/docs/modules/ROOT/pages/usage.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Usage</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>Matrix</code> is the central class of this library: a dense matrix of <code>double</code> values on which every
+decomposer and utility method operates.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_a_matrix"><a class="anchor" href="#_create_a_matrix"></a>Create a matrix</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A matrix can be created with a given size (initialized to zero), copied from another matrix, built
+from an array, or generated with random values:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import com.irurueta.algebra.Matrix;
+
+// 3x2 matrix initialized to zero
+Matrix m = new Matrix(3, 2);
+m.setElementAt(0, 0, 1.0);
+m.setElementAt(1, 0, 2.0);
+
+// copy constructor
+Matrix copy = new Matrix(m);
+
+// 3x3 identity matrix
+Matrix identity = Matrix.identity(3, 3);
+
+// column matrix built from an array
+double[] data = {1.0, 2.0, 3.0};
+Matrix column = Matrix.newFromArray(data);
+
+// 2x2 matrix with uniformly distributed random values in [0.0, 1.0)
+Matrix random = Matrix.createWithUniformRandomValues(2, 2, 0.0, 1.0);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_basic_operations"><a class="anchor" href="#_basic_operations"></a>Basic operations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>Matrix</code> provides in-place and return-new-instance variants of the usual arithmetic operations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Matrix a = Matrix.identity(2, 2);
+Matrix b = Matrix.identity(2, 2);
+
+a.add(b);              // a = a + b, in-place
+Matrix c = a.addAndReturnNew(b);
+
+a.multiply(b);          // a = a * b, in-place
+Matrix d = a.multiplyAndReturnNew(b);
+
+a.multiplyByScalar(2.0);
+a.transpose();          // in-place transpose
+Matrix t = a.transposeAndReturnNew();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>getElementAt</code>/<code>setElementAt</code> access individual elements by row and column; <code>getSubmatrix</code> and
+<code>setSubmatrix</code> extract or overwrite rectangular regions of a matrix.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solve_a_linear_system_of_equations"><a class="anchor" href="#_solve_a_linear_system_of_equations"></a>Solve a linear system of equations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>Utils.solve</code> picks a suitable decomposer automatically: <code>LUDecomposer</code> for square matrices, and
+<code>EconomyQRDecomposer</code> (least-squares solution) otherwise.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import com.irurueta.algebra.Utils;
+
+Matrix a = new Matrix(2, 2);
+a.setElementAt(0, 0, 2.0);
+a.setElementAt(0, 1, 1.0);
+a.setElementAt(1, 0, 1.0);
+a.setElementAt(1, 1, 3.0);
+
+Matrix b = Matrix.newFromArray(new double[]{5.0, 10.0});
+
+Matrix x = Utils.solve(a, b);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For repeated solves against the same matrix <code>a</code> with different right-hand sides, instantiate the
+relevant <a href="lu-decomposition.html" class="xref page"><code>LUDecomposer</code></a>, <a href="qr-decomposition.html" class="xref page"><code>QRDecomposer</code></a> or
+<a href="singular-value-decomposition.html" class="xref page"><code>SingularValueDecomposer</code></a> directly, call <code>decompose()</code>
+once, and reuse it by calling <code>solve(b)</code> as many times as needed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_invert_or_pseudo_invert_a_matrix"><a class="anchor" href="#_invert_or_pseudo_invert_a_matrix"></a>Invert or pseudo-invert a matrix</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>Utils.inverse</code> inverts square matrices and returns the Moore-Penrose pseudo-inverse for
+non-square ones; <code>Utils.pseudoInverse</code> always uses
+<a href="singular-value-decomposition.html" class="xref page">Singular Value Decomposition</a>, which is more numerically
+stable at a higher computational cost.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Matrix inv = Utils.inverse(a);
+Matrix pinv = Utils.pseudoInverse(a);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compute_norms_rank_determinant_and_condition_number"><a class="anchor" href="#_compute_norms_rank_determinant_and_condition_number"></a>Compute norms, rank, determinant and condition number</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">double frobenius = Utils.normF(a);   // xref:frobenius-norm.adoc
+double one = Utils.norm1(a);         // xref:one-norm.adoc
+double infinity = Utils.normInf(a);  // xref:infinity-norm.adoc
+double two = Utils.norm2(a);         // largest singular value
+
+double determinant = Utils.det(a);
+int rank = Utils.rank(a);
+double condition = Utils.cond(a);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_error_handling"><a class="anchor" href="#_error_handling"></a>Error handling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Most operations throw <code>WrongSizeException</code> when matrix dimensions are incompatible. Decomposers
+additionally throw <code>NotReadyException</code> if <code>decompose()</code> is called before an input matrix has been
+set, <code>LockedException</code> if a decomposer is reconfigured while <code>decompose()</code> is running,
+<code>NotAvailableException</code> if a result is requested before <code>decompose()</code> has completed, and a
+decomposition-specific exception (<code>SingularMatrixException</code>, <code>RankDeficientMatrixException</code>,
+<code>NonSymmetricPositiveDefiniteMatrixException</code> or <code>NoConvergenceException</code>) when the input matrix
+does not meet the requirements of the algorithm. See each decomposer&#8217;s page for details.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_related_classes"><a class="anchor" href="#_related_classes"></a>Related classes</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Class</th>
+<th class="tableblock halign-left valign-top">Source</th>
+<th class="tableblock halign-left valign-top">Javadoc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Matrix</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Matrix.java">GitHub</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Matrix.html">Javadoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Utils</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/albertoirurueta/irurueta-algebra/blob/master/src/main/java/com/irurueta/algebra/Utils.java">GitHub</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://albertoirurueta.github.io/irurueta-algebra/mvn-site/apidocs/com/irurueta/algebra/Utils.html">Javadoc</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Made with ♥ from <strong>BCN</strong></p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

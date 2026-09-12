@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 430" font-family="Helvetica Neue, Arial, sans-serif">
+<title>Gram-Schmidt orthogonalization of two columns</title>
+<defs><marker id="ah-ink" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#1a1a2e"/></marker><marker id="ah-blue" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#2f6fed"/></marker><marker id="ah-orange" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#e2703a"/></marker><marker id="ah-teal" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#12897f"/></marker><marker id="ah-muted" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#7a8090"/></marker></defs><g transform="translate(0,-100)">
+<line x1="130" y1="380" x2="438.1164942311488" y2="314.5078173924058" stroke="#9aa0a6" stroke-width="1" stroke-dasharray="1,4"/>
+<line x1="130" y1="380" x2="423.4442802201417" y2="317.6264927546722" stroke="#1a1a2e" stroke-width="3" marker-end="url(#ah-ink)"/>
+<text x="437.4442802201417" y="321.6264927546722" font-size="17" fill="#1a1a2e" font-weight="600">a1</text>
+<line x1="130" y1="380" x2="207.25424859373686" y2="142.23587092621162" stroke="#2f6fed" stroke-width="3" marker-end="url(#ah-blue)"/>
+<text x="201.25424859373686" y="128.23587092621162" font-size="17" fill="#2f6fed" font-weight="600">a2</text>
+<line x1="130" y1="380" x2="252.26845009172575" y2="354.0110386477801" stroke="#7a8090" stroke-width="2.4" stroke-dasharray="6,4" marker-end="url(#ah-muted)"/>
+<text x="194.26845009172575" y="378.0110386477801" font-size="14" fill="#7a8090">proj of a2 on a1</text>
+<path d="M 238.57438368145247,356.92180231922873 L 235.66362001000385,343.2277359089554 L 249.35768642027713,340.3169722375068" fill="none" stroke="#7a8090" stroke-width="1.2"/>
+<line x1="130" y1="380" x2="84.98579850201111" y2="168.22483227843153" stroke="#e2703a" stroke-width="2.6" marker-end="url(#ah-orange)"/>
+<text x="44.98579850201111" y="158.22483227843153" font-size="15.5" fill="#e2703a">u2 = a2 &#8722; proj</text>
+<line x1="252.26845009172575" y1="354.0110386477801" x2="207.25424859373686" y2="142.23587092621162" stroke="#e2703a" stroke-width="1.6" stroke-dasharray="4,3"/>
+<line x1="130" y1="380" x2="198.4703320513664" y2="365.44618164275687" stroke="#12897f" stroke-width="4" marker-end="url(#ah-teal)"/>
+<text x="194.4703320513664" y="387.44618164275687" font-size="15.5" fill="#12897f" font-weight="600">q1</text>
+<line x1="130" y1="380" x2="115.44618164275683" y2="311.5296679486336" stroke="#12897f" stroke-width="4" marker-end="url(#ah-teal)"/>
+<text x="125.44618164275683" y="309.5296679486336" font-size="15.5" fill="#12897f" font-weight="600">q2</text>
+<path d="M 151.51924721614373,375.4259428020093 L 146.94519001815303,353.9066955858656 L 125.42594280200929,358.48075278385625" fill="none" stroke="#12897f" stroke-width="1.2"/>
+<circle cx="130" cy="380" r="3.4" fill="#1a1a2e"/>
+<text x="30" y="440" font-size="14.5" fill="#1a1a2e"><tspan fill="#12897f" font-weight="600">q1</tspan> is <tspan fill="#1a1a2e" font-weight="600">a1</tspan> normalized; <tspan fill="#e2703a" font-weight="600">u2</tspan> subtracts from <tspan fill="#2f6fed" font-weight="600">a2</tspan> its projection onto <tspan fill="#12897f" font-weight="600">q1</tspan>, leaving a vector orthogonal to it.</text>
+<text x="30" y="466" font-size="14.5" fill="#1a1a2e">Normalizing <tspan fill="#e2703a" font-weight="600">u2</tspan> gives <tspan fill="#12897f" font-weight="600">q2</tspan>; repeating for every column builds the orthonormal columns of Q, while the dot products form R.</text>
+</g></svg>
