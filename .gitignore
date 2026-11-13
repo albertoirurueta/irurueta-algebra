@@ -3,3 +3,4 @@ target
 
 src/main/resources/com/irurueta/algebra/build-info.properties
 /docs/build/
+/docs/node_modules/

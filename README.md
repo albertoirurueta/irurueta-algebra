@@ -198,6 +198,7 @@ To build the Antora documentation locally:
 
 ```bash
 cd docs
+npm ci
 npx antora antora-playbook.yml
 ```
 
@@ -230,6 +231,7 @@ For changes affecting documentation, also run:
 
 ```bash
 cd docs
+npm ci
 npx antora antora-playbook.yml
 ```
 
