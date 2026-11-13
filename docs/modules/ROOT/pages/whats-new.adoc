@@ -1,0 +1,10 @@
+= What's new
+:description: Release notes for irurueta-algebra.
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+== 1.4.1
+
+* ♻️ Raised the compiled bytecode target from Java 17 to Java 21 (`maven.compiler.source`/`target`); consumers
+  now need a Java 21 runtime.
+* ♻️ Updated the `irurueta-statistics` dependency to 1.4.1.

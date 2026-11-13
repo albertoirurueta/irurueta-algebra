@@ -3,7 +3,7 @@
 :keywords: irurueta-algebra installation, Maven dependency, Gradle dependency, com.irurueta, Java 17 matrix library, Maven Central artifact, matrix algebra setup
 
 Irurueta Algebra is a Maven artifact that can be integrated into Java projects using group id
-`com.irurueta` and artifact id `irurueta-algebra`. The project is built as a Java 17 Maven JAR, and
+`com.irurueta` and artifact id `irurueta-algebra`. The project is built as a Java 21 Maven JAR, and
 depends on `com.irurueta:irurueta-statistics`.
 
 == Maven configuration
@@ -17,7 +17,7 @@ Latest release:
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-algebra</artifactId>
-    <version>1.3.2</version>
+    <version>1.4.1</version>
     <scope>compile</scope>
 </dependency>
 ----
@@ -29,7 +29,7 @@ Latest snapshot:
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-algebra</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
     <scope>compile</scope>
 </dependency>
 ----
@@ -41,7 +41,7 @@ Include this in your `build.gradle.kts`:
 [source,kotlin]
 ----
 dependencies {
-    implementation("com.irurueta:irurueta-algebra:1.3.2")
+    implementation("com.irurueta:irurueta-algebra:1.4.1")
 }
 ----
 
