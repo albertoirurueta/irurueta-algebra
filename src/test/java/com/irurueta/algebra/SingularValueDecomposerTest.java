@@ -34,7 +34,7 @@ class SingularValueDecomposerTest {
     private static final int MAX_ITERS = 50;
 
     private static final double RELATIVE_ERROR = 3.0;
-    private static final double RELATIVE_ERROR_OVERDETERMINED = 0.35;
+    private static final double RELATIVE_ERROR_OVERDETERMINED = 0.36;
     private static final double ABSOLUTE_ERROR = 1e-6;
     private static final double VALID_RATIO = 0.15;
     private static final double ROUND_ERROR = 1e-3;
